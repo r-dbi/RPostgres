@@ -1,0 +1,143 @@
+# Process this file with autoconf to produce a configure script.
+#
+# Configure.in for RPostgreSQL
+# Copyright (C) 2008 Dirk Eddelbuettel and licensed under GNU GPL
+#
+# This file draws heavily on configure.in files from littler, RMySQL, and RdbiPgSQL
+
+# Set the name and version -- the version set here will propagate to other files from here
+AC_INIT(RPostgreSQL, 0.2)
+
+# Checks for common programs using default macros
+AC_PROG_CC
+
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+case "${host_os}" in
+  darwin*)
+    R_OS_TYPE="darwin"
+    ;;
+esac
+
+
+# Check for non-standard programs: pg_config(1) to configure PostgreSQL builds
+AC_PATH_PROG([PG_CONFIG], [pg_config])
+
+# By default, we will not use the accompanied libpq 
+ENABLE_LIBPQ=
+
+# If pg_config was found, let's use it
+if test "${PG_CONFIG}" != ""; then
+
+    # Use pg_config for header and linker arguments
+    PG_INCDIR=`${PG_CONFIG} --includedir`
+    PG_LIBDIR=`${PG_CONFIG} --libdir`
+
+else
+
+    # let's look around -- code copied from RdbuiPgSQL but modified to use test -f
+    # added fink standard install location Neil 8/30/2009
+    AC_MSG_NOTICE([checking for PostgreSQL header files])
+    if ! test $PG_INCDIR
+    then
+	for dir in \
+	/usr/include \
+	/usr/include/pgsql \
+	/usr/include/postgresql \
+	/usr/local/include \
+	/usr/local/include/pgsql \
+	/usr/local/include/postgresql \
+	/usr/local/pgsql/include \
+	/usr/local/postgresql/include \
+	/opt/include \
+	/opt/include/pgsql \
+	/opt/include/postgresql \
+	/opt/local/include \
+	/opt/local/include/postgresql \
+	/opt/local/include/postgresql84 \
+	/sw/opt/postgresql-8.4/include \
+	/Library/PostgresPlus/8.4SS/include \
+	/sw/include/postgresql
+	do
+        AC_MSG_NOTICE([Checking include ${dir}.])
+	    if test -f ${dir}/libpq-fe.h
+	    then
+	    	PG_INCDIR=${dir}
+		break
+	    fi
+	done
+    fi
+
+    # likewise, let's look around for libpq.so
+    if ! test $PG_LIBDIR
+    then
+	for dir in \
+	/usr/lib \
+	/usr/lib/pgsql \
+	/usr/lib/postgresql \
+	/usr/local/lib \
+	/usr/local/lib/pgsql \
+	/usr/local/lib/postgresql \
+	/usr/local/pgsql/lib \
+	/usr/local/postgresql/lib \
+	/opt/lib \
+	/opt/lib/pgsql \
+	/opt/lib/postgresql \
+	/opt/local/lib \
+	/opt/local/lib/postgresql \
+	/opt/local/lib/postgresql84 \
+	/sw/opt/postgresql-8.4/lib \
+	/Library/PostgresPlus/8.4SS/lib \
+	/sw/lib
+	do
+        AC_MSG_NOTICE([Checking lib ${dir}.])
+	    if test -f ${dir}/libpq.so
+	    then
+	    	PG_LIBDIR=${dir}
+		break
+	    fi
+	    if test -f ${dir}/libpq.dylib
+	    then
+	    	PG_LIBDIR=${dir}
+		break
+	    fi
+	done
+    fi
+    if ! test $PG_LIBDIR
+    then
+        if test "$R_OS_TYPE" = "darwin" ; then
+# in case we cannot find any libpq library we will use the accompanied libpq
+# This content would be written into src/Makevars at the end of this script
+            ENABLE_LIBPQ='
+
+PKG_CPPFLAGS=-Ilibpq
+PKG_LIBS=libpq/libpq.a
+
+.PHONY: all
+all:  $(SHLIB)
+$(SHLIB): libpq/libpq.5.dylib
+
+libpq/libpq.5.dylib:
+	(cd libpq; $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" -f Makefile.darwin)
+
+clean:
+	(cd libpq; $(MAKE) -f Makefile.darwin clean)
+'
+        fi
+    fi
+fi
+
+# Expand into arguments
+PKG_CPPFLAGS="-I${PG_INCDIR}"
+PKG_LIBS="-L${PG_LIBDIR} -lpq"
+# Test for sanity by looking for libpq-fe.h, no explicit action on found, error on failure
+AC_CHECK_FILE(["${PG_INCDIR}/libpq-fe.h"],
+	,
+	AC_SUBST(R_OS_TYPE))
+
+# Now substitute these two variable in src/Makevars.in to create src/Makevars
+AC_SUBST(PKG_CPPFLAGS)
+AC_SUBST(PKG_LIBS)
+
+AC_SUBST(ENABLE_LIBPQ)
+AC_OUTPUT(src/Makevars)

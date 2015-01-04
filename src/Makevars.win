@@ -1,0 +1,11 @@
+PKG_CPPFLAGS=-I./libpq
+PKG_LIBS=libpq/libpq.a -lshfolder -lwsock32 -lws2_32 -lsecur32
+
+.PHONY: all 
+all:  $(SHLIB)
+$(SHLIB): libpq/libpq.a
+
+export CC
+
+libpq/libpq.a:
+	(cd libpq; make -f Makefile.win)
