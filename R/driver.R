@@ -4,6 +4,8 @@ setClass("PgDriver", contains = "DBIDriver")
 #'
 #' @aliases PgDriver-class
 #' @export
+#' @useDynLib rpg
+#' @importFrom Rcpp evalCpp
 pg <- function() {
   new("PgDriver")
 }
