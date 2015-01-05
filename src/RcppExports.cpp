@@ -80,6 +80,36 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// is_complete
+bool is_complete(XPtr<PqConnection> con);
+RcppExport SEXP rpq_is_complete(SEXP conSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        bool __result = is_complete(con);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// fetch
+List fetch(XPtr<PqConnection> con);
+RcppExport SEXP rpq_fetch(SEXP conSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        List __result = fetch(con);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // disconnect
 void disconnect(XPtr<PqConnection> con);
 RcppExport SEXP rpq_disconnect(SEXP conSEXP) {
@@ -88,6 +118,18 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
         disconnect(con);
+    }
+    return R_NilValue;
+END_RCPP
+}
+// clear_result
+void clear_result(XPtr<PqConnection> con);
+RcppExport SEXP rpq_clear_result(SEXP conSEXP) {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        clear_result(con);
     }
     return R_NilValue;
 END_RCPP

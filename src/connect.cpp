@@ -29,8 +29,25 @@ int rows_affected(XPtr<PqConnection> con) {
 }
 
 // [[Rcpp::export]]
+bool is_complete(XPtr<PqConnection> con) {
+  return con->is_complete();
+}
+
+
+// [[Rcpp::export]]
+List fetch(XPtr<PqConnection> con) {
+  return con->fetch();
+}
+
+
+// [[Rcpp::export]]
 void disconnect(XPtr<PqConnection> con) {
   return con->disconnect();
+}
+
+// [[Rcpp::export]]
+void clear_result(XPtr<PqConnection> con) {
+  return con->clear_result();
 }
 
 // [[Rcpp::export]]

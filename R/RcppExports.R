@@ -21,8 +21,20 @@ rows_affected <- function(con) {
     .Call('rpq_rows_affected', PACKAGE = 'rpq', con)
 }
 
+is_complete <- function(con) {
+    .Call('rpq_is_complete', PACKAGE = 'rpq', con)
+}
+
+fetch <- function(con) {
+    .Call('rpq_fetch', PACKAGE = 'rpq', con)
+}
+
 disconnect <- function(con) {
     invisible(.Call('rpq_disconnect', PACKAGE = 'rpq', con))
+}
+
+clear_result <- function(con) {
+    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', con))
 }
 
 escape_string <- function(con, xs) {
