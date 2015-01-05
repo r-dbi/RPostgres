@@ -55,34 +55,34 @@ inline Rcpp::LogicalVector lgl_fill_col(PGresult* res, int j, int n) {
 }
 
 class PqConnection {
-  PGconn* conn;
-  PGresult* res;
-  int rows, fetched_rows;
+  PGconn* pConn_;
+  PGresult* pRes_;
+  int rows_, fetched_rows_;
 
 public:
-  PqConnection(std::vector<std::string> keys_, std::vector<std::string> values_) {
-    conn = NULL;
-    res = NULL;
+  PqConnection(std::vector<std::string> keys, std::vector<std::string> values) {
+    pConn_ = NULL;
+    pRes_ = NULL;
 
-    int n = keys_.size();
-    std::vector<const char*> keys(n + 1), values(n + 1);
+    int n = keys.size();
+    std::vector<const char*> c_keys(n + 1), c_values(n + 1);
 
     for (int i = 0; i < n; ++i) {
-      keys[i] = keys_[i].c_str();
-      values[i] = values_[i].c_str();
+      c_keys[i] = keys[i].c_str();
+      c_values[i] = values[i].c_str();
     }
-    keys[n] = NULL;
-    values[n] = NULL;
+    c_keys[n] = NULL;
+    c_values[n] = NULL;
 
-    conn = PQconnectdbParams(&keys[0], &values[0], false);
+    pConn_ = PQconnectdbParams(&c_keys[0], &c_values[0], false);
 
-    if (PQstatus(conn) != CONNECTION_OK) {
-      std::string err = PQerrorMessage(conn);
-      PQfinish(conn);
+    if (PQstatus(pConn_) != CONNECTION_OK) {
+      std::string err = PQerrorMessage(pConn_);
+      PQfinish(pConn_);
       Rcpp::stop(err);
     }
 
-    PQsetClientEncoding(conn, "UTF-8");
+    PQsetClientEncoding(pConn_, "UTF-8");
   }
 
   ~PqConnection() {
@@ -91,23 +91,23 @@ public:
 
   void disconnect() {
     clear_result();
-    if (conn != NULL) {
-      PQfinish(conn);
-      conn = NULL;
+    if (pConn_ != NULL) {
+      PQfinish(pConn_);
+      pConn_ = NULL;
     }
   }
 
   // Connections ---------------------------------------------------------------
   void con_check() {
-    if (conn == NULL)
+    if (pConn_ == NULL)
       Rcpp::stop("Connection has been closed");
 
-    ConnStatusType status = PQstatus(conn);
+    ConnStatusType status = PQstatus(pConn_);
     if (status == CONNECTION_OK) return;
 
     // Status was bad, so try resetting.
-    PQreset(conn);
-    status = PQstatus(conn);
+    PQreset(pConn_);
+    status = PQstatus(pConn_);
     if (status == CONNECTION_OK) return;
 
     Rcpp::stop("Lost connection to database");
@@ -116,11 +116,11 @@ public:
   Rcpp::List con_info() {
     con_check();
 
-    const char* dbnm = PQdb(conn);
-    const char* host = PQhost(conn);
-    const char* port = PQport(conn);
-    int pver = PQprotocolVersion(conn);
-    int sver = PQserverVersion(conn);
+    const char* dbnm = PQdb(pConn_);
+    const char* host = PQhost(pConn_);
+    const char* port = PQport(pConn_);
+    int pver = PQprotocolVersion(pConn_);
+    int sver = PQserverVersion(pConn_);
 
     return Rcpp::List::create(
       Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
@@ -135,9 +135,9 @@ public:
   SEXP escape_string(std::string x) {
     con_check();
 
-    char* escaped_ = PQescapeLiteral(conn, x.c_str(), x.length());
-    SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
-    PQfreemem(escaped_);
+    char* pq_escaped = PQescapeLiteral(pConn_, x.c_str(), x.length());
+    SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
+    PQfreemem(pq_escaped);
 
     return escaped;
   }
@@ -146,9 +146,9 @@ public:
   SEXP escape_identifier(std::string x) {
     con_check();
 
-    char* escaped_ = PQescapeIdentifier(conn, x.c_str(), x.length());
-    SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
-    PQfreemem(escaped_);
+    char* pq_escaped = PQescapeIdentifier(pConn_, x.c_str(), x.length());
+    SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
+    PQfreemem(pq_escaped);
 
     return escaped;
   }
@@ -158,49 +158,49 @@ public:
   void exec(std::string query) {
     con_check();
 
-    if (res != NULL) {
-      PQclear(res);
-      fetched_rows = 0;
-      rows = 0;
+    if (pRes_ != NULL) {
+      PQclear(pRes_);
+      fetched_rows_ = 0;
+      rows_ = 0;
     }
 
-    res = PQexecParams(conn, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
-    res_check();
+    pRes_ = PQexecParams(pConn_, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
+    pRes_check();
 
-    fetched_rows = 0;
-    rows = PQntuples(res);
+    fetched_rows_ = 0;
+    rows_ = PQntuples(pRes_);
   }
 
-  void res_check() {
-    if (res == NULL)
+  void pRes_check() {
+    if (pRes_ == NULL)
       Rcpp::stop("No results");
 
-    if (PQresultStatus(res) == PGRES_FATAL_ERROR) {
-      Rcpp::stop(PQerrorMessage(conn));
+    if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
+      Rcpp::stop(PQerrorMessage(pConn_));
     }
   }
 
   void clear_result() {
-    if (res != NULL) {
-      PQclear(res);
-      res = NULL;
+    if (pRes_ != NULL) {
+      PQclear(pRes_);
+      pRes_ = NULL;
     }
   }
 
   bool is_complete() {
-    return rows == fetched_rows;
+    return rows_ == fetched_rows_;
   }
 
   Rcpp::List fetch() {
-    res_check();
+    pRes_check();
 
-    int p = PQnfields(res);
+    int p = PQnfields(pRes_);
     Rcpp::List cols(p);
     Rcpp::CharacterVector names(p);
 
     for (int j = 0; j < p; ++j) {
-      Oid type = PQftype(res, j);
-      std::string name(PQfname(res, j));
+      Oid type = PQftype(pRes_, j);
+      std::string name(PQfname(pRes_, j));
       SEXP col;
 
       // These come from
@@ -210,14 +210,14 @@ public:
       case 21: // SMALLINT
       case 23: // INTEGER
       case 26: // OID
-        col = int_fill_col(res, j, rows);
+        col = int_fill_col(pRes_, j, rows_);
         break;
 
       case 1700: // DECIMAL
       case 701: // FLOAT8
       case 700: // FLOAT
       case 790: // MONEY
-        col = real_fill_col(res, j, rows);
+        col = real_fill_col(pRes_, j, rows_);
         break;
 
       case 18: // CHAR
@@ -231,17 +231,17 @@ public:
       case 1184: // TIMESTAMPTZOID
       case 1186: // INTERVAL
       case 1266: // TIMETZOID
-        col = str_fill_col(res, j, rows);
+        col = str_fill_col(pRes_, j, rows_);
         break;
 
       case 16: // BOOL
-        col = lgl_fill_col(res, j, rows);
+        col = lgl_fill_col(pRes_, j, rows_);
         break;
 
       case 17: // BYTEA
       case 2278: // NULL
       default:
-        col = str_fill_col(res, j, rows);
+        col = str_fill_col(pRes_, j, rows_);
 
         std::stringstream err;
         err << "Unknown field type (" << type << ") in column " << name;
@@ -253,22 +253,22 @@ public:
       names[j] = name;
     }
 
-    fetched_rows = rows;
+    fetched_rows_ = rows_;
 
     cols.names() = names;
     cols.attr("class") = "data.frame";
-    cols.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -rows);
+    cols.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -rows_);
     return cols;
   }
 
   Rcpp::List exception_info() {
-    if (res == NULL)
+    if (pRes_ == NULL)
       Rcpp::stop("No results");
 
-    const char* sev = PQresultErrorField(res, PG_DIAG_SEVERITY);
-    const char* msg = PQresultErrorField(res, PG_DIAG_MESSAGE_PRIMARY);
-    const char* det = PQresultErrorField(res, PG_DIAG_MESSAGE_DETAIL);
-    const char* hnt = PQresultErrorField(res, PG_DIAG_MESSAGE_HINT);
+    const char* sev = PQresultErrorField(pRes_, PG_DIAG_SEVERITY);
+    const char* msg = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_PRIMARY);
+    const char* det = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_DETAIL);
+    const char* hnt = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_HINT);
 
     return Rcpp::List::create(
       Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
@@ -279,10 +279,16 @@ public:
   }
 
   int rows_affected() {
-    res_check();
-    if (PQresultStatus(res) != PGRES_COMMAND_OK)
+    pRes_check();
+    if (PQresultStatus(pRes_) != PGRES_COMMAND_OK)
       Rcpp::stop("Not a data modifying query");
 
-    return atoi(PQcmdTuples(res));
+    return atoi(PQcmdTuples(pRes_));
   }
+
+  // Prevent copying because of shared resource
+private:
+  PqConnection( PqConnection const& );
+  PqConnection operator=( PqConnection const& );
+
 };
