@@ -10,4 +10,7 @@ pq()
 \description{
 Postgres driver
 }
+\examples{
+rpq::pq()
+}
 
