@@ -32,6 +32,8 @@ public:
   }
 
   void exec(std::string query) {
+    con_check();
+
     if (res != NULL) {
       PQclear(res);
     }
@@ -62,6 +64,8 @@ public:
   }
 
   Rcpp::List con_info() {
+    con_check();
+
     const char* dbnm = PQdb(conn);
     const char* host = PQhost(conn);
     const char* port = PQport(conn);
@@ -105,6 +109,8 @@ public:
 
   // Returns a single CHRSXP
   SEXP escape_string(std::string x) {
+    con_check();
+
     char* escaped_ = PQescapeLiteral(conn, x.c_str(), x.length());
     SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
     PQfreemem(escaped_);
@@ -114,11 +120,28 @@ public:
 
   // Returns a single CHRSXP
   SEXP escape_identifier(std::string x) {
+    con_check();
+
     char* escaped_ = PQescapeIdentifier(conn, x.c_str(), x.length());
     SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
     PQfreemem(escaped_);
 
     return escaped;
+  }
+
+  void con_check() {
+    if (conn == NULL)
+      Rcpp::stop("Connection has been closed");
+
+    ConnStatusType status = PQstatus(conn);
+    if (status == CONNECTION_OK) return;
+
+    // Status was bad, so try resetting.
+    PQreset(conn);
+    status = PQstatus(conn);
+    if (status == CONNECTION_OK) return;
+
+    Rcpp::stop("Lost connection to database");
   }
 
   ~PqConnection() {
