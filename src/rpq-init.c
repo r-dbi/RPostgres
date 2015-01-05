@@ -12,13 +12,13 @@
 // connection is closed.
 
 void R_init_mypackage(DllInfo *info) {
-#ifdef WIN32
+#ifdef _WIN32
   WSAStartup();
 #endif
 }
 
 void R_unload_mylib(DllInfo *info) {
-#ifdef WIN32
+#ifdef _WIN32
   WSACleanup();
 #endif
 }
