@@ -87,6 +87,24 @@ public:
     }
   }
 
+  // Returns a single CHRSXP
+  SEXP escape_string(std::string x) {
+    char* escaped_ = PQescapeLiteral(conn, x.c_str(), x.length());
+    SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
+    PQfreemem(escaped_);
+
+    return escaped;
+  }
+
+  // Returns a single CHRSXP
+  SEXP escape_identifier(std::string x) {
+    char* escaped_ = PQescapeIdentifier(conn, x.c_str(), x.length());
+    SEXP escaped = Rf_mkCharCE(escaped_, CE_UTF8);
+    PQfreemem(escaped_);
+
+    return escaped;
+  }
+
   ~PqConnection() {
     disconnect();
   };

@@ -21,6 +21,14 @@ disconnect <- function(con) {
     invisible(.Call('rpq_disconnect', PACKAGE = 'rpq', con))
 }
 
+escape_string <- function(con, xs) {
+    .Call('rpq_escape_string', PACKAGE = 'rpq', con, xs)
+}
+
+escape_identifier <- function(con, xs) {
+    .Call('rpq_escape_identifier', PACKAGE = 'rpq', con, xs)
+}
+
 encrypt_password <- function(password, user) {
     .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
 }

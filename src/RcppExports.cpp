@@ -77,6 +77,38 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// escape_string
+CharacterVector escape_string(XPtr<PqConnection> con, CharacterVector xs);
+RcppExport SEXP rpq_escape_string(SEXP conSEXP, SEXP xsSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP );
+        CharacterVector __result = escape_string(con, xs);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// escape_identifier
+CharacterVector escape_identifier(XPtr<PqConnection> con, CharacterVector xs);
+RcppExport SEXP rpq_escape_identifier(SEXP conSEXP, SEXP xsSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP );
+        CharacterVector __result = escape_identifier(con, xs);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // encrypt_password
 String encrypt_password(String password, String user);
 RcppExport SEXP rpq_encrypt_password(SEXP passwordSEXP, SEXP userSEXP) {

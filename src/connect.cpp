@@ -27,3 +27,29 @@ int rows_affected(XPtr<PqConnection> con) {
 void disconnect(XPtr<PqConnection> con) {
   return con->disconnect();
 }
+
+// [[Rcpp::export]]
+CharacterVector escape_string(XPtr<PqConnection> con, CharacterVector xs) {
+  int n = xs.size();
+  CharacterVector escaped(n);
+
+  for (int i = 0; i < n; ++i) {
+    std::string x(xs[i]);
+    escaped[i] = con->escape_string(x);
+  }
+
+  return escaped;
+}
+
+// [[Rcpp::export]]
+CharacterVector escape_identifier(XPtr<PqConnection> con, CharacterVector xs) {
+  int n = xs.size();
+  CharacterVector escaped(n);
+
+  for (int i = 0; i < n; ++i) {
+    std::string x(xs[i]);
+    escaped[i] = con->escape_identifier(x);
+  }
+
+  return escaped;
+}

@@ -19,6 +19,7 @@ Collate:
     'RcppExports.R'
     'driver.R'
     'connection.R'
+    'quote.R'
     'result.R'
 Suggests:
     testthat
