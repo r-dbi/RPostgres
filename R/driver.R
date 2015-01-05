@@ -6,6 +6,7 @@ setClass("PqDriver", contains = "DBIDriver")
 #' @export
 #' @useDynLib rpq
 #' @importFrom Rcpp evalCpp
+#' @import methods DBI
 #' @examples
 #' rpq::pq()
 pq <- function() {
