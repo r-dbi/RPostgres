@@ -1,4 +1,4 @@
-PKG_CPPFLAGS=-I/usr/local/Cellar/postgresql/9.3.0/include
+PKG_CPPFLAGS=-I../inst/include -I/usr/local/Cellar/postgresql/9.3.0/include
 PKG_LIBS=-L/usr/local/Cellar/postgresql/9.3.0/lib -lpq
 R_OS_TYPE=darwin
 

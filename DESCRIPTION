@@ -1,4 +1,4 @@
-Package: rpg
+Package: rpq
 Version: 0.1
 Title: R interface to the PostgreSQL database system
 Author: Joe Conway, Dirk Eddelbuettel, Tomoaki Nishiyama, Sameer Kumar

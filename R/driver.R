@@ -1,15 +1,15 @@
-setClass("PgDriver", contains = "DBIDriver")
+setClass("PqDriver", contains = "DBIDriver")
 
 #' Postgres driver
 #'
 #' @aliases PgDriver-class
 #' @export
-#' @useDynLib rpg
+#' @useDynLib rpq
 #' @importFrom Rcpp evalCpp
-pg <- function() {
-  new("PgDriver")
+pq <- function() {
+  new("PqDriver")
 }
 
-setMethod("show", "PgDriver", function(object) {
-  cat("<PgDriver>\n")
+setMethod("show", "PqDriver", function(object) {
+  cat("<PqDriver>\n")
 })
