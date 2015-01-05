@@ -19,8 +19,16 @@ public:
     conn = PQconnectdbParams(&keys[0], &values[0], false);
 
     if (PQstatus(conn) != CONNECTION_OK) {
-      Rcpp::stop(PQerrorMessage(conn));
+      std::string err = PQerrorMessage(conn);
+      PQfinish(conn);
+      Rcpp::stop(err);
     }
   }
+
+  ~PqConnection() {
+    if (conn != NULL) {
+      PQfinish(conn);
+    }
+  };
 
 };
