@@ -3,6 +3,7 @@
 
 class PqConnection {
   PGconn* conn;
+  PGresult* res;
 
 public:
   PqConnection(std::vector<std::string> keys_, std::vector<std::string> values_) {
@@ -25,9 +26,42 @@ public:
     }
   }
 
+  void exec(std::string query) {
+    if (res != NULL) {
+      PQclear(res);
+    }
+
+    res = PQexecParams(conn, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
+
+    if (PQresultStatus(res) == PGRES_FATAL_ERROR) {
+      Rcpp::stop(PQerrorMessage(conn));
+    }
+  }
+
+  Rcpp::List exception_details() {
+    if (res == NULL) {
+      Rcpp::stop("No query executed on this connection");
+    }
+
+    const char* sev = PQresultErrorField(res, PG_DIAG_SEVERITY);
+    const char* msg = PQresultErrorField(res, PG_DIAG_MESSAGE_PRIMARY);
+    const char* det = PQresultErrorField(res, PG_DIAG_MESSAGE_DETAIL);
+    const char* hnt = PQresultErrorField(res, PG_DIAG_MESSAGE_HINT);
+
+    return Rcpp::List::create(
+      Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
+      Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
+      Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
+      Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
+    );
+  }
+
   ~PqConnection() {
     if (conn != NULL) {
       PQfinish(conn);
+    }
+    if (res != NULL) {
+      PQclear(res);
     }
   };
 

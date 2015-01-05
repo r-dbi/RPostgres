@@ -8,3 +8,12 @@ XPtr<PqConnection> connect(std::vector<std::string> keys, std::vector<std::strin
   return XPtr<PqConnection>(conn, true);
 }
 
+// [[Rcpp::export]]
+void exec(XPtr<PqConnection> con, std::string query) {
+  con->exec(query);
+}
+
+// [[Rcpp::export]]
+List exception_details(XPtr<PqConnection> con) {
+  return con->exception_details();
+}

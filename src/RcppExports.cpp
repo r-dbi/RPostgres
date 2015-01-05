@@ -22,6 +22,34 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// exec
+void exec(XPtr<PqConnection> con, std::string query);
+RcppExport SEXP rpq_exec(SEXP conSEXP, SEXP querySEXP) {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        Rcpp::traits::input_parameter< std::string >::type query(querySEXP );
+        exec(con, query);
+    }
+    return R_NilValue;
+END_RCPP
+}
+// exception_details
+List exception_details(XPtr<PqConnection> con);
+RcppExport SEXP rpq_exception_details(SEXP conSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        List __result = exception_details(con);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // encrypt_password
 String encrypt_password(String password, String user);
 RcppExport SEXP rpq_encrypt_password(SEXP passwordSEXP, SEXP userSEXP) {

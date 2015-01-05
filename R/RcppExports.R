@@ -5,6 +5,14 @@ connect <- function(keys, values) {
     .Call('rpq_connect', PACKAGE = 'rpq', keys, values)
 }
 
+exec <- function(con, query) {
+    invisible(.Call('rpq_exec', PACKAGE = 'rpq', con, query))
+}
+
+exception_details <- function(con) {
+    .Call('rpq_exception_details', PACKAGE = 'rpq', con)
+}
+
 encrypt_password <- function(password, user) {
     .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
 }
