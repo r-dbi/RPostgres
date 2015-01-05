@@ -1,12 +1,9 @@
 Package: rpq
 Version: 0.1
-Title: R interface to the PostgreSQL database system
-Author: Joe Conway, Dirk Eddelbuettel, Tomoaki Nishiyama, Sameer Kumar
-    Prayaga (during 2008), Neil Tiffin
-Maintainer: Tomoaki Nishiyama <tomoakin@staff.kanazawa-u.ac.jp>
-Description: Database interface and PostgreSQL driver for R This
-    package provides a Database Interface (DBI) compliant driver
-    for R to access PostgreSQL database systems.
+Title: Experimental Rcpp Interface to PostgreSQL.
+Author: Hadley Wickham, build scripts from RPostgreSQL.
+Maintainer: Hadley Wickham <hadley@rstudio.com>
+Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
 LazyLoad: true
 Depends:
     R (>= 3.1.0),
