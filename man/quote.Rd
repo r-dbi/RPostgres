@@ -12,9 +12,11 @@
 \S4method{dbQuoteIdentifier}{PqConnection,character}(conn, x, ...)
 }
 \arguments{
-\item{conn}{A \linkS4class{PQConnection} created by \code{dbConnect()}}
+\item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}
 
 \item{x}{A character to escaped}
+
+\item{...}{Other arguments needed for compatibility with generic}
 }
 \description{
 Quote postgres strings and identifiers.

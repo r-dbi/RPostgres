@@ -26,6 +26,8 @@ appropriate line in \code{~/.pgpass}. See below for details.}
 \item{...}{Other name-value pairs that describe additional connection
 options as described at
 \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
+
+\item{conn}{Connection to disconnect.}
 }
 \description{
 Note that manually disconnecting a connection is not necessary with rpq; if

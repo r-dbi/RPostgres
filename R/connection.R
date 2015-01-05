@@ -46,6 +46,7 @@ setMethod("show", "PqConnection", function(object) {
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
 #'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
+#' @param conn Connection to disconnect.
 #' @export
 #' @examples
 #' con <- dbConnect(pq())
