@@ -39,16 +39,12 @@ public:
     }
 
     res = PQexecParams(conn, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
-
-    if (PQresultStatus(res) == PGRES_FATAL_ERROR) {
-      Rcpp::stop(PQerrorMessage(conn));
-    }
+    res_check();
   }
 
   Rcpp::List exception_details() {
-    if (res == NULL) {
-      Rcpp::stop("No query executed on this connection");
-    }
+    if (res == NULL)
+      Rcpp::stop("No results");
 
     const char* sev = PQresultErrorField(res, PG_DIAG_SEVERITY);
     const char* msg = PQresultErrorField(res, PG_DIAG_MESSAGE_PRIMARY);
@@ -142,6 +138,15 @@ public:
     if (status == CONNECTION_OK) return;
 
     Rcpp::stop("Lost connection to database");
+  }
+
+  void res_check() {
+    if (res == NULL)
+      Rcpp::stop("No results");
+
+    if (PQresultStatus(res) == PGRES_FATAL_ERROR) {
+      Rcpp::stop(PQerrorMessage(conn));
+    }
   }
 
   ~PqConnection() {
