@@ -27,6 +27,8 @@ public:
       PQfinish(conn);
       Rcpp::stop(err);
     }
+
+    PQsetClientEncoding(conn, "UTF-8");
   }
 
   void exec(std::string query) {
