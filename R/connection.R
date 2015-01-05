@@ -46,8 +46,23 @@ setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
 
 #' @export
 #' @rdname dbConnect-PqDriver-method
-#' @keywords internal
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   disconnect(conn@ptr)
   TRUE
+})
+
+#' Get more details of error related to exception.
+#'
+#' @param conn A \code{PQConnection} object
+#' @param ... Needed for compatibility with generic; otherwise ignored.
+#' @export
+#' @examples
+#' con <- dbConnect(rpq::pq())
+#' try(dbSendQuery(con, "BLAH"), silent = TRUE)
+#' dbGetException(con)
+#'
+#' try(dbSendQuery(con, "SELECT 1 + 'a'"), silent = TRUE)
+#' dbGetException(con)
+setMethod("dbGetException", "PqConnection", function(conn, ...) {
+  exception_details(conn@ptr)
 })

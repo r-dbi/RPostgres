@@ -37,5 +37,4 @@ disconnected during the next GC.
 con <- dbConnect(pq())
 dbDisconnect(con)
 }
-\keyword{internal}
 
