@@ -9,8 +9,8 @@ exec <- function(con, query) {
     invisible(.Call('rpq_exec', PACKAGE = 'rpq', con, query))
 }
 
-exception_details <- function(con) {
-    .Call('rpq_exception_details', PACKAGE = 'rpq', con)
+exception_info <- function(con) {
+    .Call('rpq_exception_info', PACKAGE = 'rpq', con)
 }
 
 con_info <- function(con) {

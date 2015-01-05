@@ -14,8 +14,8 @@ void exec(XPtr<PqConnection> con, std::string query) {
 }
 
 // [[Rcpp::export]]
-List exception_details(XPtr<PqConnection> con) {
-  return con->exception_details();
+List exception_info(XPtr<PqConnection> con) {
+  return con->exception_info();
 }
 
 // [[Rcpp::export]]

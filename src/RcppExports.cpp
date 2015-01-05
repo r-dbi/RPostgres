@@ -35,15 +35,15 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// exception_details
-List exception_details(XPtr<PqConnection> con);
-RcppExport SEXP rpq_exception_details(SEXP conSEXP) {
+// exception_info
+List exception_info(XPtr<PqConnection> con);
+RcppExport SEXP rpq_exception_info(SEXP conSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
-        List __result = exception_details(con);
+        List __result = exception_info(con);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

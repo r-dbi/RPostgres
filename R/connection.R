@@ -89,5 +89,5 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' try(dbSendQuery(con, "SELECT 1 + 'a'"), silent = TRUE)
 #' dbGetException(con)
 setMethod("dbGetException", "PqConnection", function(conn, ...) {
-  exception_details(conn@ptr)
+  exception_info(conn@ptr)
 })

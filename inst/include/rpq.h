@@ -31,32 +31,35 @@ public:
     PQsetClientEncoding(conn, "UTF-8");
   }
 
-  void exec(std::string query) {
-    con_check();
+  ~PqConnection() {
+    disconnect();
+  };
 
+  void disconnect() {
     if (res != NULL) {
       PQclear(res);
+      res = NULL;
     }
-
-    res = PQexecParams(conn, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
-    res_check();
+    if (conn != NULL) {
+      PQfinish(conn);
+      conn = NULL;
+    }
   }
 
-  Rcpp::List exception_details() {
-    if (res == NULL)
-      Rcpp::stop("No results");
+  // Connections ---------------------------------------------------------------
+  void con_check() {
+    if (conn == NULL)
+      Rcpp::stop("Connection has been closed");
 
-    const char* sev = PQresultErrorField(res, PG_DIAG_SEVERITY);
-    const char* msg = PQresultErrorField(res, PG_DIAG_MESSAGE_PRIMARY);
-    const char* det = PQresultErrorField(res, PG_DIAG_MESSAGE_DETAIL);
-    const char* hnt = PQresultErrorField(res, PG_DIAG_MESSAGE_HINT);
+    ConnStatusType status = PQstatus(conn);
+    if (status == CONNECTION_OK) return;
 
-    return Rcpp::List::create(
-      Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
-      Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
-      Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
-      Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
-    );
+    // Status was bad, so try resetting.
+    PQreset(conn);
+    status = PQstatus(conn);
+    if (status == CONNECTION_OK) return;
+
+    Rcpp::stop("Lost connection to database");
   }
 
   Rcpp::List con_info() {
@@ -75,32 +78,6 @@ public:
       Rcpp::_["protocol_version"]   = pver,
       Rcpp::_["server_version"]     = sver
     );
-  }
-
-  int rows_affected() {
-    if (!is_valid_res()) Rcpp::stop("No query exectuted");
-    if (PQresultStatus(res) != PGRES_COMMAND_OK) Rcpp::stop("Not a DDL query");
-
-    return atoi(PQcmdTuples(res));
-  }
-
-  bool is_valid_conn() {
-    return conn != NULL;
-  }
-
-  bool is_valid_res() {
-    return res != NULL;
-  }
-
-  void disconnect() {
-    if (res != NULL) {
-      PQclear(res);
-      res = NULL;
-    }
-    if (conn != NULL) {
-      PQfinish(conn);
-      conn = NULL;
-    }
   }
 
   // Returns a single CHRSXP
@@ -125,19 +102,17 @@ public:
     return escaped;
   }
 
-  void con_check() {
-    if (conn == NULL)
-      Rcpp::stop("Connection has been closed");
 
-    ConnStatusType status = PQstatus(conn);
-    if (status == CONNECTION_OK) return;
+  // Results -------------------------------------------------------------------
+  void exec(std::string query) {
+    con_check();
 
-    // Status was bad, so try resetting.
-    PQreset(conn);
-    status = PQstatus(conn);
-    if (status == CONNECTION_OK) return;
+    if (res != NULL) {
+      PQclear(res);
+    }
 
-    Rcpp::stop("Lost connection to database");
+    res = PQexecParams(conn, query.c_str(), 0, NULL, NULL, NULL, NULL, 0);
+    res_check();
   }
 
   void res_check() {
@@ -149,8 +124,28 @@ public:
     }
   }
 
-  ~PqConnection() {
-    disconnect();
-  };
+  Rcpp::List exception_info() {
+    if (res == NULL)
+      Rcpp::stop("No results");
 
+    const char* sev = PQresultErrorField(res, PG_DIAG_SEVERITY);
+    const char* msg = PQresultErrorField(res, PG_DIAG_MESSAGE_PRIMARY);
+    const char* det = PQresultErrorField(res, PG_DIAG_MESSAGE_DETAIL);
+    const char* hnt = PQresultErrorField(res, PG_DIAG_MESSAGE_HINT);
+
+    return Rcpp::List::create(
+      Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
+      Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
+      Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
+      Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
+    );
+  }
+
+  int rows_affected() {
+    res_check();
+    if (PQresultStatus(res) != PGRES_COMMAND_OK)
+      Rcpp::stop("Not a data modifying query");
+
+    return atoi(PQcmdTuples(res));
+  }
 };
