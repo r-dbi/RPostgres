@@ -8,9 +8,10 @@ Description: Database interface and PostgreSQL driver for R This
         package provides a Database Interface (DBI) compliant driver
         for R to access PostgreSQL database systems.
 LazyLoad: true
-Depends: R (>= 2.9.0), methods, DBI (>= 0.1-4)
+Depends: R (>= 3.1.0), methods, DBI (>= 0.3.1)
 License: GPL-2 | file LICENSE
 Copyright: Authors listed above, PostgreSQL Global Development Group,
         and The Regents of the University of California
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports:
+    Rcpp
