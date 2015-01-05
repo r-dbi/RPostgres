@@ -5,7 +5,7 @@ Author: Hadley Wickham, build scripts from RPostgreSQL.
 Maintainer: Hadley Wickham <hadley@rstudio.com>
 Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
 LazyLoad: true
-Depends:
+Depends: 
     R (>= 3.1.0),
     methods,
     DBI (>= 0.3.1)
@@ -13,9 +13,10 @@ License: GPL-2 | file LICENSE
 Copyright: Authors listed above, PostgreSQL Global Development Group,
     and The Regents of the University of California
 LinkingTo: Rcpp
-Imports:
+Imports: 
     Rcpp
-Collate:
+Collate: 
     'RcppExports.R'
     'driver.R'
     'connection.R'
+Suggests: testthat
