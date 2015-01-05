@@ -2,7 +2,6 @@
 % Please edit documentation in R/connection.R
 \docType{methods}
 \name{dbConnect,PqDriver-method}
-\alias{PqConnection-class}
 \alias{dbConnect,PqDriver-method}
 \alias{dbDisconnect,PqConnection-method}
 \title{Connect to a PostgreSQL database.}
