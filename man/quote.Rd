@@ -2,16 +2,28 @@
 % Please edit documentation in R/quote.R
 \docType{methods}
 \name{quote}
-\alias{dbQuoteIdentifier,PqConnection,ANY-method}
-\alias{dbQuoteString,PqConnection,ANY-method}
+\alias{dbQuoteIdentifier,PqConnection,character-method}
+\alias{dbQuoteString,PqConnection,character-method}
 \alias{quote}
-\title{Quote postgres strings and identifiers}
+\title{Quote postgres strings and identifiers.}
 \usage{
-\S4method{dbQuoteString}{PqConnection,ANY}(conn, x, ...)
+\S4method{dbQuoteString}{PqConnection,character}(conn, x, ...)
 
-\S4method{dbQuoteIdentifier}{PqConnection,ANY}(conn, x, ...)
+\S4method{dbQuoteIdentifier}{PqConnection,character}(conn, x, ...)
+}
+\arguments{
+\item{conn}{A \linkS4class{PQConnection} created by \code{dbConnect()}}
+
+\item{x}{A character to escaped}
 }
 \description{
-Quote postgres strings and identifiers
+Quote postgres strings and identifiers.
+}
+\examples{
+con <- dbConnect(rpq::pq())
+
+x <- c("a", "b c", "d'e", "\\\\f"d)
+dbQuoteString(con, x)
+dbQuoteIdentifier(con, x)
 }
 
