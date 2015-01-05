@@ -50,6 +50,21 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// con_info
+List con_info(XPtr<PqConnection> con);
+RcppExport SEXP rpq_con_info(SEXP conSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        List __result = con_info(con);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // rows_affected
 int rows_affected(XPtr<PqConnection> con);
 RcppExport SEXP rpq_rows_affected(SEXP conSEXP) {

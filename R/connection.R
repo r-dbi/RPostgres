@@ -1,9 +1,34 @@
 #' @include driver.R
+NULL
+
+#' PqConnection and methods.
+#'
+#' @keywords internal
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
   slots = list(ptr = "externalptr")
 )
+
+#' @export
+#' @rdname PqConnection-class
+setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
+  con_info(dbObj@ptr)
+})
+
+#' @export
+#' @rdname PqConnection-class
+setMethod("show", "PqConnection", function(object) {
+  info <- dbGetInfo(object)
+
+  if (info$host == "") {
+    host <- "socket"
+  } else {
+    host <- paste0(info$host, ":", info$port)
+  }
+
+  cat("<PqConnection> ", info$dbname, "@", host, "\n", sep = "")
+})
 
 #' Connect to a PostgreSQL database.
 #'
@@ -21,7 +46,6 @@ setClass("PqConnection",
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
 #'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
-#' @aliases PqConnection-class
 #' @export
 #' @examples
 #' con <- dbConnect(pq())

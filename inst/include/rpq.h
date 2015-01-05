@@ -61,6 +61,22 @@ public:
     );
   }
 
+  Rcpp::List con_info() {
+    const char* dbnm = PQdb(conn);
+    const char* host = PQhost(conn);
+    const char* port = PQport(conn);
+    int pver = PQprotocolVersion(conn);
+    int sver = PQserverVersion(conn);
+
+    return Rcpp::List::create(
+      Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
+      Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
+      Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
+      Rcpp::_["protocol_version"]   = pver,
+      Rcpp::_["server_version"]     = sver
+    );
+  }
+
   int rows_affected() {
     if (!is_valid_res()) Rcpp::stop("No query exectuted");
     if (PQresultStatus(res) != PGRES_COMMAND_OK) Rcpp::stop("Not a DDL query");

@@ -13,6 +13,10 @@ exception_details <- function(con) {
     .Call('rpq_exception_details', PACKAGE = 'rpq', con)
 }
 
+con_info <- function(con) {
+    .Call('rpq_con_info', PACKAGE = 'rpq', con)
+}
+
 rows_affected <- function(con) {
     .Call('rpq_rows_affected', PACKAGE = 'rpq', con)
 }

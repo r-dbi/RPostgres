@@ -19,6 +19,11 @@ List exception_details(XPtr<PqConnection> con) {
 }
 
 // [[Rcpp::export]]
+List con_info(XPtr<PqConnection> con) {
+  return con->con_info();
+}
+
+// [[Rcpp::export]]
 int rows_affected(XPtr<PqConnection> con) {
   return con->rows_affected();
 }
