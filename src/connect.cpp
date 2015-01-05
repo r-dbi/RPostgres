@@ -17,3 +17,9 @@ void exec(XPtr<PqConnection> con, std::string query) {
 List exception_details(XPtr<PqConnection> con) {
   return con->exception_details();
 }
+
+// [[Rcpp::export]]
+int rows_affected(XPtr<PqConnection> con) {
+  return con->rows_affected();
+}
+

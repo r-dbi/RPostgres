@@ -7,6 +7,9 @@ class PqConnection {
 
 public:
   PqConnection(std::vector<std::string> keys_, std::vector<std::string> values_) {
+    conn = NULL;
+    res = NULL;
+
     int n = keys_.size();
     std::vector<const char*> keys(n + 1), values(n + 1);
 
@@ -54,6 +57,21 @@ public:
       Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
       Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
     );
+  }
+
+  int rows_affected() {
+    if (!is_valid_res()) Rcpp::stop("No query exectuted");
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) Rcpp::stop("Not a DDL query");
+
+    return atoi(PQcmdTuples(res));
+  }
+
+  bool is_valid_conn() {
+    return conn != NULL;
+  }
+
+  bool is_valid_res() {
+    return res != NULL;
   }
 
   ~PqConnection() {
