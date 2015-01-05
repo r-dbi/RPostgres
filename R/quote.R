@@ -8,7 +8,7 @@ NULL
 #' @examples
 #' con <- dbConnect(rpq::pq())
 #'
-#' x <- c("a", "b c", "d'e", "\\f"d)
+#' x <- c("a", "b c", "d'e", "\\f")
 #' dbQuoteString(con, x)
 #' dbQuoteIdentifier(con, x)
 #' @name quote
