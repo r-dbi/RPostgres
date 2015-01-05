@@ -74,13 +74,19 @@ public:
     return res != NULL;
   }
 
-  ~PqConnection() {
-    if (conn != NULL) {
-      PQfinish(conn);
-    }
+  void disconnect() {
     if (res != NULL) {
       PQclear(res);
+      res = NULL;
     }
+    if (conn != NULL) {
+      PQfinish(conn);
+      conn = NULL;
+    }
+  }
+
+  ~PqConnection() {
+    disconnect();
   };
 
 };

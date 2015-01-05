@@ -65,6 +65,18 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// disconnect
+void disconnect(XPtr<PqConnection> con);
+RcppExport SEXP rpq_disconnect(SEXP conSEXP) {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< XPtr<PqConnection> >::type con(conSEXP );
+        disconnect(con);
+    }
+    return R_NilValue;
+END_RCPP
+}
 // encrypt_password
 String encrypt_password(String password, String user);
 RcppExport SEXP rpq_encrypt_password(SEXP passwordSEXP, SEXP userSEXP) {

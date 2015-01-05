@@ -3,5 +3,8 @@
 export(pq)
 exportClasses(PqConnection)
 exportMethods(dbConnect)
+exportMethods(dbDisconnect)
+import(DBI)
+import(methods)
 importFrom(Rcpp,evalCpp)
 useDynLib(rpq)

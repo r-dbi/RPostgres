@@ -23,3 +23,7 @@ int rows_affected(XPtr<PqConnection> con) {
   return con->rows_affected();
 }
 
+// [[Rcpp::export]]
+void disconnect(XPtr<PqConnection> con) {
+  return con->disconnect();
+}

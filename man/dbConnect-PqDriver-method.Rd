@@ -4,10 +4,13 @@
 \name{dbConnect,PqDriver-method}
 \alias{PqConnection-class}
 \alias{dbConnect,PqDriver-method}
+\alias{dbDisconnect,PqConnection-method}
 \title{Connect to a PostgreSQL database.}
 \usage{
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
   port = NULL, password = NULL, user = NULL, ...)
+
+\S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
 \arguments{
 \item{drv}{\code{rpg::pq()}}
@@ -26,11 +29,13 @@ options as described at
 \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 }
 \description{
-Connect to a PostgreSQL database.
+Note that manually disconnecting a connection is not necessary with rpq; if
+you delete the object containing the connection, it will be automatcally
+disconnected during the next GC.
 }
 \examples{
-\donttest{
-dbConnect(pq())
+con <- dbConnect(pq())
+dbDisconnect(con)
 }
-}
+\keyword{internal}
 

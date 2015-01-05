@@ -17,6 +17,10 @@ rows_affected <- function(con) {
     .Call('rpq_rows_affected', PACKAGE = 'rpq', con)
 }
 
+disconnect <- function(con) {
+    invisible(.Call('rpq_disconnect', PACKAGE = 'rpq', con))
+}
+
 encrypt_password <- function(password, user) {
     .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
 }
