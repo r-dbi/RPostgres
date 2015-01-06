@@ -85,9 +85,11 @@ public:
     PQsetClientEncoding(pConn_, "UTF-8");
   }
 
-  ~PqConnection() {
-    disconnect();
-  };
+  virtual ~PqConnection() {
+    try {
+      disconnect();
+    } catch(...) {}
+  }
 
   void disconnect() {
     clear_result();
