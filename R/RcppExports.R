@@ -5,36 +5,12 @@ connect <- function(keys, values) {
     .Call('rpq_connect', PACKAGE = 'rpq', keys, values)
 }
 
-exec <- function(con, query) {
-    invisible(.Call('rpq_exec', PACKAGE = 'rpq', con, query))
-}
-
-exception_info <- function(con) {
-    .Call('rpq_exception_info', PACKAGE = 'rpq', con)
-}
-
 con_info <- function(con) {
     .Call('rpq_con_info', PACKAGE = 'rpq', con)
 }
 
-rows_affected <- function(con) {
-    .Call('rpq_rows_affected', PACKAGE = 'rpq', con)
-}
-
-is_complete <- function(con) {
-    .Call('rpq_is_complete', PACKAGE = 'rpq', con)
-}
-
-fetch <- function(con) {
-    .Call('rpq_fetch', PACKAGE = 'rpq', con)
-}
-
 disconnect <- function(con) {
     invisible(.Call('rpq_disconnect', PACKAGE = 'rpq', con))
-}
-
-clear_result <- function(con) {
-    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', con))
 }
 
 escape_string <- function(con, xs) {
@@ -47,5 +23,25 @@ escape_identifier <- function(con, xs) {
 
 encrypt_password <- function(password, user) {
     .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
+}
+
+exec <- function(con, sql) {
+    .Call('rpq_exec', PACKAGE = 'rpq', con, sql)
+}
+
+fetch <- function(rs) {
+    .Call('rpq_fetch', PACKAGE = 'rpq', rs)
+}
+
+rows_affected <- function(rs) {
+    .Call('rpq_rows_affected', PACKAGE = 'rpq', rs)
+}
+
+is_complete <- function(rs) {
+    .Call('rpq_is_complete', PACKAGE = 'rpq', rs)
+}
+
+clear_result <- function(con) {
+    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', con))
 }
 
