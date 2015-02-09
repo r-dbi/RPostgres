@@ -49,3 +49,7 @@ postgres_result_valid <- function(rs) {
     .Call('rpq_postgres_result_valid', PACKAGE = 'rpq', rs)
 }
 
+postgres_row_count <- function(rs) {
+    .Call('rpq_postgres_row_count', PACKAGE = 'rpq', rs)
+}
+

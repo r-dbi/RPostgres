@@ -142,3 +142,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// postgres_row_count
+int postgres_row_count(XPtr<PqResult> rs);
+RcppExport SEXP rpq_postgres_row_count(SEXP rsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
+    __result = Rcpp::wrap(postgres_row_count(rs));
+    return __result;
+END_RCPP
+}

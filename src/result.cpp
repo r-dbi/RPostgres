@@ -32,3 +32,8 @@ void clear_result(XPtr<PqResult> rs) {
 bool postgres_result_valid(XPtr<PqResult> rs) {
   return rs->active();
 }
+
+// [[Rcpp::export]]
+int postgres_row_count(XPtr<PqResult> rs) {
+  return rs->nrows();
+}

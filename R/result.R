@@ -23,6 +23,10 @@ setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
   postgres_result_valid(dbObj@ptr)
 })
 
+setMethod("dbGetRowCount", "PqResult", function(res, ...) {
+  postgres_row_count(res@ptr)
+})
+
 #' @rdname PqResult-class
 #' @export
 setMethod("show", "PqResult", function(object) {
