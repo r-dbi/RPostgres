@@ -54,6 +54,9 @@ public:
   }
 
   void init() {
+    if (!active())
+      Rcpp::stop("Inactive result set");
+
     if (pLastRow_.get() != NULL)
       return;
 
@@ -67,12 +70,10 @@ public:
   }
 
   Rcpp::List fetch(int n_max = 10) {
-    if (!active())
-      Rcpp::stop("Inactive result set");
-
     init();
-    Rcpp::List out = df_create(types_, n_max);
+
     int n = n_max;
+    Rcpp::List out = df_create(types_, n);
 
     for(int i = 0; i < n_max; ++i) {
       if (pLastRow_->complete()) {
@@ -90,6 +91,38 @@ public:
       out = df_resize(out, n);
 
     out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
+    out.attr("class") = "data.frame";
+    out.attr("names") = names_;
+
+    return out;
+  }
+
+  Rcpp::List fetch_all() {
+    init();
+
+    int n = 100;
+    Rcpp::List out = df_create(types_, n);
+
+    int i = 0;
+    while(!pLastRow_->complete()) {
+      if (i >= n) {
+        n *= 2;
+        out = df_resize(out, n);
+      }
+
+      for (int j = 0; j < ncols_; ++j) {
+        pLastRow_->set_list_value(out[j], i, j);
+      }
+      step();
+      ++i;
+    }
+
+    // Trim back to what we actually used
+    if (i < n) {
+      out = df_resize(out, i);
+    }
+
+    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -i);
     out.attr("class") = "data.frame";
     out.attr("names") = names_;
 
