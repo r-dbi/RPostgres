@@ -14,7 +14,7 @@ Copyright: Authors listed above, PostgreSQL Global Development Group,
     and The Regents of the University of California
 LinkingTo: Rcpp
 Imports:
-    Rcpp
+    Rcpp (>= 0.11.4.2)
 Collate:
     'RcppExports.R'
     'driver.R'

@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include <rpq.h>
+#include "rpq_types.h"
 using namespace Rcpp;
 
 // [[Rcpp::export]]
@@ -42,7 +42,7 @@ List fetch(XPtr<PqConnection> con) {
 
 // [[Rcpp::export]]
 void disconnect(XPtr<PqConnection> con) {
-  return con->disconnect();
+  con.release();
 }
 
 // [[Rcpp::export]]

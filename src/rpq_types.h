@@ -87,23 +87,13 @@ public:
 
   virtual ~PqConnection() {
     try {
-      disconnect();
-    } catch(...) {}
-  }
-
-  void disconnect() {
-    clear_result();
-    if (pConn_ != NULL) {
+      clear_result();
       PQfinish(pConn_);
-      pConn_ = NULL;
-    }
+    } catch(...) {}
   }
 
   // Connections ---------------------------------------------------------------
   void con_check() {
-    if (pConn_ == NULL)
-      Rcpp::stop("Connection has been closed");
-
     ConnStatusType status = PQstatus(pConn_);
     if (status == CONNECTION_OK) return;
 
