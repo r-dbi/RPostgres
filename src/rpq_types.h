@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include <libpq-fe.h>
+#include <boost/noncopyable.hpp>
 
 inline Rcpp::IntegerVector int_fill_col(PGresult* res, int j, int n) {
   Rcpp::IntegerVector col(n);
@@ -54,7 +55,7 @@ inline Rcpp::LogicalVector lgl_fill_col(PGresult* res, int j, int n) {
   return col;
 }
 
-class PqConnection {
+class PqConnection : boost::noncopyable {
   PGconn* pConn_;
   PGresult* pRes_;
   int rows_, fetched_rows_;
@@ -277,10 +278,5 @@ public:
 
     return atoi(PQcmdTuples(pRes_));
   }
-
-  // Prevent copying because of shared resource
-private:
-  PqConnection( PqConnection const& );
-  PqConnection operator=( PqConnection const& );
 
 };
