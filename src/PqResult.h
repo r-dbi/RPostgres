@@ -77,7 +77,7 @@ public:
       }
 
       for (int j = 0; j < ncols_; ++j) {
-        pLastRow_->set_list_value(out[j], i, j, types_[j]);
+        pLastRow_->set_list_value(out[j], i, j);
       }
       step();
     }

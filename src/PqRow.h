@@ -13,8 +13,9 @@ class PqRow : boost::noncopyable {
 public:
 
   PqRow(PGconn* conn) {
-    if (conn != NULL)
-      pRes_ = PQgetResult(conn);
+    if (conn == NULL)
+      return;
+    pRes_ = PQgetResult(conn);
   }
 
   // Query is complete when PQgetResult returns NULL
@@ -154,8 +155,8 @@ public:
       (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
   }
 
-  void set_list_value(SEXP x, int i, int j, SEXPTYPE type) {
-    switch(type) {
+  void set_list_value(SEXP x, int i, int j) {
+    switch(TYPEOF(x)) {
     case LGLSXP:
       LOGICAL(x)[i] = value_logical(j);
       break;
