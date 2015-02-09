@@ -5,8 +5,39 @@
 #' @export
 setClass("PqResult",
   contains = "DBIResult",
-  slots = list(ptr = "externalptr")
+  slots = list(
+    ptr = "externalptr",
+    sql = "character"
+  )
 )
+
+#' @rdname PqResult-class
+#' @export
+setMethod("dbGetStatement", "PqResult", function(res, ...) {
+  res@sql
+})
+
+#' @rdname PqResult-class
+#' @export
+setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
+  postgres_result_valid(dbObj@ptr)
+})
+
+#' @rdname PqResult-class
+#' @export
+setMethod("show", "PqResult", function(object) {
+  cat("<PqResult>\n")
+  if(!dbIsValid(object)){
+    cat("EXPIRED\n")
+  } else {
+    cat("  SQL  ", dbGetStatement(object), "\n", sep = "")
+#
+#     done <- if (dbHasCompleted(object)) "complete" else "incomplete"
+#     cat("  ROWS Fetched: ", dbGetRowCount(object), " [", done, "]\n", sep = "")
+#     cat("       Changed: ", dbGetRowsAffected(object), "\n", sep = "")
+  }
+  invisible(NULL)
+})
 
 #' Send a query to the database.
 #'
@@ -21,9 +52,15 @@ setClass("PqResult",
 #' con <- dbConnect(rpq::pq())
 #' dbSendQuery(con, "SELECT * FROM pg_catalog.pg_tables")
 setMethod("dbSendQuery", "PqConnection", function(conn, statement, ...) {
-  exec(conn@ptr, statement)
-  new("PqResult", ptr = conn@ptr)
+  statement <- enc2utf8(statement)
+
+  new("PqResult",
+    ptr = rpostgres_send_query(conn@ptr, statement),
+    sql = statement)
 })
+
+
+
 
 #' Fetch results into a data frame
 #'

@@ -29,13 +29,13 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// disconnect
-void disconnect(XPtr<PqConnectionPtr> con);
-RcppExport SEXP rpq_disconnect(SEXP conSEXP) {
+// postgres_disconnect
+void postgres_disconnect(XPtr<PqConnectionPtr> con);
+RcppExport SEXP rpq_postgres_disconnect(SEXP conSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
-    disconnect(con);
+    postgres_disconnect(con);
     return R_NilValue;
 END_RCPP
 }
@@ -75,15 +75,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// exec
-XPtr<PqResult> exec(XPtr<PqConnectionPtr> con, std::string sql);
-RcppExport SEXP rpq_exec(SEXP conSEXP, SEXP sqlSEXP) {
+// rpostgres_send_query
+XPtr<PqResult> rpostgres_send_query(XPtr<PqConnectionPtr> con, std::string sql);
+RcppExport SEXP rpq_rpostgres_send_query(SEXP conSEXP, SEXP sqlSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
     Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
-    __result = Rcpp::wrap(exec(con, sql));
+    __result = Rcpp::wrap(rpostgres_send_query(con, sql));
     return __result;
 END_RCPP
 }
@@ -121,12 +121,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // clear_result
-void clear_result(XPtr<PqResult> con);
-RcppExport SEXP rpq_clear_result(SEXP conSEXP) {
+void clear_result(XPtr<PqResult> rs);
+RcppExport SEXP rpq_clear_result(SEXP rsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< XPtr<PqResult> >::type con(conSEXP);
-    clear_result(con);
+    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
+    clear_result(rs);
     return R_NilValue;
+END_RCPP
+}
+// postgres_result_valid
+bool postgres_result_valid(XPtr<PqResult> rs);
+RcppExport SEXP rpq_postgres_result_valid(SEXP rsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
+    __result = Rcpp::wrap(postgres_result_valid(rs));
+    return __result;
 END_RCPP
 }

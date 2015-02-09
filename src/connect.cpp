@@ -16,7 +16,13 @@ List con_info(XPtr<PqConnectionPtr> con) {
 }
 
 // [[Rcpp::export]]
-void disconnect(XPtr<PqConnectionPtr> con) {
+void postgres_disconnect(XPtr<PqConnectionPtr> con) {
+  if ((*con)->has_query()) {
+    warning("%s\n%s",
+      "There is a result object still in use.",
+      "The connection will be automatically released when it is closed"
+    );
+  }
   con.release();
 }
 

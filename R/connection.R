@@ -72,7 +72,7 @@ setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
 #' @export
 #' @rdname dbConnect-PqDriver-method
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
-  disconnect(conn@ptr)
+  postgres_disconnect(conn@ptr)
   TRUE
 })
 

@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-XPtr<PqResult> exec(XPtr<PqConnectionPtr> con, std::string sql) {
+XPtr<PqResult> rpostgres_send_query(XPtr<PqConnectionPtr> con, std::string sql) {
   PqResult* res = new PqResult(*con, sql);
   return XPtr<PqResult>(res, true);
 }
@@ -24,6 +24,11 @@ bool is_complete(XPtr<PqResult> rs) {
 }
 
 // [[Rcpp::export]]
-void clear_result(XPtr<PqResult> con) {
-  con.release();
+void clear_result(XPtr<PqResult> rs) {
+  rs.release();
+}
+
+// [[Rcpp::export]]
+bool postgres_result_valid(XPtr<PqResult> rs) {
+  return rs->active();
 }

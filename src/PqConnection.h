@@ -54,9 +54,12 @@ public:
 
   // Cancels previous query, if needed.
   void setCurrentResult(PqResult* pResult) {
+    if (pResult == pCurrentResult_)
+      return;
+
     if (pCurrentResult_ != NULL) {
       if (pResult != NULL)
-        Rf_warning("Cancelling previous query");
+        Rcpp::warning("Cancelling previous query");
 
       con_check();
       PGcancel* cancel = PQgetCancel(pConn_);
@@ -64,14 +67,20 @@ public:
         return;
 
       char errbuf[256];
-      PQcancel(cancel, errbuf, 256);
+      int rc = PQcancel(cancel, errbuf, 256);
+      if (rc == 0)
+        Rcpp::warning(errbuf);
       PQfreeCancel(cancel);
     }
     pCurrentResult_ = pResult;
   }
 
   bool isCurrentResult(PqResult* pResult) {
-    return pResult == pCurrentResult_;
+    return pCurrentResult_ == pResult;
+  }
+
+  bool has_query() {
+    return pCurrentResult_ != NULL;
   }
 
   void con_check() {

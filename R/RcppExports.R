@@ -9,8 +9,8 @@ con_info <- function(con) {
     .Call('rpq_con_info', PACKAGE = 'rpq', con)
 }
 
-disconnect <- function(con) {
-    invisible(.Call('rpq_disconnect', PACKAGE = 'rpq', con))
+postgres_disconnect <- function(con) {
+    invisible(.Call('rpq_postgres_disconnect', PACKAGE = 'rpq', con))
 }
 
 escape_string <- function(con, xs) {
@@ -25,8 +25,8 @@ encrypt_password <- function(password, user) {
     .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
 }
 
-exec <- function(con, sql) {
-    .Call('rpq_exec', PACKAGE = 'rpq', con, sql)
+rpostgres_send_query <- function(con, sql) {
+    .Call('rpq_rpostgres_send_query', PACKAGE = 'rpq', con, sql)
 }
 
 fetch <- function(rs) {
@@ -41,7 +41,11 @@ is_complete <- function(rs) {
     .Call('rpq_is_complete', PACKAGE = 'rpq', rs)
 }
 
-clear_result <- function(con) {
-    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', con))
+clear_result <- function(rs) {
+    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', rs))
+}
+
+postgres_result_valid <- function(rs) {
+    .Call('rpq_postgres_result_valid', PACKAGE = 'rpq', rs)
 }
 

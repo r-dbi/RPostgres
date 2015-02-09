@@ -3,7 +3,17 @@
 \docType{class}
 \name{PqResult-class}
 \alias{PqResult-class}
+\alias{dbGetStatement,PqResult-method}
+\alias{dbIsValid,PqResult-method}
+\alias{show,PqResult-method}
 \title{PostgreSQL results.}
+\usage{
+\S4method{dbGetStatement}{PqResult}(res, ...)
+
+\S4method{dbIsValid}{PqResult}(dbObj, ...)
+
+\S4method{show}{PqResult}(object)
+}
 \description{
 PostgreSQL results.
 }

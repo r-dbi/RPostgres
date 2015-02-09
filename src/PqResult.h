@@ -27,10 +27,13 @@ public:
 
   ~PqResult() {
     try {
-      if (pConn_->isCurrentResult(this)) {
+      if (active())
         pConn_->setCurrentResult(NULL);
-      }
     } catch (...) {}
+  }
+
+  bool active() {
+    return pConn_->isCurrentResult(this);
   }
 
   Rcpp::List fetch(int n = 10) {
