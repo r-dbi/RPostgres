@@ -117,6 +117,63 @@ public:
       Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
     );
   }
+
+  // Value accessors -----------------------------------------------------------
+  bool value_null(int j) {
+    return PQgetisnull(pRes_, 0, j);
+  }
+
+  int value_int(int j) {
+    return value_null(j) ? NA_INTEGER : atoi(PQgetvalue(pRes_, 0, j));
+  }
+
+  double value_double(double j) {
+    return value_null(j) ? NA_REAL : atof(PQgetvalue(pRes_, 0, j));
+  }
+
+  SEXP value_string(int j) {
+    if (value_null(j))
+      return NA_STRING;
+
+    char* val = PQgetvalue(pRes_, 0, j);
+    return Rf_mkCharCE(val, CE_UTF8);
+  }
+
+  SEXP value_raw(int j) {
+    int size = PQgetlength(pRes_, 0, j);
+    const void* blob = PQgetvalue(pRes_, 0, j);
+
+    SEXP bytes = Rf_allocVector(RAWSXP, size);
+    memcpy(RAW(bytes), blob, size);
+
+    return bytes;
+  }
+
+  int value_logical(int j) {
+    return value_null(j) ? NA_LOGICAL :
+      (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
+  }
+
+  void set_list_value(SEXP x, int i, int j, SEXPTYPE type) {
+    switch(type) {
+    case LGLSXP:
+      LOGICAL(x)[i] = value_logical(j);
+      break;
+    case INTSXP:
+      INTEGER(x)[i] = value_int(j);
+      break;
+    case REALSXP:
+      REAL(x)[i] = value_double(j);
+      break;
+    case STRSXP:
+      SET_STRING_ELT(x, i, value_string(j));
+      break;
+    case VECSXP:
+      SET_VECTOR_ELT(x, i, value_raw(j));
+      break;
+    }
+  }
+
 };
 
 #endif
