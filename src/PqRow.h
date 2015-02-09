@@ -16,11 +16,24 @@ public:
     if (conn == NULL)
       return;
     pRes_ = PQgetResult(conn);
+
+
+    if (pRes_ != NULL && status() == PGRES_TUPLES_OK) {
+      // We're done, but we need to call PQgetResult until it returns NULL
+      while(pRes_ != NULL) {
+        PQclear(pRes_);
+        pRes_ = PQgetResult(conn);
+      }
+    }
   }
 
   // Query is complete when PQgetResult returns NULL
   bool complete() {
     return pRes_ == NULL;
+  }
+
+  ExecStatusType status() {
+    return PQresultStatus(pRes_);
   }
 
   ~PqRow() {

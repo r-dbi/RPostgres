@@ -47,13 +47,17 @@ public:
 
   void step() {
     pLastRow_.reset(new PqRow(pConn_->conn()));
-    nrows_++;
+
+    if (pLastRow_->status() == PGRES_SINGLE_TUPLE) {
+      nrows_++;
+    }
   }
 
   void init() {
     if (pLastRow_.get() != NULL)
       return;
 
+    nrows_ = 0;
     step();
 
     rowsAffected_ = pLastRow_->rowsAffected();
