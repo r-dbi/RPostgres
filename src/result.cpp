@@ -9,13 +9,13 @@ XPtr<PqResult> rpostgres_send_query(XPtr<PqConnectionPtr> con, std::string sql) 
 }
 
 // [[Rcpp::export]]
-List fetch(XPtr<PqResult> rs) {
-  return rs->fetch();
+List postgres_fetch(XPtr<PqResult> rs, int n) {
+  return rs->fetch(n);
 }
 
 // [[Rcpp::export]]
 int rows_affected(XPtr<PqResult> rs) {
-  return rs->rows_affected();
+  return rs->rowsAffected();
 }
 
 // [[Rcpp::export]]

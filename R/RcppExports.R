@@ -29,8 +29,8 @@ rpostgres_send_query <- function(con, sql) {
     .Call('rpq_rpostgres_send_query', PACKAGE = 'rpq', con, sql)
 }
 
-fetch <- function(rs) {
-    .Call('rpq_fetch', PACKAGE = 'rpq', rs)
+postgres_fetch <- function(rs, n) {
+    .Call('rpq_postgres_fetch', PACKAGE = 'rpq', rs, n)
 }
 
 rows_affected <- function(rs) {

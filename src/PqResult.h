@@ -4,8 +4,13 @@
 #include <Rcpp.h>
 #include <libpq-fe.h>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include "PqConnection.h"
 #include "PqRow.h"
+#include "PqUtils.h"
+
+typedef boost::shared_ptr<PqRow> PqRowPtr;
+
 
 // PqResult --------------------------------------------------------------------
 // There is no object analogous to PqResult in libpq: this provides a result set
@@ -14,13 +19,17 @@
 
 class PqResult : boost::noncopyable {
   PqConnectionPtr pConn_;
-  PqRow lastRow_;
+  PqRowPtr pLastRow_;
+  std::vector<SEXPTYPE> types_;
+  std::vector<std::string> names_;
+  int ncols_, nrows_, rowsAffected_;
 
 public:
 
-  PqResult(PqConnectionPtr pConn, std::string sql): pConn_(pConn), lastRow_(NULL) {
+  PqResult(PqConnectionPtr pConn, std::string sql): pConn_(pConn) {
     pConn->setCurrentResult(this);
 
+    // Check for error here? Might be param mismatch
     PQsendQueryParams(pConn_->conn(), sql.c_str(), 0, NULL, NULL, NULL, NULL, 0);
     PQsetSingleRowMode(pConn_->conn());
   }
@@ -36,95 +45,63 @@ public:
     return pConn_->isCurrentResult(this);
   }
 
-  Rcpp::List fetch(int n = 10) {
-    for (int i = 0; i < n; ++i) {
-      PqRow row(pConn_->conn());
-      if (row.is_complete()) {
-        break;
-      }
-    }
-//
-//     int p = PQnfields(pRes_);
-//     Rcpp::List cols(p);
-//     Rcpp::CharacterVector names(p);
-//
-//     for (int j = 0; j < p; ++j) {
-//       Oid type = PQftype(pRes_, j);
-//       std::string name(PQfname(pRes_, j));
-//       SEXP col;
-//
-//       // These come from
-//       // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
-//       switch(type) {
-//       case 20: // BIGINT
-//       case 21: // SMALLINT
-//       case 23: // INTEGER
-//       case 26: // OID
-//         col = int_fill_col(pRes_, j, rows_);
-//         break;
-//
-//       case 1700: // DECIMAL
-//       case 701: // FLOAT8
-//       case 700: // FLOAT
-//       case 790: // MONEY
-//         col = real_fill_col(pRes_, j, rows_);
-//         break;
-//
-//       case 18: // CHAR
-//       case 19: // NAME
-//       case 25: // TEXT
-//       case 1042: // CHAR
-//       case 1043: // VARCHAR
-//       case 1082: // DATE
-//       case 1083: // TIME
-//       case 1114: // TIMESTAMP
-//       case 1184: // TIMESTAMPTZOID
-//       case 1186: // INTERVAL
-//       case 1266: // TIMETZOID
-//         col = str_fill_col(pRes_, j, rows_);
-//         break;
-//
-//       case 16: // BOOL
-//         col = lgl_fill_col(pRes_, j, rows_);
-//         break;
-//
-//       case 17: // BYTEA
-//       case 2278: // NULL
-//       default:
-//         col = str_fill_col(pRes_, j, rows_);
-//
-//         std::stringstream err;
-//         err << "Unknown field type (" << type << ") in column " << name;
-//         Rcpp::Function warning("warning");
-//         warning(err.str());
-//       }
-//
-//       cols[j] = col;
-//       names[j] = name;
-//     }
-//
-//     fetched_rows_ = rows_;
-//
-//     cols.names() = names;
-//     cols.attr("class") = "data.frame";
-//     cols.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -rows_);
-//     return cols;
+  void step() {
+    pLastRow_.reset(new PqRow(pConn_->conn()));
+    nrows_++;
   }
 
-  int rows_affected() {
-//     pRes_check();
-//     if (PQresultStatus(pRes_) != PGRES_COMMAND_OK)
-//       Rcpp::stop("Not a data modifying query");
-//     atoi(PQcmdTuples(pRes_));
+  void init() {
+    if (pLastRow_.get() != NULL)
+      return;
 
-    return 0;
+    step();
+
+    rowsAffected_ = pLastRow_->rowsAffected();
+    ncols_ = pLastRow_->ncols();
+    names_ = pLastRow_->column_names();
+    types_ = pLastRow_->column_types();
+  }
+
+  Rcpp::List fetch(int n_max = 10) {
+    if (!active())
+      Rcpp::stop("Inactive result set");
+
+    init();
+    Rcpp::List out = df_create(types_, n_max);
+    int n = n_max;
+
+    for(int i = 0; i < n_max; ++i) {
+      if (pLastRow_->complete()) {
+        n = i;
+        break;
+      }
+
+      step();
+    }
+
+    if (n != n_max)
+      out = df_resize(out, n);
+
+    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
+    out.attr("class") = "data.frame";
+    out.attr("names") = names_;
+
+    return out;
+  }
+
+  int rowsAffected() {
+    init();
+    return rowsAffected_;
   }
 
   bool is_complete() {
-    return false;
+    init();
+    return pLastRow_->complete();
   }
 
-
+  int nrows() {
+    return nrows_;
+  }
 
 };
 

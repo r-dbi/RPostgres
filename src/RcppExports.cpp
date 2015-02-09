@@ -87,14 +87,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// fetch
-List fetch(XPtr<PqResult> rs);
-RcppExport SEXP rpq_fetch(SEXP rsSEXP) {
+// postgres_fetch
+List postgres_fetch(XPtr<PqResult> rs, int n);
+RcppExport SEXP rpq_postgres_fetch(SEXP rsSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
-    __result = Rcpp::wrap(fetch(rs));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    __result = Rcpp::wrap(postgres_fetch(rs, n));
     return __result;
 END_RCPP
 }

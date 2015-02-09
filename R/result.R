@@ -70,11 +70,7 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, ...) {
 #' @param ... Needed for compatibility with generic; currently ignored.
 #' @export
 setMethod("dbFetch", "PqResult", function(res, n = -1, ...) {
-  if (!identical(as.integer(n), -1L)) {
-    warning("Always retrieves all data")
-  }
-
-  fetch(res@ptr)
+  postgres_fetch(res@ptr, n = n)
 })
 
 #' @rdname dbFetch-PqResult-method
