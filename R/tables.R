@@ -15,7 +15,7 @@
 #'   the names are the names of new table's columns. If missing, types inferred
 #'   with \code{\link[DBI]{dbDataType}}).
 #' @examples
-#' con <- dbConnect(pq())
+#' con <- dbConnect(RPostgres::Postgres())
 #' dbListTables(con)
 #' dbWriteTable(con, "mtcars", mtcars, overwrite = TRUE)
 #' dbReadTable(con, "mtcars")

@@ -2,62 +2,62 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 connect <- function(keys, values) {
-    .Call('rpq_connect', PACKAGE = 'rpq', keys, values)
+    .Call('RPostgres_connect', PACKAGE = 'RPostgres', keys, values)
 }
 
 con_info <- function(con) {
-    .Call('rpq_con_info', PACKAGE = 'rpq', con)
+    .Call('RPostgres_con_info', PACKAGE = 'RPostgres', con)
 }
 
 postgres_disconnect <- function(con) {
-    invisible(.Call('rpq_postgres_disconnect', PACKAGE = 'rpq', con))
+    invisible(.Call('RPostgres_postgres_disconnect', PACKAGE = 'RPostgres', con))
 }
 
 escape_string <- function(con, xs) {
-    .Call('rpq_escape_string', PACKAGE = 'rpq', con, xs)
+    .Call('RPostgres_escape_string', PACKAGE = 'RPostgres', con, xs)
 }
 
 escape_identifier <- function(con, xs) {
-    .Call('rpq_escape_identifier', PACKAGE = 'rpq', con, xs)
+    .Call('RPostgres_escape_identifier', PACKAGE = 'RPostgres', con, xs)
 }
 
 encrypt_password <- function(password, user) {
-    .Call('rpq_encrypt_password', PACKAGE = 'rpq', password, user)
+    .Call('RPostgres_encrypt_password', PACKAGE = 'RPostgres', password, user)
 }
 
 rpostgres_send_query <- function(con, sql) {
-    .Call('rpq_rpostgres_send_query', PACKAGE = 'rpq', con, sql)
+    .Call('RPostgres_rpostgres_send_query', PACKAGE = 'RPostgres', con, sql)
 }
 
 postgres_fetch <- function(rs, n) {
-    .Call('rpq_postgres_fetch', PACKAGE = 'rpq', rs, n)
+    .Call('RPostgres_postgres_fetch', PACKAGE = 'RPostgres', rs, n)
 }
 
 postgresql_bind_params <- function(rs, params) {
-    invisible(.Call('rpq_postgresql_bind_params', PACKAGE = 'rpq', rs, params))
+    invisible(.Call('RPostgres_postgresql_bind_params', PACKAGE = 'RPostgres', rs, params))
 }
 
 rows_affected <- function(rs) {
-    .Call('rpq_rows_affected', PACKAGE = 'rpq', rs)
+    .Call('RPostgres_rows_affected', PACKAGE = 'RPostgres', rs)
 }
 
 is_complete <- function(rs) {
-    .Call('rpq_is_complete', PACKAGE = 'rpq', rs)
+    .Call('RPostgres_is_complete', PACKAGE = 'RPostgres', rs)
 }
 
 clear_result <- function(rs) {
-    invisible(.Call('rpq_clear_result', PACKAGE = 'rpq', rs))
+    invisible(.Call('RPostgres_clear_result', PACKAGE = 'RPostgres', rs))
 }
 
 postgres_result_valid <- function(rs) {
-    .Call('rpq_postgres_result_valid', PACKAGE = 'rpq', rs)
+    .Call('RPostgres_postgres_result_valid', PACKAGE = 'RPostgres', rs)
 }
 
 postgres_row_count <- function(rs) {
-    .Call('rpq_postgres_row_count', PACKAGE = 'rpq', rs)
+    .Call('RPostgres_postgres_row_count', PACKAGE = 'RPostgres', rs)
 }
 
 postgres_column_info <- function(rs) {
-    .Call('rpq_postgres_column_info', PACKAGE = 'rpq', rs)
+    .Call('RPostgres_postgres_column_info', PACKAGE = 'RPostgres', rs)
 }
 

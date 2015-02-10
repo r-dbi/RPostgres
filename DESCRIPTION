@@ -1,4 +1,4 @@
-Package: rpq
+Package: RPostgres
 Version: 0.1
 Title: Experimental Rcpp Interface to PostgreSQL.
 Author: Hadley Wickham, build scripts from RPostgreSQL.

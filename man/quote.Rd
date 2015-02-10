@@ -22,7 +22,7 @@
 Quote postgres strings and identifiers.
 }
 \examples{
-con <- dbConnect(rpq::pq())
+con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")
 dbQuoteString(con, x)

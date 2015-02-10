@@ -32,11 +32,11 @@ setMethod("show", "PqConnection", function(object) {
 
 #' Connect to a PostgreSQL database.
 #'
-#' Note that manually disconnecting a connection is not necessary with rpq; if
-#' you delete the object containing the connection, it will be automatcally
+#' Note that manually disconnecting a connection is not necessary with RPostgres;
+#' if you delete the object containing the connection, it will be automatcally
 #' disconnected during the next GC.
 #'
-#' @param drv \code{rpg::pq()}
+#' @param drv \code{RPostgres::Postgres()}
 #' @param dbname Database name. If \code{NULL}, defaults to the user name.
 #' @param user,password User name and password. If \code{NULL}, will be
 #'   retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
@@ -51,7 +51,7 @@ setMethod("show", "PqConnection", function(object) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
-#' con <- dbConnect(pq())
+#' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
   host = NULL, port = NULL, password = NULL, user = NULL, ...) {

@@ -56,7 +56,7 @@ with \code{\link[DBI]{dbDataType}}).}
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
-con <- dbConnect(pq())
+con <- dbConnect(RPostgres::Postgres())
 dbListTables(con)
 dbWriteTable(con, "mtcars", mtcars, overwrite = TRUE)
 dbReadTable(con, "mtcars")

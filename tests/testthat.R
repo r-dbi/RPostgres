@@ -1,4 +1,4 @@
 library(testthat)
-library(rpq)
+library(RPostgres)
 
-test_check("rpq")
+test_check("RPostgres")

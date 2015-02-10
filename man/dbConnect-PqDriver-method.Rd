@@ -12,7 +12,7 @@
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
 \arguments{
-\item{drv}{\code{rpg::pq()}}
+\item{drv}{\code{RPostgres::Postgres()}}
 
 \item{dbname}{Database name. If \code{NULL}, defaults to the user name.}
 
@@ -32,12 +32,12 @@ options as described at
 \item{conn}{Connection to disconnect.}
 }
 \description{
-Note that manually disconnecting a connection is not necessary with rpq; if
-you delete the object containing the connection, it will be automatcally
+Note that manually disconnecting a connection is not necessary with RPostgres;
+if you delete the object containing the connection, it will be automatcally
 disconnected during the next GC.
 }
 \examples{
-con <- dbConnect(pq())
+con <- dbConnect(RPostgres::Postgres())
 dbDisconnect(con)
 }
 

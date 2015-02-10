@@ -7,7 +7,7 @@
 #'   \code{\link[DBI]{dbConnect}}
 #' @return A boolean, indicating success or failure.
 #' @examples
-#' con <- dbConnect(pq())
+#' con <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(con, "USarrests", datasets::USArrests, overwrite = TRUE)
 #' dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 #'

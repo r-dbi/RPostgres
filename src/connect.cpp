@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "rpq_types.h"
+#include "RPostgres_types.h"
 using namespace Rcpp;
 
 // [[Rcpp::export]]

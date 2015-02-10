@@ -60,7 +60,7 @@ results (and they'll fit in memory) use \code{dbGetQuery} which sends,
 fetches and clears for you.
 }
 \examples{
-db <- dbConnect(pq())
+db <- dbConnect(RPostgres::Postgres())
 dbWriteTable(db, "usarrests", datasets::USArrests, overwrite = TRUE)
 
 # Run query to get results as dataframe

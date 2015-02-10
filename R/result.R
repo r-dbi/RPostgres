@@ -67,7 +67,7 @@ setMethod("show", "PqResult", function(object) {
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
-#' db <- dbConnect(pq())
+#' db <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(db, "usarrests", datasets::USArrests, overwrite = TRUE)
 #'
 #' # Run query to get results as dataframe

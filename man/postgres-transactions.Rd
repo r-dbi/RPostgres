@@ -26,7 +26,7 @@ A boolean, indicating success or failure.
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
-con <- dbConnect(pq())
+con <- dbConnect(RPostgres::Postgres())
 dbWriteTable(con, "USarrests", datasets::USArrests, overwrite = TRUE)
 dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 

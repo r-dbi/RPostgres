@@ -4,12 +4,12 @@
 #' null-op.
 #'
 #' @export
-#' @useDynLib rpq
+#' @useDynLib RPostgres
 #' @importFrom Rcpp evalCpp
 #' @import methods DBI
 #' @examples
-#' rpq::pq()
-pq <- function() {
+#' RPostgres::Postgres()
+Postgres <- function() {
   new("PqDriver")
 }
 
