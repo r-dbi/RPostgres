@@ -17,24 +17,27 @@ public:
       return;
     pRes_ = PQgetResult(conn);
 
-    if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
-      PQclear(pRes_);
-      Rcpp::stop(PQresultErrorMessage(pRes_));
-    }
-
     // We're done, but we need to call PQgetResult until it returns NULL
-    if (complete()) {
+    if (status() == PGRES_TUPLES_OK) {
       PGresult* next = PQgetResult(conn);
       while(next != NULL) {
         PQclear(next);
         next = PQgetResult(conn);
       }
     }
+
+    if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
+      PQclear(pRes_);
+      Rcpp::stop(PQresultErrorMessage(pRes_));
+    }
   }
 
-  bool complete() {
-    ExecStatusType status = PQresultStatus(pRes_);
-    return status != PGRES_SINGLE_TUPLE;
+  ExecStatusType status() {
+    return PQresultStatus(pRes_);
+  }
+
+  bool hasData() {
+    return status() == PGRES_SINGLE_TUPLE;
   }
 
   ~PqRow() {
@@ -117,9 +120,6 @@ public:
   }
 
   Rcpp::List exception_info() {
-    if (complete())
-      Rcpp::stop("No results");
-
     const char* sev = PQresultErrorField(pRes_, PG_DIAG_SEVERITY);
     const char* msg = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_PRIMARY);
     const char* det = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_DETAIL);

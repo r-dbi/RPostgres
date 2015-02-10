@@ -26,12 +26,29 @@ class PqResult : boost::noncopyable {
 
 public:
 
-  PqResult(PqConnectionPtr pConn, std::string sql): pConn_(pConn) {
+  PqResult(PqConnectionPtr pConn, std::string sql): pConn_(pConn), nrows_(0) {
+
+    if (!PQsendQueryParams(pConn_->conn(), sql.c_str(), 0, NULL, NULL, NULL, NULL, 0))
+      Rcpp::stop(PQerrorMessage(pConn_->conn()));
+
+    try {
+      if (!PQsetSingleRowMode(pConn_->conn())) {
+        Rcpp::stop("Failed to set single row mode");
+      }
+
+      fetch_row();
+    } catch (...) {
+      pConn_->cancelQuery();
+      throw;
+    }
+
     pConn->setCurrentResult(this);
 
-    // Check for error here? Might be param mismatch
-    PQsendQueryParams(pConn_->conn(), sql.c_str(), 0, NULL, NULL, NULL, NULL, 0);
-    PQsetSingleRowMode(pConn_->conn());
+    // Initialise query metadata
+    rowsAffected_ = pLastRow_->rowsAffected();
+    ncols_ = pLastRow_->ncols();
+    names_ = pLastRow_->column_names();
+    types_ = pLastRow_->column_types();
   }
 
   ~PqResult() {
@@ -45,7 +62,7 @@ public:
     return pConn_->isCurrentResult(this);
   }
 
-  void step() {
+  void fetch_row() {
     pLastRow_.reset(new PqRow(pConn_->conn()));
     nrows_++;
   }
@@ -54,26 +71,14 @@ public:
     if (!active())
       Rcpp::stop("Inactive result set");
 
-    if (pLastRow_.get() != NULL)
-      return;
-
-    nrows_ = 0;
-    step();
-
-    rowsAffected_ = pLastRow_->rowsAffected();
-    ncols_ = pLastRow_->ncols();
-    names_ = pLastRow_->column_names();
-    types_ = pLastRow_->column_types();
   }
 
   Rcpp::List fetch(int n_max = 10) {
-    init();
-
     int n = n_max;
     Rcpp::List out = df_create(types_, n);
 
     for(int i = 0; i < n_max; ++i) {
-      if (pLastRow_->complete()) {
+      if (!pLastRow_->hasData()) {
         n = i;
         break;
       }
@@ -81,7 +86,7 @@ public:
       for (int j = 0; j < ncols_; ++j) {
         pLastRow_->set_list_value(out[j], i, j);
       }
-      step();
+      fetch_row();
     }
 
     if (n != n_max)
@@ -95,13 +100,11 @@ public:
   }
 
   Rcpp::List fetch_all() {
-    init();
-
     int n = 100;
     Rcpp::List out = df_create(types_, n);
 
     int i = 0;
-    while(!pLastRow_->complete()) {
+    while(pLastRow_->hasData()) {
       if (i >= n) {
         n *= 2;
         out = df_resize(out, n);
@@ -110,7 +113,7 @@ public:
       for (int j = 0; j < ncols_; ++j) {
         pLastRow_->set_list_value(out[j], i, j);
       }
-      step();
+      fetch_row();
       ++i;
 
       if (i % 1000 == 0)
@@ -130,13 +133,11 @@ public:
   }
 
   int rowsAffected() {
-    init();
     return rowsAffected_;
   }
 
   bool is_complete() {
-    init();
-    return pLastRow_->complete();
+    return !pLastRow_->hasData();
   }
 
   int nrows() {

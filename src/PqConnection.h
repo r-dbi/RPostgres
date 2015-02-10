@@ -61,18 +61,33 @@ public:
       if (pResult != NULL)
         Rcpp::warning("Cancelling previous query");
 
-      con_check();
-      PGcancel* cancel = PQgetCancel(pConn_);
-      if (cancel == NULL)
-        return;
-
-      char errbuf[256];
-      int rc = PQcancel(cancel, errbuf, 256);
-      if (rc == 0)
-        Rcpp::warning(errbuf);
-      PQfreeCancel(cancel);
+      cancelQuery();
     }
     pCurrentResult_ = pResult;
+  }
+
+  void cancelQuery() {
+    con_check();
+
+    // Cancel running query
+    PGcancel* cancel = PQgetCancel(pConn_);
+    if (cancel == NULL) {
+      Rcpp::warning("Failed to cancel running query");
+      return;
+    }
+
+    char errbuf[256];
+    if (!PQcancel(cancel, errbuf, 256)) {
+      Rcpp::warning(errbuf);
+    }
+
+    PQfreeCancel(cancel);
+
+    // Clear pending results
+    PGresult* result;
+    while((result = PQgetResult(pConn_)) != NULL) {
+      PQclear(result);
+    }
   }
 
   bool isCurrentResult(PqResult* pResult) {
