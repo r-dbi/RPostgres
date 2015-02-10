@@ -3,6 +3,7 @@
 \docType{class}
 \name{PqResult-class}
 \alias{PqResult-class}
+\alias{dbGetRowCount,PqResult-method}
 \alias{dbGetStatement,PqResult-method}
 \alias{dbIsValid,PqResult-method}
 \alias{show,PqResult-method}
@@ -11,6 +12,8 @@
 \S4method{dbGetStatement}{PqResult}(res, ...)
 
 \S4method{dbIsValid}{PqResult}(dbObj, ...)
+
+\S4method{dbGetRowCount}{PqResult}(res, ...)
 
 \S4method{show}{PqResult}(object)
 }
