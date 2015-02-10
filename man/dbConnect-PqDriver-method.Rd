@@ -19,9 +19,11 @@
 \item{host,port}{Host and port. If \code{NULL}, will be retrieved from
 \code{PGHOST} and \code{PGPORT} env vars.}
 
-\item{user,password}{User name and password. If \code{NULLL}, will be
+\item{user,password}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
-appropriate line in \code{~/.pgpass}. See below for details.}
+appropriate line in \code{~/.pgpass}. See
+\url{http://www.postgresql.org/docs/9.4/static/libpq-pgpass.html} for
+more details.}
 
 \item{...}{Other name-value pairs that describe additional connection
 options as described at

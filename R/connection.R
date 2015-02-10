@@ -38,9 +38,11 @@ setMethod("show", "PqConnection", function(object) {
 #'
 #' @param drv \code{rpg::pq()}
 #' @param dbname Database name. If \code{NULL}, defaults to the user name.
-#' @param user,password User name and password. If \code{NULLL}, will be
+#' @param user,password User name and password. If \code{NULL}, will be
 #'   retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
-#'   appropriate line in \code{~/.pgpass}. See below for details.
+#'   appropriate line in \code{~/.pgpass}. See
+#'   \url{http://www.postgresql.org/docs/9.4/static/libpq-pgpass.html} for
+#'   more details.
 #' @param host,port Host and port. If \code{NULL}, will be retrieved from
 #'   \code{PGHOST} and \code{PGPORT} env vars.
 #' @param ... Other name-value pairs that describe additional connection
