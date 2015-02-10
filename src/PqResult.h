@@ -62,14 +62,11 @@ public:
   }
 
   void fetch_row() {
-    pLastRow_.reset(new PqRow(pConn_->conn()));
-    nrows_++;
-  }
-
-  void init() {
     if (!active())
       Rcpp::stop("Inactive result set");
 
+    pLastRow_.reset(new PqRow(pConn_->conn()));
+    nrows_++;
   }
 
   Rcpp::List fetch(int n_max = 10) {
