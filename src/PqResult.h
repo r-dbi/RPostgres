@@ -71,7 +71,7 @@ public:
 
   Rcpp::List fetch(int n_max = -1) {
     int n = (n_max < 0) ? 100 : n_max;
-    Rcpp::List out = df_create(types_, n);
+    Rcpp::List out = df_create(types_, names_, n);
 
     int i = 0;
     while(pLastRow_->hasData()) {
@@ -98,10 +98,6 @@ public:
     if (i < n) {
       out = df_resize(out, i);
     }
-
-    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -i);
-    out.attr("class") = "data.frame";
-    out.attr("names") = names_;
 
     return out;
   }
