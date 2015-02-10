@@ -24,5 +24,6 @@ Collate:
     'quote.R'
     'result.R'
     'tables.R'
+    'transactions.R'
 Suggests:
     testthat

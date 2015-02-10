@@ -43,8 +43,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
 
-#     dbBegin(conn, "dbWriteTable")
-#     on.exit(dbRollback(conn, "dbWriteTable"))
+    dbBegin(conn)
+    on.exit(dbRollback(conn))
 
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
@@ -65,8 +65,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       dbGetQuery(conn, sql)
     }
 
-#     on.exit(NULL)
-#     dbCommit(conn, "dbWriteTable")
+    on.exit(NULL)
+    dbCommit(conn)
     TRUE
   }
 )
