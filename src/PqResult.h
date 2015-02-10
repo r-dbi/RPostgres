@@ -27,24 +27,23 @@ class PqResult : boost::noncopyable {
 public:
 
   PqResult(PqConnectionPtr pConn, std::string sql): pConn_(pConn), nrows_(0) {
-
-    if (!PQsendQueryParams(pConn_->conn(), sql.c_str(), 0, NULL, NULL, NULL, NULL, 0))
-      Rcpp::stop(PQerrorMessage(pConn_->conn()));
+    pConn->setCurrentResult(this);
 
     try {
+      if (!PQsendQueryParams(pConn_->conn(), sql.c_str(), 0, NULL, NULL, NULL, NULL, 0))
+        Rcpp::stop(PQerrorMessage(pConn_->conn()));
+
       if (!PQsetSingleRowMode(pConn_->conn())) {
         Rcpp::stop("Failed to set single row mode");
       }
 
       fetch_row();
     } catch (...) {
-      pConn_->cancelQuery();
+      pConn->setCurrentResult(NULL);
       throw;
     }
 
-    pConn->setCurrentResult(this);
-
-    // Initialise query metadata
+    // Cache query metadata
     rowsAffected_ = pLastRow_->rowsAffected();
     ncols_ = pLastRow_->ncols();
     names_ = pLastRow_->column_names();
