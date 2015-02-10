@@ -41,9 +41,9 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
 
-    dbBegin(conn)
-    on.exit(dbRollback(conn))
-
+#     dbBegin(conn)
+#     on.exit(dbRollback(conn))
+#
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
       stop("Table ", name, " exists in database, and both overwrite and",
@@ -64,8 +64,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       dbGetQuery(conn, sql)
     }
 
-    on.exit(NULL)
-    dbCommit(conn)
+#     on.exit(NULL)
+#     dbCommit(conn)
     TRUE
   }
 )
