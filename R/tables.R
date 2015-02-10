@@ -7,6 +7,7 @@
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
 #' @inheritParams SQL::rownamesToColumn
+#' @inheritParams SQL::sqlTableCreate
 #' @param overwrite a logical specifying whether to overwrite an existing table
 #'   or not. Its default is \code{FALSE}.
 #' @param append a logical specifying whether to append to an existing table
@@ -17,18 +18,15 @@
 #' @examples
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbListTables(con)
-#' dbWriteTable(con, "mtcars", mtcars, overwrite = TRUE)
+#' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
 #' dbReadTable(con, "mtcars")
 #'
 #' dbListTables(con)
 #' dbExistsTable(con, "mtcars")
 #'
 #' # A zero row data frame just creates a table definition.
-#' dbWriteTable(con, "mtcars2", mtcars[0, ], overwrite = TRUE)
+#' dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 #' dbReadTable(con, "mtcars2")
-#'
-#' dbRemoveTable(con, "mtcars")
-#' dbRemoveTable(con, "mtcars2")
 #'
 #' dbDisconnect(con)
 #' @name postgres-tables
@@ -38,7 +36,7 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, row.names = NA, overwrite = FALSE, append = FALSE,
-    field.types = NULL) {
+    field.types = NULL, temporary = FALSE) {
 
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
@@ -56,7 +54,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names)
+      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names,
+        temporary = temporary)
       dbGetQuery(conn, sql)
     }
 

@@ -61,7 +61,7 @@ fetches and clears for you.
 }
 \examples{
 db <- dbConnect(RPostgres::Postgres())
-dbWriteTable(db, "usarrests", datasets::USArrests, overwrite = TRUE)
+dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 
 # Run query to get results as dataframe
 dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")

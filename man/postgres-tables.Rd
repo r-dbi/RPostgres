@@ -11,7 +11,8 @@
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
-  row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL)
+  row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
+  temporary = FALSE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, row.names = NA)
 
@@ -51,6 +52,8 @@ in the DBMS. Its default is \code{FALSE}.}
 \item{field.types}{character vector of named SQL field types where
 the names are the names of new table's columns. If missing, types inferred
 with \code{\link[DBI]{dbDataType}}).}
+
+\item{temporary}{If \code{TRUE}, will generate a temporary table statement.}
 }
 \description{
 Convenience functions for reading/writing DBMS tables
@@ -58,18 +61,15 @@ Convenience functions for reading/writing DBMS tables
 \examples{
 con <- dbConnect(RPostgres::Postgres())
 dbListTables(con)
-dbWriteTable(con, "mtcars", mtcars, overwrite = TRUE)
+dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
 dbReadTable(con, "mtcars")
 
 dbListTables(con)
 dbExistsTable(con, "mtcars")
 
 # A zero row data frame just creates a table definition.
-dbWriteTable(con, "mtcars2", mtcars[0, ], overwrite = TRUE)
+dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 dbReadTable(con, "mtcars2")
-
-dbRemoveTable(con, "mtcars")
-dbRemoveTable(con, "mtcars2")
 
 dbDisconnect(con)
 }

@@ -8,7 +8,7 @@
 #' @return A boolean, indicating success or failure.
 #' @examples
 #' con <- dbConnect(RPostgres::Postgres())
-#' dbWriteTable(con, "USarrests", datasets::USArrests, overwrite = TRUE)
+#' dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
 #' dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 #'
 #' dbBegin(con)

@@ -68,7 +68,7 @@ setMethod("show", "PqResult", function(object) {
 #'   currently ignored).
 #' @examples
 #' db <- dbConnect(RPostgres::Postgres())
-#' dbWriteTable(db, "usarrests", datasets::USArrests, overwrite = TRUE)
+#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
 #' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
