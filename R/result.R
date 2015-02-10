@@ -60,6 +60,10 @@ setMethod("show", "PqResult", function(object) {
 #'
 #' @param conn A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.
 #' @param statement An SQL string to execture
+#' @param params A list of query parameters to be substituted into
+#'   a parameterised query. Query parameters are sent as strings, and the
+#'   correct type is imputed by PostgreSQL. If this fails, you can manually
+#'   cast the parameter with e.g. \code{"$1::bigint"}.
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
@@ -84,19 +88,25 @@ NULL
 
 #' @export
 #' @rdname postgres-query
-setMethod("dbSendQuery", "PqConnection", function(conn, statement, ...) {
+setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ...) {
   statement <- enc2utf8(statement)
 
-  new("PqResult",
+  rs <- new("PqResult",
     ptr = rpostgres_send_query(conn@ptr, statement),
     sql = statement)
+
+  if (!is.null(params)) {
+    dbBind(rs, params)
+  }
+
+  rs
 })
 
 #' @export
 #' @rdname postgres-query
 setMethod("dbGetQuery", signature("PqConnection", "character"),
-  function(conn, statement, ..., row.names = NA) {
-    rs <- dbSendQuery(conn, statement, ...)
+  function(conn, statement, ..., params = NULL, row.names = NA) {
+    rs <- dbSendQuery(conn, statement, params = params, ...)
     on.exit(dbClearResult(rs))
 
     dbFetch(rs, n = -1, ..., row.names = row.names)

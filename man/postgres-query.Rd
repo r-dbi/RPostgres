@@ -11,10 +11,10 @@
 \alias{postgres-query}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection}(conn, statement, ...)
+\S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ...)
 
 \S4method{dbGetQuery}{PqConnection,character}(conn, statement, ...,
-  row.names = NA)
+  params = NULL, row.names = NA)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = NA)
 
@@ -28,6 +28,11 @@
 \item{conn}{A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.}
 
 \item{statement}{An SQL string to execture}
+
+\item{params}{A list of query parameters to be substituted into
+a parameterised query. Query parameters are sent as strings, and the
+correct type is imputed by PostgreSQL. If this fails, you can manually
+cast the parameter with e.g. \code{"$1::bigint"}.}
 
 \item{...}{Another arguments needed for compatibility with generic (
 currently ignored).}
