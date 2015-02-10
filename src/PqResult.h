@@ -128,6 +128,32 @@ public:
     return out;
   }
 
+  Rcpp::List column_info() {
+    Rcpp::CharacterVector names(ncols_);
+    for (int i = 0; i < ncols_; i++) {
+      names[i] = names_[i];
+    }
+
+    Rcpp::CharacterVector types(ncols_);
+    for (int i = 0; i < ncols_; i++) {
+      switch(types_[i]) {
+      case STRSXP:  types[i] = "character"; break;
+      case INTSXP:  types[i] = "integer"; break;
+      case REALSXP: types[i] = "double"; break;
+      case VECSXP:  types[i] = "list"; break;
+      default: Rcpp::stop("Unknown variable type");
+      }
+    }
+
+    Rcpp::List out = Rcpp::List::create(names, types);
+    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -ncols_);
+    out.attr("class") = "data.frame";
+    out.attr("names") = Rcpp::CharacterVector::create("name", "type");
+
+    return out;
+  }
+
+
   int rowsAffected() {
     return rowsAffected_;
   }

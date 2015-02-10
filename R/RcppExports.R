@@ -53,3 +53,7 @@ postgres_row_count <- function(rs) {
     .Call('rpq_postgres_row_count', PACKAGE = 'rpq', rs)
 }
 
+postgres_column_info <- function(rs) {
+    .Call('rpq_postgres_column_info', PACKAGE = 'rpq', rs)
+}
+

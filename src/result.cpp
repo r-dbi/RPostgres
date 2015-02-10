@@ -41,3 +41,8 @@ bool postgres_result_valid(XPtr<PqResult> rs) {
 int postgres_row_count(XPtr<PqResult> rs) {
   return rs->nrows();
 }
+
+// [[Rcpp::export]]
+List postgres_column_info(XPtr<PqResult> rs) {
+  return rs->column_info();
+}

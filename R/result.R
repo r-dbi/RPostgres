@@ -31,6 +31,12 @@ setMethod("dbGetRowCount", "PqResult", function(res, ...) {
 
 #' @rdname PqResult-class
 #' @export
+setMethod("dbColumnInfo", "PqResult", function(res, ...) {
+  postgres_column_info(res@ptr)
+})
+
+#' @rdname PqResult-class
+#' @export
 setMethod("show", "PqResult", function(object) {
   cat("<PqResult>\n")
   if(!dbIsValid(object)){

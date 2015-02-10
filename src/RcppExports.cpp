@@ -153,3 +153,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// postgres_column_info
+List postgres_column_info(XPtr<PqResult> rs);
+RcppExport SEXP rpq_postgres_column_info(SEXP rsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
+    __result = Rcpp::wrap(postgres_column_info(rs));
+    return __result;
+END_RCPP
+}
