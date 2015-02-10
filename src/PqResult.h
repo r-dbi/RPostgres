@@ -47,10 +47,7 @@ public:
 
   void step() {
     pLastRow_.reset(new PqRow(pConn_->conn()));
-
-    if (pLastRow_->status() == PGRES_SINGLE_TUPLE) {
-      nrows_++;
-    }
+    nrows_++;
   }
 
   void init() {
@@ -115,6 +112,9 @@ public:
       }
       step();
       ++i;
+
+      if (i % 1000 == 0)
+        Rcpp::checkUserInterrupt();
     }
 
     // Trim back to what we actually used

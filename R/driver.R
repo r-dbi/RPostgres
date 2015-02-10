@@ -30,3 +30,4 @@ setMethod("show", "PqDriver", function(object) {
 setMethod("dbUnloadDriver", "PqDriver", function(drv, ...) {
   NULL
 })
+

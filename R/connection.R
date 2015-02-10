@@ -76,18 +76,27 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   TRUE
 })
 
-#' Get more details of error related to exception.
+#' Determine database type for R vector.
 #'
-#' @param conn A \code{PQConnection} object
-#' @param ... Needed for compatibility with generic; otherwise ignored.
 #' @export
-#' @examples
-#' con <- dbConnect(rpq::pq())
-#' try(dbSendQuery(con, "BLAH"), silent = TRUE)
-#' dbGetException(con)
-#'
-#' try(dbSendQuery(con, "SELECT 1 + 'a'"), silent = TRUE)
-#' dbGetException(con)
-setMethod("dbGetException", "PqConnection", function(conn, ...) {
-  exception_info(conn@ptr)
+#' @param dbObj Postgres driver or connection.
+#' @param obj Object to convert
+#' @keywords internal
+setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
+  dbDataType(SQLite(), obj)
+})
+
+#' @rdname dbDataType-PqDriver-ANY-method
+#' @export
+setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  if (is.factor(obj)) return("TEXT")
+
+  switch(typeof(obj),
+    integer = "INTEGER",
+    double = "REAL",
+    character = "TEXT",
+    logical = "INTEGER",
+    list = "BLOB",
+    stop("Unsupported type", call. = FALSE)
+  )
 })

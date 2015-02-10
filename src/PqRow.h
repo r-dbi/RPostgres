@@ -17,23 +17,24 @@ public:
       return;
     pRes_ = PQgetResult(conn);
 
+    if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
+      PQclear(pRes_);
+      Rcpp::stop(PQresultErrorMessage(pRes_));
+    }
 
-    if (pRes_ != NULL && status() == PGRES_TUPLES_OK) {
-      // We're done, but we need to call PQgetResult until it returns NULL
-      while(pRes_ != NULL) {
-        PQclear(pRes_);
-        pRes_ = PQgetResult(conn);
+    // We're done, but we need to call PQgetResult until it returns NULL
+    if (complete()) {
+      PGresult* next = PQgetResult(conn);
+      while(next != NULL) {
+        PQclear(next);
+        next = PQgetResult(conn);
       }
     }
   }
 
-  // Query is complete when PQgetResult returns NULL
   bool complete() {
-    return pRes_ == NULL;
-  }
-
-  ExecStatusType status() {
-    return PQresultStatus(pRes_);
+    ExecStatusType status = PQresultStatus(pRes_);
+    return status != PGRES_SINGLE_TUPLE;
   }
 
   ~PqRow() {
