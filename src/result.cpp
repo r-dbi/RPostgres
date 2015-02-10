@@ -44,6 +44,11 @@ int postgres_row_count(XPtr<PqResult> rs) {
 }
 
 // [[Rcpp::export]]
+int postgres_rows_affected(XPtr<PqResult> rs) {
+  return rs->rowsAffected();
+}
+
+// [[Rcpp::export]]
 List postgres_column_info(XPtr<PqResult> rs) {
   return rs->column_info();
 }

@@ -20,9 +20,10 @@ typedef boost::shared_ptr<PqRow> PqRowPtr;
 class PqResult : boost::noncopyable {
   PqConnectionPtr pConn_;
   PGresult* pSpec_;
+  PqRowPtr pNextRow_;
   std::vector<SEXPTYPE> types_;
   std::vector<std::string> names_;
-  int ncols_, nrows_, rowsAffected_, nparams_;
+  int ncols_, nrows_, nparams_;
   bool bound_;
 
 public:
@@ -111,20 +112,31 @@ public:
     return pConn_->isCurrentResult(this);
   }
 
+  void fetch_row() {
+    pNextRow_.reset(new PqRow(pConn_->conn()));
+    nrows_++;
+  }
+
+  void fetch_row_if_needed() {
+    if (pNextRow_.get() != NULL)
+      return;
+
+    fetch_row();
+  }
+
   Rcpp::List fetch(int n_max = -1) {
     if (!bound_)
       Rcpp::stop("Query needs to be bound before fetching");
     if (!active())
       Rcpp::stop("Inactive result set");
 
-    PqRowPtr pRow(new PqRow(pConn_->conn()));
-    nrows_++;
 
     int n = (n_max < 0) ? 100 : n_max;
     Rcpp::List out = df_create(types_, names_, n);
 
     int i = 0;
-    while(pRow->hasData()) {
+    fetch_row_if_needed();
+    while(pNextRow_->hasData()) {
       if (i >= n) {
         if (n_max < 0) {
           n *= 2;
@@ -135,9 +147,9 @@ public:
       }
 
       for (int j = 0; j < ncols_; ++j) {
-        pRow->set_list_value(out[j], i, j);
+        pNextRow_->set_list_value(out[j], i, j);
       }
-      pRow.reset(new PqRow(pConn_->conn()));
+      fetch_row();
       ++i;
 
       if (i % 1000 == 0)
@@ -153,15 +165,17 @@ public:
   }
 
   int rowsAffected() {
-    return -1;
+    fetch_row_if_needed();
+    return pNextRow_->rowsAffected();
   }
 
   bool is_complete() {
-    return false;
+    fetch_row_if_needed();
+    return !pNextRow_->hasData();
   }
 
   int nrows() {
-    return nrows_;
+    return nrows_ - (pNextRow_.get() != NULL);
   }
 
   Rcpp::List column_info() {
@@ -248,7 +262,7 @@ private:
 
       default:
         types.push_back(STRSXP);
-      Rcpp::warning("Unknown field type (%s) in column %i", type, i);
+        Rcpp::warning("Unknown field type (%s) in column %i", type, i);
       }
     }
 

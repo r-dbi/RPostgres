@@ -31,6 +31,12 @@ setMethod("dbGetRowCount", "PqResult", function(res, ...) {
 
 #' @rdname PqResult-class
 #' @export
+setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
+  postgres_rows_affected(res@ptr)
+})
+
+#' @rdname PqResult-class
+#' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
   postgres_column_info(res@ptr)
 })

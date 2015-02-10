@@ -57,6 +57,10 @@ postgres_row_count <- function(rs) {
     .Call('RPostgres_postgres_row_count', PACKAGE = 'RPostgres', rs)
 }
 
+postgres_rows_affected <- function(rs) {
+    .Call('RPostgres_postgres_rows_affected', PACKAGE = 'RPostgres', rs)
+}
+
 postgres_column_info <- function(rs) {
     .Call('RPostgres_postgres_column_info', PACKAGE = 'RPostgres', rs)
 }
