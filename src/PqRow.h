@@ -26,9 +26,14 @@ public:
       }
     }
 
+    if (pRes_ == NULL) {
+      PQclear(pRes_);
+      Rcpp::stop("No active query");
+    }
+
     if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
       PQclear(pRes_);
-      Rcpp::stop(PQresultErrorMessage(pRes_));
+      Rcpp::stop(PQerrorMessage(conn));
     }
   }
 
@@ -44,75 +49,6 @@ public:
     try {
       PQclear(pRes_);
     } catch(...) {}
-  }
-
-  int ncols() {
-    return PQnfields(pRes_);
-  }
-
-  std::vector<std::string> column_names() {
-    std::vector<std::string> names;
-    names.reserve(ncols());
-
-    for (int i = 0; i < ncols(); ++i) {
-      names.push_back(std::string(PQfname(pRes_, i)));
-    }
-
-    return names;
-  }
-
-  std::vector<SEXPTYPE> column_types() {
-    std::vector<SEXPTYPE> types;
-    types.reserve(ncols());
-
-    for (int i = 0; i < ncols(); ++i) {
-      Oid type = PQftype(pRes_, i);
-      // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
-      switch(type) {
-      case 20: // BIGINT
-      case 21: // SMALLINT
-      case 23: // INTEGER
-      case 26: // OID
-        types.push_back(INTSXP);
-        break;
-
-      case 1700: // DECIMAL
-      case 701: // FLOAT8
-      case 700: // FLOAT
-      case 790: // MONEY
-        types.push_back(REALSXP);
-        break;
-
-      case 18: // CHAR
-      case 19: // NAME
-      case 25: // TEXT
-      case 1042: // CHAR
-      case 1043: // VARCHAR
-      case 1082: // DATE
-      case 1083: // TIME
-      case 1114: // TIMESTAMP
-      case 1184: // TIMESTAMPTZOID
-      case 1186: // INTERVAL
-      case 1266: // TIMETZOID
-        types.push_back(STRSXP);
-        break;
-
-      case 16: // BOOL
-        types.push_back(LGLSXP);
-        break;
-
-      case 17: // BYTEA
-      case 2278: // NULL
-        types.push_back(VECSXP);
-        break;
-
-      default:
-        types.push_back(STRSXP);
-        Rcpp::warning("Unknown field type (%s) in column %i", type, i);
-      }
-    }
-
-    return types;
   }
 
   int rowsAffected() {
