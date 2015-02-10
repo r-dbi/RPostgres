@@ -2,6 +2,7 @@
 % Please edit documentation in R/result.R
 \docType{methods}
 \name{postgres-query}
+\alias{dbBind,PqResult-method}
 \alias{dbClearResult,PqResult-method}
 \alias{dbFetch,PqResult-method}
 \alias{dbGetQuery,PqConnection,character-method}
@@ -16,6 +17,8 @@
   row.names = NA)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = NA)
+
+\S4method{dbBind}{PqResult}(res, params, ...)
 
 \S4method{dbHasCompleted}{PqResult}(res, ...)
 

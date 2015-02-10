@@ -99,6 +99,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// postgresql_bind_params
+void postgresql_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params);
+RcppExport SEXP rpq_postgresql_bind_params(SEXP rsSEXP, SEXP paramsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
+    Rcpp::traits::input_parameter< ListOf<CharacterVector> >::type params(paramsSEXP);
+    postgresql_bind_params(rs, params);
+    return R_NilValue;
+END_RCPP
+}
 // rows_affected
 int rows_affected(XPtr<PqResult> rs);
 RcppExport SEXP rpq_rows_affected(SEXP rsSEXP) {

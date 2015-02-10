@@ -115,6 +115,15 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
 
 #' @rdname postgres-query
 #' @export
+setMethod("dbBind", "PqResult", function(res, params, ...) {
+  params <- lapply(params, as.character)
+  postgresql_bind_params(res@ptr, params)
+  invisible(res)
+})
+
+
+#' @rdname postgres-query
+#' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
   is_complete(res@ptr)
 })

@@ -33,6 +33,10 @@ postgres_fetch <- function(rs, n) {
     .Call('rpq_postgres_fetch', PACKAGE = 'rpq', rs, n)
 }
 
+postgresql_bind_params <- function(rs, params) {
+    invisible(.Call('rpq_postgresql_bind_params', PACKAGE = 'rpq', rs, params))
+}
+
 rows_affected <- function(rs) {
     .Call('rpq_rows_affected', PACKAGE = 'rpq', rs)
 }

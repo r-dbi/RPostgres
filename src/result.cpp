@@ -14,6 +14,11 @@ List postgres_fetch(XPtr<PqResult> rs, int n) {
 }
 
 // [[Rcpp::export]]
+void postgresql_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
+  return rs->bind(params);
+}
+
+// [[Rcpp::export]]
 int rows_affected(XPtr<PqResult> rs) {
   return rs->rowsAffected();
 }
