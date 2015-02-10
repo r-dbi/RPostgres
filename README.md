@@ -1,5 +1,7 @@
 # RPostgres
 
+[![Travis-CI Build Status](https://travis-ci.org/rstats-db/RPostgres.png?branch=master)](https://travis-ci.org/rstats-db/RPostgres)
+
 RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to PostgresSQL, it:
 
 * Has full support for parameterised queries via `dbSendQuery()`, and `dbBind()`.
