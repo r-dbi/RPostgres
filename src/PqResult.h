@@ -69,41 +69,19 @@ public:
     nrows_++;
   }
 
-  Rcpp::List fetch(int n_max = 10) {
-    int n = n_max;
-    Rcpp::List out = df_create(types_, n);
-
-    for(int i = 0; i < n_max; ++i) {
-      if (!pLastRow_->hasData()) {
-        n = i;
-        break;
-      }
-
-      for (int j = 0; j < ncols_; ++j) {
-        pLastRow_->set_list_value(out[j], i, j);
-      }
-      fetch_row();
-    }
-
-    if (n != n_max)
-      out = df_resize(out, n);
-
-    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
-    out.attr("class") = "data.frame";
-    out.attr("names") = names_;
-
-    return out;
-  }
-
-  Rcpp::List fetch_all() {
-    int n = 100;
+  Rcpp::List fetch(int n_max = -1) {
+    int n = (n_max < 0) ? 100 : n_max;
     Rcpp::List out = df_create(types_, n);
 
     int i = 0;
     while(pLastRow_->hasData()) {
       if (i >= n) {
-        n *= 2;
-        out = df_resize(out, n);
+        if (n_max < 0) {
+          n *= 2;
+          out = df_resize(out, n);
+        } else {
+          break;
+        }
       }
 
       for (int j = 0; j < ncols_; ++j) {

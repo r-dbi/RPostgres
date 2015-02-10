@@ -10,11 +10,7 @@ XPtr<PqResult> rpostgres_send_query(XPtr<PqConnectionPtr> con, std::string sql) 
 
 // [[Rcpp::export]]
 List postgres_fetch(XPtr<PqResult> rs, int n) {
-  if (n >= 0) {
-    return rs->fetch(n);
-  } else {
-    return rs->fetch_all();
-  }
+  return rs->fetch(n);
 }
 
 // [[Rcpp::export]]
