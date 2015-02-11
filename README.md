@@ -13,6 +13,8 @@ RPostgres is an DBI-compliant interface to the postgres database. It's a ground-
   to retrive a 1000 x 25 result set from a local database, so this is 
   decent speed up for smaller queries.)
 
+* A simplified build process that relies on system libpq.
+
 ## Installation
 
 RPostgres isn't available from CRAN yet, but you can get it from github with:
