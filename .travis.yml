@@ -14,6 +14,10 @@ install:
   - ./travis-tool.sh install_github RcppCore/Rcpp
   - ./travis-tool.sh install_deps
 
+before_script:
+  - psql -c 'create database travis;' -U postgres
+
+
 script: ./travis-tool.sh run_tests
 
 after_failure:
