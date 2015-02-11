@@ -24,7 +24,7 @@ RPostgres isn't available from CRAN yet, but you can get it from github with:
 devtools::install_github("RcppCore/Rcpp")
 devtools::install_github("rstats-db/DBI")
 devtools::install_github("rstats-db/SQL")
-devtools::install_github("rstats-dbi/RPostgres")
+devtools::install_github("rstats-db/RPostgres")
 ```
 
 
