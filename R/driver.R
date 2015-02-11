@@ -6,6 +6,7 @@
 #' @export
 #' @useDynLib RPostgres
 #' @importFrom Rcpp evalCpp
+#' @importFrom SQL sqlData
 #' @import methods DBI
 #' @examples
 #' RPostgres::Postgres()
