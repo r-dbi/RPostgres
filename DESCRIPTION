@@ -7,7 +7,7 @@ Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
 LazyLoad: true
 Depends:
     R (>= 3.1.0)
-License: GPL-2 | file LICENSE
+License: GPL-2
 Copyright: Authors listed above, PostgreSQL Global Development Group,
     and The Regents of the University of California
 LinkingTo: Rcpp,
