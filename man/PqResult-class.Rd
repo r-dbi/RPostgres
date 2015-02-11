@@ -5,6 +5,7 @@
 \alias{PqResult-class}
 \alias{dbColumnInfo,PqResult-method}
 \alias{dbGetRowCount,PqResult-method}
+\alias{dbGetRowsAffected,PqResult-method}
 \alias{dbGetStatement,PqResult-method}
 \alias{dbIsValid,PqResult-method}
 \alias{show,PqResult-method}
@@ -15,6 +16,8 @@
 \S4method{dbIsValid}{PqResult}(dbObj, ...)
 
 \S4method{dbGetRowCount}{PqResult}(res, ...)
+
+\S4method{dbGetRowsAffected}{PqResult}(res, ...)
 
 \S4method{dbColumnInfo}{PqResult}(res, ...)
 
