@@ -1,9 +1,9 @@
 PKG_CPPFLAGS= -I../windows/libpq-9.4.0/include
 PKG_LIBS= -L../windows/libpq-9.4.0/lib${R_ARCH} -lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 
-SOURCES = $(wildcard *.c)
+SOURCES = $(wildcard *.c *.cpp)
 
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCES)))
 
 all: clean winlibs $(OBJECTS)
 
