@@ -27,7 +27,6 @@ devtools::install_github("rstats-db/SQL")
 devtools::install_github("rstats-db/RPostgres")
 ```
 
-
 ## Basic usage
 
 ```R
