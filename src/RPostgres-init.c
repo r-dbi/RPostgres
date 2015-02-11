@@ -1,5 +1,9 @@
 #include <R_ext/Rdynload.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 // From http://www.postgresql.org/docs/9.4/static/libpq-connect.html:
 // On Windows, there is a way to improve performance if a single database
 // connection is repeatedly started and shutdown. Internally, libpq calls
@@ -13,7 +17,7 @@
 
 void R_init_mypackage(DllInfo *info) {
 #ifdef _WIN32
-  WSAStartup();
+  WSAStartup(MAKEWORD(1, 0), NULL);
 #endif
 }
 
