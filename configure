@@ -7,7 +7,14 @@ fi
 
 # Check for system libpq shared library
 if [ -r "/usr/include/libpq-fe.h" ] || [ -r "/usr/local/include/libpq-fe.h" ]; then
-  echo "PKG_LIBS= -L$LIBPQ_DIR/lib -lpq" > src/Makevars
+  echo "PKG_LIBS=-lpq" > src/Makevars
+  exit 0;
+fi
+
+# Debian/Ubuntu
+if [ -r "/usr/include/postgresql/libpq-fe.h" ]; then
+  echo "PKG_CPPFLAGS= -I/usr/include/postgresql" > src/Makevars
+  echo "PKG_LIBS=-lpq" >> src/Makevars
   exit 0;
 fi
 
@@ -24,7 +31,7 @@ if [ $(echo "$OSTYPE" | grep "darwin") ]; then
 
   PKGDIR=$(echo $BREWDIR/Cellar/postgresql/*);
   if [ ! -r "$PKGDIR/include/libpq-fe.h" ]; then
-    echo "Brewing libpq in $PKGDIR...";
+    echo "Brewing libpq in $BREWDIR...";
     HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install postgresql;
     PKGDIR=$(echo $BREWDIR/Cellar/postgresql/*);
   fi
