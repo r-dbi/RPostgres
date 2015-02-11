@@ -1,11 +1,14 @@
-PKG_CPPFLAGS=-I./libpq
-PKG_LIBS=libpq/libpq.a -lshfolder -lwsock32 -lws2_32 -lsecur32
+PKG_CPPFLAGS= -I../windows/libpq-9.4.1/include
+PKG_LIBS= -L../windows/libpq-9.4.1/lib${R_ARCH} -lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 
-.PHONY: all 
-all:  $(SHLIB)
-$(SHLIB): libpq/libpq.a
+SOURCES = $(wildcard *.c *.cpp)
 
-export CC
+OBJECTS = $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCES)))
 
-libpq/libpq.a:
-	(cd libpq; make -f Makefile.win)
+all: clean winlibs $(OBJECTS)
+
+clean:
+	rm -f $(OBJECTS)
+
+winlibs:
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
