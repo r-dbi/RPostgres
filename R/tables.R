@@ -59,7 +59,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names)
+      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names,
+        temporary = temporary)
       dbGetQuery(conn, sql)
     }
 
