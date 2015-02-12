@@ -90,13 +90,9 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
   value <- SQL::rownamesToColumn(value, row.names)
 
-  if (copy) {
-    # C code takes care of atomic vectors, just need to coerce objects
-    is_object <- vapply(value, is.object, logical(1))
-    value[is_object] <- lapply(value[is_object], as.character)
-  } else {
-    # ???
-  }
+  # C code takes care of atomic vectors, just need to coerce objects
+  is_object <- vapply(value, is.object, logical(1))
+  value[is_object] <- lapply(value[is_object], as.character)
 
   value
 })
