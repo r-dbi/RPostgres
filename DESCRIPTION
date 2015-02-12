@@ -4,7 +4,9 @@ Title: Experimental Rcpp Interface to PostgreSQL.
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
     person("Jeroen", "Ooms", role = "ctb"),
-    person("RStudio", role = "cph")
+    person("RStudio", role = "cph"),
+    person("Tomoaki", "Nishiyama", role = "ctb",
+      comment = "Code for encoding vectors into strings derived from RPostgreSQL")
     )
 Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
 LazyLoad: true
