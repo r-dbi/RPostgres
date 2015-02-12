@@ -61,7 +61,6 @@ public:
 
     // Cache query metadata
     ncols_ = PQnfields(pSpec_);
-    Rcpp::Rcout << "ncols " << ncols_;
     names_ = column_names();
     types_ = column_types();
 
