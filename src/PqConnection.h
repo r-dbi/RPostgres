@@ -115,7 +115,7 @@ public:
     std::string buffer;
     int n = Rf_length(df[0]);
     // Sending row at-a-time is faster, presumable because it avoids copies
-    // of buffer
+    // of buffer. Sending data asynchronously appears to be no faster.
     for (int i = 0; i < n; ++i) {
       buffer.clear();
       encodeRowInBuffer(df, i, buffer);
