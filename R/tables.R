@@ -15,6 +15,14 @@
 #' @param field.types character vector of named SQL field types where
 #'   the names are the names of new table's columns. If missing, types inferred
 #'   with \code{\link[DBI]{dbDataType}}).
+#' @param copy If \code{TRUE}, serializes the data frame to a single string
+#'   and uses \code{COPY name FROM stdin}. This is fast, but not supported by
+#'   all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
+#'   a single SQL string. This is slower, but always supported.
+#'
+#'   RPostgres does not use parameterised queries to insert rows because
+#'   benchmarks revealed that this was considerably slower than using a single
+#'   SQL string.
 #' @examples
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbListTables(con)
