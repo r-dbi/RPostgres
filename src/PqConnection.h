@@ -5,6 +5,7 @@
 #include <libpq-fe.h>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include "PqUtils.h"
 
 class PqResult;
 
@@ -96,6 +97,31 @@ public:
 
   bool has_query() {
     return pCurrentResult_ != NULL;
+  }
+
+  void copy_data(std::string sql, Rcpp::List df) {
+    PGresult* pInit = PQexec(pConn_, sql.c_str());
+    if (PQresultStatus(pInit) != PGRES_COPY_IN) {
+      PQclear(pInit);
+      Rcpp::stop("Failed to initialise COPY");
+    }
+    PQclear(pInit);
+
+    std::string encoded = encode_data_frame(df);
+    if (PQputCopyData(pConn_, encoded.data(), encoded.size()) != 1) {
+      Rcpp::stop(PQerrorMessage(pConn_));
+    }
+
+    if (PQputCopyEnd(pConn_, NULL) != 1) {
+      Rcpp::stop(PQerrorMessage(pConn_));
+    }
+
+    PGresult* pComplete = PQgetResult(pConn_);
+    if (PQresultStatus(pComplete) != PGRES_COMMAND_OK) {
+      PQclear(pComplete);
+      Rcpp::stop(PQerrorMessage(pConn_));
+    }
+    PQclear(pComplete);
   }
 
   void con_check() {

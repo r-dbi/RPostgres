@@ -21,6 +21,10 @@ escape_identifier <- function(con, xs) {
     .Call('RPostgres_escape_identifier', PACKAGE = 'RPostgres', con, xs)
 }
 
+postgresql_copy_data <- function(con, sql, df) {
+    invisible(.Call('RPostgres_postgresql_copy_data', PACKAGE = 'RPostgres', con, sql, df))
+}
+
 encode_vector <- function(x) {
     .Call('RPostgres_encode_vector', PACKAGE = 'RPostgres', x)
 }

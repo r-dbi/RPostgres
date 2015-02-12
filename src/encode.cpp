@@ -1,9 +1,6 @@
 #include <Rcpp.h>
-#include "RPostgres_types.h"
+#include "PqUtils.h"
 using namespace Rcpp;
-
-void escapeInBuffer(const char* string, std::string& buffer);
-void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer);
 
 // [[Rcpp::export]]
 std::string encode_vector(RObject x) {
@@ -19,28 +16,31 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
+void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
+                             std::string fieldDelim = "\t",
+                             std::string lineDelim = "\n") {
+  int p = Rf_length(x);
+  for (int j = 0; j < p; ++j) {
+    encodeInBuffer(x[j], i, buffer);
+    if (j != p - 1)
+      buffer.append(fieldDelim);
+  }
+  buffer.append(lineDelim);
+}
+
 // [[Rcpp::export]]
 std::string encode_data_frame(List x) {
-  int p = Rf_length(x);
-  if (p == 0)
+  if (Rf_length(x) == 0)
     return("");
-
   int n = Rf_length(x[0]);
-  std::string buffer;
-  buffer.reserve(n + n * p * (2 + 5));
 
+  std::string buffer;
   for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < p; ++j) {
-      encodeInBuffer(x[j], i, buffer);
-      buffer.append("\t");
-    }
-    buffer.append("\n");
+    encodeRowInBuffer(x, i, buffer);
   }
 
   return buffer;
 }
-
-
 
 // =============================================================================
 // Derived from EncodeElementS in RPostgreSQL

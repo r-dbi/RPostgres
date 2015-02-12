@@ -36,13 +36,10 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, row.names = NA, overwrite = FALSE, append = FALSE,
-    field.types = NULL, temporary = FALSE) {
+    field.types = NULL, temporary = FALSE, copy = TRUE) {
 
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
-
-    dbBegin(conn)
-    on.exit(dbRollback(conn))
 
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
@@ -55,24 +52,25 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
     if (!found || overwrite) {
       sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names)
-      print(sql)
       dbGetQuery(conn, sql)
     }
 
     if (nrow(value) > 0) {
-      value <- sqlData(conn, value, row.names = row.names)
-      sql <- SQL::sqlTableInsertIntoTemplate(conn, name, value, prefix = "$")
-      rs <- dbSendQuery(conn, sql)
-
-      names(value) <- rep("", length(value))
-      tryCatch(
-        postgresql_bind_rows(rs@ptr, value),
-        finally = dbClearResult(rs)
-      )
+      value <- sqlData(conn, value, row.names = row.names, copy = copy)
+      if (!copy) {
+        sql <- SQL::sqlTableInsertInto(conn, name, value)
+        rs <- dbSendQuery(conn, sql)
+      } else {
+        fields <- dbQuoteIdentifier(conn, names(value))
+        sql <- paste0(
+          "COPY ", dbQuoteIdentifier(conn, name),
+          " (", paste(fields, collapse = ", "), ")",
+          " FROM STDIN"
+        )
+        postgresql_copy_data(conn@ptr, sql, value)
+      }
     }
 
-    on.exit(NULL)
-    dbCommit(conn)
     TRUE
   }
 )
@@ -81,11 +79,16 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @importFrom SQL sqlData
 #' @export
 #' @rdname dbWriteTable
-setMethod("sqlData", "PqConnection", function(con, value, row.names = NA) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
   value <- SQL::rownamesToColumn(value, row.names)
 
-  # Convert everything to utf-8 strings
-  value[] <- lapply(value, function(x) enc2utf8(as.character(x)))
+  if (copy) {
+    # C code takes care of atomic vectors, just need to coerce objects
+    is_object <- vapply(value, is.object, logical(1))
+    value[is_object] <- lapply(value[is_object], as.character)
+  } else {
+    # ???
+  }
 
   value
 })

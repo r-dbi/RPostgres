@@ -63,6 +63,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// postgresql_copy_data
+void postgresql_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df);
+RcppExport SEXP RPostgres_postgresql_copy_data(SEXP conSEXP, SEXP sqlSEXP, SEXP dfSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
+    Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< List >::type df(dfSEXP);
+    postgresql_copy_data(con, sql, df);
+    return R_NilValue;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP RPostgres_encode_vector(SEXP xSEXP) {

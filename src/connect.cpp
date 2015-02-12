@@ -51,3 +51,8 @@ CharacterVector escape_identifier(XPtr<PqConnectionPtr> con, CharacterVector xs)
 
   return escaped;
 }
+
+// [[Rcpp::export]]
+void postgresql_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
+  return (*con)->copy_data(sql, df);
+}
