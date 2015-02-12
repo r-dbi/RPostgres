@@ -11,7 +11,6 @@
 
 typedef boost::shared_ptr<PqRow> PqRowPtr;
 
-
 // PqResult --------------------------------------------------------------------
 // There is no object analogous to PqResult in libpq: this provides a result set
 // like object for the R API. There is only ever one active result set (the
@@ -62,6 +61,7 @@ public:
 
     // Cache query metadata
     ncols_ = PQnfields(pSpec_);
+    Rcpp::Rcout << "ncols " << ncols_;
     names_ = column_names();
     types_ = column_types();
 
@@ -106,6 +106,36 @@ public:
       Rcpp::stop("Failed to set single row mode");
 
     bound_ = true;
+  }
+
+  void bind_rows(Rcpp::ListOf<Rcpp::CharacterVector> params) {
+    if (params.size() != nparams_) {
+      Rcpp::stop("Query requires %i params; %i supplied.",
+        nparams_, params.size());
+    }
+
+    int n = params[0].size();
+
+    std::vector<const char*> c_params(nparams_);
+    std::vector<int> c_formats(nparams_);
+    for (int j = 0; j < nparams_; ++j) {
+      c_formats[j] = 0;
+    }
+
+    for (int i = 0; i < n; ++i) {
+      if (i % 1000 == 0)
+        Rcpp::checkUserInterrupt();
+
+      for (int j = 0; j < nparams_; ++j) {
+        std::string param(params[j][i]);
+        c_params[j] = param.c_str();
+      }
+
+      PGresult* res = PQexecPrepared(pConn_->conn(), "", nparams_,
+        &c_params[0], NULL, &c_formats[0], 0);
+      if (PQresultStatus(res) != PGRES_COMMAND_OK)
+        Rcpp::stop("%s (row %i)", PQerrorMessage(pConn_->conn()), i + 1);
+    }
   }
 
   bool active() {

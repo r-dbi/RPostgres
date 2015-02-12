@@ -19,6 +19,11 @@ void postgresql_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
 }
 
 // [[Rcpp::export]]
+void postgresql_bind_rows(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
+  return rs->bind_rows(params);
+}
+
+// [[Rcpp::export]]
 int rows_affected(XPtr<PqResult> rs) {
   return rs->rowsAffected();
 }

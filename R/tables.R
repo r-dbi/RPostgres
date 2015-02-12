@@ -41,9 +41,9 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
 
-#     dbBegin(conn)
-#     on.exit(dbRollback(conn))
-#
+    dbBegin(conn)
+    on.exit(dbRollback(conn))
+
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
       stop("Table ", name, " exists in database, and both overwrite and",
@@ -54,21 +54,42 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names,
-        temporary = temporary)
+      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names)
+      print(sql)
       dbGetQuery(conn, sql)
     }
 
     if (nrow(value) > 0) {
-      sql <- SQL::sqlTableInsertInto(conn, name, value, row.names = row.names)
-      dbGetQuery(conn, sql)
+      value <- sqlData(conn, value, row.names = row.names)
+      sql <- SQL::sqlTableInsertIntoTemplate(conn, name, value, prefix = "$")
+      rs <- dbSendQuery(conn, sql)
+
+      names(value) <- rep("", length(value))
+      tryCatch(
+        postgresql_bind_rows(rs@ptr, value),
+        finally = dbClearResult(rs)
+      )
     }
 
-#     on.exit(NULL)
-#     dbCommit(conn)
+    on.exit(NULL)
+    dbCommit(conn)
     TRUE
   }
 )
+
+
+#' @importFrom SQL sqlData
+#' @export
+#' @rdname dbWriteTable
+setMethod("sqlData", "PqConnection", function(con, value, row.names = NA) {
+  value <- SQL::rownamesToColumn(value, row.names)
+
+  # Convert everything to utf-8 strings
+  value[] <- lapply(value, function(x) enc2utf8(as.character(x)))
+
+  value
+})
+
 
 #' @export
 #' @rdname postgres-tables

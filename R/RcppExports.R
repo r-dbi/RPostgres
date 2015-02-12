@@ -37,6 +37,10 @@ postgresql_bind_params <- function(rs, params) {
     invisible(.Call('RPostgres_postgresql_bind_params', PACKAGE = 'RPostgres', rs, params))
 }
 
+postgresql_bind_rows <- function(rs, params) {
+    invisible(.Call('RPostgres_postgresql_bind_rows', PACKAGE = 'RPostgres', rs, params))
+}
+
 rows_affected <- function(rs) {
     .Call('RPostgres_rows_affected', PACKAGE = 'RPostgres', rs)
 }
