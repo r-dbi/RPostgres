@@ -75,7 +75,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
           " (", paste(fields, collapse = ", "), ")",
           " FROM STDIN"
         )
-        postgresql_copy_data(conn@ptr, sql, value)
+        connection_copy_data(conn@ptr, sql, value)
       }
     }
 

@@ -20,25 +20,25 @@ setMethod("dbGetStatement", "PqResult", function(res, ...) {
 #' @rdname PqResult-class
 #' @export
 setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
-  postgres_result_valid(dbObj@ptr)
+  result_active(dbObj@ptr)
 })
 
 #' @rdname PqResult-class
 #' @export
 setMethod("dbGetRowCount", "PqResult", function(res, ...) {
-  postgres_row_count(res@ptr)
+  result_row_count(res@ptr)
 })
 
 #' @rdname PqResult-class
 #' @export
 setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
-  postgres_rows_affected(res@ptr)
+  result_rows_affected(res@ptr)
 })
 
 #' @rdname PqResult-class
 #' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
-  postgres_column_info(res@ptr)
+  result_column_info(res@ptr)
 })
 
 #' @rdname PqResult-class
@@ -98,7 +98,7 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
-    ptr = rpostgres_send_query(conn@ptr, statement),
+    ptr = result_create(conn@ptr, statement),
     sql = statement)
 
   if (!is.null(params)) {
@@ -126,14 +126,14 @@ setMethod("dbGetQuery", signature("PqConnection", "character"),
 #' @export
 #' @rdname postgres-query
 setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
-  SQL::columnToRownames(postgres_fetch(res@ptr, n = n), row.names)
+  SQL::columnToRownames(result_fetch(res@ptr, n = n), row.names)
 })
 
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
   params <- lapply(params, as.character)
-  postgresql_bind_params(res@ptr, params)
+  result_bind_params(res@ptr, params)
   invisible(res)
 })
 
@@ -141,12 +141,12 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  is_complete(res@ptr)
+  result_active(res@ptr)
 })
 
 #' @rdname postgres-query
 #' @export
 setMethod("dbClearResult", "PqResult", function(res, ...) {
-  clear_result(res@ptr)
+  result_release(res@ptr)
   TRUE
 })

@@ -18,11 +18,11 @@ NULL
 #' @export
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
-  SQL(escape_string(conn@ptr, x))
+  SQL(connection_escape_string(conn@ptr, x))
 })
 
 #' @export
 #' @rdname quote
 setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x, ...) {
-  SQL(escape_identifier(conn@ptr, x))
+  SQL(connection_escape_identifier(conn@ptr, x))
 })

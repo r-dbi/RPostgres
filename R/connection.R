@@ -13,7 +13,7 @@ setClass("PqConnection",
 #' @export
 #' @rdname PqConnection-class
 setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
-  con_info(dbObj@ptr)
+  connection_info(dbObj@ptr)
 })
 
 #' @export
@@ -63,9 +63,9 @@ setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
   }
 
   if (length(opts) == 0) {
-    ptr <- connect(character(), character())
+    ptr <- connection_create(character(), character())
   } else {
-    ptr <- connect(names(opts), as.vector(opts))
+    ptr <- connection_create(names(opts), as.vector(opts))
   }
 
   new("PqConnection", ptr = ptr)
@@ -74,7 +74,7 @@ setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
 #' @export
 #' @rdname dbConnect-PqDriver-method
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
-  postgres_disconnect(conn@ptr)
+  connection_release(conn@ptr)
   TRUE
 })
 

@@ -3,7 +3,8 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-XPtr<PqConnectionPtr> connect(std::vector<std::string> keys, std::vector<std::string> values) {
+XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
+                                        std::vector<std::string> values) {
   PqConnectionPtr* pConn = new PqConnectionPtr(
     new PqConnection(keys, values)
   );
@@ -11,12 +12,7 @@ XPtr<PqConnectionPtr> connect(std::vector<std::string> keys, std::vector<std::st
 }
 
 // [[Rcpp::export]]
-List con_info(XPtr<PqConnectionPtr> con) {
-  return (*con)->info();
-}
-
-// [[Rcpp::export]]
-void postgres_disconnect(XPtr<PqConnectionPtr> con) {
+void connection_release(XPtr<PqConnectionPtr> con) {
   if ((*con)->has_query()) {
     warning("%s\n%s",
       "There is a result object still in use.",
@@ -27,7 +23,13 @@ void postgres_disconnect(XPtr<PqConnectionPtr> con) {
 }
 
 // [[Rcpp::export]]
-CharacterVector escape_string(XPtr<PqConnectionPtr> con, CharacterVector xs) {
+List connection_info(XPtr<PqConnectionPtr> con) {
+  return (*con)->info();
+}
+
+// [[Rcpp::export]]
+CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
+                                         CharacterVector xs) {
   int n = xs.size();
   CharacterVector escaped(n);
 
@@ -40,7 +42,8 @@ CharacterVector escape_string(XPtr<PqConnectionPtr> con, CharacterVector xs) {
 }
 
 // [[Rcpp::export]]
-CharacterVector escape_identifier(XPtr<PqConnectionPtr> con, CharacterVector xs) {
+CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
+                                             CharacterVector xs) {
   int n = xs.size();
   CharacterVector escaped(n);
 
@@ -53,6 +56,6 @@ CharacterVector escape_identifier(XPtr<PqConnectionPtr> con, CharacterVector xs)
 }
 
 // [[Rcpp::export]]
-void postgresql_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
+void connection_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
   return (*con)->copy_data(sql, df);
 }
