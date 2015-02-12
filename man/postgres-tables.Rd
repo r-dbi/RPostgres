@@ -8,11 +8,14 @@
 \alias{dbRemoveTable,PqConnection,character-method}
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{postgres-tables}
+\alias{sqlData,PqConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
   row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
   temporary = FALSE, copy = TRUE)
+
+\S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, row.names = NA)
 
@@ -63,6 +66,8 @@ with \code{\link[DBI]{dbDataType}}).}
   RPostgres does not use parameterised queries to insert rows because
   benchmarks revealed that this was considerably slower than using a single
   SQL string.}
+
+\item{con}{A database connection.}
 }
 \description{
 Convenience functions for reading/writing DBMS tables

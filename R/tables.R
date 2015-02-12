@@ -86,7 +86,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
 #' @importFrom SQL sqlData
 #' @export
-#' @rdname dbWriteTable
+#' @rdname postgres-tables
 setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
   value <- SQL::rownamesToColumn(value, row.names)
 
