@@ -63,6 +63,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// encode_vector
+std::string encode_vector(RObject x);
+RcppExport SEXP RPostgres_encode_vector(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< RObject >::type x(xSEXP);
+    __result = Rcpp::wrap(encode_vector(x));
+    return __result;
+END_RCPP
+}
 // encrypt_password
 String encrypt_password(String password, String user);
 RcppExport SEXP RPostgres_encrypt_password(SEXP passwordSEXP, SEXP userSEXP) {

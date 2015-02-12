@@ -21,6 +21,10 @@ escape_identifier <- function(con, xs) {
     .Call('RPostgres_escape_identifier', PACKAGE = 'RPostgres', con, xs)
 }
 
+encode_vector <- function(x) {
+    .Call('RPostgres_encode_vector', PACKAGE = 'RPostgres', x)
+}
+
 encrypt_password <- function(password, user) {
     .Call('RPostgres_encrypt_password', PACKAGE = 'RPostgres', password, user)
 }
