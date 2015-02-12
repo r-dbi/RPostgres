@@ -17,8 +17,8 @@ std::string encode_vector(RObject x) {
 }
 
 void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
-                             std::string fieldDelim = "\t",
-                             std::string lineDelim = "\n") {
+                             std::string fieldDelim,
+                             std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
     encodeInBuffer(x[j], i, buffer);

@@ -100,6 +100,10 @@ public:
   }
 
   void copy_data(std::string sql, Rcpp::List df) {
+    int p = df.size();
+    if (p == 0)
+      return;
+
     PGresult* pInit = PQexec(pConn_, sql.c_str());
     if (PQresultStatus(pInit) != PGRES_COPY_IN) {
       PQclear(pInit);
@@ -107,10 +111,20 @@ public:
     }
     PQclear(pInit);
 
-    std::string encoded = encode_data_frame(df);
-    if (PQputCopyData(pConn_, encoded.data(), encoded.size()) != 1) {
-      Rcpp::stop(PQerrorMessage(pConn_));
+
+    std::string buffer;
+    int n = Rf_length(df[0]);
+    // Sending row at-a-time is faster, presumable because it avoids copies
+    // of buffer
+    for (int i = 0; i < n; ++i) {
+      buffer.clear();
+      encodeRowInBuffer(df, i, buffer);
+
+      if (PQputCopyData(pConn_, buffer.data(), buffer.size()) != 1) {
+        Rcpp::stop(PQerrorMessage(pConn_));
+      }
     }
+
 
     if (PQputCopyEnd(pConn_, NULL) != 1) {
       Rcpp::stop(PQerrorMessage(pConn_));
