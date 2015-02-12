@@ -20,7 +20,7 @@ void result_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
 
 // [[Rcpp::export]]
 bool result_is_complete(XPtr<PqResult> rs) {
-  return rs->is_complete();
+  return rs->isComplete();
 }
 
 // [[Rcpp::export]]
@@ -34,8 +34,8 @@ bool result_active(XPtr<PqResult> rs) {
 }
 
 // [[Rcpp::export]]
-int result_row_count(XPtr<PqResult> rs) {
-  return rs->nrows();
+int result_rows_fetched(XPtr<PqResult> rs) {
+  return rs->rowsFetched();
 }
 
 // [[Rcpp::export]]
@@ -45,5 +45,5 @@ int result_rows_affected(XPtr<PqResult> rs) {
 
 // [[Rcpp::export]]
 List result_column_info(XPtr<PqResult> rs) {
-  return rs->column_info();
+  return rs->columnInfo();
 }

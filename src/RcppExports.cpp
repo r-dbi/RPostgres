@@ -176,14 +176,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// result_row_count
-int result_row_count(XPtr<PqResult> rs);
-RcppExport SEXP RPostgres_result_row_count(SEXP rsSEXP) {
+// result_rows_fetched
+int result_rows_fetched(XPtr<PqResult> rs);
+RcppExport SEXP RPostgres_result_rows_fetched(SEXP rsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
-    __result = Rcpp::wrap(result_row_count(rs));
+    __result = Rcpp::wrap(result_rows_fetched(rs));
     return __result;
 END_RCPP
 }

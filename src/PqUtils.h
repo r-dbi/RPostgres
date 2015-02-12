@@ -15,7 +15,7 @@ std::string encode_data_frame(Rcpp::List x);
 
 // Generic data frame utils ----------------------------------------------------
 
-Rcpp::List inline df_resize(Rcpp::List df, int n) {
+Rcpp::List inline dfResize(Rcpp::List df, int n) {
   int p = df.size();
 
   Rcpp::List out(p);
@@ -30,7 +30,7 @@ Rcpp::List inline df_resize(Rcpp::List df, int n) {
   return out;
 }
 
-Rcpp::List inline df_create(std::vector<SEXPTYPE> types, std::vector<std::string> names, int n) {
+Rcpp::List inline dfCreate(std::vector<SEXPTYPE> types, std::vector<std::string> names, int n) {
   int p = types.size();
 
   Rcpp::List out(p);

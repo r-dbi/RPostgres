@@ -68,7 +68,7 @@ public:
   }
 
   void cancelQuery() {
-    con_check();
+    conCheck();
 
     // Cancel running query
     PGcancel* cancel = PQgetCancel(pConn_);
@@ -95,11 +95,11 @@ public:
     return pCurrentResult_ == pResult;
   }
 
-  bool has_query() {
+  bool hasQuery() {
     return pCurrentResult_ != NULL;
   }
 
-  void copy_data(std::string sql, Rcpp::List df) {
+  void copyData(std::string sql, Rcpp::List df) {
     int p = df.size();
     if (p == 0)
       return;
@@ -138,7 +138,7 @@ public:
     PQclear(pComplete);
   }
 
-  void con_check() {
+  void conCheck() {
     ConnStatusType status = PQstatus(pConn_);
     if (status == CONNECTION_OK) return;
 
@@ -151,7 +151,7 @@ public:
   }
 
   Rcpp::List info() {
-    con_check();
+    conCheck();
 
     const char* dbnm = PQdb(pConn_);
     const char* host = PQhost(pConn_);
@@ -169,8 +169,8 @@ public:
   }
 
   // Returns a single CHRSXP
-  SEXP escape_string(std::string x) {
-    con_check();
+  SEXP escapeString(std::string x) {
+    conCheck();
 
     char* pq_escaped = PQescapeLiteral(pConn_, x.c_str(), x.length());
     SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
@@ -180,8 +180,8 @@ public:
   }
 
   // Returns a single CHRSXP
-  SEXP escape_identifier(std::string x) {
-    con_check();
+  SEXP escapeIdentifier(std::string x) {
+    conCheck();
 
     char* pq_escaped = PQescapeIdentifier(pConn_, x.c_str(), x.length());
     SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);

@@ -26,7 +26,7 @@ setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
 #' @rdname PqResult-class
 #' @export
 setMethod("dbGetRowCount", "PqResult", function(res, ...) {
-  result_row_count(res@ptr)
+  result_rows_fetched(res@ptr)
 })
 
 #' @rdname PqResult-class

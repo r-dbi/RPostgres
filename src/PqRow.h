@@ -55,7 +55,7 @@ public:
     return atoi(PQcmdTuples(pRes_));
   }
 
-  Rcpp::List exception_info() {
+  Rcpp::List exceptionInfo() {
     const char* sev = PQresultErrorField(pRes_, PG_DIAG_SEVERITY);
     const char* msg = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_PRIMARY);
     const char* det = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_DETAIL);
@@ -70,27 +70,27 @@ public:
   }
 
   // Value accessors -----------------------------------------------------------
-  bool value_null(int j) {
+  bool valueNull(int j) {
     return PQgetisnull(pRes_, 0, j);
   }
 
-  int value_int(int j) {
-    return value_null(j) ? NA_INTEGER : atoi(PQgetvalue(pRes_, 0, j));
+  int valueInt(int j) {
+    return valueNull(j) ? NA_INTEGER : atoi(PQgetvalue(pRes_, 0, j));
   }
 
-  double value_double(double j) {
-    return value_null(j) ? NA_REAL : atof(PQgetvalue(pRes_, 0, j));
+  double valueDouble(double j) {
+    return valueNull(j) ? NA_REAL : atof(PQgetvalue(pRes_, 0, j));
   }
 
-  SEXP value_string(int j) {
-    if (value_null(j))
+  SEXP valueString(int j) {
+    if (valueNull(j))
       return NA_STRING;
 
     char* val = PQgetvalue(pRes_, 0, j);
     return Rf_mkCharCE(val, CE_UTF8);
   }
 
-  SEXP value_raw(int j) {
+  SEXP valueRaw(int j) {
     int size = PQgetlength(pRes_, 0, j);
     const void* blob = PQgetvalue(pRes_, 0, j);
 
@@ -100,27 +100,27 @@ public:
     return bytes;
   }
 
-  int value_logical(int j) {
-    return value_null(j) ? NA_LOGICAL :
+  int valueLogical(int j) {
+    return valueNull(j) ? NA_LOGICAL :
       (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
   }
 
-  void set_list_value(SEXP x, int i, int j) {
+  void setListValue(SEXP x, int i, int j) {
     switch(TYPEOF(x)) {
     case LGLSXP:
-      LOGICAL(x)[i] = value_logical(j);
+      LOGICAL(x)[i] = valueLogical(j);
       break;
     case INTSXP:
-      INTEGER(x)[i] = value_int(j);
+      INTEGER(x)[i] = valueInt(j);
       break;
     case REALSXP:
-      REAL(x)[i] = value_double(j);
+      REAL(x)[i] = valueDouble(j);
       break;
     case STRSXP:
-      SET_STRING_ELT(x, i, value_string(j));
+      SET_STRING_ELT(x, i, valueString(j));
       break;
     case VECSXP:
-      SET_VECTOR_ELT(x, i, value_raw(j));
+      SET_VECTOR_ELT(x, i, valueRaw(j));
       break;
     }
   }

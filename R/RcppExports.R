@@ -61,8 +61,8 @@ result_active <- function(rs) {
     .Call('RPostgres_result_active', PACKAGE = 'RPostgres', rs)
 }
 
-result_row_count <- function(rs) {
-    .Call('RPostgres_result_row_count', PACKAGE = 'RPostgres', rs)
+result_rows_fetched <- function(rs) {
+    .Call('RPostgres_result_rows_fetched', PACKAGE = 'RPostgres', rs)
 }
 
 result_rows_affected <- function(rs) {

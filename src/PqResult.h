@@ -29,7 +29,7 @@ public:
 
   PqResult(PqConnectionPtr pConn, std::string sql):
            pConn_(pConn), nrows_(0), bound_(false) {
-    pConn_->con_check();
+    pConn_->conCheck();
     pConn->setCurrentResult(this);
 
     try {
@@ -61,8 +61,8 @@ public:
 
     // Cache query metadata
     ncols_ = PQnfields(pSpec_);
-    names_ = column_names();
-    types_ = column_types();
+    names_ = columnNames();
+    types_ = columnTypes();
 
   }
 
@@ -107,7 +107,7 @@ public:
     bound_ = true;
   }
 
-  void bind_rows(Rcpp::ListOf<Rcpp::CharacterVector> params) {
+  void bindRows(Rcpp::ListOf<Rcpp::CharacterVector> params) {
     if (params.size() != nparams_) {
       Rcpp::stop("Query requires %i params; %i supplied.",
         nparams_, params.size());
@@ -141,16 +141,16 @@ public:
     return pConn_->isCurrentResult(this);
   }
 
-  void fetch_row() {
+  void fetchRow() {
     pNextRow_.reset(new PqRow(pConn_->conn()));
     nrows_++;
   }
 
-  void fetch_row_if_needed() {
+  void fetchRowIfNeeded() {
     if (pNextRow_.get() != NULL)
       return;
 
-    fetch_row();
+    fetchRow();
   }
 
   Rcpp::List fetch(int n_max = -1) {
@@ -161,24 +161,24 @@ public:
 
 
     int n = (n_max < 0) ? 100 : n_max;
-    Rcpp::List out = df_create(types_, names_, n);
+    Rcpp::List out = dfCreate(types_, names_, n);
 
     int i = 0;
-    fetch_row_if_needed();
+    fetchRowIfNeeded();
     while(pNextRow_->hasData()) {
       if (i >= n) {
         if (n_max < 0) {
           n *= 2;
-          out = df_resize(out, n);
+          out = dfResize(out, n);
         } else {
           break;
         }
       }
 
       for (int j = 0; j < ncols_; ++j) {
-        pNextRow_->set_list_value(out[j], i, j);
+        pNextRow_->setListValue(out[j], i, j);
       }
-      fetch_row();
+      fetchRow();
       ++i;
 
       if (i % 1000 == 0)
@@ -187,27 +187,27 @@ public:
 
     // Trim back to what we actually used
     if (i < n) {
-      out = df_resize(out, i);
+      out = dfResize(out, i);
     }
 
     return out;
   }
 
   int rowsAffected() {
-    fetch_row_if_needed();
+    fetchRowIfNeeded();
     return pNextRow_->rowsAffected();
   }
 
-  bool is_complete() {
-    fetch_row_if_needed();
-    return !pNextRow_->hasData();
-  }
-
-  int nrows() {
+  int rowsFetched() {
     return nrows_ - (pNextRow_.get() != NULL);
   }
 
-  Rcpp::List column_info() {
+  bool isComplete() {
+    fetchRowIfNeeded();
+    return !pNextRow_->hasData();
+  }
+
+  Rcpp::List columnInfo() {
     Rcpp::CharacterVector names(ncols_);
     for (int i = 0; i < ncols_; i++) {
       names[i] = names_[i];
@@ -233,7 +233,7 @@ public:
   }
 
 private:
-  std::vector<std::string> column_names() const {
+  std::vector<std::string> columnNames() const {
     std::vector<std::string> names;
     names.reserve(ncols_);
 
@@ -244,7 +244,7 @@ private:
     return names;
   }
 
-  std::vector<SEXPTYPE> column_types() const {
+  std::vector<SEXPTYPE> columnTypes() const {
     std::vector<SEXPTYPE> types;
     types.reserve(ncols_);
 
