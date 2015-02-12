@@ -74,6 +74,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// encode_data_frame
+std::string encode_data_frame(List x);
+RcppExport SEXP RPostgres_encode_data_frame(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type x(xSEXP);
+    __result = Rcpp::wrap(encode_data_frame(x));
+    return __result;
+END_RCPP
+}
 // encrypt_password
 String encrypt_password(String password, String user);
 RcppExport SEXP RPostgres_encrypt_password(SEXP passwordSEXP, SEXP userSEXP) {

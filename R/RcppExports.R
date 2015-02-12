@@ -25,6 +25,10 @@ encode_vector <- function(x) {
     .Call('RPostgres_encode_vector', PACKAGE = 'RPostgres', x)
 }
 
+encode_data_frame <- function(x) {
+    .Call('RPostgres_encode_data_frame', PACKAGE = 'RPostgres', x)
+}
+
 encrypt_password <- function(password, user) {
     .Call('RPostgres_encrypt_password', PACKAGE = 'RPostgres', password, user)
 }

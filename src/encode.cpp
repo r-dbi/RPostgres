@@ -19,6 +19,29 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
+// [[Rcpp::export]]
+std::string encode_data_frame(List x) {
+  int p = Rf_length(x);
+  if (p == 0)
+    return("");
+
+  int n = Rf_length(x[0]);
+  std::string buffer;
+  buffer.reserve(n + n * p * (2 + 5));
+
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < p; ++j) {
+      encodeInBuffer(x[j], i, buffer);
+      buffer.append("\t");
+    }
+    buffer.append("\n");
+  }
+
+  return buffer;
+}
+
+
+
 // =============================================================================
 // Derived from EncodeElementS in RPostgreSQL
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
