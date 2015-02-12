@@ -291,7 +291,7 @@ private:
 
       default:
         types.push_back(STRSXP);
-        Rcpp::warning("Unknown field type (%s) in column %i", type, i);
+        Rcpp::warning("Unknown field type (%s) in column %s", type, PQfname(pSpec_, i));
       }
     }
 
