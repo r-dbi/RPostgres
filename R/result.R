@@ -41,22 +41,6 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
   result_column_info(res@ptr)
 })
 
-#' @rdname PqResult-class
-#' @export
-setMethod("show", "PqResult", function(object) {
-  cat("<PqResult>\n")
-  if(!dbIsValid(object)){
-    cat("EXPIRED\n")
-  } else {
-    cat("  SQL  ", dbGetStatement(object), "\n", sep = "")
-
-    done <- if (dbHasCompleted(object)) "complete" else "incomplete"
-    cat("  ROWS Fetched: ", dbGetRowCount(object), " [", done, "]\n", sep = "")
-    cat("       Changed: ", dbGetRowsAffected(object), "\n", sep = "")
-  }
-  invisible(NULL)
-})
-
 #' Execute a SQL statement on a database connection
 #'
 #' To retrieve results a chunk at a time, use \code{dbSendQuery},
@@ -73,6 +57,7 @@ setMethod("show", "PqResult", function(object) {
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
+#' library(DBI)
 #' db <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
@@ -108,25 +93,14 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL
   rs
 })
 
-#' @export
-#' @rdname postgres-query
-setMethod("dbGetQuery", signature("PqConnection", "character"),
-  function(conn, statement, ..., params = NULL, row.names = NA) {
-    rs <- dbSendQuery(conn, statement, params = params, ...)
-    on.exit(dbClearResult(rs))
-
-    dbFetch(rs, n = -1, ..., row.names = row.names)
-  }
-)
-
 #' @param res Code a \linkS4class{PqResult} produced by
 #'   \code{\link[DBI]{dbSendQuery}}.
 #' @param n Number of rows to return. If less than zero returns all rows.
-#' @inheritParams SQL::rownamesToColumn
+#' @inheritParams DBI::rownamesToColumn
 #' @export
 #' @rdname postgres-query
 setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
-  SQL::columnToRownames(result_fetch(res@ptr, n = n), row.names)
+  columnToRownames(result_fetch(res@ptr, n = n), row.names)
 })
 
 #' @rdname postgres-query

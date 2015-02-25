@@ -159,7 +159,6 @@ public:
     if (!active())
       Rcpp::stop("Inactive result set");
 
-
     int n = (n_max < 0) ? 100 : n_max;
     Rcpp::List out = dfCreate(types_, names_, n);
 

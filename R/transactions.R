@@ -7,6 +7,7 @@
 #'   \code{\link[DBI]{dbConnect}}
 #' @return A boolean, indicating success or failure.
 #' @examples
+#' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
 #' dbGetQuery(con, 'SELECT count(*) from "USarrests"')
@@ -44,3 +45,14 @@ setMethod("dbRollback", "PqConnection", function(conn) {
   dbGetQuery(conn, "ROLLBACK")
   TRUE
 })
+
+
+inTransaction <- function(con) {
+  dbGetQuery(con, "
+    SELECT count(*)
+    FROM pg_locks
+    WHERE pid = pg_backend_pid()
+      AND locktype = 'transactionid'
+      AND mode = 'ExclusiveLock'
+  ")
+}

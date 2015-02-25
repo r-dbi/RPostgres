@@ -73,6 +73,7 @@ with \code{\link[DBI]{dbDataType}}).}
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
+library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbListTables(con)
 dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)

@@ -6,9 +6,9 @@
 #' @export
 #' @useDynLib RPostgres
 #' @importFrom Rcpp evalCpp
-#' @importFrom SQL sqlData
 #' @import methods DBI
 #' @examples
+#' library(DBI)
 #' RPostgres::Postgres()
 Postgres <- function() {
   new("PqDriver")
@@ -19,12 +19,6 @@ Postgres <- function() {
 #' @export
 #' @keywords internal
 setClass("PqDriver", contains = "DBIDriver")
-
-#' @export
-#' @rdname PqDriver-class
-setMethod("show", "PqDriver", function(object) {
-  cat("<PqDriver>\n")
-})
 
 #' @export
 #' @rdname PqDriver-class

@@ -37,6 +37,7 @@ if you delete the object containing the connection, it will be automatcally
 disconnected during the next GC.
 }
 \examples{
+library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbDisconnect(con)
 }

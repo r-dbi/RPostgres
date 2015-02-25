@@ -30,7 +30,7 @@ void result_release(XPtr<PqResult> rs) {
 
 // [[Rcpp::export]]
 bool result_active(XPtr<PqResult> rs) {
-  return rs->active();
+  return rs.get() != NULL && rs->active();
 }
 
 // [[Rcpp::export]]

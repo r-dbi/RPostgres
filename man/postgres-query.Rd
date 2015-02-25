@@ -5,16 +5,12 @@
 \alias{dbBind,PqResult-method}
 \alias{dbClearResult,PqResult-method}
 \alias{dbFetch,PqResult-method}
-\alias{dbGetQuery,PqConnection,character-method}
 \alias{dbHasCompleted,PqResult-method}
 \alias{dbSendQuery,PqConnection-method}
 \alias{postgres-query}
 \title{Execute a SQL statement on a database connection}
 \usage{
 \S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ...)
-
-\S4method{dbGetQuery}{PqConnection,character}(conn, statement, ...,
-  params = NULL, row.names = NA)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = NA)
 
@@ -37,6 +33,11 @@ cast the parameter with e.g. \code{"$1::bigint"}.}
 \item{...}{Another arguments needed for compatibility with generic (
 currently ignored).}
 
+\item{res}{Code a \linkS4class{PqResult} produced by
+\code{\link[DBI]{dbSendQuery}}.}
+
+\item{n}{Number of rows to return. If less than zero returns all rows.}
+
 \item{row.names}{Either \code{TRUE}, \code{FALSE}, \code{NA} or a string.
 
   If \code{TRUE}, always translate row names to a column called "row_names".
@@ -47,11 +48,6 @@ currently ignored).}
   default name.
 
   For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
-
-\item{res}{Code a \linkS4class{PqResult} produced by
-\code{\link[DBI]{dbSendQuery}}.}
-
-\item{n}{Number of rows to return. If less than zero returns all rows.}
 }
 \description{
 To retrieve results a chunk at a time, use \code{dbSendQuery},
@@ -60,6 +56,7 @@ results (and they'll fit in memory) use \code{dbGetQuery} which sends,
 fetches and clears for you.
 }
 \examples{
+library(DBI)
 db <- dbConnect(RPostgres::Postgres())
 dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 

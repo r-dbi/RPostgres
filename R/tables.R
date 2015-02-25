@@ -6,8 +6,7 @@
 #'   automatically quoted so you can use any sequence of characaters, not
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
-#' @inheritParams SQL::rownamesToColumn
-#' @inheritParams SQL::sqlTableCreate
+#' @inheritParams DBI::sqlCreateTable
 #' @param overwrite a logical specifying whether to overwrite an existing table
 #'   or not. Its default is \code{FALSE}.
 #' @param append a logical specifying whether to append to an existing table
@@ -24,6 +23,7 @@
 #'   benchmarks revealed that this was considerably slower than using a single
 #'   SQL string.
 #' @examples
+#' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbListTables(con)
 #' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
@@ -59,7 +59,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- SQL::sqlTableCreate(conn, name, value, row.names = row.names,
+      sql <- sqlCreateTable(conn, name, value, row.names = row.names,
         temporary = temporary)
       dbGetQuery(conn, sql)
     }
@@ -67,7 +67,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (nrow(value) > 0) {
       value <- sqlData(conn, value, row.names = row.names, copy = copy)
       if (!copy) {
-        sql <- SQL::sqlTableInsertInto(conn, name, value)
+        sql <- sqlAppendTable(conn, name, value)
         rs <- dbSendQuery(conn, sql)
       } else {
         fields <- dbQuoteIdentifier(conn, names(value))
@@ -85,11 +85,11 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 )
 
 
-#' @importFrom SQL sqlData
 #' @export
+#' @inheritParams DBI::rownamesToColumn
 #' @rdname postgres-tables
 setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
-  value <- SQL::rownamesToColumn(value, row.names)
+  value <- rownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vapply(value, is.object, logical(1))

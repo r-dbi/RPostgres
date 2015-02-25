@@ -22,6 +22,7 @@
 Quote postgres strings and identifiers.
 }
 \examples{
+library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")

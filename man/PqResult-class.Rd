@@ -8,7 +8,6 @@
 \alias{dbGetRowsAffected,PqResult-method}
 \alias{dbGetStatement,PqResult-method}
 \alias{dbIsValid,PqResult-method}
-\alias{show,PqResult-method}
 \title{PostgreSQL results.}
 \usage{
 \S4method{dbGetStatement}{PqResult}(res, ...)
@@ -20,8 +19,6 @@
 \S4method{dbGetRowsAffected}{PqResult}(res, ...)
 
 \S4method{dbColumnInfo}{PqResult}(res, ...)
-
-\S4method{show}{PqResult}(object)
 }
 \description{
 PostgreSQL results.

@@ -26,6 +26,7 @@ A boolean, indicating success or failure.
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
+library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
 dbGetQuery(con, 'SELECT count(*) from "USarrests"')
