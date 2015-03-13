@@ -102,7 +102,7 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL
 setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
   r <- columnToRownames(result_fetch(res@ptr, n = n), row.names)
   r[,result_column_info(res@ptr)$type=="POSIXct"] <-
-      as.Date(r[,result_column_info(res@ptr)$type=="POSIXct"])
+      lapply(r[,result_column_info(res@ptr)$type=="POSIXct"], as.Date)
   return(r)
 })
 
