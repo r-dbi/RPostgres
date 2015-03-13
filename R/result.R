@@ -100,7 +100,10 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL
 #' @export
 #' @rdname postgres-query
 setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
-  columnToRownames(result_fetch(res@ptr, n = n), row.names)
+  r <- columnToRownames(result_fetch(res@ptr, n = n), row.names)
+  r[,result_column_info(res@ptr)$type=="POSIXct"] <-
+      as.Date(r[,result_column_info(res@ptr)$type=="POSIXct"])
+  return(r)
 })
 
 #' @rdname postgres-query
