@@ -270,6 +270,7 @@ private:
       case 18: // CHAR
       case 19: // NAME
       case 25: // TEXT
+      case 114: // JSON
       case 1042: // CHAR
       case 1043: // VARCHAR
       case 1082: // DATE
