@@ -85,7 +85,7 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
       }
     } else {
       char buf[15 + 1 + 1 + 4 + 1]; // minus + decimal + exponent + \0
-      snprintf(buf, 32, "%.15g", value);
+      snprintf(buf, 22, "%.15g", value);
       buffer.append(buf);
     }
     break;
