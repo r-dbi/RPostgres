@@ -219,8 +219,10 @@ public:
       switch(types_[i]) {
       case STRSXP: {
           Oid type = PQftype(pSpec_, i);
-          if(type==1114 || type==1082 || type==1184){
+          if(type==1114 || type==1184 || type==1266){
               types[i] = "POSIXct";
+          }else if(type==1082){
+              types[i] = "Date";
           }else{
               types[i] = "character";
           }
