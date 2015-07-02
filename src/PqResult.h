@@ -221,6 +221,7 @@ public:
       case INTSXP:  types[i] = "integer"; break;
       case REALSXP: types[i] = "double"; break;
       case VECSXP:  types[i] = "list"; break;
+      case LGLSXP:  types[i] = "logical"; break;
       default: Rcpp::stop("Unknown variable type");
       }
     }

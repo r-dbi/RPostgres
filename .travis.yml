@@ -1,4 +1,5 @@
 language: r
+sudo: required
 warnings_are_errors: true
 
 apt_packages:
@@ -6,6 +7,10 @@ apt_packages:
 
 r_github_packages:
   - rstats-db/DBI
+  - jimhester/covr
 
 before_script:
   - psql -c 'create database travis;' -U postgres
+
+after_success:
+  - Rscript -e 'covr::codecov()"
