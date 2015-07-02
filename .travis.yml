@@ -7,6 +7,10 @@ apt_packages:
 r_github_packages:
   - RcppCore/Rcpp
   - rstats-db/DBI
+  - jimhester/covr
 
 before_script:
   - psql -c 'create database travis;' -U postgres
+
+after_success:
+  - Rscript -e 'covr::codecov(exclusions='src/sqlite3.c')"
