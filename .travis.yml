@@ -5,7 +5,6 @@ apt_packages:
   - libpq-dev
 
 r_github_packages:
-  - RcppCore/Rcpp
   - rstats-db/DBI
 
 before_script:
