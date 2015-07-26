@@ -145,13 +145,13 @@ writeTableToDB <- function(con, Rdata, tableName) {
   # write tmp table to database
   colnames(Rdata) <- tolower(colnames(Rdata)) # lower case would be more convenient
   tmpTableName <- paste0(tableName,"tmp")
-  RPostgreSQL::dbWriteTable(con, tmpTableName, Rdata)
+  dbWriteTable(con, tmpTableName, Rdata)
   # drop the existing old table
-  if(RPostgreSQL::dbExistsTable(con, tableName)){ # if tableName exists
-    RPostgreSQL::dbSendQuery(con, paste0("DROP TABLE ", tableName))
+  if(dbExistsTable(con, tableName)){ # if tableName exists
+    dbSendQuery(con, paste0("DROP TABLE ", tableName))
     print(paste0("Old table ", tableName, " dropped"))
   }
   # rename the tmp table
-  RPostgreSQL::dbSendQuery(con, paste0("ALTER TABLE ", tmpTableName, " RENAME TO ", tableName))
+  dbSendQuery(con, paste0("ALTER TABLE ", tmpTableName, " RENAME TO ", tableName))
   print(paste0("Temporary table renamed and saved permanently to ", tableName))
 }
