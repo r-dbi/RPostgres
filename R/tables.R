@@ -140,7 +140,7 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 #' @param tableName The table name in database that we are writing to
 #' @export
 #' @rdname postgres-tables
-writeTableToDB <- function(con, Rdata, tableName) {
+setMethod("dbOverwriteTable", function(con, Rdata, tableName){
   print(paste0("Writing data into table ", tableName))
   # write tmp table to database
   colnames(Rdata) <- tolower(colnames(Rdata)) # lower case would be more convenient
@@ -154,4 +154,4 @@ writeTableToDB <- function(con, Rdata, tableName) {
   # rename the tmp table
   dbSendQuery(con, paste0("ALTER TABLE ", tmpTableName, " RENAME TO ", tableName))
   print(paste0("Temporary table renamed and saved permanently to ", tableName))
-}
+})
