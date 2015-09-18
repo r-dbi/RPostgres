@@ -45,6 +45,10 @@ setMethod("show", "PqConnection", function(object) {
 #'   more details.
 #' @param host,port Host and port. If \code{NULL}, will be retrieved from
 #'   \code{PGHOST} and \code{PGPORT} env vars.
+#' @param service Name of service to connect as.  If \code{NULL}, will be
+#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
+#'   file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
+#'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
 #'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
