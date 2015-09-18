@@ -289,6 +289,7 @@ private:
 
       case 17: // BYTEA
       case 2278: // NULL
+      case 3802: // JSONB
         types.push_back(VECSXP);
         break;
 
