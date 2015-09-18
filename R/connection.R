@@ -55,10 +55,10 @@ setMethod("show", "PqConnection", function(object) {
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
-  host = NULL, port = NULL, password = NULL, user = NULL, ...) {
+  host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
 
   opts <- unlist(list(dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), client_encoding = "utf8"))
+    host = host, port = as.character(port), service = service, client_encoding = "utf8"))
   if (!is.character(opts)) {
     stop("All options should be strings", call. = FALSE)
   }
