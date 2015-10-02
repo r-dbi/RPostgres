@@ -6,6 +6,7 @@ apt_packages:
   - libpq-dev
 
 r_github_packages:
+  - hadley/testthat
   - rstats-db/DBI
   - jimhester/covr
   - krlmlr/DBItest
