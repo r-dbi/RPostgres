@@ -7,5 +7,6 @@ DBItest::test_all(c(
   "data_null",            # #50
   "data_64_bit",          # #51
   "data_character",       # #50
+  "data_date",            # #52
   NULL
 ))
