@@ -5,5 +5,7 @@ DBItest::test_all(c(
   "show",                 # #49
   "get_info",             # to be discussed
   "data_null",            # #50
-  "data_64_bit"           # #51
+  "data_64_bit",          # #51
+  "data_character",       # #50
+  NULL
 ))
