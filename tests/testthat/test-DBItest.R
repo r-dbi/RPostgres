@@ -10,6 +10,7 @@ DBItest::test_all(c(
   "data_date",             # #52
   "data_time_parens",      # syntax not supported
   "data_timestamp",        # #53
+  "data_timestamp_utc",    # #53
   "data_timestamp_parens", # syntax not supported
   NULL
 ))
