@@ -24,3 +24,22 @@ test_that("JSONB format is recognized", {
   expect_that(dbGetQuery(con, 'SELECT * FROM test2'), not(gives_warning()))
 
 })
+
+
+test_that("uuid format is recognized", {
+
+  con <- dbConnect(RPostgres::Postgres())
+
+  dbGetQuery(con, "CREATE TEMPORARY TABLE fuutab
+    (
+    fuu UUID,
+    name VARCHAR(255) NOT NULL
+    );")
+
+  dbGetQuery(con, "INSERT INTO fuutab(fuu, name) values ('c44352c0-72bd-11e5-a7f3-0002a5d5c51b', 'bob');")
+
+  expect_that(dbGetQuery(con, 'SELECT * FROM fuutab'), not(gives_warning()))
+
+})
+
+

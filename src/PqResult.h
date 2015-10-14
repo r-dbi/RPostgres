@@ -290,6 +290,7 @@ private:
       case 17: // BYTEA
       case 2278: // NULL
       case 3802: // JSONB
+      case 2950: // UUID
         types.push_back(VECSXP);
         break;
 
