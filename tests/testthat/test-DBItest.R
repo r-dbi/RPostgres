@@ -16,5 +16,6 @@ DBItest::test_all(c(
   "roundtrip_logical",     # #60
   "roundtrip_64_bit",      # rstats-db/DBI#48
   "roundtrip_date",        # #61
+  "roundtrip_timestamp",   # #61
   NULL
 ))
