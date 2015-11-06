@@ -13,5 +13,6 @@ DBItest::test_all(c(
   "data_timestamp_utc",    # #53
   "data_timestamp_parens", # syntax not supported
   "quote_string",          # #50
+  "roundtrip_logical",     # #60
   NULL
 ))
