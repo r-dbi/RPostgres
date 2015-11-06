@@ -15,5 +15,6 @@ DBItest::test_all(c(
   "quote_string",          # #50
   "roundtrip_logical",     # #60
   "roundtrip_64_bit",      # rstats-db/DBI#48
+  "roundtrip_date",        # #61
   NULL
 ))
