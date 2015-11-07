@@ -21,6 +21,7 @@ DBItest::test_all(c(
   "data_timestamp_parens", # syntax not supported
   "data_timestamp_parens_null", # syntax not supported
   "quote_string",          # #50
+  "append_table_error",    # #62
   "roundtrip_logical",     # #60
   "roundtrip_64_bit",      # rstats-db/DBI#48
   "roundtrip_date",        # #61
