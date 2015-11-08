@@ -86,12 +86,16 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @param obj Object to convert
 #' @keywords internal
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
-  dbDataType(SQLite(), obj)
+  get_data_type(obj)
 })
 
 #' @rdname dbDataType-PqDriver-ANY-method
 #' @export
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  get_data_type(obj)
+})
+
+get_data_type <- function(obj) {
   if (is.factor(obj)) return("TEXT")
 
   switch(typeof(obj),
@@ -102,4 +106,4 @@ setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
     list = "BLOB",
     stop("Unsupported type", call. = FALSE)
   )
-})
+}
