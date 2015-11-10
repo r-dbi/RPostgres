@@ -119,7 +119,7 @@ setMethod("dbListTables", "PqConnection", function(conn) {
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbExistsTable", "PqConnection", function(conn, name) {
+setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) {
   name %in% dbListTables(conn)
 })
 
