@@ -31,6 +31,7 @@ DBItest::test_all(c(
   "fetch_closed",          # #65
   "roundtrip_logical",     # #60
   "roundtrip_64_bit",      # rstats-db/DBI#48
+  "roundtrip_raw",         # #66
   "roundtrip_date",        # #61
   "roundtrip_timestamp",   # #61
   "is_valid",              # #64
