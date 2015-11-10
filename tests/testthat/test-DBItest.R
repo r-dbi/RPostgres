@@ -3,12 +3,15 @@ DBItest::test_all(c(
   "package_dependencies",  # #47
   "show",                  # #49
   "get_info",              # to be discussed
+  "data_type_connection",  # #66
   "data_logical_int",      # not an error, full support for boolean data type
   "data_logical_int_null", # not an error, full support for boolean data type
   "data_null",             # #50
   "data_64_bit",           # #51
   "data_64_bit_null",      # #51
   "data_character",        # #50
+  "data_raw",              # #66
+  "data_raw_null",         # #66
   "data_date",             # #52
   "data_date_null",        # #52
   "data_time_parens",      # syntax not supported
