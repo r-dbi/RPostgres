@@ -1,8 +1,8 @@
 DBItest::make_context(Postgres(), NULL)
 DBItest::test_all(c(
   "package_dependencies",  # #47
-  "show",                  # #49
-  "get_info",              # to be discussed
+  "get_info_driver",       # rstats-db/RSQLite#117
+  "get_info_connection",   # rstats-db/RSQLite#117
   "data_type_connection",  # #66
   "data_logical_int",      # not an error, full support for boolean data type
   "data_logical_int_null", # not an error, full support for boolean data type
