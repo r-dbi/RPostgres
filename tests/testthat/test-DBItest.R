@@ -36,5 +36,12 @@ DBItest::test_all(c(
   "roundtrip_timestamp",   # #61
   "is_valid",              # #64
   "get_exception",         # #63
+  "bind_.*_positional_qm", # no error, syntax not supported
+  "bind_.*_named_.*",      # no error, syntax not supported
+  "bind_logical_int_positional_dollar", # not an error, logicals supported natively
+  "bind_raw_positional_dollar", # 66
+  "bind_null_positional_dollar", # 67
+  "bind_timestamp_positional_dollar", # 53
+  "bind_timestamp_lt_positional_dollar", # 53
   NULL
 ))
