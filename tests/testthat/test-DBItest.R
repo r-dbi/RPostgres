@@ -44,5 +44,6 @@ DBItest::test_all(c(
   "bind_null_positional_dollar", # 67
   "bind_timestamp_positional_dollar", # 53
   "bind_timestamp_lt_positional_dollar", # 53
+  "compliance",            # #68
   NULL
 ))
