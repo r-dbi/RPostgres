@@ -29,6 +29,7 @@ DBItest::test_all(c(
   "fetch_progressive",     # #65
   "fetch_more_rows",       # #65
   "fetch_closed",          # #65
+  "quote_identifier_not_vectorized", # rstats-db/DBI#24
   "roundtrip_logical",     # #60
   "roundtrip_64_bit",      # rstats-db/DBI#48
   "roundtrip_raw",         # #66
@@ -39,6 +40,7 @@ DBItest::test_all(c(
   "column_info",           # #50
   "bind_.*_positional_qm", # no error, syntax not supported
   "bind_.*_named_.*",      # no error, syntax not supported
+  "bind_empty_positional_dollar", # #70
   "bind_logical_int_positional_dollar", # not an error, logicals supported natively
   "bind_raw_positional_dollar", # 66
   "bind_null_positional_dollar", # 67
