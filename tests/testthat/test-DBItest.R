@@ -5,23 +5,23 @@ DBItest::test_all(c(
   "get_info_connection",   # rstats-db/RSQLite#117
   "data_type_connection",  # #66
   "data_logical_int",      # not an error, full support for boolean data type
-  "data_logical_int_null", # not an error, full support for boolean data type
-  "data_null",             # #50
+  "data_logical_int_null_below", # not an error, full support for boolean data type
+  "data_null_below",             # #50
   "data_64_bit",           # #51
-  "data_64_bit_null",      # #51
+  "data_64_bit_null_below",      # #51
   "data_character",        # #50
   "data_raw",              # #66
-  "data_raw_null",         # #66
+  "data_raw_null_below",         # #66
   "data_date",             # #52
-  "data_date_null",        # #52
+  "data_date_null_below",        # #52
   "data_time_parens",      # syntax not supported
-  "data_time_parens_null", # syntax not supported
+  "data_time_parens_null_below", # syntax not supported
   "data_timestamp",        # #53
-  "data_timestamp_null",   # #53
+  "data_timestamp_null_below",   # #53
   "data_timestamp_utc",    # #53
-  "data_timestamp_utc_null", # #53
+  "data_timestamp_utc_null_below", # #53
   "data_timestamp_parens", # syntax not supported
-  "data_timestamp_parens_null", # syntax not supported
+  "data_timestamp_parens_null_below", # syntax not supported
   "quote_string",          # #50
   "append_table_error",    # #62
   "fetch_single",          # #65
