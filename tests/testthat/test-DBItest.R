@@ -47,5 +47,6 @@ DBItest::test_all(c(
   "bind_timestamp_positional_dollar", # 53
   "bind_timestamp_lt_positional_dollar", # 53
   "compliance",            # #68
+  "read_only",             # default connection is read-write
   NULL
 ))
