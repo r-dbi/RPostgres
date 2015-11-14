@@ -31,6 +31,7 @@ DBItest::test_all(c(
   "fetch_closed",          # #65
   "quote_identifier_not_vectorized", # rstats-db/DBI#24
   "roundtrip_logical",     # #60
+  "roundtrip_logical_int", # not an error, full support for boolean data type
   "roundtrip_64_bit",      # rstats-db/DBI#48
   "roundtrip_raw",         # #66
   "roundtrip_date",        # #61
