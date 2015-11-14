@@ -1,5 +1,6 @@
 context("dbGetQuery")
 
+# Not generic enough for DBItest
 test_that("JSONB format is recognized", {
 
   con <- dbConnect(RPostgres::Postgres())
