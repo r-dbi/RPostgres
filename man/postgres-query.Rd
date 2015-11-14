@@ -6,11 +6,12 @@
 \alias{dbClearResult,PqResult-method}
 \alias{dbFetch,PqResult-method}
 \alias{dbHasCompleted,PqResult-method}
-\alias{dbSendQuery,PqConnection-method}
+\alias{dbSendQuery,PqConnection,character-method}
 \alias{postgres-query}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ...)
+\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL,
+  ...)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = NA)
 

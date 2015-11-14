@@ -2,7 +2,7 @@
 % Please edit documentation in R/tables.R
 \docType{methods}
 \name{postgres-tables}
-\alias{dbExistsTable,PqConnection-method}
+\alias{dbExistsTable,PqConnection,character-method}
 \alias{dbListTables,PqConnection-method}
 \alias{dbReadTable,PqConnection,character-method}
 \alias{dbRemoveTable,PqConnection,character-method}
@@ -21,7 +21,7 @@
 
 \S4method{dbListTables}{PqConnection}(conn)
 
-\S4method{dbExistsTable}{PqConnection}(conn, name)
+\S4method{dbExistsTable}{PqConnection,character}(conn, name)
 
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name)
 }
