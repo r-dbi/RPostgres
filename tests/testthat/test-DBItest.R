@@ -36,7 +36,7 @@ DBItest::test_all(c(
   "roundtrip_raw",         # #66
   "roundtrip_date",        # #61
   "roundtrip_timestamp",   # #61
-  "is_valid",              # #64
+  "is_valid_connection",   # #64
   "get_exception",         # #63
   "column_info",           # #50
   "bind_.*_positional_qm", # no error, syntax not supported
