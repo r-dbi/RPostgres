@@ -1,17 +1,5 @@
 context("Connection")
 
-test_that("double disconnect throws error", {
-  con <- dbConnect(Postgres())
-  expect_true(dbDisconnect(con))
-  expect_error(dbDisconnect(con), "not valid")
-})
-
-test_that("querying closed connection throws error", {
-  db <- dbConnect(Postgres())
-  dbDisconnect(db)
-  expect_error(dbSendQuery(db, "select * from foo"), "not valid")
-})
-
 test_that("warn if previous result set is invalidated", {
   con <- dbConnect(Postgres())
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
