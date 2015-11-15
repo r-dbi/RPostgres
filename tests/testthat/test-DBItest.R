@@ -1,8 +1,15 @@
 DBItest::make_context(Postgres(), NULL)
 DBItest::test_all(c(
+  # getting_started
   "package_dependencies",                       # #47
+
+  # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
+
+  # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
+
+  # result
   "data_type_connection",                       # #66
   "data_logical_int",                           # not an error, full support for boolean data type
   "data_logical_int_null_.*",                   # not an error, full support for boolean data type
@@ -22,6 +29,8 @@ DBItest::test_all(c(
   "data_timestamp_utc_null_.*",                 # #53
   "data_timestamp_parens",                      # syntax not supported
   "data_timestamp_parens_null_.*",              # syntax not supported
+
+  # sql
   "quote_string",                               # #50
   "append_table_error",                         # #62
   "fetch_single",                               # #65
@@ -36,6 +45,8 @@ DBItest::test_all(c(
   "roundtrip_raw",                              # #66
   "roundtrip_date",                             # #61
   "roundtrip_timestamp",                        # #61
+
+  # meta
   "is_valid_connection",                        # #64
   "get_exception",                              # #63
   "column_info",                                # #50
@@ -47,6 +58,8 @@ DBItest::test_all(c(
   "bind_null_positional_dollar",                # 67
   "bind_timestamp_positional_dollar",           # 53
   "bind_timestamp_lt_positional_dollar",        # 53
+
+  # compliance
   "compliance",                                 # #68
   "read_only",                                  # default connection is read-write
   NULL
