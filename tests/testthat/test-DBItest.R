@@ -1,8 +1,5 @@
 DBItest::make_context(Postgres(), NULL)
 DBItest::test_all(c(
-  # getting_started
-  "package_dependencies",                       # #47
-
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
 
