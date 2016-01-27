@@ -5,6 +5,7 @@ DBItest::test_all(c(
 
   # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
+  "cannot_disconnect_twice",                    # TODO
 
   # result
   "data_type_connection",                       # #66
