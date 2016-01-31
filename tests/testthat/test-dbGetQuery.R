@@ -36,9 +36,12 @@ test_that("uuid format is recognized", {
     name VARCHAR(255) NOT NULL
     );")
 
-  dbGetQuery(con, "INSERT INTO fuutab(fuu, name) values ('c44352c0-72bd-11e5-a7f3-0002a5d5c51b', 'bob');")
+  uuid <- 'c44352c0-72bd-11e5-a7f3-0002a5d5c51b'
+
+  dbGetQuery(con, paste0("INSERT INTO fuutab(fuu, name) values ('", uuid, "', 'bob');"))
 
   expect_that(dbGetQuery(con, 'SELECT * FROM fuutab'), not(gives_warning()))
+  expect_equal(dbGetQuery(con, 'SELECT * FROM fuutab')$fuu, uuid)
 
 })
 
