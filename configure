@@ -39,12 +39,11 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     rm -Rf $BREWDIR
     mkdir -p $BREWDIR
     curl -fsSL https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C $BREWDIR
-    HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install $PKG_BREW_NAME 2>&1 | sed 's/Warning/Note/g'
-    rm -f $BREWDIR/Cellar/$PKG_BREW_NAME/*/lib/*.dylib
+    HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install --force-bottle openssl postgresql 2>&1 | perl -pe 's/Warning/Note/gi'
     rm -f $BREWDIR/opt/$PKG_BREW_NAME/lib/*.dylib
   fi
-  PKG_CFLAGS="-I$BREWDIR/opt/$PKG_BREW_NAME/include"
-  PKG_LIBS="-L$BREWDIR/opt/$PKG_BREW_NAME/lib $PKG_LIBS_STATIC"
+  PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
+  PKG_LIBS="-L$BREWDIR/opt/{openssl/lib,postgresql/lib} $PKG_LIBS_STATIC"
 fi
 
 # For debugging
