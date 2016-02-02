@@ -18,6 +18,13 @@ if [ -r "/usr/include/postgresql/libpq-fe.h" ]; then
   exit 0;
 fi
 
+# Amazon Linux
+if [ -r "/usr/include/pgsql/libpq-fe.h" ]; then
+  echo "PKG_CPPFLAGS= -I/usr/include/pgsql" > src/Makevars
+  echo "PKG_LIBS=-lpq" >> src/Makevars
+  exit 0;
+fi
+
 # Force static linking on OSX to support redistributable binary packages.
 if [ $(echo "$OSTYPE" | grep "darwin") ]; then
 
