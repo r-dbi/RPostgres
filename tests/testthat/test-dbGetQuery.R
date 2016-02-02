@@ -23,8 +23,10 @@ test_that("JSONB format is recognized", {
   dbGetQuery(con, "CREATE TEMPORARY TABLE test2 (data JSONB)")
   dbGetQuery(con, paste0("INSERT INTO test2(data) values ('", jsonb, "');"))
 
-  expect_that(dbGetQuery(con, 'SELECT * FROM test2'), not(gives_warning()))
-  expect_equal(dbGetQuery(con, 'SELECT * FROM test2')$data, jsonb)
+  expect_warning(
+    expect_equal(dbGetQuery(con, 'SELECT * FROM test2')$data, jsonb)
+    ,NA
+  )
 
 })
 
@@ -43,8 +45,10 @@ test_that("uuid format is recognized", {
 
   dbGetQuery(con, paste0("INSERT INTO fuutab(fuu, name) values ('", uuid, "', 'bob');"))
 
-  expect_that(dbGetQuery(con, 'SELECT * FROM fuutab'), not(gives_warning()))
-  expect_equal(dbGetQuery(con, 'SELECT * FROM fuutab')$fuu, uuid)
+  expect_warning(
+    expect_equal(dbGetQuery(con, 'SELECT * FROM fuutab')$fuu, uuid)
+    ,NA
+  )
 
 })
 
