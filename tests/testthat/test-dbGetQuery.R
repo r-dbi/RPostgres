@@ -18,10 +18,13 @@ test_that("JSONB format is recognized", {
 
   con <- dbConnect(RPostgres::Postgres())
 
+  jsonb <- '{\"name\": \"mike\"}'
+
   dbGetQuery(con, "CREATE TEMPORARY TABLE test2 (data JSONB)")
-  dbGetQuery(con, "INSERT INTO test2(data) values ('{\"name\":\"mike\"}');")
+  dbGetQuery(con, paste0("INSERT INTO test2(data) values ('", jsonb, "');"))
 
   expect_that(dbGetQuery(con, 'SELECT * FROM test2'), not(gives_warning()))
+  expect_equal(dbGetQuery(con, 'SELECT * FROM test2')$data, jsonb)
 
 })
 
