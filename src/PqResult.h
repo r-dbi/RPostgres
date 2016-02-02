@@ -272,6 +272,7 @@ private:
       case 19: // NAME
       case 25: // TEXT
       case 114: // JSON
+      case 3802: // JSONB
       case 1042: // CHAR
       case 1043: // VARCHAR
       case 1082: // DATE
@@ -289,7 +290,6 @@ private:
 
       case 17: // BYTEA
       case 2278: // NULL
-      case 3802: // JSONB
         types.push_back(VECSXP);
         break;
 
