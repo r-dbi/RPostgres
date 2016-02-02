@@ -28,6 +28,8 @@ test_that("JSONB format is recognized", {
     ,NA
   )
 
+  dbDisconnect(con)
+
 })
 
 
@@ -49,6 +51,8 @@ test_that("uuid format is recognized", {
     expect_equal(dbGetQuery(con, 'SELECT * FROM fuutab')$fuu, uuid)
     ,NA
   )
+
+  dbDisconnect(con)
 
 })
 
