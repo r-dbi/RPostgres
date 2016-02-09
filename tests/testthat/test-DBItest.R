@@ -48,6 +48,7 @@ DBItest::test_all(c(
   # meta
   "is_valid_connection",                        # #64
   "get_exception",                              # #63
+  "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_.*_positional_qm",                      # no error, syntax not supported
   "bind_.*_named_.*",                           # no error, syntax not supported
