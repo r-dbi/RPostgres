@@ -31,6 +31,7 @@ DBItest::test_all(c(
   # sql
   "quote_string",                               # #50
   "append_table_error",                         # #62
+  "list_fields",                                # #79
   "fetch_single",                               # #65
   "fetch_multi_row_single_column",              # #65
   "fetch_progressive",                          # #65
