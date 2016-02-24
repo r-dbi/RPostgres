@@ -21,7 +21,7 @@ PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
 # pkg-config values (if available)
 if [ $(command -v pkg-config) ]; then
   PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
-  PKGCONFIG_LIBS=$(pkg-config --libs --silencer-errors ${PKG_CONFIG_NAME})
+  PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
 fi
 
 # pg_config vlaues (if available)
