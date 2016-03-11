@@ -1,5 +1,6 @@
 Package: RPostgres
 Version: 0.1
+Date: 2015-12-23
 Title: Experimental Rcpp Interface to PostgreSQL.
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
