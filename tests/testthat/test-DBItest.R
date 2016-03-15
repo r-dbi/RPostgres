@@ -53,7 +53,6 @@ DBItest::test_all(c(
   "bind_multi_row.*",                           # #100
   "bind_logical_int.*",                         # not an error, logicals supported natively
   "bind_raw.*",                                 # 66
-  "bind_null.*",                                # 67
   "bind_repeated.*",                            # 87
   "bind_timestamp.*",                           # 53
   "bind_timestamp_lt.*",                        # 53
