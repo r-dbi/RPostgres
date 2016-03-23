@@ -158,13 +158,14 @@ public:
     const char* port = PQport(pConn_);
     int pver = PQprotocolVersion(pConn_);
     int sver = PQserverVersion(pConn_);
-
+    int pid = PQbackendPID(pConn_);
     return Rcpp::List::create(
       Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
       Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
       Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
       Rcpp::_["protocol_version"]   = pver,
-      Rcpp::_["server_version"]     = sver
+      Rcpp::_["server_version"]     = sver,
+      Rcpp::_["pid"]                = pid
     );
   }
 
