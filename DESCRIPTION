@@ -29,3 +29,4 @@ Collate:
     'result.R'
     'tables.R'
     'transactions.R'
+RoxygenNote: 5.0.1
