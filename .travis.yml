@@ -1,0 +1,16 @@
+language: r
+sudo: required
+warnings_are_errors: true
+
+apt_packages:
+  - libpq-dev
+
+r_github_packages:
+  - rstats-db/DBI
+  - jimhester/covr
+
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+addons:
+  postgresql: "9.4"
