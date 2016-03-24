@@ -120,7 +120,11 @@ setMethod("dbListTables", "PqConnection", function(conn) {
 #' @export
 #' @rdname postgres-tables
 setMethod("dbExistsTable", "PqConnection", function(conn, name) {
-  name %in% dbListTables(conn)
+  dbGetQuery(conn, paste0(
+    "SELECT count(1) FROM INFORMATION_SCHEMA.tables ",
+    "WHERE table_schema = ANY (current_schemas(false))",
+    " AND table_name = '", name, "'")
+  )[[1]] > 0
 })
 
 #' @export
