@@ -217,7 +217,17 @@ public:
     Rcpp::CharacterVector types(ncols_);
     for (int i = 0; i < ncols_; i++) {
       switch(types_[i]) {
-      case STRSXP:  types[i] = "character"; break;
+      case STRSXP: {
+          Oid type = PQftype(pSpec_, i);
+          if(type==1114 || type==1184 || type==1266){
+              types[i] = "POSIXct";
+          }else if(type==1082){
+              types[i] = "Date";
+          }else{
+              types[i] = "character";
+          }
+          break;
+      }
       case INTSXP:  types[i] = "integer"; break;
       case REALSXP: types[i] = "double"; break;
       case VECSXP:  types[i] = "list"; break;
