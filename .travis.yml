@@ -1,4 +1,5 @@
 language: r
+cache: packages
 
 apt_packages:
   - libpq-dev
