@@ -2,17 +2,17 @@
 
 language: r
 cache: packages
-
-# need this because of apt_packages
-sudo: required
+sudo: false
 
 services:
   - postgresql
 addons:
   postgresql: "9.4"
+  apt:
+    packages:
+      - libpq-dev
 
-apt_packages:
-  - libpq-dev
+#r_check_revdep: true
 
 r_github_packages:
   - rstats-db/DBI
