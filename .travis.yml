@@ -1,5 +1,12 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
 language: r
 cache: packages
+
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
 
 apt_packages:
   - libpq-dev
@@ -12,5 +19,7 @@ r_github_packages:
 after_success:
   - Rscript -e 'covr::codecov()'
 
-addons:
-  postgresql: "9.4"
+notifications:
+  email:
+    on_success: change
+    on_failure: change
