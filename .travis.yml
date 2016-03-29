@@ -3,6 +3,9 @@
 language: r
 cache: packages
 
+# need this because of apt_packages
+sudo: required
+
 services:
   - postgresql
 addons:
