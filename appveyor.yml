@@ -12,7 +12,18 @@ install:
 
 # Adapt as necessary starting from here
 
+environment:
+  global:
+    WARNINGS_ARE_ERRORS: 1
+
+  matrix:
+  - R_VERSION: devel
+    GCC_PATH: mingw_32
+
+  - R_VERSION: patched
+
 build_script:
+  - travis-tool.sh install_github rstats-db/DBI
   - travis-tool.sh install_deps
 
 test_script:
