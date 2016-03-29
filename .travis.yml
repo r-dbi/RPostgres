@@ -1,6 +1,4 @@
 language: r
-sudo: required
-warnings_are_errors: true
 
 apt_packages:
   - libpq-dev
