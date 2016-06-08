@@ -96,11 +96,11 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
 #' @param res Code a \linkS4class{PqResult} produced by
 #'   \code{\link[DBI]{dbSendQuery}}.
 #' @param n Number of rows to return. If less than zero returns all rows.
-#' @inheritParams DBI::rownamesToColumn
+#' @inheritParams DBI::sqlRownamesToColumn
 #' @export
 #' @rdname postgres-query
 setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
-  columnToRownames(result_fetch(res@ptr, n = n), row.names)
+  sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
 })
 
 #' @rdname postgres-query

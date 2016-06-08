@@ -1,4 +1,4 @@
-DBItest::make_context(Postgres(), NULL)
+DBItest::make_context(Postgres(), NULL, name = "RPostgres")
 DBItest::test_all(c(
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
@@ -57,6 +57,7 @@ DBItest::test_all(c(
   "bind_logical_int_positional_dollar",         # not an error, logicals supported natively
   "bind_raw_positional_dollar",                 # 66
   "bind_null_positional_dollar",                # 67
+  "bind_repeated_positional_dollar",            # 87
   "bind_timestamp_positional_dollar",           # 53
   "bind_timestamp_lt_positional_dollar",        # 53
 

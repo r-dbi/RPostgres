@@ -93,7 +93,6 @@ setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
   get_data_type(obj)
 })
 
-#' @rdname dbDataType-PqDriver-ANY-method
 #' @export
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
   get_data_type(obj)
