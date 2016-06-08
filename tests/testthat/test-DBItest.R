@@ -1,4 +1,4 @@
-DBItest::make_context(Postgres(), NULL)
+DBItest::make_context(Postgres(), NULL, name = "RPostgres")
 DBItest::test_all(c(
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
