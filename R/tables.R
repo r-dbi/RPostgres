@@ -86,6 +86,39 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
 
 #' @export
+#' @rdname postgres-tables
+setMethod("sqlAppendTable", "PqConnection", function(con, table, values, row.names = NA, copy = TRUE) {
+  values <- sqlRownamesToColumn(values, row.names = row.names)
+
+  is_factor <- vapply(values, is.factor, logical(1))
+  is_char <- vapply(values, is.character, logical(1))
+
+  # # convert factors to strings
+  values[is_factor] <- lapply(values[is_factor], as.character)
+
+  # convert all strings to quoted utf-8
+  values[is_factor | is_char] <- lapply(values[is_factor | is_char], function(s) {
+    ifelse(is.na(s), "NULL", sQuote(enc2utf8(s)))
+  })
+
+  # convert all remaining NA's to "NULL"
+  values[] <- lapply(values, as.character)
+  values[is.na(values)] <- "NULL"
+
+  rows <- do.call(paste, c(values, sep = ", "))
+  table <- dbQuoteIdentifier(con, table)
+  fields <- dbQuoteIdentifier(con, names(values))
+
+  SQL(paste0(
+    "INSERT INTO ", table, "\n",
+    "  (", paste(fields, collapse = ", "), ")\n",
+    "VALUES\n",
+    paste0("  (", rows, ")", collapse = ",\n")
+  ))
+})
+
+
+#' @export
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-tables
 setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {

@@ -8,12 +8,16 @@
 \alias{dbRemoveTable,PqConnection,character-method}
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{postgres-tables}
+\alias{sqlAppendTable,PqConnection-method}
 \alias{sqlData,PqConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
   row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
   temporary = FALSE, copy = TRUE)
+
+\S4method{sqlAppendTable}{PqConnection}(con, values, row.names = NA,
+  copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
