@@ -60,6 +60,10 @@ DBItest::test_all(c(
   "bind_timestamp_positional_dollar",           # 53
   "bind_timestamp_lt_positional_dollar",        # 53
 
+  # transactions
+  "commit_without_begin",                       # 98
+  "begin_begin",                                # 98
+
   # compliance
   "compliance",                                 # #68
   "read_only",                                  # default connection is read-write
