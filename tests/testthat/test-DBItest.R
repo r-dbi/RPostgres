@@ -52,13 +52,13 @@ DBItest::test_all(c(
   "column_info",                                # #50
   "bind_.*_positional_qm",                      # no error, syntax not supported
   "bind_.*_named_.*",                           # no error, syntax not supported
-  "bind_empty_positional_dollar",               # #70
-  "bind_logical_int_positional_dollar",         # not an error, logicals supported natively
-  "bind_raw_positional_dollar",                 # 66
-  "bind_null_positional_dollar",                # 67
-  "bind_repeated_positional_dollar",            # 87
-  "bind_timestamp_positional_dollar",           # 53
-  "bind_timestamp_lt_positional_dollar",        # 53
+  "bind_empty.*",                               # #70
+  "bind_logical_int.*",                         # not an error, logicals supported natively
+  "bind_raw.*",                                 # 66
+  "bind_null.*",                                # 67
+  "bind_repeated.*",                            # 87
+  "bind_timestamp.*",                           # 53
+  "bind_timestamp_lt.*",                        # 53
 
   # transactions
   "commit_without_begin",                       # 98
