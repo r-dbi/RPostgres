@@ -50,9 +50,8 @@ DBItest::test_all(c(
   "get_exception",                              # #63
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
-  "bind_.*_positional_qm",                      # no error, syntax not supported
-  "bind_.*_named_.*",                           # no error, syntax not supported
   "bind_empty.*",                               # #70
+  "bind_multi_row",                             # #100
   "bind_logical_int.*",                         # not an error, logicals supported natively
   "bind_raw.*",                                 # 66
   "bind_null.*",                                # 67
