@@ -65,6 +65,7 @@ DBItest::test_all(c(
 
   # compliance
   "compliance",                                 # #68
+  "ellipsis",                                   # #101
   "read_only",                                  # default connection is read-write
   NULL
 ))
