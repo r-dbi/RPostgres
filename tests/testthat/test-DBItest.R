@@ -58,6 +58,7 @@ DBItest::test_all(c(
   "bind_repeated.*",                            # 87
   "bind_timestamp.*",                           # 53
   "bind_timestamp_lt.*",                        # 53
+  "bind_statement_repeated",                    # 102
 
   # transactions
   "commit_without_begin",                       # 98
