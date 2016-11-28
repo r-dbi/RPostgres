@@ -24,11 +24,9 @@ DBItest::test_all(c(
   "data_raw_null_.*",                           # #66
   "data_date_typed",                            # #52
   "data_date_current_typed",                    # #52
-  "data_timestamp",                             #
   "data_timestamp_typed",                       # #53
   "data_timestamp_current_typed",               # #53
   "data_timestamp_utc_typed",                   # #53
-  "data_timestamp_null_.*",                     # #53
 
   # sql
   "quote_string.*",                             # #50

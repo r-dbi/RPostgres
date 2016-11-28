@@ -70,7 +70,7 @@ public:
   }
 
   // Value accessors -----------------------------------------------------------
-  bool valueNull(int j) {
+  bool inline valueNull(int j) {
     return PQgetisnull(pRes_, 0, j);
   }
 
@@ -100,6 +100,57 @@ public:
     return bytes;
   }
 
+  int valueDate(int j) {
+    if (valueNull(j)) {
+      return NA_INTEGER;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    struct tm date = { 0 };
+    date.tm_sec = date.tm_min = date.tm_hour = date.tm_isdst = 0;
+    date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
+      (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
+    val++;
+    date.tm_mon = (*(++val)-0x30)*10 + (*(++val)-0x30) -1;
+    val++;
+    date.tm_mday = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    return mktime(&date)/(24*60*60);
+  }
+
+  double valueDatetime(int j) {
+    if (valueNull(j)) {
+      return NA_REAL;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    struct tm date;
+    date.tm_isdst = 0;
+    date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
+      (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
+    val++;
+    date.tm_mon = (*(++val)-0x30)*10 + (*(++val)-0x30)-1;
+    val++;
+    date.tm_mday = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    val++;
+    date.tm_hour = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    val++;
+    date.tm_min = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    val++;
+    date.tm_sec = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    return mktime(&date);
+  }
+
+  double valueTime(int j) {
+    if (valueNull(j)) {
+      return NA_REAL;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    int hour = (*val-0x30)*10 + (*(++val)-0x30);
+    val++;
+    int min = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    val++;
+    int sec = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    return static_cast<double>(hour * 3600 + min * 60 + sec);
+  }
+
   int valueLogical(int j) {
     return valueNull(j) ? NA_LOGICAL :
       (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
@@ -116,12 +167,23 @@ public:
     case PGReal:
       REAL(x)[i] = valueDouble(j);
       break;
-   case PGVector:
+    case PGVector:
       SET_VECTOR_ELT(x, i, valueRaw(j));
       break;
-   case PGString:
+    case PGString:
       SET_STRING_ELT(x, i, valueString(j));
       break;
+    case PGDate:
+      INTEGER(x)[i] = valueDate(j);
+      break;
+    case PGDatetimeTZ:
+      REAL(x)[i] = valueDatetime(j, false);
+      break;
+    case PGDatetime:
+      REAL(x)[i] = valueDatetime(j, true);
+      break;
+    case PGTime:
+      REAL(x)[i] = valueTime(j);
     }
   }
 
