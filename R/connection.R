@@ -105,7 +105,7 @@ get_data_type <- function(obj) {
     integer = "INTEGER",
     double = "REAL",
     character = "TEXT",
-    logical = "INTEGER",
+    logical = "BOOLEAN",
     list = "BLOB",
     stop("Unsupported type", call. = FALSE)
   )
