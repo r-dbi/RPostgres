@@ -106,7 +106,7 @@ public:
     }
     char* val = PQgetvalue(pRes_, 0, j);
     struct tm date = { 0 };
-    date.tm_sec = date.tm_min = date.tm_hour = date.tm_isdst = 0;
+    date.tm_isdst = -1;
     date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
       (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
     val++;
@@ -123,7 +123,7 @@ public:
     char* val = PQgetvalue(pRes_, 0, j);
     char* end;
     struct tm date;
-    date.tm_isdst = 0;
+    date.tm_isdst = -1;
     date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
       (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
     val++;
