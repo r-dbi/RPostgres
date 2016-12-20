@@ -104,7 +104,7 @@ setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
 
 get_data_type <- function(obj) {
   if (is.factor(obj)) return("TEXT")
-  if (inherits(obj, "POSIXt")) return("TIMESTAMP")
+  if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
   if (inherits(obj, "Date")) return("DATE")
   if (inherits(obj, "hms")) return("TIME")
   switch(typeof(obj),

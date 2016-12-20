@@ -93,7 +93,9 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy =
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vapply(value, is.object, logical(1))
-  value[is_object] <- lapply(value[is_object], as.character)
+  is_posix <- vapply(value, function(c) inherits(c, "POSIXt"), logical(1))
+  value[is_posix] <- lapply(value[is_posix], function(col) format(col, usetz=T))
+  value[xor(is_object, is_posix)] <- lapply(value[is_object], as.character)
 
   value
 })
