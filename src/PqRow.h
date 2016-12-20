@@ -121,6 +121,7 @@ public:
       return NA_REAL;
     }
     char* val = PQgetvalue(pRes_, 0, j);
+    char* end;
     struct tm date;
     date.tm_isdst = 0;
     date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
@@ -134,8 +135,9 @@ public:
     val++;
     date.tm_min = (*(++val)-0x30)*10 + (*(++val)-0x30);
     val++;
-    date.tm_sec = (*(++val)-0x30)*10 + (*(++val)-0x30);
-    return mktime(&date);
+    double sec = strtod(++val, &end);
+    date.tm_sec = sec;
+    return mktime(&date) + (sec - date.tm_sec);
   }
 
   double valueTime(int j) {
@@ -147,8 +149,8 @@ public:
     val++;
     int min = (*(++val)-0x30)*10 + (*(++val)-0x30);
     val++;
-    int sec = (*(++val)-0x30)*10 + (*(++val)-0x30);
-    return static_cast<double>(hour * 3600 + min * 60 + sec);
+    double sec = strtod(++val, NULL);
+    return static_cast<double>(hour * 3600 + min * 60) + sec;
   }
 
   int valueLogical(int j) {
