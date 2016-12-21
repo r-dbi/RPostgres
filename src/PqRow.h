@@ -113,7 +113,7 @@ public:
     date.tm_mon = (*(++val)-0x30)*10 + (*(++val)-0x30) -1;
     val++;
     date.tm_mday = (*(++val)-0x30)*10 + (*(++val)-0x30);
-    return mktime(&date)/(24*60*60);
+    return timegm(&date)/(24*60*60);
   }
 
   double valueDatetime(int j) {
@@ -137,7 +137,7 @@ public:
     val++;
     double sec = strtod(++val, &end);
     date.tm_sec = sec;
-    return mktime(&date) + (sec - date.tm_sec);
+    return timegm(&date) + (sec - date.tm_sec);
   }
 
   double valueTime(int j) {

@@ -6,6 +6,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include "PqUtils.h"
+#include <cstdlib>
 
 class PqResult;
 
@@ -31,7 +32,7 @@ public:
     }
     c_keys[n] = NULL;
     c_values[n] = NULL;
-
+    setenv("PGTZ", "UTC", 1);
     pConn_ = PQconnectdbParams(&c_keys[0], &c_values[0], false);
 
     if (PQstatus(pConn_) != CONNECTION_OK) {
