@@ -1,4 +1,3 @@
-DBItest::make_context(Postgres(), NULL, name = "RPostgres")
 DBItest::test_all(c(
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
@@ -51,18 +50,23 @@ DBItest::test_all(c(
   "get_exception",                              # #63
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
-  "bind_.*_positional_qm",                      # no error, syntax not supported
-  "bind_.*_named_.*",                           # no error, syntax not supported
-  "bind_empty_positional_dollar",               # #70
-  "bind_logical_int_positional_dollar",         # not an error, logicals supported natively
-  "bind_raw_positional_dollar",                 # 66
-  "bind_null_positional_dollar",                # 67
-  "bind_repeated_positional_dollar",            # 87
-  "bind_timestamp_positional_dollar",           # 53
-  "bind_timestamp_lt_positional_dollar",        # 53
+  "bind_empty.*",                               # #70
+  "bind_multi_row.*",                           # #100
+  "bind_logical_int.*",                         # not an error, logicals supported natively
+  "bind_raw.*",                                 # 66
+  "bind_null.*",                                # 67
+  "bind_repeated.*",                            # 87
+  "bind_timestamp.*",                           # 53
+  "bind_timestamp_lt.*",                        # 53
+  "bind_statement_repeated",                    # 102
+
+  # transactions
+  "commit_without_begin",                       # 98
+  "begin_begin",                                # 98
 
   # compliance
   "compliance",                                 # #68
+  "ellipsis",                                   # #101
   "read_only",                                  # default connection is read-write
   NULL
 ))

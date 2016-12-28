@@ -46,4 +46,3 @@ library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbDisconnect(con)
 }
-

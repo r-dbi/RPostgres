@@ -3,11 +3,11 @@
 \docType{class}
 \name{PqResult-class}
 \alias{PqResult-class}
-\alias{dbColumnInfo,PqResult-method}
-\alias{dbGetRowCount,PqResult-method}
-\alias{dbGetRowsAffected,PqResult-method}
 \alias{dbGetStatement,PqResult-method}
 \alias{dbIsValid,PqResult-method}
+\alias{dbGetRowCount,PqResult-method}
+\alias{dbGetRowsAffected,PqResult-method}
+\alias{dbColumnInfo,PqResult-method}
 \title{PostgreSQL results.}
 \usage{
 \S4method{dbGetStatement}{PqResult}(res, ...)
@@ -24,4 +24,3 @@
 PostgreSQL results.
 }
 \keyword{internal}
-
