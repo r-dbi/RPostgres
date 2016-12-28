@@ -89,11 +89,13 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @param dbObj Postgres driver or connection.
 #' @param obj Object to convert
 #' @keywords internal
+#' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
   get_data_type(obj)
 })
 
 #' @export
+#' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
   get_data_type(obj)
 })
