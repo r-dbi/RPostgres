@@ -15,4 +15,3 @@
 PqConnection and methods.
 }
 \keyword{internal}
-
