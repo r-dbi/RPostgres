@@ -19,4 +19,3 @@
 Determine database type for R vector.
 }
 \keyword{internal}
-
