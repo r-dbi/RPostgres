@@ -1,3 +1,8 @@
+## RPostgres 0.1-3 (2016-12-28)
+
+- Ignore various test.
+
+
 # RPostgres 0.1-2 (2016-06-08)
 
 - Use new `sqlRownamesToColumn()` and `sqlColumnToRownames()` (rstats-db/DBI#91).

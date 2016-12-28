@@ -2,8 +2,8 @@
 % Please edit documentation in R/connection.R
 \docType{methods}
 \name{dbDataType,PqDriver-method}
-\alias{dbDataType,PqConnection-method}
 \alias{dbDataType,PqDriver-method}
+\alias{dbDataType,PqConnection-method}
 \title{Determine database type for R vector.}
 \usage{
 \S4method{dbDataType}{PqDriver}(dbObj, obj)
