@@ -2,10 +2,10 @@
 % Please edit documentation in R/transactions.R
 \docType{methods}
 \name{postgres-transactions}
+\alias{postgres-transactions}
 \alias{dbBegin,PqConnection-method}
 \alias{dbCommit,PqConnection-method}
 \alias{dbRollback,PqConnection-method}
-\alias{postgres-transactions}
 \title{Transaction management.}
 \usage{
 \S4method{dbBegin}{PqConnection}(conn)
@@ -42,4 +42,3 @@ dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 dbRemoveTable(con, "USarrests")
 dbDisconnect(con)
 }
-

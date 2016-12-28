@@ -38,7 +38,6 @@ DBItest::test_all(c(
   "fetch_more_rows",                            # #65
   "fetch_closed",                               # #65
   "quote_identifier_not_vectorized",            # rstats-db/DBI#24
-  "roundtrip_logical",                          # #60
   "roundtrip_logical_int",                      # not an error, full support for boolean data type
   "roundtrip_64_bit",                           # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
@@ -50,18 +49,23 @@ DBItest::test_all(c(
   "get_exception",                              # #63
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
-  "bind_.*_positional_qm",                      # no error, syntax not supported
-  "bind_.*_named_.*",                           # no error, syntax not supported
-  "bind_empty_positional_dollar",               # #70
-  "bind_logical_int_positional_dollar",         # not an error, logicals supported natively
-  "bind_raw_positional_dollar",                 # 66
-  "bind_null_positional_dollar",                # 67
-  "bind_repeated_positional_dollar",            # 87
-  "bind_timestamp_positional_dollar",           # 53
-  "bind_timestamp_lt_positional_dollar",        # 53
+  "bind_empty.*",                               # #70
+  "bind_multi_row.*",                           # #100
+  "bind_logical_int.*",                         # not an error, logicals supported natively
+  "bind_raw.*",                                 # 66
+  "bind_null.*",                                # 67
+  "bind_repeated.*",                            # 87
+  "bind_timestamp.*",                           # 53
+  "bind_timestamp_lt.*",                        # 53
+  "bind_statement_repeated",                    # 102
+
+  # transactions
+  "commit_without_begin",                       # 98
+  "begin_begin",                                # 98
 
   # compliance
   "compliance",                                 # #68
+  "ellipsis",                                   # #101
   "read_only",                                  # default connection is read-write
   NULL
 ))

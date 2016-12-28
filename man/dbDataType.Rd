@@ -3,9 +3,12 @@
 \docType{methods}
 \name{dbDataType,PqDriver-method}
 \alias{dbDataType,PqDriver-method}
+\alias{dbDataType,PqConnection-method}
 \title{Determine database type for R vector.}
 \usage{
 \S4method{dbDataType}{PqDriver}(dbObj, obj)
+
+\S4method{dbDataType}{PqConnection}(dbObj, obj)
 }
 \arguments{
 \item{dbObj}{Postgres driver or connection.}
@@ -16,4 +19,3 @@
 Determine database type for R vector.
 }
 \keyword{internal}
-

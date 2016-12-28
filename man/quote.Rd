@@ -2,9 +2,9 @@
 % Please edit documentation in R/quote.R
 \docType{methods}
 \name{quote}
-\alias{dbQuoteIdentifier,PqConnection,character-method}
-\alias{dbQuoteString,PqConnection,character-method}
 \alias{quote}
+\alias{dbQuoteString,PqConnection,character-method}
+\alias{dbQuoteIdentifier,PqConnection,character-method}
 \title{Quote postgres strings and identifiers.}
 \usage{
 \S4method{dbQuoteString}{PqConnection,character}(conn, x, ...)
@@ -29,4 +29,3 @@ x <- c("a", "b c", "d'e", "\\\\f")
 dbQuoteString(con, x)
 dbQuoteIdentifier(con, x)
 }
-
