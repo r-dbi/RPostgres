@@ -1,3 +1,10 @@
+## RPostgres 0.1-4 (2016-12-29)
+
+- Added `pg_config` support, factored `CFLAGS` and `LIBS` as separate steps (#81, @mmuurr).
+- Fix roundtrip of `logical` values (#108, @thrasibule).
+- Fix documentation warning (#109, @thrasibule).
+
+
 ## RPostgres 0.1-3 (2016-12-28)
 
 - Ignore various test.
