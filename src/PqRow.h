@@ -116,7 +116,7 @@ public:
     return timegm(&date)/(24*60*60);
   }
 
-  double valueDatetime(int j) {
+  double valueDatetime(int j, bool use_local = true) {
     if (valueNull(j)) {
       return NA_REAL;
     }
@@ -137,7 +137,11 @@ public:
     val++;
     double sec = strtod(++val, &end);
     date.tm_sec = sec;
-    return timegm(&date) + (sec - date.tm_sec);
+    if (use_local) {
+      return mktime(&date) + (sec - date.tm_sec);
+    } else {
+      return timegm(&date) + (sec - date.tm_sec);
+    }
   }
 
   double valueTime(int j) {
