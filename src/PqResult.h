@@ -254,7 +254,6 @@ private:
       Oid type = PQftype(pSpec_, i);
       // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
       switch(type) {
-      case 20: // BIGINT
       case 21: // SMALLINT
       case 23: // INTEGER
       case 26: // OID
@@ -282,6 +281,7 @@ private:
       case 1266: // TIMETZOID
       case 3802: // JSONB
       case 2950: // UUID
+      case 20: // BIGINT -> R do not handle int8
         types.push_back(STRSXP);
         break;
 
