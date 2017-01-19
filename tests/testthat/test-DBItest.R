@@ -7,6 +7,13 @@ DBItest::test_all(c(
   "cannot_disconnect_twice",                    # TODO
 
   # result
+  "cannot_clear_result_twice_.*",               #
+  "fetch_n_bad",                                #
+  "fetch_n_good_after_bad",                     #
+  "fetch_no_return_value",                      #
+  "send_query_syntax_error",                    #
+  "get_query_n_.*",                             #
+  "get_query_syntax_error",                     #
   "clear_result_return",                        # error: need to warn if closing result twice
   "data_type_connection",                       # #66
   "data_logical_int",                           # not an error, full support for boolean data type
