@@ -108,7 +108,7 @@ get_data_type <- function(obj) {
     double = "REAL",
     character = "TEXT",
     logical = "BOOLEAN",
-    list = "BLOB",
+    list = "BYTEA",
     stop("Unsupported type", call. = FALSE)
   )
 }
