@@ -19,21 +19,17 @@ DBItest::test_all(c(
   "data_logical_int",                           # not an error, full support for boolean data type
   "data_logical_int_null_.*",                   # not an error, full support for boolean data type
   "data_null",                                  # #50
-  "data_64_bit",                                # #51
-  "data_64_bit_null_.*",                        # #51
+  "data_64_bit_.*",                             # #51
   "data_character",                             # #50
   "data_raw",                                   # #66
   "data_raw_null_.*",                           # #66
-  "data_date",                                  # #52
-  "data_date_null_.*",                          # #52
-  "data_time_parens",                           # syntax not supported
-  "data_time_parens_null_.*",                   # syntax not supported
-  "data_timestamp",                             # #53
+  "data_date_typed",                            # #52
+  "data_date_current_typed",                    # #52
+  "data_timestamp",                             #
+  "data_timestamp_typed",                       # #53
+  "data_timestamp_current_typed",               # #53
+  "data_timestamp_utc_typed",                   # #53
   "data_timestamp_null_.*",                     # #53
-  "data_timestamp_utc",                         # #53
-  "data_timestamp_utc_null_.*",                 # #53
-  "data_timestamp_parens",                      # syntax not supported
-  "data_timestamp_parens_null_.*",              # syntax not supported
 
   # sql
   "quote_string",                               # #50
