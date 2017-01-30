@@ -53,6 +53,12 @@ DBItest::test_all(c(
   "roundtrip_timestamp",                        # #61
   "roundtrip_numeric_special",                  #
   "read_table_check_names",                     #
+  "read_table_error",                           #
+  "read_table_name",                            #
+  "write_table_error",                          #
+  "exists_table_error",                         #
+  "exists_table_name",                          #
+  "remove_table_name",                          #
 
   # meta
   "is_valid_connection",                        # #64
