@@ -32,7 +32,9 @@ DBItest::test_all(c(
   "data_timestamp_null_.*",                     # #53
 
   # sql
-  "quote_string",                               # #50
+  "quote_string.*",                             # #50
+  "quote_identifier_vectorized",                #
+  "quote_identifier_special",                   #
   "append_table_error",                         # #62
   "list_fields",                                # #79
   "fetch_single",                               # #65
@@ -41,11 +43,16 @@ DBItest::test_all(c(
   "fetch_more_rows",                            # #65
   "fetch_closed",                               # #65
   "quote_identifier_not_vectorized",            # rstats-db/DBI#24
-  "roundtrip_logical_int",                      # not an error, full support for boolean data type
+  "write_table_name",                           #
+  "roundtrip_quotes",                           #
+  "list_tables",                                #
   "roundtrip_64_bit",                           # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
   "roundtrip_date",                             # #61
+  "roundtrip_time",                             # #61
   "roundtrip_timestamp",                        # #61
+  "roundtrip_numeric_special",                  #
+  "read_table_check_names",                     #
 
   # meta
   "is_valid_connection",                        # #64
