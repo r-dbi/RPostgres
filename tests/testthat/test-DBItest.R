@@ -46,6 +46,8 @@ DBItest::test_all(c(
   "write_table_name",                           #
   "roundtrip_quotes",                           #
   "list_tables",                                #
+  "exists_table_list",                          #
+  "roundtrip_keywords",                         #
   "roundtrip_64_bit",                           # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
   "roundtrip_date",                             # #61
@@ -62,12 +64,17 @@ DBItest::test_all(c(
 
   # meta
   "is_valid_connection",                        # #64
+  "get_statement_error",                        #
+  "has_completed_query",                        #
+  "has_completed_error",                        #
+  "rows_affected_query",                        #
   "get_exception",                              # #63
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_empty.*",                               # #70
   "bind_multi_row.*",                           # #100
-  "bind_logical_int.*",                         # not an error, logicals supported natively
+  "bind_logical",                               #
+  "bind_wrong_name",                            #
   "bind_raw.*",                                 # 66
   "bind_null.*",                                # 67
   "bind_repeated.*",                            # 87
