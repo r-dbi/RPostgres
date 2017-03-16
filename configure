@@ -50,9 +50,7 @@ elif [ "$PKGCONFIG_LIBS" ]; then
 elif [ "$PGCONFIG_LIBDIR" ]; then
   echo "Found pg_config libdir!"
   PKG_LIBS="-L${PGCONFIG_LIBDIR} $PKG_LIBS"
-fi
-
-if [ -z "$PKG_CFLAGS" ] && [[ "$OSTYPE" == "darwin"* ]]; then
+elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
   else
