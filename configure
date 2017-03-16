@@ -52,17 +52,12 @@ elif [ "$PGCONFIG_LIBDIR" ]; then
   PKG_LIBS="-L${PGCONFIG_LIBDIR} $PKG_LIBS"
 fi
 
-if [ -z "$PKG_CFLAGS" ] && [ -z "$PKG_LIBS" ] && [[ "$OSTYPE" == "darwin"* ]]; then
+if [ -z "$PKG_CFLAGS" ] && [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
   else
-    echo "Auto-brewing $PKG_BREW_NAME..."
-    BREWDIR="/tmp/homebrew"
-    rm -Rf $BREWDIR
-    mkdir -p $BREWDIR
-    curl -fsSL https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C $BREWDIR
-    HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install --force-bottle openssl postgresql 2>&1 | perl -pe 's/Warning/Note/gi'
-    rm -f $BREWDIR/opt/*/lib/*.dylib
+    curl -OL https://jeroen.github.io/autobrew/postgresql.sh
+    source postgresql.sh
   fi
   PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
   PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS_STATIC"
