@@ -47,8 +47,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
   else
-    curl -OL https://jeroen.github.io/autobrew/postgresql.sh
-    source postgresql.sh
+    curl -sOL https://jeroen.github.io/autobrew/postgresql
+    source postgresql
   fi
   PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
   PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS_STATIC"
