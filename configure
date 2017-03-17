@@ -1,5 +1,5 @@
 #!/bin/bash
-# Anticonf (tm) script by Jeroen Ooms & Murat Tasan (2016)
+# Anticonf (tm) script by Jeroen Ooms & Murat Tasan (2017)
 # This script will prefer cflags (specifically includefile dirs) and lib dirs
 # in the following order of precedence:
 #   (1) INCLUDE_DIR or LIB_DIR entered explicitly on the command line, e.g.
@@ -26,30 +26,23 @@ fi
 
 # pg_config vlaues (if available)
 if [ $(command -v pg_config) ]; then
-  PGCONFIG_INCLUDEDIR=$(pg_config --includedir)
-  PGCONFIG_LIBDIR=$(pg_config --libdir)
+  PG_INC_DIR=$(pg_config --includedir)
+  PG_LIB_DIR=$(pg_config --libdir)
 fi
 
-if [ "$INCLUDE_DIR" ]; then
-  echo "Found INCLUDE_DIR!"
+# Note that cflags may be empty in case of success
+if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
+  echo "Found INCLUDE_DIR and/or LIB_DIR!"
   PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
-elif [ "$PKGCONFIG_CFLAGS" ]; then
-  echo "Found pkg-config cflags!"
-  PKG_CFLAGS=${PKGCONFIG_CFLAGS}
-elif [ "$PGCONFIG_INCLUDEDIR" ]; then
-  echo "Found pg_config includedir!"
-  PKG_CFLAGS="-I${PGCONFIG_INCLUDEDIR} $PKG_CFLAGS"
-fi
-
-if [ "$LIB_DIR" ]; then
-  echo "Found LIB_DIR!"
   PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
-elif [ "$PKGCONFIG_LIBS" ]; then
-  echo "Found pkg-config libs!"
+elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
+  echo "Using pkg-config cflags and libs!"
+  PKG_CFLAGS=${PKGCONFIG_CFLAGS}
   PKG_LIBS=${PKGCONFIG_LIBS}
-elif [ "$PGCONFIG_LIBDIR" ]; then
-  echo "Found pg_config libdir!"
-  PKG_LIBS="-L${PGCONFIG_LIBDIR} $PKG_LIBS"
+elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
+  echo "Using pg_config includedir and libdir!"
+  PKGCONFIG_CFLAGS="-I${PG_INC_DIR}"
+  PKGCONFIG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
