@@ -41,8 +41,8 @@ elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
   PKG_LIBS=${PKGCONFIG_LIBS}
 elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
   echo "Using pg_config includedir and libdir!"
-  PKGCONFIG_CFLAGS="-I${PG_INC_DIR}"
-  PKGCONFIG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
+  PKG_CFLAGS="-I${PG_INC_DIR}"
+  PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
