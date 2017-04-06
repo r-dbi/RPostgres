@@ -34,4 +34,5 @@ Collate:
     'result.R'
     'tables.R'
     'transactions.R'
+    'zzz.R'
 RoxygenNote: 6.0.1
