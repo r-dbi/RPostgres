@@ -5,6 +5,7 @@ DBItest::test_all(c(
   # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
   "cannot_disconnect_twice",                    # TODO
+  "cannot_forget_disconnect",                   #
 
   # result
   "cannot_clear_result_twice_.*",               #
@@ -50,6 +51,7 @@ DBItest::test_all(c(
   "roundtrip_keywords",                         #
   "roundtrip_64_bit",                           # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
+  "roundtrip_blob",                             # #66
   "roundtrip_date",                             # #61
   "roundtrip_time",                             # #61
   "roundtrip_timestamp",                        # #61
