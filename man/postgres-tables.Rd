@@ -2,13 +2,13 @@
 % Please edit documentation in R/tables.R
 \docType{methods}
 \name{postgres-tables}
-\alias{postgres-tables}
-\alias{dbWriteTable,PqConnection,character,data.frame-method}
-\alias{sqlData,PqConnection-method}
-\alias{dbReadTable,PqConnection,character-method}
-\alias{dbListTables,PqConnection-method}
 \alias{dbExistsTable,PqConnection,character-method}
+\alias{dbListTables,PqConnection-method}
+\alias{dbReadTable,PqConnection,character-method}
 \alias{dbRemoveTable,PqConnection,character-method}
+\alias{dbWriteTable,PqConnection,character,data.frame-method}
+\alias{postgres-tables}
+\alias{sqlData,PqConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
@@ -91,3 +91,4 @@ dbReadTable(con, "mtcars2")
 
 dbDisconnect(con)
 }
+
