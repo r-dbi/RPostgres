@@ -107,12 +107,19 @@ public:
     char* val = PQgetvalue(pRes_, 0, j);
     struct tm date = { 0 };
     date.tm_isdst = -1;
-    date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
-      (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
+    date.tm_year = *val - 0x30;
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30) - 1900;
     val++;
-    date.tm_mon = (*(++val)-0x30)*10 + (*(++val)-0x30) -1;
+    date.tm_mon = 10 *(*(++val)-0x30);
+    date.tm_mon += (*(++val)-0x30) -1;
     val++;
-    date.tm_mday = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    date.tm_mday = (*(++val)-0x30) * 10;
+    date.tm_mday += (*(++val)-0x30);
     return timegm(&date)/(24*60*60);
   }
 
@@ -124,16 +131,25 @@ public:
     char* end;
     struct tm date;
     date.tm_isdst = -1;
-    date.tm_year = (*val - 0x30)*1000 + (*(++val)-0x30)*100 +
-      (*(++val)-0x30)*10 + (*(++val)-0x30) - 1900;
+    date.tm_year = *val - 0x30;
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30) - 1900;
     val++;
-    date.tm_mon = (*(++val)-0x30)*10 + (*(++val)-0x30)-1;
+    date.tm_mon = (*(++val)-0x30)*10;
+    date.tm_mon += (*(++val)-0x30)-1;
     val++;
-    date.tm_mday = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    date.tm_mday = (*(++val)-0x30)*10;
+    date.tm_mday += (*(++val)-0x30);
     val++;
-    date.tm_hour = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    date.tm_hour = (*(++val)-0x30)*10;
+    date.tm_hour += (*(++val)-0x30);
     val++;
-    date.tm_min = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    date.tm_min = (*(++val)-0x30)*10;
+    date.tm_min += (*(++val)-0x30);
     val++;
     double sec = strtod(++val, &end);
     date.tm_sec = sec;
@@ -149,9 +165,11 @@ public:
       return NA_REAL;
     }
     char* val = PQgetvalue(pRes_, 0, j);
-    int hour = (*val-0x30)*10 + (*(++val)-0x30);
+    int hour = (*val-0x30)*10;
+    hour += (*(++val)-0x30);
     val++;
-    int min = (*(++val)-0x30)*10 + (*(++val)-0x30);
+    int min = (*(++val)-0x30)*10;
+    min += (*(++val)-0x30);
     val++;
     double sec = strtod(++val, NULL);
     return static_cast<double>(hour * 3600 + min * 60) + sec;
