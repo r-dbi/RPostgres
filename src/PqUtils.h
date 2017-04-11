@@ -54,8 +54,6 @@ Rcpp::List inline dfCreate(const std::vector<PGTypes>& types, const std::vector<
   for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
       switch (*it) {
       case PGDate:
-          out[j] = Rf_allocVector(INTSXP, n);
-          break;
       case PGDatetime:
       case PGDatetimeTZ:
       case PGTime:

@@ -106,7 +106,7 @@ get_data_type <- function(obj) {
   if (is.factor(obj)) return("TEXT")
   if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
   if (inherits(obj, "Date")) return("DATE")
-  if (inherits(obj, "hms")) return("TIME")
+  if (inherits(obj, "difftime")) return("TIME")
   switch(typeof(obj),
     integer = "INTEGER",
     double = "REAL",

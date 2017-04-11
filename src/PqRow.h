@@ -100,9 +100,9 @@ public:
     return bytes;
   }
 
-  int valueDate(int j) {
+  double valueDate(int j) {
     if (valueNull(j)) {
-      return NA_INTEGER;
+      return NA_REAL;
     }
     char* val = PQgetvalue(pRes_, 0, j);
     struct tm date = { 0 };
@@ -198,7 +198,7 @@ public:
       SET_STRING_ELT(x, i, valueString(j));
       break;
     case PGDate:
-      INTEGER(x)[i] = valueDate(j);
+      REAL(x)[i] = valueDate(j);
       break;
     case PGDatetimeTZ:
       REAL(x)[i] = valueDatetime(j, false);

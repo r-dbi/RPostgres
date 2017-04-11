@@ -24,6 +24,7 @@ DBItest::test_all(c(
   "data_raw_null_.*",                           # #66
   "data_date_typed",                            # #52
   "data_date_current_typed",                    # #52
+  "data_timestamp",                             #
   "data_timestamp_typed",                       # #53
   "data_timestamp_current_typed",               # #53
   "data_timestamp_utc_typed",                   # #53
@@ -40,9 +41,6 @@ DBItest::test_all(c(
   "roundtrip_64_bit_.*",                 # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
-  "roundtrip_date",                             # #61
-  "roundtrip_time",                             # #61
-  "roundtrip_timestamp",                        # #61
   "roundtrip_numeric_special",                  #
   "read_table_check_names",                     #
   "read_table_error",                           #
