@@ -132,3 +132,26 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
     invisible(TRUE)
   }
 )
+
+#' overwrite to an existing table to database connection from a data frame in R environment
+#' by dropping the old table after successfully created a new but temporary table
+#' @param con Database Connection
+#' @param Rdata Data frame object in environment
+#' @param tableName The table name in database that we are writing to
+#' @export
+#' @rdname postgres-tables
+setMethod("dbOverwriteTable", function(con, Rdata, tableName){
+  print(paste0("Writing data into table ", tableName))
+  # write tmp table to database
+  colnames(Rdata) <- tolower(colnames(Rdata)) # lower case would be more convenient
+  tmpTableName <- paste0(tableName,"tmp")
+  dbWriteTable(con, tmpTableName, Rdata)
+  # drop the existing old table
+  if(dbExistsTable(con, tableName)){ # if tableName exists
+    dbSendQuery(con, paste0("DROP TABLE ", tableName))
+    print(paste0("Old table ", tableName, " dropped"))
+  }
+  # rename the tmp table
+  dbSendQuery(con, paste0("ALTER TABLE ", tmpTableName, " RENAME TO ", tableName))
+  print(paste0("Temporary table renamed and saved permanently to ", tableName))
+})
