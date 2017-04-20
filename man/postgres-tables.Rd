@@ -3,6 +3,7 @@
 \docType{methods}
 \name{postgres-tables}
 \alias{postgres-tables}
+\alias{sqlAppendTable,PqConnection-method}
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{sqlData,PqConnection-method}
 \alias{dbReadTable,PqConnection,character-method}
@@ -14,6 +15,9 @@
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
   row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
   temporary = FALSE, copy = TRUE)
+
+\S4method{sqlAppendTable}{PqConnection}(con, values, row.names = NA,
+  copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
