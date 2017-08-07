@@ -78,7 +78,6 @@ DBItest::test_all(c(
   "bind_logical",                               #
   "bind_wrong_name",                            #
   "bind_raw.*",                                 # 66
-  "bind_null.*",                                # 67
   "bind_repeated.*",                            # 87
   "bind_timestamp.*",                           # 53
   "bind_timestamp_lt.*",                        # 53
