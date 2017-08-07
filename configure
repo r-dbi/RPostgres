@@ -1,24 +1,33 @@
 #!/bin/bash
-# Anticonf (tm) script by Jeroen Ooms (2016)
-# This script will query 'pkg-config' for the required cflags and ldflags.
-# If pkg-config is unavailable or does not find the library, try setting
-# INCLUDE_DIR and LIB_DIR manually via e.g:
-# R CMD INSTALL --configure-vars='INCLUDE_DIR=/.../include LIB_DIR=/.../lib'
+# Anticonf (tm) script by Jeroen Ooms & Murat Tasan (2017)
+# This script will prefer cflags (specifically includefile dirs) and lib dirs
+# in the following order of precedence:
+#   (1) INCLUDE_DIR or LIB_DIR entered explicitly on the command line, e.g.
+#       R CMD INSTALL --configure-vars='INCLUDE_DIR=/.../include LIB_DIR=/.../lib'
+#   (2) Values found via 'pkg-config' for the libpq package.
+#   (3) Values found via 'pg_config' given a PostgreSQL installation.
 
 # Library settings
 PKG_CONFIG_NAME="libpq"
 PKG_DEB_NAME="libpq-dev"
 PKG_RPM_NAME="postgresql-devel"
+PKG_AMZ_RPM_NAMES="postgreql8-devel, psstgresql92-devel, postgresql93-devel, or postgresql94-devel"
 PKG_CSW_NAME="postgresql_dev"
 PKG_BREW_NAME="postgresql"
 PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
 PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
 
-# Use pkg-config if available
+# pkg-config values (if available)
 if [ $(command -v pkg-config) ]; then
   PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
-  PKGCONFIG_LIBS=$(pkg-config --libs ${PKG_CONFIG_NAME})
+  PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
+fi
+
+# pg_config vlaues (if available)
+if [ $(command -v pg_config) ]; then
+  PG_INC_DIR=$(pg_config --includedir)
+  PG_LIB_DIR=$(pg_config --libdir)
 fi
 
 # Note that cflags may be empty in case of success
@@ -27,23 +36,22 @@ if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
   PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
   PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
 elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
-  echo "Found pkg-config cflags and libs!"
+  echo "Using pkg-config cflags and libs!"
   PKG_CFLAGS=${PKGCONFIG_CFLAGS}
   PKG_LIBS=${PKGCONFIG_LIBS}
+elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
+  echo "Using pg_config includedir and libdir!"
+  PKG_CFLAGS="-I${PG_INC_DIR}"
+  PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
   else
-    echo "Auto-brewing $PKG_BREW_NAME..."
-    BREWDIR="/tmp/homebrew"
-    rm -Rf $BREWDIR
-    mkdir -p $BREWDIR
-    curl -fsSL https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C $BREWDIR
-    HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install --force-bottle openssl postgresql 2>&1 | perl -pe 's/Warning/Note/gi'
-    rm -f $BREWDIR/opt/*/lib/*.dylib
+    curl -sfL "https://jeroen.github.io/autobrew/$PKG_BREW_NAME" > autobrew
+    source autobrew
   fi
   PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
-  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS_STATIC"
+  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS"
 fi
 
 # For debugging
@@ -64,11 +72,15 @@ if [ $R_CONFIG_ERROR ]; then
   echo "Configuration failed because $PKG_CONFIG_NAME was not found. Try installing:"
   echo " * deb: $PKG_DEB_NAME (Debian, Ubuntu, etc)"
   echo " * rpm: $PKG_RPM_NAME (Fedora, EPEL)"
+  echo " * rpm: $PKG_AMZ_RPM_NAMES (Amazon Linux)"
   echo " * csw: $PKG_CSW_NAME (Solaris)"
   echo " * brew: $PKG_BREW_NAME (OSX)"
-  echo "If $PKG_CONFIG_NAME is already installed, check that 'pkg-config' is in your"
-  echo "PATH and PKG_CONFIG_PATH contains a $PKG_CONFIG_NAME.pc file. If pkg-config"
-  echo "is unavailable you can set INCLUDE_DIR and LIB_DIR manually via:"
+  echo "If $PKG_CONFIG_NAME is already installed, check that either:"
+  echo "(i)  'pkg-config' is in your PATH AND PKG_CONFIG_PATH contains"
+  echo "     a $PKG_CONFIG_NAME.pc file; or"
+  echo "(ii) 'pg_config' is in your PATH."
+  echo "If neither can detect $PGK_CONFIG_NAME, you can set INCLUDE_DIR"
+  echo "and LIB_DIR manually via:"
   echo "R CMD INSTALL --configure-vars='INCLUDE_DIR=... LIB_DIR=...'"
   echo "--------------------------------------------------------------------"
   exit 1;

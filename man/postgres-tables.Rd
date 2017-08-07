@@ -2,22 +2,23 @@
 % Please edit documentation in R/tables.R
 \docType{methods}
 \name{postgres-tables}
-\alias{dbExistsTable,PqConnection,character-method}
-\alias{dbListTables,PqConnection-method}
-\alias{dbReadTable,PqConnection,character-method}
-\alias{dbRemoveTable,PqConnection,character-method}
-\alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{postgres-tables}
+\alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{sqlData,PqConnection-method}
+\alias{dbReadTable,PqConnection,character-method}
+\alias{dbListTables,PqConnection-method}
+\alias{dbExistsTable,PqConnection,character-method}
+\alias{dbRemoveTable,PqConnection,character-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
-  row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
-  temporary = FALSE, copy = TRUE)
+  ..., row.names = NA, overwrite = FALSE, append = FALSE,
+  field.types = NULL, temporary = FALSE, copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
-\S4method{dbReadTable}{PqConnection,character}(conn, name, row.names = NA)
+\S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
+  row.names = NA)
 
 \S4method{dbListTables}{PqConnection}(conn)
 
@@ -35,16 +36,18 @@ just any valid bare table name.}
 
 \item{value}{A data.frame to write to the database.}
 
+\item{...}{Other arguments used by individual methods.}
+
 \item{row.names}{Either \code{TRUE}, \code{FALSE}, \code{NA} or a string.
 
-  If \code{TRUE}, always translate row names to a column called "row_names".
-  If \code{FALSE}, never translate row names. If \code{NA}, translate
-  rownames only if they're a character vector.
+If \code{TRUE}, always translate row names to a column called "row_names".
+If \code{FALSE}, never translate row names. If \code{NA}, translate
+rownames only if they're a character vector.
 
-  A string is equivalent to \code{TRUE}, but allows you to override the
-  default name.
+A string is equivalent to \code{TRUE}, but allows you to override the
+default name.
 
-  For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
+For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
 \item{overwrite}{a logical specifying whether to overwrite an existing table
 or not. Its default is \code{FALSE}.}
@@ -88,4 +91,3 @@ dbReadTable(con, "mtcars2")
 
 dbDisconnect(con)
 }
-

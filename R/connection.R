@@ -91,12 +91,14 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @keywords internal
 #' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
 #' @export
 #' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
@@ -107,8 +109,8 @@ get_data_type <- function(obj) {
     integer = "INTEGER",
     double = "REAL",
     character = "TEXT",
-    logical = "INTEGER",
-    list = "BLOB",
+    logical = "BOOLEAN",
+    list = "BYTEA",
     stop("Unsupported type", call. = FALSE)
   )
 }

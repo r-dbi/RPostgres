@@ -43,7 +43,7 @@ NULL
 #' @export
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
-  function(conn, name, value, row.names = NA, overwrite = FALSE, append = FALSE,
+  function(conn, name, value, ..., row.names = NA, overwrite = FALSE, append = FALSE,
     field.types = NULL, temporary = FALSE, copy = TRUE) {
 
     if (overwrite && append)
@@ -95,6 +95,9 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy =
   is_object <- vapply(value, is.object, logical(1))
   value[is_object] <- lapply(value[is_object], as.character)
 
+  is_character <- vapply(value, is.character, logical(1))
+  value[is_character] <- lapply(value[is_character], dbQuoteString, con = con)
+
   value
 })
 
@@ -102,7 +105,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy =
 #' @export
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
-  function(conn, name, row.names = NA) {
+  function(conn, name, ..., row.names = NA) {
     name <- dbQuoteIdentifier(conn, name)
     dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
   }
