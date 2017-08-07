@@ -19,7 +19,10 @@ NULL
 #' @export
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
-  SQL(connection_escape_string(conn@ptr, x))
+  is_na <- is.na(x)
+  res <- SQL(connection_escape_string(conn@ptr, x))
+  res[is_na] <- SQL("NULL")
+  res
 })
 
 #' @export

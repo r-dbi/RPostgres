@@ -62,7 +62,7 @@ setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
   host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
 
   opts <- unlist(list(dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), service = service, client_encoding = "utf8"))
+    host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
   if (!is.character(opts)) {
     stop("All options should be strings", call. = FALSE)
   }
@@ -91,12 +91,14 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @keywords internal
 #' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
 #' @export
 #' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
@@ -108,7 +110,7 @@ get_data_type <- function(obj) {
     double = "REAL",
     character = "TEXT",
     logical = "BOOLEAN",
-    list = "BLOB",
+    list = "BYTEA",
     stop("Unsupported type", call. = FALSE)
   )
 }

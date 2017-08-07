@@ -12,12 +12,13 @@
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
-  row.names = NA, overwrite = FALSE, append = FALSE, field.types = NULL,
-  temporary = FALSE, copy = TRUE)
+  ..., row.names = NA, overwrite = FALSE, append = FALSE,
+  field.types = NULL, temporary = FALSE, copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
-\S4method{dbReadTable}{PqConnection,character}(conn, name, row.names = NA)
+\S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
+  row.names = NA)
 
 \S4method{dbListTables}{PqConnection}(conn)
 
@@ -34,6 +35,8 @@ automatically quoted so you can use any sequence of characaters, not
 just any valid bare table name.}
 
 \item{value}{A data.frame to write to the database.}
+
+\item{...}{Other arguments used by individual methods.}
 
 \item{row.names}{Either \code{TRUE}, \code{FALSE}, \code{NA} or a string.
 

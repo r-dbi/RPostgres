@@ -4,7 +4,7 @@
 #' null-op.
 #'
 #' @export
-#' @useDynLib RPostgres
+#' @useDynLib RPostgres, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #' @import methods DBI
 #' @examples

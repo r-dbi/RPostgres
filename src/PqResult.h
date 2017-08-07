@@ -93,9 +93,14 @@ public:
     std::vector<int> c_formats(nparams_);
     std::vector<std::string> s_params(nparams_);
     for (int i = 0; i < nparams_; ++i) {
-      s_params[i] = Rcpp::as<std::string>(params[i][0]);
-      c_params[i] = s_params[i].c_str();
-      c_formats[i] = 0;
+      if (Rcpp::CharacterVector::is_na(params[i][0])) {
+        c_params[i] = NULL;
+        c_formats[i] = 0;
+      } else {
+        s_params[i] = Rcpp::as<std::string>(params[i][0]);
+        c_params[i] = s_params[i].c_str();
+        c_formats[i] = 0;
+      }
     }
 
     if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
