@@ -4,7 +4,7 @@
 - `dbConnect()` now accepts arbitrary connection parameters in the `...` argument (#83, @thrasibule).
 - Handles NA values by converting them to NULL (#82, @thrasibule).
 - Handle string quoting and missing values in strings (#89, @jimhester).
-- `PKG_CFLAGS` and `PKG_LIBS` are now being set when using pg_config for `includedir` and `libdir`.
+- `PKG_CFLAGS` and `PKG_LIBS` are now being set when using `pg_config` for `includedir` and `libdir` (#119, @usman-r).
 - Use `BYTEA` instead of `BLOB` for PostgreSQL 9.5 support.
 
 
