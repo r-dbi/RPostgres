@@ -20,7 +20,7 @@ class PqResult : boost::noncopyable {
   PqConnectionPtr pConn_;
   PGresult* pSpec_;
   PqRowPtr pNextRow_;
-  std::vector<SEXPTYPE> types_;
+  std::vector<PGTypes> types_;
   std::vector<std::string> names_;
   int ncols_, nrows_, nparams_;
   bool bound_;
@@ -182,7 +182,7 @@ public:
       }
 
       for (int j = 0; j < ncols_; ++j) {
-        pNextRow_->setListValue(out[j], i, j);
+        pNextRow_->setListValue(out[j], i, j, types_);
       }
       fetchRow();
       ++i;
@@ -222,11 +222,11 @@ public:
     Rcpp::CharacterVector types(ncols_);
     for (int i = 0; i < ncols_; i++) {
       switch(types_[i]) {
-      case STRSXP:  types[i] = "character"; break;
-      case INTSXP:  types[i] = "integer"; break;
-      case REALSXP: types[i] = "double"; break;
-      case VECSXP:  types[i] = "list"; break;
-      case LGLSXP:  types[i] = "logical"; break;
+      case PGString: types[i] = "character"; break;
+      case PGInt:  types[i] = "integer"; break;
+      case PGReal: types[i] = "double"; break;
+      case PGVector:  types[i] = "list"; break;
+      case PGLogical:  types[i] = "logical"; break;
       default: Rcpp::stop("Unknown variable type");
       }
     }
@@ -251,8 +251,8 @@ private:
     return names;
   }
 
-  std::vector<SEXPTYPE> columnTypes() const {
-    std::vector<SEXPTYPE> types;
+  std::vector<PGTypes> columnTypes() const {
+    std::vector<PGTypes> types;
     types.reserve(ncols_);
 
     for (int i = 0; i < ncols_; ++i) {
@@ -263,14 +263,14 @@ private:
       case 21: // SMALLINT
       case 23: // INTEGER
       case 26: // OID
-        types.push_back(INTSXP);
+        types.push_back(PGInt);
         break;
 
       case 1700: // DECIMAL
       case 701: // FLOAT8
       case 700: // FLOAT
       case 790: // MONEY
-        types.push_back(REALSXP);
+        types.push_back(PGReal);
         break;
 
       case 18: // CHAR
@@ -287,20 +287,20 @@ private:
       case 1266: // TIMETZOID
       case 3802: // JSONB
       case 2950: // UUID
-        types.push_back(STRSXP);
+        types.push_back(PGString);
         break;
 
       case 16: // BOOL
-        types.push_back(LGLSXP);
+        types.push_back(PGLogical);
         break;
 
       case 17: // BYTEA
       case 2278: // NULL
-        types.push_back(VECSXP);
+        types.push_back(PGVector);
         break;
 
       default:
-        types.push_back(STRSXP);
+        types.push_back(PGString);
         Rcpp::warning("Unknown field type (%s) in column %s", type, PQfname(pSpec_, i));
       }
     }

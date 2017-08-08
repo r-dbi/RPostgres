@@ -105,22 +105,22 @@ public:
       (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
   }
 
-  void setListValue(SEXP x, int i, int j) {
-    switch(TYPEOF(x)) {
-    case LGLSXP:
+  void setListValue(SEXP x, int i, int j, const std::vector<PGTypes>& types) {
+    switch(types[j]) {
+    case PGLogical:
       LOGICAL(x)[i] = valueLogical(j);
       break;
-    case INTSXP:
+    case PGInt:
       INTEGER(x)[i] = valueInt(j);
       break;
-    case REALSXP:
+    case PGReal:
       REAL(x)[i] = valueDouble(j);
       break;
-    case STRSXP:
-      SET_STRING_ELT(x, i, valueString(j));
-      break;
-    case VECSXP:
+   case PGVector:
       SET_VECTOR_ELT(x, i, valueRaw(j));
+      break;
+   case PGString:
+      SET_STRING_ELT(x, i, valueString(j));
       break;
     }
   }
