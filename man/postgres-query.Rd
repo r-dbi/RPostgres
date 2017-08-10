@@ -13,7 +13,7 @@
 \S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL,
   ...)
 
-\S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = NA)
+\S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = FALSE)
 
 \S4method{dbBind}{PqResult}(res, params, ...)
 

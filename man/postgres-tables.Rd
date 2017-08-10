@@ -12,13 +12,13 @@
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
-  ..., row.names = NA, overwrite = FALSE, append = FALSE,
+  ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, temporary = FALSE, copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
-  row.names = NA)
+  row.names = FALSE)
 
 \S4method{dbListTables}{PqConnection}(conn)
 
