@@ -116,7 +116,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_active(res@ptr)
+  result_is_complete(res@ptr)
 })
 
 #' @rdname postgres-query
