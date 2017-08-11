@@ -99,7 +99,8 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @export
 #' @rdname postgres-query
-setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
+setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
+  if (n == Inf) n <- -1
   sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
 })
 
@@ -115,7 +116,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_active(res@ptr)
+  result_is_complete(res@ptr)
 })
 
 #' @rdname postgres-query

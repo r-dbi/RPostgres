@@ -20,7 +20,13 @@ void result_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
 
 // [[Rcpp::export]]
 bool result_is_complete(XPtr<PqResult> rs) {
-  return rs->isComplete();
+  if(rs.get() == NULL) 
+     Rcpp::stop("invalid result set");
+  try {
+    return rs->isComplete();
+  } catch(...) {
+     return false;
+  }
 }
 
 // [[Rcpp::export]]
