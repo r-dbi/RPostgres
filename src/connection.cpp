@@ -13,13 +13,17 @@ XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
 
 // [[Rcpp::export]]
 void connection_release(XPtr<PqConnectionPtr> con) {
-  if ((*con)->hasQuery()) {
-    warning("%s\n%s",
-      "There is a result object still in use.",
-      "The connection will be automatically released when it is closed"
-    );
+  if(con.get() != NULL) {
+    if ((*con)->hasQuery()) {
+      warning("%s\n%s",
+        "There is a result object still in use.",
+        "The connection will be automatically released when it is closed"
+      );
+    }
+    con.release();
+  } else {
+    warning("connections is invalid");
   }
-  con.release();
 }
 
 // [[Rcpp::export]]
