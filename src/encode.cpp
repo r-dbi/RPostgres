@@ -21,7 +21,8 @@ void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
                              std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
-    encodeInBuffer(x[j], i, buffer);
+    Rcpp::RObject xj(x[j]);
+    encodeInBuffer(xj, i, buffer);
     if (j != p - 1)
       buffer.append(fieldDelim);
   }
@@ -110,9 +111,9 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
 // Escape postgresql special characters
 // http://www.postgresql.org/docs/9.4/static/sql-copy.html#AEN71914
 void escapeInBuffer(const char* string, std::string& buffer) {
-  int len = strlen(string);
+  size_t len = strlen(string);
 
-  for (int i = 0; i < len; ++i){
+  for (size_t i = 0; i < len; ++i){
     switch (string[i]) {
     case '\b':
       buffer.append("\\b");
