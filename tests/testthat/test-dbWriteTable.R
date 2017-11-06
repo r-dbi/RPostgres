@@ -42,7 +42,7 @@ with_database_connection({
       skip("Broken")
       with_table(con, "iris", {
         iris2       <- transform(iris, Petal.Width = as.integer(Petal.Width),
-                                 Species = as.character(Species))
+          Species = as.character(Species))
         field.types <- c("real", "double precision", "numeric", "bigint", "text")
 
         dbWriteTable(con, "iris", iris2, field.types = field.types)
@@ -51,9 +51,9 @@ with_database_connection({
         # http://stackoverflow.com/questions/2146705/select-datatype-of-the-field-in-postgres
         types <- DBI::dbGetQuery(con,
           paste("select column_name, data_type from information_schema.columns ",
-                "where table_name = 'iris'"))
+            "where table_name = 'iris'"))
         expected <- data.frame(column_name = colnames(iris2),
-                               data_type = field.types, stringsAsFactors = FALSE)
+          data_type = field.types, stringsAsFactors = FALSE)
         types    <- without_rownames(types[order(types$column_name), ])
         expected <- without_rownames(expected[order(expected$column_name), ])
 
@@ -65,7 +65,7 @@ with_database_connection({
       skip("Broken")
       with_table(con, "iris", {
         iris2       <- transform(iris, Petal.Width = as.integer(Petal.Width),
-                                 Species = as.character(Species))
+          Species = as.character(Species))
         field.types <- c("real", "double precision", "numeric", "bigint", "text")
 
         dbWriteTable(con, "iris", iris2, field.types = field.types)
@@ -75,9 +75,9 @@ with_database_connection({
         # http://stackoverflow.com/questions/2146705/select-datatype-of-the-field-in-postgres
         types <- DBI::dbGetQuery(con,
           paste("select column_name, data_type from information_schema.columns ",
-                "where table_name = 'iris'"))
+            "where table_name = 'iris'"))
         expected <- data.frame(column_name = colnames(iris2),
-                               data_type = field.types, stringsAsFactors = FALSE)
+          data_type = field.types, stringsAsFactors = FALSE)
         types    <- without_rownames(types[order(types$column_name), ])
         expected <- without_rownames(expected[order(expected$column_name), ])
 
@@ -86,4 +86,3 @@ with_database_connection({
     })
   })
 })
-

@@ -25,4 +25,3 @@ setClass("PqDriver", contains = "DBIDriver")
 setMethod("dbUnloadDriver", "PqDriver", function(drv, ...) {
   NULL
 })
-

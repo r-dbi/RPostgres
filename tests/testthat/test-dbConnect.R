@@ -33,13 +33,13 @@ test_that("warning if close connection with open results", {
 })
 
 test_that("passing other options parameters", {
-  con <- dbConnect(Postgres(), application_name="apple")
+  con <- dbConnect(Postgres(), application_name = "apple")
   pid <- dbGetInfo(con)$pid
   r <- dbGetQuery(con, "SELECT application_name FROM pg_stat_activity WHERE pid=$1",
-                  list(pid=pid))
+    list(pid = pid))
   expect_identical(r$application_name, "apple")
 })
 
 test_that("error if passing unkown parameters", {
-  expect_error(dbConnect(Postgres(), fruit="apple"), 'invalid connection option "fruit"')
+  expect_error(dbConnect(Postgres(), fruit = "apple"), 'invalid connection option "fruit"')
 })
