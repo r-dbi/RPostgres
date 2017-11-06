@@ -8,4 +8,3 @@ with_table <- function(con, tbl, expr) {
   on.exit(dbRemoveTable(con, tbl), add = TRUE)
   force(expr)
 }
-
