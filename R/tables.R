@@ -100,9 +100,6 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy =
   is_object <- vapply(value, is.object, logical(1))
   value[is_object] <- lapply(value[is_object], as.character)
 
-  is_character <- vapply(value, is.character, logical(1))
-  value[is_character] <- lapply(value[is_character], dbQuoteString, con = con)
-
   value
 })
 
