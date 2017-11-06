@@ -60,22 +60,22 @@ setMethod("show", "PqConnection", function(object) {
 #' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
-                                            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
+           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
 
-  opts <- unlist(list(dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
-  if (!is.character(opts)) {
-    stop("All options should be strings", call. = FALSE)
-  }
+    opts <- unlist(list(dbname = dbname, user = user, password = password,
+      host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
+    if (!is.character(opts)) {
+      stop("All options should be strings", call. = FALSE)
+    }
 
-  if (length(opts) == 0) {
-    ptr <- connection_create(character(), character())
-  } else {
-    ptr <- connection_create(names(opts), as.vector(opts))
-  }
+    if (length(opts) == 0) {
+      ptr <- connection_create(character(), character())
+    } else {
+      ptr <- connection_create(names(opts), as.vector(opts))
+    }
 
-  new("PqConnection", ptr = ptr)
-})
+    new("PqConnection", ptr = ptr)
+  })
 
 #' @export
 #' @rdname dbConnect-PqDriver-method
