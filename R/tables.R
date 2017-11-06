@@ -132,3 +132,13 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
     invisible(TRUE)
   }
 )
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListFields", c("PqConnection", "character"),
+  function(conn, name) {
+    name <- dbQuoteString(conn, name)
+    dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
+WHERE table_name=", name))$column_name
+  }
+)
