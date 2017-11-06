@@ -1,6 +1,5 @@
-#include <Rcpp.h>
-#include <libpq-fe.h>
-using namespace Rcpp;
+#include "pch.h"
+
 
 // [[Rcpp::export]]
 String encrypt_password(String password, String user) {

@@ -11,21 +11,23 @@ Authors@R: c(
     person("Tomoaki", "Nishiyama", role = "ctb",
     comment = "Code for encoding vectors into strings derived from RPostgreSQL")
     )
-Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
+Description: DBI-compatible Rcpp-backed interface to PostgreSQL.
 License: GPL-2
 LazyLoad: true
 Depends:
     R (>= 3.1.0)
 Imports:
-    methods,
-    Rcpp (>= 0.11.4.2),
     DBI (>= 0.3.1.9008),
-    hms
+    hms,
+    methods,
+    Rcpp (>= 0.11.4.2)
 Suggests:
-    testthat,
-    DBItest
-LinkingTo: Rcpp,
-    BH
+    DBItest,
+    testthat
+LinkingTo:
+    BH,
+    plogr,
+    Rcpp
 Collate:
     'RcppExports.R'
     'driver.R'

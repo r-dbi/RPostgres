@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include "pch.h"
 #include "RPostgres_types.h"
-using namespace Rcpp;
+
 
 // [[Rcpp::export]]
 XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
@@ -13,12 +13,12 @@ XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
 
 // [[Rcpp::export]]
 void connection_release(XPtr<PqConnectionPtr> con) {
-  if(con.get() != NULL) {
-    if ((*con)->hasQuery()) {
+  if (con.get() != NULL) {
+    if ((*con)->has_query()) {
       warning("%s\n%s",
-        "There is a result object still in use.",
-        "The connection will be automatically released when it is closed"
-      );
+              "There is a result object still in use.",
+              "The connection will be automatically released when it is closed"
+             );
     }
     con.release();
   } else {
@@ -33,13 +33,13 @@ List connection_info(XPtr<PqConnectionPtr> con) {
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
-                                         CharacterVector xs) {
+    CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
-    escaped[i] = (*con)->escapeString(x);
+    escaped[i] = (*con)->escape_string(x);
   }
 
   return escaped;
@@ -47,13 +47,13 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
-                                             CharacterVector xs) {
+    CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
-    escaped[i] = (*con)->escapeIdentifier(x);
+    escaped[i] = (*con)->escape_identifier(x);
   }
 
   return escaped;
@@ -61,5 +61,5 @@ CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
 
 // [[Rcpp::export]]
 void connection_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
-  return (*con)->copyData(sql, df);
+  return (*con)->copy_data(sql, df);
 }
