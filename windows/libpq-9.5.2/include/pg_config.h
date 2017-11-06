@@ -53,7 +53,7 @@
 /* #undef ENABLE_GSS */
 
 /* Define to 1 if you want National Language Support. (--enable-nls) */
-/* #undef ENABLE_NLS */
+#define ENABLE_NLS 1
 
 /* Define to 1 to build client libraries as thread-safe code.
    (--enable-thread-safety) */
@@ -75,9 +75,6 @@
    reference if 'false' */
 #define FLOAT8PASSBYVAL true
 
-/* Define to 1 if getpwuid_r() takes a 5th argument. */
-/* #undef GETPWUID_R_5ARG */
-
 /* Define to 1 if gettimeofday() takes only 1 argument. */
 /* #undef GETTIMEOFDAY_1ARG */
 
@@ -87,6 +84,12 @@
 
 /* Define to 1 if you have the `append_history' function. */
 /* #undef HAVE_APPEND_HISTORY */
+
+/* Define to 1 if you want to use atomics if available. */
+#define HAVE_ATOMICS 1
+
+/* Define to 1 if you have the <atomic.h> header file. */
+/* #undef HAVE_ATOMIC_H */
 
 /* Define to 1 if you have the `cbrt' function. */
 #define HAVE_CBRT 1
@@ -174,8 +177,24 @@
 /* Define to 1 if your compiler understands __FUNCTION__. */
 /* #undef HAVE_FUNCNAME__FUNCTION */
 
+/* Define to 1 if you have __atomic_compare_exchange_n(int *, int *, int). */
+#define HAVE_GCC__ATOMIC_INT32_CAS 1
+
+/* Define to 1 if you have __atomic_compare_exchange_n(int64 *, int *, int64).
+   */
+#define HAVE_GCC__ATOMIC_INT64_CAS 1
+
+/* Define to 1 if you have __sync_lock_test_and_set(char *) and friends. */
+#define HAVE_GCC__SYNC_CHAR_TAS 1
+
+/* Define to 1 if you have __sync_compare_and_swap(int *, int, int). */
+#define HAVE_GCC__SYNC_INT32_CAS 1
+
 /* Define to 1 if you have __sync_lock_test_and_set(int *) and friends. */
-#define HAVE_GCC_INT_ATOMICS 1
+#define HAVE_GCC__SYNC_INT32_TAS 1
+
+/* Define to 1 if you have __sync_compare_and_swap(int64 *, int64, int64). */
+#define HAVE_GCC__SYNC_INT64_CAS 1
 
 /* Define to 1 if you have the `getaddrinfo' function. */
 /* #undef HAVE_GETADDRINFO */
@@ -319,6 +338,9 @@
 /* Define to 1 if `long long int' works and is 64 bits. */
 #define HAVE_LONG_LONG_INT_64 1
 
+/* Define to 1 if you have the <mbarrier.h> header file. */
+/* #undef HAVE_MBARRIER_H */
+
 /* Define to 1 if you have the `mbstowcs_l' function. */
 /* #undef HAVE_MBSTOWCS_L */
 
@@ -370,9 +392,6 @@
 /* Define to 1 if the PS_STRINGS thing exists. */
 /* #undef HAVE_PS_STRINGS */
 
-/* Define if you have POSIX threads libraries and header files. */
-/* #undef HAVE_PTHREAD */
-
 /* Define to 1 if you have the `pthread_is_threaded_np' function. */
 /* #undef HAVE_PTHREAD_IS_THREADED_NP */
 
@@ -406,6 +425,9 @@
 
 /* Define to 1 if you have the `rl_filename_completion_function' function. */
 /* #undef HAVE_RL_FILENAME_COMPLETION_FUNCTION */
+
+/* Define to 1 if you have the `rl_reset_screen_size' function. */
+/* #undef HAVE_RL_RESET_SCREEN_SIZE */
 
 /* Define to 1 if you have the <security/pam_appl.h> header file. */
 /* #undef HAVE_SECURITY_PAM_APPL_H */
@@ -645,6 +667,9 @@
 /* Define to 1 if you have the <winldap.h> header file. */
 #define HAVE_WINLDAP_H 1
 
+/* Define to 1 if your compiler understands __builtin_bswap32. */
+#define HAVE__BUILTIN_BSWAP32 1
+
 /* Define to 1 if your compiler understands __builtin_constant_p. */
 #define HAVE__BUILTIN_CONSTANT_P 1
 
@@ -654,14 +679,20 @@
 /* Define to 1 if your compiler understands __builtin_unreachable. */
 #define HAVE__BUILTIN_UNREACHABLE 1
 
+/* Define to 1 if you have __cpuid. */
+/* #undef HAVE__CPUID */
+
+/* Define to 1 if you have __get_cpuid. */
+#define HAVE__GET_CPUID 1
+
 /* Define to 1 if your compiler understands _Static_assert. */
 #define HAVE__STATIC_ASSERT 1
 
 /* Define to 1 if your compiler understands __VA_ARGS__ in macros. */
 #define HAVE__VA_ARGS 1
 
-/* Define to the appropriate snprintf format for 64-bit ints. */
-#define INT64_FORMAT "%lld"
+/* Define to the appropriate snprintf length modifier for 64-bit ints. */
+#define INT64_MODIFIER "ll"
 
 /* Define to 1 if `locale_t' requires <xlocale.h>. */
 /* #undef LOCALE_T_IN_XLOCALE */
@@ -679,7 +710,7 @@
 #define PACKAGE_NAME "PostgreSQL"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "PostgreSQL 9.4.1"
+#define PACKAGE_STRING "PostgreSQL 9.5.2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "postgresql"
@@ -688,7 +719,10 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "9.4.1"
+#define PACKAGE_VERSION "9.5.2"
+
+/* Define to the name of a signed 128-bit integer type. */
+#define PG_INT128_TYPE __int128
 
 /* Define to the name of a signed 64-bit integer type. */
 #define PG_INT64_TYPE long long int
@@ -698,28 +732,27 @@
 #define PG_KRB_SRVNAM "postgres"
 
 /* PostgreSQL major version as a string */
-#define PG_MAJORVERSION "9.4"
+#define PG_MAJORVERSION "9.5"
+
+/* Define to gnu_printf if compiler supports it, else printf. */
+#define PG_PRINTF_ATTRIBUTE gnu_printf
 
 /* Define to 1 if "static inline" works without unwanted warnings from
    compilations where static inline functions are defined but not called. */
 #define PG_USE_INLINE 1
 
 /* PostgreSQL version as a string */
-#define PG_VERSION "9.4.1"
+#define PG_VERSION "9.5.2"
 
 /* PostgreSQL version as a number */
-#define PG_VERSION_NUM 90401
+#define PG_VERSION_NUM 90502
 
 /* A string containing the version number, platform, and C compiler */
-#define PG_VERSION_STR "PostgreSQL 9.4.1 on x86_64-w64-mingw32, compiled by x86_64-w64-mingw32-gcc.exe (Rev2, Built by MSYS2 project) 4.9.2, 64-bit"
+#define PG_VERSION_STR "PostgreSQL 9.5.2 on x86_64-w64-mingw32, compiled by x86_64-w64-mingw32-gcc.exe (Rev2, Built by MSYS2 project) 5.3.0, 64-bit"
 
 /* Define to 1 to allow profiling output to be saved separately for each
    process. */
 /* #undef PROFILE_PID_DIR */
-
-/* Define to the necessary symbol if this constant uses a non-standard name on
-   your system. */
-/* #undef PTHREAD_CREATE_JOINABLE */
 
 /* RELSEG_SIZE is the maximum number of blocks allowed in one disk file. Thus,
    the maximum size of a single file is RELSEG_SIZE * BLCKSZ; relations bigger
@@ -755,9 +788,6 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
-/* Define to the appropriate snprintf format for unsigned 64-bit ints. */
-#define UINT64_FORMAT "%llu"
-
 /* Define to 1 to build with assertion checks. (--enable-cassert) */
 /* #undef USE_ASSERT_CHECKING */
 
@@ -789,14 +819,23 @@
 /* Define to select named POSIX semaphores. */
 /* #undef USE_NAMED_POSIX_SEMAPHORES */
 
+/* Define to build with OpenSSL support. (--with-openssl) */
+#define USE_OPENSSL 1
+
 /* Define to 1 to build with PAM support. (--with-pam) */
 /* #undef USE_PAM */
 
 /* Use replacement snprintf() functions. */
 #define USE_REPL_SNPRINTF 1
 
-/* Define to build with (Open)SSL support. (--with-openssl) */
-#define USE_SSL 1
+/* Define to 1 to use Intel SSE 4.2 CRC instructions with a runtime check. */
+/* #undef USE_SLICING_BY_8_CRC32C */
+
+/* Define to 1 use Intel SSE 4.2 CRC instructions. */
+/* #undef USE_SSE42_CRC32C */
+
+/* Define to 1 to use Intel SSSE 4.2 CRC instructions with a runtime check. */
+#define USE_SSE42_CRC32C_WITH_RUNTIME_CHECK 1
 
 /* Define to select SysV-style semaphores. */
 /* #undef USE_SYSV_SEMAPHORES */
@@ -812,6 +851,9 @@
 
 /* Define to select Win32-style shared memory. */
 #define USE_WIN32_SHARED_MEMORY 1
+
+/* Define to 1 if `wcstombs_l' requires <xlocale.h>. */
+/* #undef WCSTOMBS_L_IN_XLOCALE */
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */

@@ -1,56 +1,93 @@
-# Specify custom libpq dir (can be shared or dynamic)
-if [ "$LIBPQ_DIR" ]; then
-  echo "PKG_CPPFLAGS= -I$LIBPQ_DIR/include" > src/Makevars
-  echo "PKG_LIBS=-lpq -lssl -lcrypto -lldap" >> src/Makevars
-  exit 0
+#!/bin/bash
+# Anticonf (tm) script by Jeroen Ooms & Murat Tasan (2017)
+# This script will prefer cflags (specifically includefile dirs) and lib dirs
+# in the following order of precedence:
+#   (1) INCLUDE_DIR or LIB_DIR entered explicitly on the command line, e.g.
+#       R CMD INSTALL --configure-vars='INCLUDE_DIR=/.../include LIB_DIR=/.../lib'
+#   (2) Values found via 'pkg-config' for the libpq package.
+#   (3) Values found via 'pg_config' given a PostgreSQL installation.
+
+# Library settings
+PKG_CONFIG_NAME="libpq"
+PKG_DEB_NAME="libpq-dev"
+PKG_RPM_NAME="postgresql-devel"
+PKG_AMZ_RPM_NAMES="postgreql8-devel, psstgresql92-devel, postgresql93-devel, or postgresql94-devel"
+PKG_CSW_NAME="postgresql_dev"
+PKG_BREW_NAME="postgresql"
+PKG_TEST_HEADER="<libpq-fe.h>"
+PKG_LIBS="-lpq"
+PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
+
+# pkg-config values (if available)
+if [ $(command -v pkg-config) ]; then
+  PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
+  PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
 fi
 
-# Check for system libpq shared library
-if [ -r "/usr/include/libpq-fe.h" ] || [ -r "/usr/local/include/libpq-fe.h" ]; then
-  echo "PKG_LIBS=-lpq" > src/Makevars
-  exit 0;
+# pg_config vlaues (if available)
+if [ $(command -v pg_config) ]; then
+  PG_INC_DIR=$(pg_config --includedir)
+  PG_LIB_DIR=$(pg_config --libdir)
 fi
 
-# Debian/Ubuntu
-if [ -r "/usr/include/postgresql/libpq-fe.h" ]; then
-  echo "PKG_CPPFLAGS= -I/usr/include/postgresql" > src/Makevars
-  echo "PKG_LIBS=-lpq" >> src/Makevars
-  exit 0;
-fi
-
-# Force static linking on OSX to support redistributable binary packages.
-if [ $(echo "$OSTYPE" | grep "darwin") ]; then
-
-  # Use system 'brew' if available
+# Note that cflags may be empty in case of success
+if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
+  echo "Found INCLUDE_DIR and/or LIB_DIR!"
+  PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
+  PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
+elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
+  echo "Using pkg-config cflags and libs!"
+  PKG_CFLAGS=${PKGCONFIG_CFLAGS}
+  PKG_LIBS=${PKGCONFIG_LIBS}
+elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
+  echo "Using pg_config includedir and libdir!"
+  PKG_CFLAGS="-I${PG_INC_DIR}"
+  PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
-    BREWDIR="$(brew --prefix)";
+    BREWDIR=$(brew --prefix)
   else
-    BREWDIR="/tmp/homebrew"
-    mkdir -p $BREWDIR && curl -fsSL https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C $BREWDIR
+    curl -sfL "https://jeroen.github.io/autobrew/$PKG_BREW_NAME" > autobrew
+    source autobrew
   fi
+  PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
+  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS"
+fi
 
-  PKGDIR=$(echo $BREWDIR/Cellar/postgresql/*);
-  if [ ! -r "$PKGDIR/include/libpq-fe.h" ]; then
-    echo "Brewing libpq in $BREWDIR...";
-    HOMEBREW_CACHE="/tmp" $BREWDIR/bin/brew install postgresql;
-    PKGDIR=$(echo $BREWDIR/Cellar/postgresql/*);
-  fi
-  if [ -r "$PKGDIR/include/libpq-fe.h" ]; then
-    echo "Brewed libpq found in $PKGDIR";
-    echo "PKG_CPPFLAGS= -I$PKGDIR/include" > src/Makevars
+# For debugging
+echo "Using PKG_CFLAGS=$PKG_CFLAGS"
+echo "Using PKG_LIBS=$PKG_LIBS"
 
-    # Force static linking!
-    if [ ! -r "$PKGDIR/lib/libpq.a" ]; then
-      echo "File $PKGDIR/lib/libpq.a not found!"
-      exit 1
-    fi
-    echo "PKG_LIBS= $PKGDIR/lib/libpq.a -lssl -lcrypto -lldap" >> src/Makevars
-    exit 0
-  fi
-  echo "File $PKGDIR/include/libpq-fe.h not found."
-  echo "Homebrew of libgit2 failed :(";
+# Find compiler
+CC=$(${R_HOME}/bin/R CMD config CC)
+CFLAGS=$(${R_HOME}/bin/R CMD config CFLAGS)
+CPPFLAGS=$(${R_HOME}/bin/R CMD config CPPFLAGS)
+
+# Test configuration
+echo "#include $PKG_TEST_HEADER" | ${CC} ${CPPFLAGS} ${PKG_CFLAGS} ${CFLAGS} -E -xc - >/dev/null 2>&1 || R_CONFIG_ERROR=1;
+
+# Customize the error
+if [ $R_CONFIG_ERROR ]; then
+  echo "------------------------- ANTICONF ERROR ---------------------------"
+  echo "Configuration failed because $PKG_CONFIG_NAME was not found. Try installing:"
+  echo " * deb: $PKG_DEB_NAME (Debian, Ubuntu, etc)"
+  echo " * rpm: $PKG_RPM_NAME (Fedora, EPEL)"
+  echo " * rpm: $PKG_AMZ_RPM_NAMES (Amazon Linux)"
+  echo " * csw: $PKG_CSW_NAME (Solaris)"
+  echo " * brew: $PKG_BREW_NAME (OSX)"
+  echo "If $PKG_CONFIG_NAME is already installed, check that either:"
+  echo "(i)  'pkg-config' is in your PATH AND PKG_CONFIG_PATH contains"
+  echo "     a $PKG_CONFIG_NAME.pc file; or"
+  echo "(ii) 'pg_config' is in your PATH."
+  echo "If neither can detect $PGK_CONFIG_NAME, you can set INCLUDE_DIR"
+  echo "and LIB_DIR manually via:"
+  echo "R CMD INSTALL --configure-vars='INCLUDE_DIR=... LIB_DIR=...'"
+  echo "--------------------------------------------------------------------"
   exit 1;
 fi
 
-echo "File libpq-fe.h not found. Please install libpq, e.g: postgresql-devel (rpm) or libpq-dev (deb)"
-exit 1
+# Write to Makevars
+sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in > src/Makevars
+
+# Success
+exit 0

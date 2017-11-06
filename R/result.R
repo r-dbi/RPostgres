@@ -79,7 +79,7 @@ NULL
 
 #' @export
 #' @rdname postgres-query
-setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ...) {
+setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ...) {
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
@@ -96,11 +96,12 @@ setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL
 #' @param res Code a \linkS4class{PqResult} produced by
 #'   \code{\link[DBI]{dbSendQuery}}.
 #' @param n Number of rows to return. If less than zero returns all rows.
-#' @inheritParams DBI::rownamesToColumn
+#' @inheritParams DBI::sqlRownamesToColumn
 #' @export
 #' @rdname postgres-query
-setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = NA) {
-  columnToRownames(result_fetch(res@ptr, n = n), row.names)
+setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
+  if (n == Inf) n <- -1
+  sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
 })
 
 #' @rdname postgres-query
@@ -115,7 +116,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_active(res@ptr)
+  result_is_complete(res@ptr)
 })
 
 #' @rdname postgres-query

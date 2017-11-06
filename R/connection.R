@@ -45,6 +45,10 @@ setMethod("show", "PqConnection", function(object) {
 #'   more details.
 #' @param host,port Host and port. If \code{NULL}, will be retrieved from
 #'   \code{PGHOST} and \code{PGPORT} env vars.
+#' @param service Name of service to connect as.  If \code{NULL}, will be
+#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
+#'   file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
+#'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
 #'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
@@ -55,10 +59,10 @@ setMethod("show", "PqConnection", function(object) {
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
-  host = NULL, port = NULL, password = NULL, user = NULL, ...) {
+  host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
 
   opts <- unlist(list(dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), client_encoding = "utf8"))
+    host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
   if (!is.character(opts)) {
     stop("All options should be strings", call. = FALSE)
   }
@@ -85,21 +89,28 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @param dbObj Postgres driver or connection.
 #' @param obj Object to convert
 #' @keywords internal
+#' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
-  dbDataType(SQLite(), obj)
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
+  get_data_type(obj)
 })
 
-#' @rdname dbDataType-PqDriver-ANY-method
 #' @export
+#' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
+  get_data_type(obj)
+})
+
+get_data_type <- function(obj) {
   if (is.factor(obj)) return("TEXT")
 
   switch(typeof(obj),
     integer = "INTEGER",
     double = "REAL",
     character = "TEXT",
-    logical = "INTEGER",
-    list = "BLOB",
+    logical = "BOOLEAN",
+    list = "BYTEA",
     stop("Unsupported type", call. = FALSE)
   )
-})
+}

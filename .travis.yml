@@ -1,16 +1,28 @@
-language: r
-sudo: required
-warnings_are_errors: true
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-apt_packages:
-  - libpq-dev
+language: r
+cache: packages
+sudo: false
+
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
+  apt:
+    packages:
+      - libpq-dev
+
+#r_check_revdep: true
 
 r_github_packages:
   - rstats-db/DBI
   - jimhester/covr
-
-before_script:
-  - psql -c 'create database travis;' -U postgres
+  - rstats-db/DBItest@production
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change

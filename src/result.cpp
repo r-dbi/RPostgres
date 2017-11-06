@@ -14,13 +14,19 @@ List result_fetch(XPtr<PqResult> rs, int n) {
 }
 
 // [[Rcpp::export]]
-void result_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
+void result_bind_params(XPtr<PqResult> rs, List params) {
   return rs->bind(params);
 }
 
 // [[Rcpp::export]]
 bool result_is_complete(XPtr<PqResult> rs) {
-  return rs->isComplete();
+  if(rs.get() == NULL)
+     Rcpp::stop("invalid result set");
+  try {
+    return rs->isComplete();
+  } catch(...) {
+     return false;
+  }
 }
 
 // [[Rcpp::export]]

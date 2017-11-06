@@ -1,14 +1,10 @@
-PKG_CPPFLAGS= -I../windows/libpq-9.4.1/include
-PKG_LIBS= -L../windows/libpq-9.4.1/lib${R_ARCH} -lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
+PKG_CPPFLAGS= -I../windows/libpq-9.5.2/include
+PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} -lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 
-SOURCES = $(wildcard *.c *.cpp)
-
-OBJECTS = $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCES)))
-
-all: clean winlibs $(OBJECTS)
-
-clean:
-	rm -f $(OBJECTS)
+all: clean winlibs
 
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
+
+clean:
+	rm -f $(OBJECTS) $(SHLIB)

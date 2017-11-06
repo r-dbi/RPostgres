@@ -22,10 +22,10 @@ class PqConnection : boost::noncopyable {
 public:
   PqConnection(std::vector<std::string> keys, std::vector<std::string> values):
                pCurrentResult_(NULL) {
-    int n = keys.size();
+    size_t n = keys.size();
     std::vector<const char*> c_keys(n + 1), c_values(n + 1);
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       c_keys[i] = keys[i].c_str();
       c_values[i] = values[i].c_str();
     }
@@ -100,7 +100,7 @@ public:
   }
 
   void copyData(std::string sql, Rcpp::List df) {
-    int p = df.size();
+    R_xlen_t p = df.size();
     if (p == 0)
       return;
 
@@ -120,7 +120,7 @@ public:
       buffer.clear();
       encodeRowInBuffer(df, i, buffer);
 
-      if (PQputCopyData(pConn_, buffer.data(), buffer.size()) != 1) {
+      if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
         Rcpp::stop(PQerrorMessage(pConn_));
       }
     }
@@ -156,15 +156,18 @@ public:
     const char* dbnm = PQdb(pConn_);
     const char* host = PQhost(pConn_);
     const char* port = PQport(pConn_);
+    const char* user = PQuser(pConn_);
     int pver = PQprotocolVersion(pConn_);
     int sver = PQserverVersion(pConn_);
-
+    int pid = PQbackendPID(pConn_);
     return Rcpp::List::create(
       Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
       Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
       Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
+      Rcpp::_["user"]   = user == NULL ? "" : std::string(user),
       Rcpp::_["protocol_version"]   = pver,
-      Rcpp::_["server_version"]     = sver
+      Rcpp::_["server_version"]     = sver,
+      Rcpp::_["pid"]                = pid
     );
   }
 

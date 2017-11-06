@@ -15,11 +15,19 @@ std::string encode_data_frame(Rcpp::List x);
 
 // Generic data frame utils ----------------------------------------------------
 
+enum PGTypes {
+  PGInt = INTSXP,
+  PGReal = REALSXP,
+  PGString = STRSXP,
+  PGLogical = LGLSXP,
+  PGVector = VECSXP
+};
+
 Rcpp::List inline dfResize(Rcpp::List df, int n) {
-  int p = df.size();
+  R_xlen_t p = df.size();
 
   Rcpp::List out(p);
-  for (int j = 0; j < p; ++j) {
+  for (R_xlen_t j = 0; j < p; ++j) {
     out[j] = Rf_lengthgets(df[j], n);
   }
 
@@ -30,16 +38,20 @@ Rcpp::List inline dfResize(Rcpp::List df, int n) {
   return out;
 }
 
-Rcpp::List inline dfCreate(std::vector<SEXPTYPE> types, std::vector<std::string> names, int n) {
-  int p = types.size();
+Rcpp::List inline dfCreate(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n) {
+  R_xlen_t p = types.size();
 
   Rcpp::List out(p);
   out.attr("names") = names;
   out.attr("class") = "data.frame";
   out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
 
-  for (int j = 0; j < p; ++j) {
-    out[j] = Rf_allocVector(types[j], n);
+  int j = 0;
+  for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
+      switch (*it) {
+      default:
+          out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
+      }
   }
   return out;
 }

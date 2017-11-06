@@ -43,7 +43,7 @@ NULL
 #' @export
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
-  function(conn, name, value, row.names = NA, overwrite = FALSE, append = FALSE,
+  function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
     field.types = NULL, temporary = FALSE, copy = TRUE) {
 
     if (overwrite && append)
@@ -59,8 +59,8 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- sqlCreateTable(conn, name, value, row.names = row.names,
-        temporary = temporary)
+      sql <- sqlCreateTable(conn, name, if(is.null(field.types)) value else field.types,
+                            row.names = row.names, temporary = temporary)
       dbGetQuery(conn, sql)
     }
 
@@ -86,10 +86,10 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
 
 #' @export
-#' @inheritParams DBI::rownamesToColumn
+#' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-tables
 setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
-  value <- rownamesToColumn(value, row.names)
+  value <- sqlRownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vapply(value, is.object, logical(1))
@@ -102,7 +102,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy =
 #' @export
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
-  function(conn, name, row.names = NA) {
+  function(conn, name, ..., row.names = FALSE) {
     name <- dbQuoteIdentifier(conn, name)
     dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
   }
@@ -119,7 +119,7 @@ setMethod("dbListTables", "PqConnection", function(conn) {
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbExistsTable", "PqConnection", function(conn, name) {
+setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) {
   name %in% dbListTables(conn)
 })
 

@@ -13,13 +13,17 @@ XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
 
 // [[Rcpp::export]]
 void connection_release(XPtr<PqConnectionPtr> con) {
-  if ((*con)->hasQuery()) {
-    warning("%s\n%s",
-      "There is a result object still in use.",
-      "The connection will be automatically released when it is closed"
-    );
+  if(con.get() != NULL) {
+    if ((*con)->hasQuery()) {
+      warning("%s\n%s",
+        "There is a result object still in use.",
+        "The connection will be automatically released when it is closed"
+      );
+    }
+    con.release();
+  } else {
+    warning("connections is invalid");
   }
-  con.release();
 }
 
 // [[Rcpp::export]]
@@ -30,10 +34,10 @@ List connection_info(XPtr<PqConnectionPtr> con) {
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
                                          CharacterVector xs) {
-  int n = xs.size();
+  R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
-  for (int i = 0; i < n; ++i) {
+  for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
     escaped[i] = (*con)->escapeString(x);
   }
@@ -44,10 +48,10 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
 // [[Rcpp::export]]
 CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
                                              CharacterVector xs) {
-  int n = xs.size();
+  R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
-  for (int i = 0; i < n; ++i) {
+  for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
     escaped[i] = (*con)->escapeIdentifier(x);
   }
