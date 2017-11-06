@@ -15,7 +15,7 @@ enum PGTypes {
   PGTime
 };
 
-List dfResize(Rcpp::List df, int n);
-List dfCreate(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n);
+List df_resize(Rcpp::List df, int n);
+List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n);
 
 #endif

@@ -2,7 +2,7 @@
 #include "PqUtils.h"
 
 
-List dfResize(Rcpp::List df, int n) {
+List df_resize(Rcpp::List df, int n) {
   R_xlen_t p = df.size();
 
   List out(p);
@@ -17,7 +17,7 @@ List dfResize(Rcpp::List df, int n) {
   return out;
 }
 
-List dfCreate(const std::vector <PGTypes>& types, const std::vector <std::string>& names, int n) {
+List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n) {
   R_xlen_t p = types.size();
 
   List out(p);

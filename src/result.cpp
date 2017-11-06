@@ -23,7 +23,7 @@ bool result_is_complete(XPtr<PqResult> rs) {
   if (rs.get() == NULL)
     stop("invalid result set");
   try {
-    return rs->isComplete();
+    return rs->is_complete();
   } catch (...) {
     return false;
   }
@@ -41,15 +41,15 @@ bool result_active(XPtr<PqResult> rs) {
 
 // [[Rcpp::export]]
 int result_rows_fetched(XPtr<PqResult> rs) {
-  return rs->rowsFetched();
+  return rs->n_rows_fetched();
 }
 
 // [[Rcpp::export]]
 int result_rows_affected(XPtr<PqResult> rs) {
-  return rs->rowsAffected();
+  return rs->n_rows_affected();
 }
 
 // [[Rcpp::export]]
 List result_column_info(XPtr<PqResult> rs) {
-  return rs->columnInfo();
+  return rs->get_column_info();
 }

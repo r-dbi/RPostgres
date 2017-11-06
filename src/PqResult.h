@@ -34,23 +34,23 @@ public:
 public:
   void bind();
   void bind(List params);
-  void bindRows(List params);
+  void bind_rows(List params);
 
   bool active();
 
-  void fetchRow();
-  void fetchRowIfNeeded();
+  void fetch_row();
+  void fetch_row_if_needed();
   List fetch(int n_max = -1);
 
-  int rowsAffected();
-  int rowsFetched();
-  bool isComplete();
+  int n_rows_affected();
+  int n_rows_fetched();
+  bool is_complete();
 
-  List columnInfo();
+  List get_column_info();
 
 private:
-  std::vector<std::string> columnNames() const;
-  std::vector<PGTypes> columnTypes() const;
+  std::vector<std::string> get_column_names() const;
+  std::vector<PGTypes> get_column_types() const;
 };
 
 #endif

@@ -6,8 +6,8 @@
 
 PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
   pConn_(pConn), nrows_(0), bound_(false) {
-  pConn_->conCheck();
-  pConn->setCurrentResult(this);
+  pConn_->check_connection();
+  pConn->set_current_result(this);
 
   try {
     // Prepare query
@@ -32,14 +32,14 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
     }
 
   } catch (...) {
-    pConn->setCurrentResult(NULL);
+    pConn->set_current_result(NULL);
     throw;
   }
 
   // Cache query metadata
   ncols_ = PQnfields(pSpec_);
-  names_ = columnNames();
-  types_ = columnTypes();
+  names_ = get_column_names();
+  types_ = get_column_types();
 
 }
 
@@ -47,7 +47,7 @@ PqResult::~PqResult() {
   try {
     if (active()) {
       PQclear(pSpec_);
-      pConn_->setCurrentResult(NULL);
+      pConn_->set_current_result(NULL);
     }
   } catch (...) {}
 }
@@ -92,7 +92,7 @@ void PqResult::bind(List params) {
   bound_ = true;
 }
 
-void PqResult::bindRows(List params) {
+void PqResult::bind_rows(List params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -125,19 +125,19 @@ void PqResult::bindRows(List params) {
 }
 
 bool PqResult::active() {
-  return pConn_->isCurrentResult(this);
+  return pConn_->is_current_result(this);
 }
 
-void PqResult::fetchRow() {
+void PqResult::fetch_row() {
   pNextRow_.reset(new PqRow(pConn_->conn()));
   nrows_++;
 }
 
-void PqResult::fetchRowIfNeeded() {
+void PqResult::fetch_row_if_needed() {
   if (pNextRow_.get() != NULL)
     return;
 
-  fetchRow();
+  fetch_row();
 }
 
 List PqResult::fetch(int n_max) {
@@ -147,24 +147,24 @@ List PqResult::fetch(int n_max) {
     stop("Inactive result set");
 
   int n = (n_max < 0) ? 100 : n_max;
-  List out = dfCreate(types_, names_, n);
+  List out = df_create(types_, names_, n);
 
   int i = 0;
-  fetchRowIfNeeded();
-  while (pNextRow_->hasData()) {
+  fetch_row_if_needed();
+  while (pNextRow_->has_data()) {
     if (i >= n) {
       if (n_max < 0) {
         n *= 2;
-        out = dfResize(out, n);
+        out = df_resize(out, n);
       } else {
         break;
       }
     }
 
     for (int j = 0; j < ncols_; ++j) {
-      pNextRow_->setListValue(out[j], i, j, types_);
+      pNextRow_->set_list_value(out[j], i, j, types_);
     }
-    fetchRow();
+    fetch_row();
     ++i;
 
     if (i % 1000 == 0)
@@ -173,7 +173,7 @@ List PqResult::fetch(int n_max) {
 
   // Trim back to what we actually used
   if (i < n) {
-    out = dfResize(out, i);
+    out = df_resize(out, i);
   }
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
@@ -196,21 +196,21 @@ List PqResult::fetch(int n_max) {
   return out;
 }
 
-int PqResult::rowsAffected() {
-  fetchRowIfNeeded();
-  return pNextRow_->rowsAffected();
+int PqResult::n_rows_affected() {
+  fetch_row_if_needed();
+  return pNextRow_->n_rows_affected();
 }
 
-int PqResult::rowsFetched() {
+int PqResult::n_rows_fetched() {
   return nrows_ - (pNextRow_.get() != NULL);
 }
 
-bool PqResult::isComplete() {
-  fetchRowIfNeeded();
-  return !pNextRow_->hasData();
+bool PqResult::is_complete() {
+  fetch_row_if_needed();
+  return !pNextRow_->has_data();
 }
 
-List PqResult::columnInfo() {
+List PqResult::get_column_info() {
   CharacterVector names(ncols_);
   for (int i = 0; i < ncols_; i++) {
     names[i] = names_[i];
@@ -256,7 +256,7 @@ List PqResult::columnInfo() {
   return out;
 }
 
-std::vector<std::string> PqResult::columnNames() const {
+std::vector<std::string> PqResult::get_column_names() const {
   std::vector<std::string> names;
   names.reserve(ncols_);
 
@@ -267,7 +267,7 @@ std::vector<std::string> PqResult::columnNames() const {
   return names;
 }
 
-std::vector<PGTypes> PqResult::columnTypes() const {
+std::vector<PGTypes> PqResult::get_column_types() const {
   std::vector<PGTypes> types;
   types.reserve(ncols_);
 

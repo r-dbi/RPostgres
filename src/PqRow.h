@@ -17,22 +17,22 @@ public:
 public:
   ExecStatusType status();
 
-  bool hasData();
-  int rowsAffected();
-  List exceptionInfo();
+  bool has_data();
+  int n_rows_affected();
+  List get_exception_info();
 
   // Value accessors -----------------------------------------------------------
-  bool valueNull(int j);
-  int valueInt(int j);
-  double valueDouble(int j);
-  SEXP valueString(int j);
-  SEXP valueRaw(int j);
-  double valueDate(int j);
-  double valueDatetime(int j, bool use_local = true);
-  double valueTime(int j);
-  int valueLogical(int j);
+  bool is_null(int j);
+  int get_int(int j);
+  double get_double(int j);
+  SEXP get_string(int j);
+  SEXP get_raw(int j);
+  double get_date(int j);
+  double get_datetime(int j, bool use_local = true);
+  double get_time(int j);
+  int get_logical(int j);
 
-  void setListValue(SEXP x, int i, int j, const std::vector<PGTypes>& types);
+  void set_list_value(SEXP x, int i, int j, const std::vector<PGTypes>& types);
 };
 
 #endif

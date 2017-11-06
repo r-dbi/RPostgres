@@ -37,7 +37,7 @@ PGconn* PqConnection::conn() {
   return pConn_;
 }
 
-void PqConnection::setCurrentResult(PqResult* pResult) {
+void PqConnection::set_current_result(PqResult* pResult) {
   // Cancels previous query, if needed.
   if (pResult == pCurrentResult_)
     return;
@@ -46,13 +46,13 @@ void PqConnection::setCurrentResult(PqResult* pResult) {
     if (pResult != NULL)
       warning("Cancelling previous query");
 
-    cancelQuery();
+    cancel_query();
   }
   pCurrentResult_ = pResult;
 }
 
-void PqConnection::cancelQuery() {
-  conCheck();
+void PqConnection::cancel_query() {
+  check_connection();
 
   // Cancel running query
   PGcancel* cancel = PQgetCancel(pConn_);
@@ -75,15 +75,15 @@ void PqConnection::cancelQuery() {
   }
 }
 
-bool PqConnection::isCurrentResult(PqResult* pResult) {
+bool PqConnection::is_current_result(PqResult* pResult) {
   return pCurrentResult_ == pResult;
 }
 
-bool PqConnection::hasQuery() {
+bool PqConnection::has_query() {
   return pCurrentResult_ != NULL;
 }
 
-void PqConnection::copyData(std::string sql, List df) {
+void PqConnection::copy_data(std::string sql, List df) {
   R_xlen_t p = df.size();
   if (p == 0)
     return;
@@ -102,7 +102,7 @@ void PqConnection::copyData(std::string sql, List df) {
   // of buffer. Sending data asynchronously appears to be no faster.
   for (int i = 0; i < n; ++i) {
     buffer.clear();
-    encodeRowInBuffer(df, i, buffer);
+    encode_row_in_buffer(df, i, buffer);
 
     if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
       stop(PQerrorMessage(pConn_));
@@ -122,7 +122,7 @@ void PqConnection::copyData(std::string sql, List df) {
   PQclear(pComplete);
 }
 
-void PqConnection::conCheck() {
+void PqConnection::check_connection() {
   ConnStatusType status = PQstatus(pConn_);
   if (status == CONNECTION_OK) return;
 
@@ -135,7 +135,7 @@ void PqConnection::conCheck() {
 }
 
 List PqConnection::info() {
-  conCheck();
+  check_connection();
 
   const char* dbnm = PQdb(pConn_);
   const char* host = PQhost(pConn_);
@@ -156,9 +156,9 @@ List PqConnection::info() {
     );
 }
 
-SEXP PqConnection::escapeString(std::string x) {
+SEXP PqConnection::escape_string(std::string x) {
   // Returns a single CHRSXP
-  conCheck();
+  check_connection();
 
   char* pq_escaped = PQescapeLiteral(pConn_, x.c_str(), x.length());
   SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
@@ -167,9 +167,9 @@ SEXP PqConnection::escapeString(std::string x) {
   return escaped;
 }
 
-SEXP PqConnection::escapeIdentifier(std::string x) {
+SEXP PqConnection::escape_identifier(std::string x) {
   // Returns a single CHRSXP
-  conCheck();
+  check_connection();
 
   char* pq_escaped = PQescapeIdentifier(pConn_, x.c_str(), x.length());
   SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);

@@ -25,18 +25,18 @@ public:
 public:
   PGconn* conn();
 
-  void setCurrentResult(PqResult* pResult);
-  void cancelQuery();
-  bool isCurrentResult(PqResult* pResult);
-  bool hasQuery();
+  void set_current_result(PqResult* pResult);
+  void cancel_query();
+  bool is_current_result(PqResult* pResult);
+  bool has_query();
 
-  void copyData(std::string sql, List df);
+  void copy_data(std::string sql, List df);
 
-  void conCheck();
+  void check_connection();
   List info();
 
-  SEXP escapeString(std::string x);
-  SEXP escapeIdentifier(std::string x);
+  SEXP escape_string(std::string x);
+  SEXP escape_identifier(std::string x);
 };
 
 #endif

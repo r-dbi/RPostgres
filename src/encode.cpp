@@ -8,7 +8,7 @@ std::string encode_vector(RObject x) {
 
   int n = Rf_length(x);
   for (int i = 0; i < n; ++i) {
-    encodeInBuffer(x, i, buffer);
+    encode_in_buffer(x, i, buffer);
     if (i != n - 1)
       buffer.push_back('\n');
   }
@@ -16,13 +16,13 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
-void encodeRowInBuffer(List x, int i, std::string& buffer,
-                       std::string fieldDelim,
-                       std::string lineDelim) {
+void encode_row_in_buffer(List x, int i, std::string& buffer,
+                          std::string fieldDelim,
+                          std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
     RObject xj(x[j]);
-    encodeInBuffer(xj, i, buffer);
+    encode_in_buffer(xj, i, buffer);
     if (j != p - 1)
       buffer.append(fieldDelim);
   }
@@ -37,7 +37,7 @@ std::string encode_data_frame(List x) {
 
   std::string buffer;
   for (int i = 0; i < n; ++i) {
-    encodeRowInBuffer(x, i, buffer);
+    encode_row_in_buffer(x, i, buffer);
   }
 
   return buffer;
@@ -48,7 +48,7 @@ std::string encode_data_frame(List x) {
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
 // License: GPL-2
 
-void encodeInBuffer(RObject x, int i, std::string& buffer) {
+void encode_in_buffer(RObject x, int i, std::string& buffer) {
   switch (TYPEOF(x)) {
   case LGLSXP: {
     int value = LOGICAL(x)[i];
@@ -97,7 +97,7 @@ void encodeInBuffer(RObject x, int i, std::string& buffer) {
       buffer.append("\\N");
     } else {
       const char* s = Rf_translateCharUTF8(STRING_ELT(x, i));
-      escapeInBuffer(s, buffer);
+      escape_in_buffer(s, buffer);
     }
     break;
   }
@@ -110,7 +110,7 @@ void encodeInBuffer(RObject x, int i, std::string& buffer) {
 
 // Escape postgresql special characters
 // http://www.postgresql.org/docs/9.4/static/sql-copy.html#AEN71914
-void escapeInBuffer(const char* string, std::string& buffer) {
+void escape_in_buffer(const char* string, std::string& buffer) {
   size_t len = strlen(string);
 
   for (size_t i = 0; i < len; ++i) {
