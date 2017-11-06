@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PqConnection.h"
+#include "encode.h"
 #include <cstdlib>
 
 
