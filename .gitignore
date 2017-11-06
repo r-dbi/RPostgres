@@ -3,3 +3,4 @@
 .RData
 src/*.d
 src/*.h.gch
+/clion-test.R
