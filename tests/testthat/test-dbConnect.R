@@ -21,7 +21,7 @@ test_that("no warning if previous result set is closed", {
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
   dbClearResult(rs1)
 
-  rs2 <- dbSendQuery(con, "SELECT 1 + 1")
+  expect_warning(rs2 <- dbSendQuery(con, "SELECT 1 + 1"), NA)
   dbClearResult(rs2)
 })
 
