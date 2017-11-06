@@ -102,9 +102,6 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, cop
   value[is_posix] <- lapply(value[is_posix], function(col) format(col, usetz=T))
   value[xor(is_object, is_posix)] <- lapply(value[is_object], as.character)
 
-  is_character <- vapply(value, is.character, logical(1))
-  value[is_character] <- lapply(value[is_character], dbQuoteString, con = con)
-
   value
 })
 
