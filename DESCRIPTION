@@ -28,6 +28,8 @@ LinkingTo:
     BH,
     plogr,
     Rcpp
+Remotes:
+    r-lib/DBItest
 Collate:
     'RcppExports.R'
     'driver.R'
