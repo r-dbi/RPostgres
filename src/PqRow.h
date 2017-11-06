@@ -78,7 +78,7 @@ public:
     return valueNull(j) ? NA_INTEGER : atoi(PQgetvalue(pRes_, 0, j));
   }
 
-  double valueDouble(double j) {
+  double valueDouble(int j) {
     return valueNull(j) ? NA_REAL : atof(PQgetvalue(pRes_, 0, j));
   }
 
