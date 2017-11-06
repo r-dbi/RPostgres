@@ -1,10 +1,9 @@
-DBItest::test_compliance(c(
+DBItest::test_all(c(
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
 
   # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
-  "cannot_forget_disconnect",                   #
 
   # result
   "cannot_clear_result_twice_.*",               #
@@ -19,7 +18,6 @@ DBItest::test_compliance(c(
   "data_64_bit_.*",                             # #51
   "data_character",                             # #50
   "data_raw",                                   # #66
-  "data_raw_null_.*",                           # #66
 
   "data_date_typed",                            # #52
   "data_date_current_typed",                    # #52
@@ -40,7 +38,17 @@ DBItest::test_compliance(c(
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
   "roundtrip_time",                             # #61
-  "roundtrip_numeric_special",                  #
+  "roundtrip_logical",                          #
+  "roundtrip_quotes",                           #
+  "roundtrip_null",                             #
+  "roundtrip_numeric",                          #
+  "roundtrip_integer",                          #
+  "roundtrip_date",                             #
+  "roundtrip_factor",                           #
+  "roundtrip_character",                        #
+  "roundtrip_character_empty",                  #
+  "roundtrip_character_native",                 #
+  "roundtrip_mixed",                            #
 
   "roundtrip_timestamp",                        # #61
   "roundtrip_field_types",                      #
@@ -72,6 +80,10 @@ DBItest::test_compliance(c(
   "bind_named_param_unnamed_placeholders",
   "bind_unnamed_param_named_placeholders",
   "bind_return_value",
+  "bind_integer",
+  "bind_numeric",
+  "bind_character",
+  "bind_date",
   "bind_factor",
   "bind_wrong_name",                            #
   "bind_raw.*",                                 # 66

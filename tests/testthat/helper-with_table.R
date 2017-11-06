@@ -5,6 +5,6 @@
 #' @param expr expression. The R expression to execute.
 #' @return the return value of the \code{expr}.
 with_table <- function(con, tbl, expr) {
-  on.exit(dbRemoveTable(con, tbl), add = TRUE)
+  on.exit(DBI::dbRemoveTable(con, tbl), add = TRUE)
   force(expr)
 }
