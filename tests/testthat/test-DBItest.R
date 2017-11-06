@@ -5,6 +5,7 @@ DBItest::test_all(c(
   # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
   "cannot_disconnect_twice",                    # TODO
+  "cannot_forget_disconnect",                   #
 
   # result
   "cannot_clear_result_twice_.*",               #
@@ -50,6 +51,7 @@ DBItest::test_all(c(
   "roundtrip_keywords",                         #
   "roundtrip_64_bit",                           # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
+  "roundtrip_blob",                             # #66
   "roundtrip_date",                             # #61
   "roundtrip_time",                             # #61
   "roundtrip_timestamp",                        # #61
@@ -76,7 +78,6 @@ DBItest::test_all(c(
   "bind_logical",                               #
   "bind_wrong_name",                            #
   "bind_raw.*",                                 # 66
-  "bind_null.*",                                # 67
   "bind_repeated.*",                            # 87
   "bind_timestamp.*",                           # 53
   "bind_timestamp_lt.*",                        # 53
@@ -92,5 +93,14 @@ DBItest::test_all(c(
   "compliance",                                 # #68
   "ellipsis",                                   # #101
   "read_only",                                  # default connection is read-write
+
+  # visibility
+  "can_disconnect",
+  "write_table_return",
+  "remove_table_return",
+  "begin_commit_return_value",
+  "begin_rollback_return_value",
+  "clear_result_return_.*",
+
   NULL
 ))

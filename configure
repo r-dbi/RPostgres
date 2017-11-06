@@ -41,17 +41,17 @@ elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
   PKG_LIBS=${PKGCONFIG_LIBS}
 elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
   echo "Using pg_config includedir and libdir!"
-  PKGCONFIG_CFLAGS="-I${PG_INC_DIR}"
-  PKGCONFIG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
+  PKG_CFLAGS="-I${PG_INC_DIR}"
+  PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [ $(command -v brew) ]; then
     BREWDIR=$(brew --prefix)
   else
-    curl -OL https://jeroen.github.io/autobrew/postgresql.sh
-    source postgresql.sh
+    curl -sfL "https://jeroen.github.io/autobrew/$PKG_BREW_NAME" > autobrew
+    source autobrew
   fi
   PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
-  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS_STATIC"
+  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS"
 fi
 
 # For debugging
