@@ -1,3 +1,16 @@
+## RPostgres 0.1-7 (2017-11-06)
+
+- All tests pass again.
+- Default to `row.names = FALSE`.
+- Fix escaping of `NA` values and character data (@jimhester).
+- Consistent coding style.
+- Fix `dbDataType()` for data frames (#133, @etiennebr).
+- Add support for dates and times (#111, @thrasibule).
+- `dbWriteTable()` gains `field.types` argument (#45, @robertzk).
+- Implement `dbListFields()` (#41, @thrasibule).
+- Fix compiler warnings.
+
+
 ## RPostgres 0.1-6 (2017-08-31)
 
 - Fix tests (#126, @thrasibule).
