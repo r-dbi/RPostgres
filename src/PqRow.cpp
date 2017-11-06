@@ -18,12 +18,12 @@ PqRow::PqRow(PGconn* conn) {
 
   if (pRes_ == NULL) {
     PQclear(pRes_);
-    Rcpp::stop("No active query");
+    stop("No active query");
   }
 
   if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
     PQclear(pRes_);
-    Rcpp::stop(PQerrorMessage(conn));
+    stop(PQerrorMessage(conn));
   }
 }
 
@@ -45,18 +45,18 @@ int PqRow::rowsAffected() {
   return atoi(PQcmdTuples(pRes_));
 }
 
-Rcpp::List PqRow::exceptionInfo() {
+List PqRow::exceptionInfo() {
   const char* sev = PQresultErrorField(pRes_, PG_DIAG_SEVERITY);
   const char* msg = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_PRIMARY);
   const char* det = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_DETAIL);
   const char* hnt = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_HINT);
 
   return
-    Rcpp::List::create(
-      Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
-      Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
-      Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
-      Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
+    List::create(
+      _["severity"] = sev == NULL ? "" : std::string(sev),
+      _["message"]  = msg == NULL ? "" : std::string(msg),
+      _["detail"]   = det == NULL ? "" : std::string(det),
+      _["hint"]     = hnt == NULL ? "" : std::string(hnt)
     );
 }
 

@@ -21,7 +21,7 @@ PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::strin
   if (PQstatus(pConn_) != CONNECTION_OK) {
     std::string err = PQerrorMessage(pConn_);
     PQfinish(pConn_);
-    Rcpp::stop(err);
+    stop(err);
   }
 
   PQsetClientEncoding(pConn_, "UTF-8");
@@ -44,7 +44,7 @@ void PqConnection::setCurrentResult(PqResult* pResult) {
 
   if (pCurrentResult_ != NULL) {
     if (pResult != NULL)
-      Rcpp::warning("Cancelling previous query");
+      warning("Cancelling previous query");
 
     cancelQuery();
   }
@@ -57,13 +57,13 @@ void PqConnection::cancelQuery() {
   // Cancel running query
   PGcancel* cancel = PQgetCancel(pConn_);
   if (cancel == NULL) {
-    Rcpp::warning("Failed to cancel running query");
+    warning("Failed to cancel running query");
     return;
   }
 
   char errbuf[256];
   if (!PQcancel(cancel, errbuf, 256)) {
-    Rcpp::warning(errbuf);
+    warning(errbuf);
   }
 
   PQfreeCancel(cancel);
@@ -83,7 +83,7 @@ bool PqConnection::hasQuery() {
   return pCurrentResult_ != NULL;
 }
 
-void PqConnection::copyData(std::string sql, Rcpp::List df) {
+void PqConnection::copyData(std::string sql, List df) {
   R_xlen_t p = df.size();
   if (p == 0)
     return;
@@ -91,7 +91,7 @@ void PqConnection::copyData(std::string sql, Rcpp::List df) {
   PGresult* pInit = PQexec(pConn_, sql.c_str());
   if (PQresultStatus(pInit) != PGRES_COPY_IN) {
     PQclear(pInit);
-    Rcpp::stop("Failed to initialise COPY");
+    stop("Failed to initialise COPY");
   }
   PQclear(pInit);
 
@@ -105,19 +105,19 @@ void PqConnection::copyData(std::string sql, Rcpp::List df) {
     encodeRowInBuffer(df, i, buffer);
 
     if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
-      Rcpp::stop(PQerrorMessage(pConn_));
+      stop(PQerrorMessage(pConn_));
     }
   }
 
 
   if (PQputCopyEnd(pConn_, NULL) != 1) {
-    Rcpp::stop(PQerrorMessage(pConn_));
+    stop(PQerrorMessage(pConn_));
   }
 
   PGresult* pComplete = PQgetResult(pConn_);
   if (PQresultStatus(pComplete) != PGRES_COMMAND_OK) {
     PQclear(pComplete);
-    Rcpp::stop(PQerrorMessage(pConn_));
+    stop(PQerrorMessage(pConn_));
   }
   PQclear(pComplete);
 }
@@ -131,10 +131,10 @@ void PqConnection::conCheck() {
   status = PQstatus(pConn_);
   if (status == CONNECTION_OK) return;
 
-  Rcpp::stop("Lost connection to database");
+  stop("Lost connection to database");
 }
 
-Rcpp::List PqConnection::info() {
+List PqConnection::info() {
   conCheck();
 
   const char* dbnm = PQdb(pConn_);
@@ -145,14 +145,14 @@ Rcpp::List PqConnection::info() {
   int sver = PQserverVersion(pConn_);
   int pid = PQbackendPID(pConn_);
   return
-    Rcpp::List::create(
-      Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
-      Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
-      Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
-      Rcpp::_["user"]   = user == NULL ? "" : std::string(user),
-      Rcpp::_["protocol_version"]   = pver,
-      Rcpp::_["server_version"]     = sver,
-      Rcpp::_["pid"]                = pid
+    List::create(
+      _["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
+      _["host"]   = host == NULL ? "" : std::string(host),
+      _["port"]   = port == NULL ? "" : std::string(port),
+      _["user"]   = user == NULL ? "" : std::string(user),
+      _["protocol_version"]   = pver,
+      _["server_version"]     = sver,
+      _["pid"]                = pid
     );
 }
 

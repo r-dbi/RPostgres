@@ -19,7 +19,7 @@ public:
 
   bool hasData();
   int rowsAffected();
-  Rcpp::List exceptionInfo();
+  List exceptionInfo();
 
   // Value accessors -----------------------------------------------------------
   bool valueNull(int j);

@@ -30,10 +30,10 @@ public:
   bool isCurrentResult(PqResult* pResult);
   bool hasQuery();
 
-  void copyData(std::string sql, Rcpp::List df);
+  void copyData(std::string sql, List df);
 
   void conCheck();
-  Rcpp::List info();
+  List info();
 
   SEXP escapeString(std::string x);
   SEXP escapeIdentifier(std::string x);

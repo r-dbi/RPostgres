@@ -16,12 +16,12 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
-void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
+void encodeRowInBuffer(List x, int i, std::string& buffer,
                        std::string fieldDelim,
                        std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
-    Rcpp::RObject xj(x[j]);
+    RObject xj(x[j]);
     encodeInBuffer(xj, i, buffer);
     if (j != p - 1)
       buffer.append(fieldDelim);
@@ -48,7 +48,7 @@ std::string encode_data_frame(List x) {
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
 // License: GPL-2
 
-void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
+void encodeInBuffer(RObject x, int i, std::string& buffer) {
   switch (TYPEOF(x)) {
   case LGLSXP: {
     int value = LOGICAL(x)[i];
@@ -102,8 +102,8 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
     break;
   }
   default:
-    Rcpp::stop("Don't know how to handle vector of type %s.",
-               Rf_type2char(TYPEOF(x)));
+    stop("Don't know how to handle vector of type %s.",
+         Rf_type2char(TYPEOF(x)));
   }
 }
 
