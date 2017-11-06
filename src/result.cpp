@@ -20,12 +20,12 @@ void result_bind_params(XPtr<PqResult> rs, List params) {
 
 // [[Rcpp::export]]
 bool result_is_complete(XPtr<PqResult> rs) {
-  if(rs.get() == NULL)
-     Rcpp::stop("invalid result set");
+  if (rs.get() == NULL)
+    Rcpp::stop("invalid result set");
   try {
     return rs->isComplete();
-  } catch(...) {
-     return false;
+  } catch (...) {
+    return false;
   }
 }
 

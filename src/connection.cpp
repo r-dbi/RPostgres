@@ -13,12 +13,12 @@ XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
 
 // [[Rcpp::export]]
 void connection_release(XPtr<PqConnectionPtr> con) {
-  if(con.get() != NULL) {
+  if (con.get() != NULL) {
     if ((*con)->hasQuery()) {
       warning("%s\n%s",
-        "There is a result object still in use.",
-        "The connection will be automatically released when it is closed"
-      );
+              "There is a result object still in use.",
+              "The connection will be automatically released when it is closed"
+             );
     }
     con.release();
   } else {
@@ -33,7 +33,7 @@ List connection_info(XPtr<PqConnectionPtr> con) {
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
-                                         CharacterVector xs) {
+    CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
@@ -47,7 +47,7 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
-                                             CharacterVector xs) {
+    CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 

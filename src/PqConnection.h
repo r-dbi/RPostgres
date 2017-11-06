@@ -22,7 +22,7 @@ class PqConnection : boost::noncopyable {
 
 public:
   PqConnection(std::vector<std::string> keys, std::vector<std::string> values):
-               pCurrentResult_(NULL) {
+    pCurrentResult_(NULL) {
     size_t n = keys.size();
     std::vector<const char*> c_keys(n + 1), c_values(n + 1);
 
@@ -47,7 +47,7 @@ public:
   virtual ~PqConnection() {
     try {
       PQfinish(pConn_);
-    } catch(...) {}
+    } catch (...) {}
   }
 
   PGconn* conn() {
@@ -87,7 +87,7 @@ public:
 
     // Clear pending results
     PGresult* result;
-    while((result = PQgetResult(pConn_)) != NULL) {
+    while ((result = PQgetResult(pConn_)) != NULL) {
       PQclear(result);
     }
   }
@@ -161,15 +161,16 @@ public:
     int pver = PQprotocolVersion(pConn_);
     int sver = PQserverVersion(pConn_);
     int pid = PQbackendPID(pConn_);
-    return Rcpp::List::create(
-      Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
-      Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
-      Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
-      Rcpp::_["user"]   = user == NULL ? "" : std::string(user),
-      Rcpp::_["protocol_version"]   = pver,
-      Rcpp::_["server_version"]     = sver,
-      Rcpp::_["pid"]                = pid
-    );
+    return
+      Rcpp::List::create(
+        Rcpp::_["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
+        Rcpp::_["host"]   = host == NULL ? "" : std::string(host),
+        Rcpp::_["port"]   = port == NULL ? "" : std::string(port),
+        Rcpp::_["user"]   = user == NULL ? "" : std::string(user),
+        Rcpp::_["protocol_version"]   = pver,
+        Rcpp::_["server_version"]     = sver,
+        Rcpp::_["pid"]                = pid
+      );
   }
 
   // Returns a single CHRSXP

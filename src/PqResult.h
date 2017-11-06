@@ -28,7 +28,7 @@ class PqResult : boost::noncopyable {
 public:
 
   PqResult(PqConnectionPtr pConn, std::string sql):
-           pConn_(pConn), nrows_(0), bound_(false) {
+    pConn_(pConn), nrows_(0), bound_(false) {
     pConn_->conCheck();
     pConn->setCurrentResult(this);
 
@@ -87,7 +87,7 @@ public:
   void bind(Rcpp::List params) {
     if (params.size() != nparams_) {
       Rcpp::stop("Query requires %i params; %i supplied.",
-        nparams_, params.size());
+                 nparams_, params.size());
     }
 
     std::vector<const char*> c_params(nparams_);
@@ -106,7 +106,7 @@ public:
     }
 
     if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
-         NULL, &c_formats[0], 0))
+                             NULL, &c_formats[0], 0))
       Rcpp::stop("Failed to send query");
 
     if (!PQsetSingleRowMode(pConn_->conn()))
@@ -118,7 +118,7 @@ public:
   void bindRows(Rcpp::List params) {
     if (params.size() != nparams_) {
       Rcpp::stop("Query requires %i params; %i supplied.",
-        nparams_, params.size());
+                 nparams_, params.size());
     }
 
     R_xlen_t n = Rcpp::CharacterVector(params[0]).size();
@@ -141,7 +141,7 @@ public:
       }
 
       PGresult* res = PQexecPrepared(pConn_->conn(), "", nparams_,
-        &c_params[0], NULL, &c_formats[0], 0);
+                                     &c_params[0], NULL, &c_formats[0], 0);
       if (PQresultStatus(res) != PGRES_COMMAND_OK)
         Rcpp::stop("%s (row %i)", PQerrorMessage(pConn_->conn()), i + 1);
     }
@@ -174,7 +174,7 @@ public:
 
     int i = 0;
     fetchRowIfNeeded();
-    while(pNextRow_->hasData()) {
+    while (pNextRow_->hasData()) {
       if (i >= n) {
         if (n_max < 0) {
           n *= 2;
@@ -198,7 +198,7 @@ public:
     if (i < n) {
       out = dfResize(out, i);
     }
-    for(int i = 0; i < out.size(); i++){
+    for (int i = 0; i < out.size(); i++) {
       Rcpp::RObject col(out[i]);
       switch (types_[i]) {
       case PGDate:
@@ -241,16 +241,33 @@ public:
 
     Rcpp::CharacterVector types(ncols_);
     for (int i = 0; i < ncols_; i++) {
-      switch(types_[i]) {
-      case PGString: types[i] = "character"; break;
-      case PGInt:  types[i] = "integer"; break;
-      case PGReal: types[i] = "double"; break;
-      case PGVector:  types[i] = "list"; break;
-      case PGLogical:  types[i] = "logical"; break;
-      case PGDate: types[i] = "Date"; break;
-      case PGDatetime: types[i] = "POSIXct"; break;
-      case PGDatetimeTZ: types[i] = "POSIXct"; break;
-      default: Rcpp::stop("Unknown variable type");
+      switch (types_[i]) {
+      case PGString:
+        types[i] = "character";
+        break;
+      case PGInt:
+        types[i] = "integer";
+        break;
+      case PGReal:
+        types[i] = "double";
+        break;
+      case PGVector:
+        types[i] = "list";
+        break;
+      case PGLogical:
+        types[i] = "logical";
+        break;
+      case PGDate:
+        types[i] = "Date";
+        break;
+      case PGDatetime:
+        types[i] = "POSIXct";
+        break;
+      case PGDatetimeTZ:
+        types[i] = "POSIXct";
+        break;
+      default:
+        Rcpp::stop("Unknown variable type");
       }
     }
 
@@ -281,7 +298,7 @@ private:
     for (int i = 0; i < ncols_; ++i) {
       Oid type = PQftype(pSpec_, i);
       // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
-      switch(type) {
+      switch (type) {
       case 20: // BIGINT
       case 21: // SMALLINT
       case 23: // INTEGER

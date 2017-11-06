@@ -9,8 +9,8 @@
 void escapeInBuffer(const char* string, std::string& buffer);
 void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer);
 void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
-  std::string fieldDelim = "\t",
-  std::string lineDelim = "\n");
+                       std::string fieldDelim = "\t",
+                       std::string lineDelim = "\n");
 std::string encode_data_frame(Rcpp::List x);
 
 // Generic data frame utils ----------------------------------------------------
@@ -52,16 +52,16 @@ Rcpp::List inline dfCreate(const std::vector<PGTypes>& types, const std::vector<
 
   int j = 0;
   for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
-      switch (*it) {
-      case PGDate:
-      case PGDatetime:
-      case PGDatetimeTZ:
-      case PGTime:
-          out[j] = Rf_allocVector(REALSXP, n);
-          break;
-      default:
-          out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
-      }
+    switch (*it) {
+    case PGDate:
+    case PGDatetime:
+    case PGDatetimeTZ:
+    case PGTime:
+      out[j] = Rf_allocVector(REALSXP, n);
+      break;
+    default:
+      out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
+    }
   }
   return out;
 }

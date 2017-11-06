@@ -17,8 +17,8 @@ std::string encode_vector(RObject x) {
 }
 
 void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
-                             std::string fieldDelim,
-                             std::string lineDelim) {
+                       std::string fieldDelim,
+                       std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
     Rcpp::RObject xj(x[j]);
@@ -32,7 +32,7 @@ void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
 // [[Rcpp::export]]
 std::string encode_data_frame(List x) {
   if (Rf_length(x) == 0)
-    return("");
+    return ("");
   int n = Rf_length(x[0]);
 
   std::string buffer;
@@ -72,7 +72,7 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
     }
     break;
   }
-  case REALSXP:{
+  case REALSXP: {
     double value = REAL(x)[i];
     if (!R_FINITE(value)) {
       if (ISNA(value)) {
@@ -96,14 +96,14 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
     if (value == NA_STRING) {
       buffer.append("\\N");
     } else {
-      const char *s = Rf_translateCharUTF8(STRING_ELT(x, i));
+      const char* s = Rf_translateCharUTF8(STRING_ELT(x, i));
       escapeInBuffer(s, buffer);
     }
     break;
   }
   default:
     Rcpp::stop("Don't know how to handle vector of type %s.",
-      Rf_type2char(TYPEOF(x)));
+               Rf_type2char(TYPEOF(x)));
   }
 }
 
@@ -113,7 +113,7 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
 void escapeInBuffer(const char* string, std::string& buffer) {
   size_t len = strlen(string);
 
-  for (size_t i = 0; i < len; ++i){
+  for (size_t i = 0; i < len; ++i) {
     switch (string[i]) {
     case '\b':
       buffer.append("\\b");

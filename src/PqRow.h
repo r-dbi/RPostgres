@@ -20,7 +20,7 @@ public:
     // We're done, but we need to call PQgetResult until it returns NULL
     if (status() == PGRES_TUPLES_OK) {
       PGresult* next = PQgetResult(conn);
-      while(next != NULL) {
+      while (next != NULL) {
         PQclear(next);
         next = PQgetResult(conn);
       }
@@ -48,7 +48,7 @@ public:
   ~PqRow() {
     try {
       PQclear(pRes_);
-    } catch(...) {}
+    } catch (...) {}
   }
 
   int rowsAffected() {
@@ -61,12 +61,13 @@ public:
     const char* det = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_DETAIL);
     const char* hnt = PQresultErrorField(pRes_, PG_DIAG_MESSAGE_HINT);
 
-    return Rcpp::List::create(
-      Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
-      Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
-      Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
-      Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
-    );
+    return
+      Rcpp::List::create(
+        Rcpp::_["severity"] = sev == NULL ? "" : std::string(sev),
+        Rcpp::_["message"]  = msg == NULL ? "" : std::string(msg),
+        Rcpp::_["detail"]   = det == NULL ? "" : std::string(det),
+        Rcpp::_["hint"]     = hnt == NULL ? "" : std::string(hnt)
+      );
   }
 
   // Value accessors -----------------------------------------------------------
@@ -109,17 +110,17 @@ public:
     date.tm_isdst = -1;
     date.tm_year = *val - 0x30;
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30);
+    date.tm_year += (*(++val) - 0x30);
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30);
+    date.tm_year += (*(++val) - 0x30);
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30) - 1900;
+    date.tm_year += (*(++val) - 0x30) - 1900;
     val++;
-    date.tm_mon = 10 *(*(++val)-0x30);
-    date.tm_mon += (*(++val)-0x30) -1;
+    date.tm_mon = 10 * (*(++val) - 0x30);
+    date.tm_mon += (*(++val) - 0x30) - 1;
     val++;
-    date.tm_mday = (*(++val)-0x30) * 10;
-    date.tm_mday += (*(++val)-0x30);
+    date.tm_mday = (*(++val) - 0x30) * 10;
+    date.tm_mday += (*(++val) - 0x30);
     return static_cast<double>(timegm(&date)) / (24.0 * 60 * 60);
   }
 
@@ -133,23 +134,23 @@ public:
     date.tm_isdst = -1;
     date.tm_year = *val - 0x30;
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30);
+    date.tm_year += (*(++val) - 0x30);
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30);
+    date.tm_year += (*(++val) - 0x30);
     date.tm_year *= 10;
-    date.tm_year += (*(++val)-0x30) - 1900;
+    date.tm_year += (*(++val) - 0x30) - 1900;
     val++;
-    date.tm_mon = (*(++val)-0x30)*10;
-    date.tm_mon += (*(++val)-0x30)-1;
+    date.tm_mon = (*(++val) - 0x30) * 10;
+    date.tm_mon += (*(++val) - 0x30) - 1;
     val++;
-    date.tm_mday = (*(++val)-0x30)*10;
-    date.tm_mday += (*(++val)-0x30);
+    date.tm_mday = (*(++val) - 0x30) * 10;
+    date.tm_mday += (*(++val) - 0x30);
     val++;
-    date.tm_hour = (*(++val)-0x30)*10;
-    date.tm_hour += (*(++val)-0x30);
+    date.tm_hour = (*(++val) - 0x30) * 10;
+    date.tm_hour += (*(++val) - 0x30);
     val++;
-    date.tm_min = (*(++val)-0x30)*10;
-    date.tm_min += (*(++val)-0x30);
+    date.tm_min = (*(++val) - 0x30) * 10;
+    date.tm_min += (*(++val) - 0x30);
     val++;
     double sec = strtod(++val, &end);
     date.tm_sec = static_cast<int>(sec);
@@ -165,11 +166,11 @@ public:
       return NA_REAL;
     }
     char* val = PQgetvalue(pRes_, 0, j);
-    int hour = (*val-0x30)*10;
-    hour += (*(++val)-0x30);
+    int hour = (*val - 0x30) * 10;
+    hour += (*(++val) - 0x30);
     val++;
-    int min = (*(++val)-0x30)*10;
-    min += (*(++val)-0x30);
+    int min = (*(++val) - 0x30) * 10;
+    min += (*(++val) - 0x30);
     val++;
     double sec = strtod(++val, NULL);
     return static_cast<double>(hour * 3600 + min * 60) + sec;
@@ -177,11 +178,11 @@ public:
 
   int valueLogical(int j) {
     return valueNull(j) ? NA_LOGICAL :
-      (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
+           (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
   }
 
   void setListValue(SEXP x, int i, int j, const std::vector<PGTypes>& types) {
-    switch(types[j]) {
+    switch (types[j]) {
     case PGLogical:
       LOGICAL(x)[i] = valueLogical(j);
       break;
