@@ -58,23 +58,24 @@ setMethod("show", "PqConnection", function(object) {
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
-setMethod("dbConnect", "PqDriver", function(drv, dbname = NULL,
-  host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
+setMethod("dbConnect", "PqDriver",
+  function(drv, dbname = NULL,
+           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
 
-  opts <- unlist(list(dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
-  if (!is.character(opts)) {
-    stop("All options should be strings", call. = FALSE)
-  }
+    opts <- unlist(list(dbname = dbname, user = user, password = password,
+      host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
+    if (!is.character(opts)) {
+      stop("All options should be strings", call. = FALSE)
+    }
 
-  if (length(opts) == 0) {
-    ptr <- connection_create(character(), character())
-  } else {
-    ptr <- connection_create(names(opts), as.vector(opts))
-  }
+    if (length(opts) == 0) {
+      ptr <- connection_create(character(), character())
+    } else {
+      ptr <- connection_create(names(opts), as.vector(opts))
+    }
 
-  new("PqConnection", ptr = ptr)
-})
+    new("PqConnection", ptr = ptr)
+  })
 
 #' @export
 #' @rdname dbConnect-PqDriver-method
@@ -91,20 +92,22 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @keywords internal
 #' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
-  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
+  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
   get_data_type(obj)
 })
 
 #' @export
 #' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
-  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
+  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
   get_data_type(obj)
 })
 
 get_data_type <- function(obj) {
   if (is.factor(obj)) return("TEXT")
-
+  if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
+  if (inherits(obj, "Date")) return("DATE")
+  if (inherits(obj, "difftime")) return("TIME")
   switch(typeof(obj),
     integer = "INTEGER",
     double = "REAL",

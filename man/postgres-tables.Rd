@@ -9,13 +9,14 @@
 \alias{dbListTables,PqConnection-method}
 \alias{dbExistsTable,PqConnection,character-method}
 \alias{dbRemoveTable,PqConnection,character-method}
+\alias{dbListFields,PqConnection,character-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
   ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, temporary = FALSE, copy = TRUE)
 
-\S4method{sqlData}{PqConnection}(con, value, row.names = NA, copy = TRUE)
+\S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, copy = TRUE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
   row.names = FALSE)
@@ -25,6 +26,8 @@
 \S4method{dbExistsTable}{PqConnection,character}(conn, name)
 
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name)
+
+\S4method{dbListFields}{PqConnection,character}(conn, name)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by

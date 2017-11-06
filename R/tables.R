@@ -44,7 +44,7 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
-    field.types = NULL, temporary = FALSE, copy = TRUE) {
+           field.types = NULL, temporary = FALSE, copy = TRUE) {
 
     if (overwrite && append)
       stop("overwrite and append cannot both be TRUE", call. = FALSE)
@@ -59,8 +59,13 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      sql <- sqlCreateTable(conn, name, if(is.null(field.types)) value else field.types,
-                            row.names = row.names, temporary = temporary)
+      if (!missing(field.types)) {
+        types <- structure(field.types, .Names = colnames(value))
+      } else {
+        types <- value
+      }
+      sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else field.types,
+        row.names = row.names, temporary = temporary)
       dbGetQuery(conn, sql)
     }
 
@@ -88,12 +93,14 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @export
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-tables
-setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, copy = TRUE) {
   value <- sqlRownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vapply(value, is.object, logical(1))
-  value[is_object] <- lapply(value[is_object], as.character)
+  is_posix <- vapply(value, function(c) inherits(c, "POSIXt"), logical(1))
+  value[is_posix] <- lapply(value[is_posix], function(col) format(col, usetz = T))
+  value[xor(is_object, is_posix)] <- lapply(value[is_object], as.character)
 
   value
 })
@@ -130,5 +137,15 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
     name <- dbQuoteIdentifier(conn, name)
     dbGetQuery(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
+  }
+)
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListFields", c("PqConnection", "character"),
+  function(conn, name) {
+    name <- dbQuoteString(conn, name)
+    dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
+WHERE table_name=", name))$column_name
   }
 )

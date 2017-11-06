@@ -1,6 +1,6 @@
-#include <Rcpp.h>
-#include "PqUtils.h"
-using namespace Rcpp;
+#include "pch.h"
+#include "encode.h"
+
 
 // [[Rcpp::export]]
 std::string encode_vector(RObject x) {
@@ -8,7 +8,7 @@ std::string encode_vector(RObject x) {
 
   int n = Rf_length(x);
   for (int i = 0; i < n; ++i) {
-    encodeInBuffer(x, i, buffer);
+    encode_in_buffer(x, i, buffer);
     if (i != n - 1)
       buffer.push_back('\n');
   }
@@ -16,12 +16,13 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
-void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
-                             std::string fieldDelim,
-                             std::string lineDelim) {
+void encode_row_in_buffer(List x, int i, std::string& buffer,
+                          std::string fieldDelim,
+                          std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
-    encodeInBuffer(x[j], i, buffer);
+    RObject xj(x[j]);
+    encode_in_buffer(xj, i, buffer);
     if (j != p - 1)
       buffer.append(fieldDelim);
   }
@@ -31,12 +32,12 @@ void encodeRowInBuffer(Rcpp::List x, int i, std::string& buffer,
 // [[Rcpp::export]]
 std::string encode_data_frame(List x) {
   if (Rf_length(x) == 0)
-    return("");
+    return ("");
   int n = Rf_length(x[0]);
 
   std::string buffer;
   for (int i = 0; i < n; ++i) {
-    encodeRowInBuffer(x, i, buffer);
+    encode_row_in_buffer(x, i, buffer);
   }
 
   return buffer;
@@ -47,7 +48,7 @@ std::string encode_data_frame(List x) {
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
 // License: GPL-2
 
-void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
+void encode_in_buffer(RObject x, int i, std::string& buffer) {
   switch (TYPEOF(x)) {
   case LGLSXP: {
     int value = LOGICAL(x)[i];
@@ -71,7 +72,7 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
     }
     break;
   }
-  case REALSXP:{
+  case REALSXP: {
     double value = REAL(x)[i];
     if (!R_FINITE(value)) {
       if (ISNA(value)) {
@@ -95,24 +96,24 @@ void encodeInBuffer(Rcpp::RObject x, int i, std::string& buffer) {
     if (value == NA_STRING) {
       buffer.append("\\N");
     } else {
-      const char *s = Rf_translateCharUTF8(STRING_ELT(x, i));
-      escapeInBuffer(s, buffer);
+      const char* s = Rf_translateCharUTF8(STRING_ELT(x, i));
+      escape_in_buffer(s, buffer);
     }
     break;
   }
   default:
-    Rcpp::stop("Don't know how to handle vector of type %s.",
-      Rf_type2char(TYPEOF(x)));
+    stop("Don't know how to handle vector of type %s.",
+         Rf_type2char(TYPEOF(x)));
   }
 }
 
 
 // Escape postgresql special characters
 // http://www.postgresql.org/docs/9.4/static/sql-copy.html#AEN71914
-void escapeInBuffer(const char* string, std::string& buffer) {
-  int len = strlen(string);
+void escape_in_buffer(const char* string, std::string& buffer) {
+  size_t len = strlen(string);
 
-  for (int i = 0; i < len; ++i){
+  for (size_t i = 0; i < len; ++i) {
     switch (string[i]) {
     case '\b':
       buffer.append("\\b");

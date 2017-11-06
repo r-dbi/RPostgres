@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1-6
-Date: 2017-08-31
+Version: 0.1-7
+Date: 2017-11-06
 Title: Experimental Rcpp Interface to PostgreSQL
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
@@ -11,20 +11,25 @@ Authors@R: c(
     person("Tomoaki", "Nishiyama", role = "ctb",
     comment = "Code for encoding vectors into strings derived from RPostgreSQL")
     )
-Description: DBI-compatible Rcpp-backed inteface to PostgreSQL.
+Description: DBI-compatible Rcpp-backed interface to PostgreSQL.
 License: GPL-2
 LazyLoad: true
 Depends:
     R (>= 3.1.0)
 Imports:
+    DBI (>= 0.3.1.9008),
+    hms,
     methods,
-    Rcpp (>= 0.11.4.2),
-    DBI (>= 0.3.1.9008)
+    Rcpp (>= 0.11.4.2)
 Suggests:
-    testthat,
-    DBItest
-LinkingTo: Rcpp,
-    BH
+    DBItest,
+    testthat
+LinkingTo:
+    BH,
+    plogr,
+    Rcpp
+Remotes:
+    r-dbi/DBItest
 Collate:
     'RcppExports.R'
     'driver.R'
@@ -33,4 +38,5 @@ Collate:
     'result.R'
     'tables.R'
     'transactions.R'
+    'zzz.R'
 RoxygenNote: 6.0.1

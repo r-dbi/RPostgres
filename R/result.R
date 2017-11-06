@@ -107,7 +107,7 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
-  params <- lapply(params, as.character)
+  params <- lapply(params, as.character, usetz = TRUE)
   result_bind_params(res@ptr, params)
   invisible(res)
 })

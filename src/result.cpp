@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include "pch.h"
 #include "RPostgres_types.h"
-using namespace Rcpp;
+
 
 // [[Rcpp::export]]
 XPtr<PqResult> result_create(XPtr<PqConnectionPtr> con, std::string sql) {
@@ -14,18 +14,18 @@ List result_fetch(XPtr<PqResult> rs, int n) {
 }
 
 // [[Rcpp::export]]
-void result_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params) {
+void result_bind_params(XPtr<PqResult> rs, List params) {
   return rs->bind(params);
 }
 
 // [[Rcpp::export]]
 bool result_is_complete(XPtr<PqResult> rs) {
-  if(rs.get() == NULL) 
-     Rcpp::stop("invalid result set");
+  if (rs.get() == NULL)
+    stop("invalid result set");
   try {
-    return rs->isComplete();
-  } catch(...) {
-     return false;
+    return rs->is_complete();
+  } catch (...) {
+    return false;
   }
 }
 
@@ -41,15 +41,15 @@ bool result_active(XPtr<PqResult> rs) {
 
 // [[Rcpp::export]]
 int result_rows_fetched(XPtr<PqResult> rs) {
-  return rs->rowsFetched();
+  return rs->n_rows_fetched();
 }
 
 // [[Rcpp::export]]
 int result_rows_affected(XPtr<PqResult> rs) {
-  return rs->rowsAffected();
+  return rs->n_rows_affected();
 }
 
 // [[Rcpp::export]]
 List result_column_info(XPtr<PqResult> rs) {
-  return rs->columnInfo();
+  return rs->get_column_info();
 }
