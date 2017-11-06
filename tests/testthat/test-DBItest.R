@@ -1,4 +1,4 @@
-DBItest::test_compliance(c(
+DBItest::test_all(c(
   # driver
   "get_info_driver",                            # rstats-db/RSQLite#117
 
