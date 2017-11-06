@@ -14,4 +14,3 @@ null-op.
 library(DBI)
 RPostgres::Postgres()
 }
-

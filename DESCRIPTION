@@ -1,12 +1,12 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1
-Date: 2015-12-23
-Title: Experimental Rcpp Interface to PostgreSQL.
+Version: 0.1-4
+Date: 2016-12-29
+Title: Experimental Rcpp Interface to PostgreSQL
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
     person("Jeroen", "Ooms", role = "aut"),
-    person("Kirill", "Müller", role = "aut"),
+    person("Kirill", "Müller", role = "ctb"),
     person("RStudio", role = "cph"),
     person("Tomoaki", "Nishiyama", role = "ctb",
     comment = "Code for encoding vectors into strings derived from RPostgreSQL")
@@ -33,4 +33,4 @@ Collate:
     'result.R'
     'tables.R'
     'transactions.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000

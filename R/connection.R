@@ -89,13 +89,16 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @param dbObj Postgres driver or connection.
 #' @param obj Object to convert
 #' @keywords internal
+#' @rdname dbDataType
 setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
-#' @rdname dbDataType-PqDriver-ANY-method
 #' @export
+#' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+  if (is.data.frame(obj)) return(callNextMethod(dbObj, obj))
   get_data_type(obj)
 })
 
@@ -106,8 +109,8 @@ get_data_type <- function(obj) {
     integer = "INTEGER",
     double = "REAL",
     character = "TEXT",
-    logical = "INTEGER",
-    list = "BLOB",
+    logical = "BOOLEAN",
+    list = "BYTEA",
     stop("Unsupported type", call. = FALSE)
   )
 }
