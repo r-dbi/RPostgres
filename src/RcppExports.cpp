@@ -134,12 +134,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // result_bind_params
-void result_bind_params(XPtr<PqResult> rs, ListOf<CharacterVector> params);
+void result_bind_params(XPtr<PqResult> rs, List params);
 RcppExport SEXP _RPostgres_result_bind_params(SEXP rsSEXP, SEXP paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
-    Rcpp::traits::input_parameter< ListOf<CharacterVector> >::type params(paramsSEXP);
+    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
     result_bind_params(rs, params);
     return R_NilValue;
 END_RCPP

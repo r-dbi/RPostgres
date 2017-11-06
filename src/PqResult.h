@@ -84,7 +84,7 @@ public:
       Rcpp::stop("Failed to set single row mode");
   }
 
-  void bind(Rcpp::ListOf<Rcpp::CharacterVector> params) {
+  void bind(Rcpp::List params) {
     if (params.size() != nparams_) {
       Rcpp::stop("Query requires %i params; %i supplied.",
         nparams_, params.size());
@@ -94,11 +94,12 @@ public:
     std::vector<int> c_formats(nparams_);
     std::vector<std::string> s_params(nparams_);
     for (int i = 0; i < nparams_; ++i) {
-      if (Rcpp::CharacterVector::is_na(params[i][0])) {
+      Rcpp::CharacterVector param(params[i]);
+      if (Rcpp::CharacterVector::is_na(param[0])) {
         c_params[i] = NULL;
         c_formats[i] = 0;
       } else {
-        s_params[i] = Rcpp::as<std::string>(params[i][0]);
+        s_params[i] = Rcpp::as<std::string>(param[0]);
         c_params[i] = s_params[i].c_str();
         c_formats[i] = 0;
       }
@@ -114,13 +115,13 @@ public:
     bound_ = true;
   }
 
-  void bindRows(Rcpp::ListOf<Rcpp::CharacterVector> params) {
+  void bindRows(Rcpp::List params) {
     if (params.size() != nparams_) {
       Rcpp::stop("Query requires %i params; %i supplied.",
         nparams_, params.size());
     }
 
-    int n = params[0].size();
+    R_xlen_t n = Rcpp::CharacterVector(params[0]).size();
 
     std::vector<const char*> c_params(nparams_);
     std::vector<std::string> s_params(nparams_);
@@ -134,7 +135,8 @@ public:
         Rcpp::checkUserInterrupt();
 
       for (int j = 0; j < nparams_; ++j) {
-        s_params[j] = Rcpp::as<std::string>(params[j][i]);
+        Rcpp::CharacterVector param(params[j]);
+        s_params[j] = Rcpp::as<std::string>(param[i]);
         c_params[j] = s_params[j].c_str();
       }
 

@@ -34,10 +34,10 @@ List connection_info(XPtr<PqConnectionPtr> con) {
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
                                          CharacterVector xs) {
-  int n = xs.size();
+  R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
-  for (int i = 0; i < n; ++i) {
+  for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
     escaped[i] = (*con)->escapeString(x);
   }
@@ -48,10 +48,10 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
 // [[Rcpp::export]]
 CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
                                              CharacterVector xs) {
-  int n = xs.size();
+  R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
-  for (int i = 0; i < n; ++i) {
+  for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
     escaped[i] = (*con)->escapeIdentifier(x);
   }
