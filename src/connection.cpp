@@ -33,13 +33,17 @@ List connection_info(XPtr<PqConnectionPtr> con) {
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
-    CharacterVector xs) {
+                                         CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    std::string x(xs[i]);
-    escaped[i] = (*con)->escape_string(x);
+    if (CharacterVector::is_na(xs[i])) {
+      escaped[i] = "NULL";
+    }
+    else {
+      escaped[i] = (*con)->escape_string(std::string(xs[i]));
+    }
   }
 
   return escaped;
