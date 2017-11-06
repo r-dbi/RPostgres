@@ -70,7 +70,7 @@ public:
   }
 
   // Value accessors -----------------------------------------------------------
-  bool valueNull(int j) {
+  bool inline valueNull(int j) {
     return PQgetisnull(pRes_, 0, j);
   }
 
@@ -100,6 +100,81 @@ public:
     return bytes;
   }
 
+  double valueDate(int j) {
+    if (valueNull(j)) {
+      return NA_REAL;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    struct tm date = tm();
+    date.tm_isdst = -1;
+    date.tm_year = *val - 0x30;
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30) - 1900;
+    val++;
+    date.tm_mon = 10 *(*(++val)-0x30);
+    date.tm_mon += (*(++val)-0x30) -1;
+    val++;
+    date.tm_mday = (*(++val)-0x30) * 10;
+    date.tm_mday += (*(++val)-0x30);
+    return static_cast<double>(timegm(&date)) / (24.0 * 60 * 60);
+  }
+
+  double valueDatetime(int j, bool use_local = true) {
+    if (valueNull(j)) {
+      return NA_REAL;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    char* end;
+    struct tm date;
+    date.tm_isdst = -1;
+    date.tm_year = *val - 0x30;
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30);
+    date.tm_year *= 10;
+    date.tm_year += (*(++val)-0x30) - 1900;
+    val++;
+    date.tm_mon = (*(++val)-0x30)*10;
+    date.tm_mon += (*(++val)-0x30)-1;
+    val++;
+    date.tm_mday = (*(++val)-0x30)*10;
+    date.tm_mday += (*(++val)-0x30);
+    val++;
+    date.tm_hour = (*(++val)-0x30)*10;
+    date.tm_hour += (*(++val)-0x30);
+    val++;
+    date.tm_min = (*(++val)-0x30)*10;
+    date.tm_min += (*(++val)-0x30);
+    val++;
+    double sec = strtod(++val, &end);
+    date.tm_sec = static_cast<int>(sec);
+    if (use_local) {
+      return static_cast<double>(mktime(&date)) + (sec - date.tm_sec);
+    } else {
+      return static_cast<double>(timegm(&date)) + (sec - date.tm_sec);
+    }
+  }
+
+  double valueTime(int j) {
+    if (valueNull(j)) {
+      return NA_REAL;
+    }
+    char* val = PQgetvalue(pRes_, 0, j);
+    int hour = (*val-0x30)*10;
+    hour += (*(++val)-0x30);
+    val++;
+    int min = (*(++val)-0x30)*10;
+    min += (*(++val)-0x30);
+    val++;
+    double sec = strtod(++val, NULL);
+    return static_cast<double>(hour * 3600 + min * 60) + sec;
+  }
+
   int valueLogical(int j) {
     return valueNull(j) ? NA_LOGICAL :
       (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
@@ -116,12 +191,23 @@ public:
     case PGReal:
       REAL(x)[i] = valueDouble(j);
       break;
-   case PGVector:
+    case PGVector:
       SET_VECTOR_ELT(x, i, valueRaw(j));
       break;
-   case PGString:
+    case PGString:
       SET_STRING_ELT(x, i, valueString(j));
       break;
+    case PGDate:
+      REAL(x)[i] = valueDate(j);
+      break;
+    case PGDatetimeTZ:
+      REAL(x)[i] = valueDatetime(j, false);
+      break;
+    case PGDatetime:
+      REAL(x)[i] = valueDatetime(j, true);
+      break;
+    case PGTime:
+      REAL(x)[i] = valueTime(j);
     }
   }
 

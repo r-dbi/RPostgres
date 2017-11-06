@@ -19,6 +19,8 @@ DBItest::test_compliance(c(
   "data_64_bit_.*",                             # #51
   "data_character",                             # #50
   "data_raw",                                   # #66
+  "data_raw_null_.*",                           # #66
+
   "data_date_typed",                            # #52
   "data_date_current_typed",                    # #52
   "data_timestamp",                             #
@@ -37,10 +39,12 @@ DBItest::test_compliance(c(
   "roundtrip_64_bit_character",                 # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
-  "roundtrip_date",                             # #61
   "roundtrip_time",                             # #61
+  "roundtrip_numeric_special",                  #
+
   "roundtrip_timestamp",                        # #61
   "roundtrip_field_types",                      #
+
   "read_table_check_names",                     #
   "read_table_error",                           #
   "read_table_name",                            #

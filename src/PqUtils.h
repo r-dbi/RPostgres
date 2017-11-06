@@ -20,7 +20,11 @@ enum PGTypes {
   PGReal = REALSXP,
   PGString = STRSXP,
   PGLogical = LGLSXP,
-  PGVector = VECSXP
+  PGVector = VECSXP,
+  PGDate,
+  PGDatetime,
+  PGDatetimeTZ,
+  PGTime
 };
 
 Rcpp::List inline dfResize(Rcpp::List df, int n) {
@@ -49,6 +53,12 @@ Rcpp::List inline dfCreate(const std::vector<PGTypes>& types, const std::vector<
   int j = 0;
   for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
       switch (*it) {
+      case PGDate:
+      case PGDatetime:
+      case PGDatetimeTZ:
+      case PGTime:
+          out[j] = Rf_allocVector(REALSXP, n);
+          break;
       default:
           out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
       }

@@ -68,10 +68,10 @@ public:
 
   ~PqResult() {
     try {
-      if (active())
+      if (active()) {
         PQclear(pSpec_);
-
-      pConn_->setCurrentResult(NULL);
+        pConn_->setCurrentResult(NULL);
+      }
     } catch (...) {}
   }
 
@@ -198,7 +198,24 @@ public:
     if (i < n) {
       out = dfResize(out, i);
     }
-
+    for(int i = 0; i < out.size(); i++){
+      Rcpp::RObject col(out[i]);
+      switch (types_[i]) {
+      case PGDate:
+        col.attr("class") = Rcpp::CharacterVector::create("Date");
+        break;
+      case PGDatetime:
+      case PGDatetimeTZ:
+        col.attr("class") = Rcpp::CharacterVector::create("POSIXct", "POSIXt");
+        break;
+      case PGTime:
+        col.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
+        col.attr("units") = Rcpp::CharacterVector::create("secs");
+        break;
+      default:
+        break;
+      }
+    }
     return out;
   }
 
@@ -230,6 +247,9 @@ public:
       case PGReal: types[i] = "double"; break;
       case PGVector:  types[i] = "list"; break;
       case PGLogical:  types[i] = "logical"; break;
+      case PGDate: types[i] = "Date"; break;
+      case PGDatetime: types[i] = "POSIXct"; break;
+      case PGDatetimeTZ: types[i] = "POSIXct"; break;
       default: Rcpp::stop("Unknown variable type");
       }
     }
@@ -282,12 +302,22 @@ private:
       case 114: // JSON
       case 1042: // CHAR
       case 1043: // VARCHAR
+        types.push_back(PGString);
+        break;
       case 1082: // DATE
+        types.push_back(PGDate);
+        break;
       case 1083: // TIME
-      case 1114: // TIMESTAMP
-      case 1184: // TIMESTAMPTZOID
-      case 1186: // INTERVAL
       case 1266: // TIMETZOID
+        types.push_back(PGTime);
+        break;
+      case 1114: // TIMESTAMP
+        types.push_back(PGDatetime);
+        break;
+      case 1184: // TIMESTAMPTZOID
+        types.push_back(PGDatetimeTZ);
+        break;
+      case 1186: // INTERVAL
       case 3802: // JSONB
       case 2950: // UUID
         types.push_back(PGString);
