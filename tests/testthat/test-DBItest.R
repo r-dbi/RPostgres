@@ -4,7 +4,6 @@ DBItest::test_all(c(
 
   # connection
   "get_info_connection",                        # rstats-db/RSQLite#117
-  "cannot_disconnect_twice",                    # TODO
   "cannot_forget_disconnect",                   #
 
   # result
@@ -15,7 +14,6 @@ DBItest::test_all(c(
   "send_query_syntax_error",                    #
   "get_query_n_.*",                             #
   "get_query_syntax_error",                     #
-  "clear_result_return",                        # error: need to warn if closing result twice
   "data_type_connection",                       # #66
   "data_logical_int",                           # not an error, full support for boolean data type
   "data_logical_int_null_.*",                   # not an error, full support for boolean data type
@@ -38,18 +36,10 @@ DBItest::test_all(c(
   "quote_identifier_special",                   #
   "append_table_error",                         # #62
   "list_fields",                                # #79
-  "fetch_single",                               # #65
-  "fetch_multi_row_single_column",              # #65
-  "fetch_progressive",                          # #65
-  "fetch_more_rows",                            # #65
-  "fetch_closed",                               # #65
-  "quote_identifier_not_vectorized",            # rstats-db/DBI#24
   "write_table_name",                           #
-  "roundtrip_quotes",                           #
   "list_tables",                                #
-  "exists_table_list",                          #
   "roundtrip_keywords",                         #
-  "roundtrip_64_bit",                           # rstats-db/DBI#48
+  "roundtrip_64_bit_.*",                 # rstats-db/DBI#48
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
   "roundtrip_date",                             # #61
@@ -67,27 +57,34 @@ DBItest::test_all(c(
   # meta
   "is_valid_connection",                        # #64
   "get_statement_error",                        #
-  "has_completed_query",                        #
-  "has_completed_error",                        #
   "rows_affected_query",                        #
+  "rows_affected_statement",
+  "row_count_statement",
   "get_exception",                              # #63
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_empty.*",                               # #70
   "bind_multi_row.*",                           # #100
   "bind_logical",                               #
+  "bind_blob",
+  "bind_named_param.*",
+  "bind_unnamed_param_named_placeholders",
+  "bind_return_value",
+  "bind_factor",
   "bind_wrong_name",                            #
   "bind_raw.*",                                 # 66
   "bind_repeated.*",                            # 87
   "bind_timestamp.*",                           # 53
   "bind_timestamp_lt.*",                        # 53
   "bind_statement_repeated",                    # 102
-
+  "is_valid_stale_connection",
+ 
   # transactions
   "commit_without_begin",                       # 98
   "rollback_without_begin",                     # 98
   "begin_begin",                                # 98
   "begin_write_disconnect",                     #
+  "with_transaction_error_nested",
 
   # compliance
   "compliance",                                 # #68
