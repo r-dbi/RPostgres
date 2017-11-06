@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include "pch.h"
 #include "RPostgres_types.h"
-using namespace Rcpp;
+
 
 // [[Rcpp::export]]
 XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,

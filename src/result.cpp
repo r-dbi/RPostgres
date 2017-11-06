@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include "pch.h"
 #include "RPostgres_types.h"
-using namespace Rcpp;
+
 
 // [[Rcpp::export]]
 XPtr<PqResult> result_create(XPtr<PqConnectionPtr> con, std::string sql) {

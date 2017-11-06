@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include "pch.h"
 #include "PqUtils.h"
-using namespace Rcpp;
+
 
 // [[Rcpp::export]]
 std::string encode_vector(RObject x) {
