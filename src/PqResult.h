@@ -199,7 +199,7 @@ public:
       out = dfResize(out, i);
     }
     for(int i = 0; i < out.size(); i++){
-      Rcpp::RObject col = out[i];
+      Rcpp::RObject col(out[i]);
       switch (types_[i]) {
       case PGDate:
         col.attr("class") = Rcpp::CharacterVector::create("Date");

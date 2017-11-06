@@ -105,7 +105,7 @@ public:
       return NA_REAL;
     }
     char* val = PQgetvalue(pRes_, 0, j);
-    struct tm date = { 0 };
+    struct tm date = tm();
     date.tm_isdst = -1;
     date.tm_year = *val - 0x30;
     date.tm_year *= 10;
@@ -120,7 +120,7 @@ public:
     val++;
     date.tm_mday = (*(++val)-0x30) * 10;
     date.tm_mday += (*(++val)-0x30);
-    return timegm(&date)/(24*60*60);
+    return static_cast<double>(timegm(&date)) / (24.0 * 60 * 60);
   }
 
   double valueDatetime(int j, bool use_local = true) {
@@ -152,11 +152,11 @@ public:
     date.tm_min += (*(++val)-0x30);
     val++;
     double sec = strtod(++val, &end);
-    date.tm_sec = sec;
+    date.tm_sec = static_cast<int>(sec);
     if (use_local) {
-      return mktime(&date) + (sec - date.tm_sec);
+      return static_cast<double>(mktime(&date)) + (sec - date.tm_sec);
     } else {
-      return timegm(&date) + (sec - date.tm_sec);
+      return static_cast<double>(timegm(&date)) + (sec - date.tm_sec);
     }
   }
 
