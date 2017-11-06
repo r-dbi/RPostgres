@@ -59,6 +59,11 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
+      if (!missing(field.types)) {
+        types <- structure(field.types, .Names = colnames(value))
+      } else {
+        types <- value
+      }
       sql <- sqlCreateTable(conn, name, if(is.null(field.types)) value else field.types,
                             row.names = row.names, temporary = temporary)
       dbGetQuery(conn, sql)
@@ -132,5 +137,15 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
     name <- dbQuoteIdentifier(conn, name)
     dbGetQuery(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
+  }
+)
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListFields", c("PqConnection", "character"),
+  function(conn, name) {
+    name <- dbQuoteString(conn, name)
+    dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
+WHERE table_name=", name))$column_name
   }
 )

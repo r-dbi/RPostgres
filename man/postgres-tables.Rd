@@ -2,13 +2,14 @@
 % Please edit documentation in R/tables.R
 \docType{methods}
 \name{postgres-tables}
-\alias{dbExistsTable,PqConnection,character-method}
-\alias{dbListTables,PqConnection-method}
-\alias{dbReadTable,PqConnection,character-method}
-\alias{dbRemoveTable,PqConnection,character-method}
-\alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{postgres-tables}
+\alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{sqlData,PqConnection-method}
+\alias{dbReadTable,PqConnection,character-method}
+\alias{dbListTables,PqConnection-method}
+\alias{dbExistsTable,PqConnection,character-method}
+\alias{dbRemoveTable,PqConnection,character-method}
+\alias{dbListFields,PqConnection,character-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
@@ -25,6 +26,8 @@
 \S4method{dbExistsTable}{PqConnection,character}(conn, name)
 
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name)
+
+\S4method{dbListFields}{PqConnection,character}(conn, name)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
@@ -91,4 +94,3 @@ dbReadTable(con, "mtcars2")
 
 dbDisconnect(con)
 }
-
