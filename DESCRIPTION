@@ -29,7 +29,7 @@ LinkingTo:
     plogr,
     Rcpp
 Remotes:
-    r-lib/DBItest
+    r-dbi/DBItest
 Collate:
     'RcppExports.R'
     'driver.R'
