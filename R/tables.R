@@ -93,7 +93,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @export
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-tables
-setMethod("sqlData", "PqConnection", function(con, value, row.names = NA, copy = TRUE) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, copy = TRUE) {
   value <- sqlRownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
