@@ -122,6 +122,10 @@ setMethod("dbHasCompleted", "PqResult", function(res, ...) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbClearResult", "PqResult", function(res, ...) {
+  if (!dbIsValid(res)) {
+    warningc("Expired, result set already closed")
+    return(invisible(TRUE))
+  }
   result_release(res@ptr)
   invisible(TRUE)
 })

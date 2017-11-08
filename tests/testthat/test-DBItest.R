@@ -6,7 +6,6 @@ DBItest::test_all(c(
   "get_info_connection",                        # rstats-db/RSQLite#117
 
   # result
-  "cannot_clear_result_twice_.*",               #
   "fetch_n_bad",                                #
   "fetch_n_good_after_bad",                     #
   "fetch_no_return_value",                      #
@@ -107,8 +106,6 @@ DBItest::test_all(c(
   "can_disconnect",
   "write_table_return",                         # #62
   "remove_table_return",
-  "begin_commit_return_value",
-  "begin_rollback_return_value",
   "clear_result_return_.*",
 
   NULL
