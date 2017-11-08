@@ -83,7 +83,7 @@ setMethod("dbConnect", "PqDriver",
 #' @rdname dbConnect-PqDriver-method
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   connection_release(conn@ptr)
-  TRUE
+  invisible(TRUE)
 })
 
 #' Determine database type for R vector.

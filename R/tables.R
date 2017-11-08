@@ -85,7 +85,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       }
     }
 
-    TRUE
+    invisible(TRUE)
   }
 )
 

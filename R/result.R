@@ -123,5 +123,5 @@ setMethod("dbHasCompleted", "PqResult", function(res, ...) {
 #' @export
 setMethod("dbClearResult", "PqResult", function(res, ...) {
   result_release(res@ptr)
-  TRUE
+  invisible(TRUE)
 })

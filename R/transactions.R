@@ -29,21 +29,21 @@ NULL
 #' @rdname postgres-transactions
 setMethod("dbBegin", "PqConnection", function(conn) {
   dbGetQuery(conn, "BEGIN")
-  TRUE
+  invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
 setMethod("dbCommit", "PqConnection", function(conn) {
   dbGetQuery(conn, "COMMIT")
-  TRUE
+  invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
 setMethod("dbRollback", "PqConnection", function(conn) {
   dbGetQuery(conn, "ROLLBACK")
-  TRUE
+  invisible(TRUE)
 })
 
 
