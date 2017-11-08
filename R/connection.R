@@ -76,6 +76,7 @@ setMethod("dbConnect", "PqDriver",
 
     con <- new("PqConnection", ptr = ptr)
     dbExecute(con, "SET TIMEZONE='UTC'")
+    con
   })
 
 #' @export
