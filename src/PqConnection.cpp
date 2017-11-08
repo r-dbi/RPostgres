@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PqConnection.h"
 #include "encode.h"
-#include <cstdlib>
 
 
 PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::string> values) :
