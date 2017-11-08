@@ -19,9 +19,9 @@ DBItest::test_all(c(
   "data_character",                             # #50
   "data_raw",                                   # #66
 
-  "data_date_typed",                            # #52
-  "data_date_current_typed",                    # #52
-  "data_timestamp",                             #
+  "data_date_typed",                            # #52, #24
+  "data_date_current_typed",                    # #52, #24
+  "data_timestamp",                             # #53
   "data_timestamp_typed",                       # #53
   "data_timestamp_current_typed",               # #53
 
@@ -33,8 +33,8 @@ DBItest::test_all(c(
   "write_table_name",                           #
   "list_tables",                                #
   "roundtrip_keywords",                         #
-  "roundtrip_64_bit_.*",                        # rstats-db/DBI#48
-  "roundtrip_64_bit_character",                 # rstats-db/DBI#48
+  "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
+  "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
   "roundtrip_time",                             # #61
@@ -43,14 +43,14 @@ DBItest::test_all(c(
   "roundtrip_null",                             #
   "roundtrip_numeric",                          #
   "roundtrip_integer",                          #
-  "roundtrip_date",                             #
+  "roundtrip_date",                             # #24, #61
   "roundtrip_factor",                           #
   "roundtrip_character",                        #
   "roundtrip_character_empty",                  #
   "roundtrip_character_native",                 #
   "roundtrip_mixed",                            #
 
-  "roundtrip_timestamp",                        # #61
+  "roundtrip_timestamp",                        # #61, #104
   "roundtrip_field_types",                      #
 
   "read_table_check_names",                     #
@@ -69,7 +69,7 @@ DBItest::test_all(c(
   "row_count_statement",
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
-  "bind_empty.*",                               # #70
+  "bind_empty.*",                               # #70, #95
   "bind_multi_row.*",                           # #100
   "bind_logical",                               #
   "bind_return_value",
@@ -83,13 +83,13 @@ DBItest::test_all(c(
   "bind_integer",
   "bind_numeric",
   "bind_character",
-  "bind_date",
+  "bind_date",                                  # #24
   "bind_factor",
   "bind_wrong_name",                            #
-  "bind_raw.*",                                 # 66
-  "bind_repeated.*",                            # 87
-  "bind_timestamp.*",                           # 53
-  "bind_timestamp_lt.*",                        # 53
+  "bind_raw.*",                                 # #66
+  "bind_repeated.*",                            # #87
+  "bind_timestamp.*",                           # #53
+  "bind_timestamp_lt.*",                        # #53
   "is_valid_stale_connection",
 
   # transactions
@@ -105,7 +105,7 @@ DBItest::test_all(c(
 
   # visibility
   "can_disconnect",
-  "write_table_return",
+  "write_table_return",                         # #62
   "remove_table_return",
   "begin_commit_return_value",
   "begin_rollback_return_value",
