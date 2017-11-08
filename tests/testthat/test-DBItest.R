@@ -8,7 +8,6 @@ DBItest::test_all(c(
   # result
   "send_query_syntax_error",                    # DBItest > 1.5-21
   "get_query_syntax_error",                     # DBItest > 1.5-21
-  "data_type_connection",                       # #66
   "data_null",                                  # #50
   "data_64_bit_.*",                             # #51
   "data_character",                             # #50
