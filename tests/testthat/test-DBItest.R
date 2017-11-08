@@ -6,8 +6,6 @@ DBItest::test_all(c(
   "get_info_connection",                        # rstats-db/RSQLite#117
 
   # result
-  "fetch_n_bad",                                #
-  "fetch_n_good_after_bad",                     #
   "fetch_no_return_value",                      #
   "send_query_syntax_error",                    #
   "get_query_n_.*",                             #
