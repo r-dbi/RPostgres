@@ -11,7 +11,7 @@ DBItest::test_all(c(
   "data_null",                                  # #50
   "data_64_bit_.*",                             # #51
   "data_character",                             # #50
-  "data_raw",                                   # #66
+  "data_raw",                                   # not a failure, can't cast to raw
 
   "data_date_typed",                            # #52, #24
   "data_date_current_typed",                    # #52, #24
@@ -87,9 +87,9 @@ DBItest::test_all(c(
   "is_valid_stale_connection",
 
   # transactions
-  "commit_without_begin",                       # 98
-  "rollback_without_begin",                     # 98
-  "begin_begin",                                # 98
+  "commit_without_begin",                       # #98
+  "rollback_without_begin",                     # #98
+  "begin_begin",                                # #98
   "begin_write_disconnect",                     #
   "with_transaction_error_nested",
 

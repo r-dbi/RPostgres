@@ -76,6 +76,7 @@ void PqResult::bind(List params) {
       c_params[i] = NULL;
       c_formats[i] = 0;
     } else {
+      // FIXME: Need PQescapeByteaConn for BYTEA
       s_params[i] = as<std::string>(param[0]);
       c_params[i] = s_params[i].c_str();
       c_formats[i] = 0;
@@ -113,6 +114,7 @@ void PqResult::bind_rows(List params) {
 
     for (int j = 0; j < nparams_; ++j) {
       CharacterVector param(params[j]);
+      // FIXME: Need PQescapeByteaConn for BYTEA
       s_params[j] = as<std::string>(param[i]);
       c_params[j] = s_params[j].c_str();
     }
