@@ -151,6 +151,11 @@ List PqResult::fetch(int n_max) {
 
   int i = 0;
   fetch_row_if_needed();
+
+  if (!pNextRow_->has_data() && out.length() == 0) {
+    warning("Don't need to call dbFetch() for statements, only for queries");
+  }
+
   while (pNextRow_->has_data()) {
     if (i >= n) {
       if (n_max < 0) {
