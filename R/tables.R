@@ -59,7 +59,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      if (!missing(field.types)) {
+      if (!is.null(field.types)) {
         types <- structure(field.types, .Names = colnames(value))
       } else {
         types <- value
@@ -73,7 +73,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       value <- sqlData(conn, value, row.names = row.names, copy = copy)
       if (!copy) {
         sql <- sqlAppendTable(conn, name, value)
-        rs <- dbSendQuery(conn, sql)
+        dbExecute(conn, sql)
       } else {
         fields <- dbQuoteIdentifier(conn, names(value))
         sql <- paste0(
