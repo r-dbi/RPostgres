@@ -6,19 +6,12 @@ DBItest::test_all(c(
   "get_info_connection",                        # rstats-db/RSQLite#117
 
   # result
-  "send_query_syntax_error",                    # DBItest > 1.5-21
-  "get_query_syntax_error",                     # DBItest > 1.5-21
-  "data_null",                                  # DBItest > 1.5-21
   "data_64_bit_.*",                             # #51
   "data_raw",                                   # not a failure, can't cast to raw
 
   # sql
   "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
   "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
-  "roundtrip_raw",                              # #66
-  "roundtrip_blob",                             # #66
-  "roundtrip_time",                             # #61
-  "roundtrip_date",                             # #24, #61
 
   "read_table_check_names",                     #
   "read_table_error",                           #
