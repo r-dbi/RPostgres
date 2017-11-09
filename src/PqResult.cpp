@@ -334,7 +334,7 @@ std::vector<PGTypes> PqResult::get_column_types() const {
 
     default:
       types.push_back(PGString);
-      warning("Unknown field type (%s) in column %s", type, PQfname(pSpec_, i));
+      warning("Unknown field type (%d) in column %s", type, PQfname(pSpec_, i));
     }
   }
 
