@@ -9,7 +9,8 @@ Authors@R: c(
     person("Kirill", "Müller", role = "ctb"),
     person("RStudio", role = "cph"),
     person("Tomoaki", "Nishiyama", role = "ctb",
-    comment = "Code for encoding vectors into strings derived from RPostgreSQL")
+    comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
+    person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
     )
 Description: DBI-compatible Rcpp-backed interface to PostgreSQL.
 License: GPL-2

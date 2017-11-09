@@ -1,10 +1,13 @@
 PKG_CPPFLAGS= -I../windows/libpq-9.5.2/include
-PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} -lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
+PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} \
+	-lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32 win32/timegm.o
 
-all: clean winlibs
+$(SHLIB): win32/timegm.o
+
+$(OBJECTS): winlibs
+
+clean:
+	rm -f $(SHLIB) $(OBJECTS) win32/timegm.o
 
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
-
-clean:
-	rm -f $(OBJECTS) $(SHLIB)
