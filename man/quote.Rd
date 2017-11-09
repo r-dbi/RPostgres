@@ -4,12 +4,18 @@
 \name{quote}
 \alias{quote}
 \alias{dbQuoteString,PqConnection,character-method}
+\alias{dbQuoteString,PqConnection,SQL-method}
 \alias{dbQuoteIdentifier,PqConnection,character-method}
+\alias{dbQuoteIdentifier,PqConnection,SQL-method}
 \title{Quote postgres strings and identifiers.}
 \usage{
 \S4method{dbQuoteString}{PqConnection,character}(conn, x, ...)
 
+\S4method{dbQuoteString}{PqConnection,SQL}(conn, x, ...)
+
 \S4method{dbQuoteIdentifier}{PqConnection,character}(conn, x, ...)
+
+\S4method{dbQuoteIdentifier}{PqConnection,SQL}(conn, x, ...)
 }
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}

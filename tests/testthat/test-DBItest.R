@@ -10,13 +10,9 @@ DBItest::test_all(c(
   "get_query_syntax_error",                     # DBItest > 1.5-21
   "data_null",                                  # DBItest > 1.5-21
   "data_64_bit_.*",                             # #51
-  "data_character",                             # not a failure, need to do `SELECT "a"::varchar`
   "data_raw",                                   # not a failure, can't cast to raw
 
   # sql
-  "quote_string.*",                             # #50
-  "quote_identifier_vectorized",                #
-  "quote_identifier_special",                   #
   "list_fields",                                # #79
   "write_table_name",                           #
   "list_tables",                                #
