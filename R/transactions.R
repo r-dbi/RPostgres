@@ -13,7 +13,7 @@
 #' dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 #'
 #' dbBegin(con)
-#' dbGetQuery(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
+#' dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
 #' dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 #' dbRollback(con)
 #'
@@ -28,21 +28,21 @@ NULL
 #' @export
 #' @rdname postgres-transactions
 setMethod("dbBegin", "PqConnection", function(conn) {
-  dbGetQuery(conn, "BEGIN")
+  dbExecute(conn, "BEGIN")
   invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
 setMethod("dbCommit", "PqConnection", function(conn) {
-  dbGetQuery(conn, "COMMIT")
+  dbExecute(conn, "COMMIT")
   invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
 setMethod("dbRollback", "PqConnection", function(conn) {
-  dbGetQuery(conn, "ROLLBACK")
+  dbExecute(conn, "ROLLBACK")
   invisible(TRUE)
 })
 

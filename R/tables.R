@@ -66,7 +66,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       }
       sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else field.types,
         row.names = row.names, temporary = temporary)
-      dbGetQuery(conn, sql)
+      dbExecute(conn, sql)
     }
 
     if (nrow(value) > 0) {
@@ -135,7 +135,7 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) 
 setMethod("dbRemoveTable", c("PqConnection", "character"),
   function(conn, name) {
     name <- dbQuoteIdentifier(conn, name)
-    dbGetQuery(conn, paste("DROP TABLE ", name))
+    dbExecute(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
   }
 )
