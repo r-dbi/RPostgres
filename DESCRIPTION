@@ -21,7 +21,8 @@ Imports:
     DBI (>= 0.3.1.9008),
     hms,
     methods,
-    Rcpp (>= 0.11.4.2)
+    Rcpp (>= 0.11.4.2),
+    withr
 Suggests:
     DBItest,
     testthat
@@ -31,7 +32,7 @@ LinkingTo:
     Rcpp
 Remotes:
     r-dbi/DBItest
-Collate:
+Collate: 
     'RcppExports.R'
     'driver.R'
     'connection.R'
@@ -39,5 +40,5 @@ Collate:
     'result.R'
     'tables.R'
     'transactions.R'
-    'zzz.R'
+    'utils.R'
 RoxygenNote: 6.0.1
