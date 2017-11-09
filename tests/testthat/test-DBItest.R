@@ -13,12 +13,6 @@ DBItest::test_all(c(
   "data_character",                             # not a failure, need to do `SELECT "a"::varchar`
   "data_raw",                                   # not a failure, can't cast to raw
 
-  "data_date_typed",                            # #52, #24
-  "data_date_current_typed",                    # #52, #24
-  "data_timestamp",                             # #53
-  "data_timestamp_typed",                       # #53
-  "data_timestamp_current_typed",               # #53
-
   # sql
   "quote_string.*",                             # #50
   "quote_identifier_vectorized",                #
