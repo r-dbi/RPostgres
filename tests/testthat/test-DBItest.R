@@ -13,7 +13,6 @@ DBItest::test_all(c(
   "data_raw",                                   # not a failure, can't cast to raw
 
   # sql
-  "list_fields",                                # #79
   "write_table_name",                           #
   "list_tables",                                #
   "roundtrip_keywords",                         #
