@@ -8,9 +8,9 @@ DBItest::test_all(c(
   # result
   "send_query_syntax_error",                    # DBItest > 1.5-21
   "get_query_syntax_error",                     # DBItest > 1.5-21
-  "data_null",                                  # #50
+  "data_null",                                  # DBItest > 1.5-21
   "data_64_bit_.*",                             # #51
-  "data_character",                             # #50
+  "data_character",                             # not a failure, need to do `SELECT "a"::varchar`
   "data_raw",                                   # not a failure, can't cast to raw
 
   "data_date_typed",                            # #52, #24
