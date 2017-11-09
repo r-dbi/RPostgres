@@ -44,3 +44,27 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x,
 setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
   x
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "logical"), function(conn, x, ...) {
+  x <- as.character(x)
+  x[is.na(x)] <- "NULL"
+  SQL(x)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "integer"), function(conn, x, ...) {
+  ret <- paste0(as.character(x), "::int4")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...) {
+  ret <- paste0(as.character(x), "::float8")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
