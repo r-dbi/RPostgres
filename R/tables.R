@@ -59,21 +59,21 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (!found || overwrite) {
-      if (!missing(field.types)) {
+      if (!is.null(field.types)) {
         types <- structure(field.types, .Names = colnames(value))
       } else {
         types <- value
       }
       sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else field.types,
         row.names = row.names, temporary = temporary)
-      dbGetQuery(conn, sql)
+      dbExecute(conn, sql)
     }
 
     if (nrow(value) > 0) {
       value <- sqlData(conn, value, row.names = row.names, copy = copy)
       if (!copy) {
         sql <- sqlAppendTable(conn, name, value)
-        rs <- dbSendQuery(conn, sql)
+        dbExecute(conn, sql)
       } else {
         fields <- dbQuoteIdentifier(conn, names(value))
         sql <- paste0(
@@ -85,7 +85,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       }
     }
 
-    TRUE
+    invisible(TRUE)
   }
 )
 
@@ -99,11 +99,38 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, cop
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vapply(value, is.object, logical(1))
   is_posix <- vapply(value, function(c) inherits(c, "POSIXt"), logical(1))
-  value[is_posix] <- lapply(value[is_posix], function(col) format(col, usetz = T))
-  value[xor(is_object, is_posix)] <- lapply(value[is_object], as.character)
+  is_difftime <- vapply(value, function(c) inherits(c, "difftime"), logical(1))
+  is_blob <- vapply(value, function(c) is.list(c), logical(1))
 
+  withr::with_options(
+    list(digits.secs = 6),
+    value[is_posix] <- lapply(value[is_posix], function(col) format_keep_na(col, usetz = T))
+  )
+  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as.hms(col)))
+  value[is_blob] <- lapply(
+    value[is_blob],
+    function(col) {
+      vapply(
+        col,
+        function(x) {
+          if (is.null(x)) NA_character_
+          else paste0("\\x", paste(format(x), collapse = ""))
+        },
+        character(1)
+      )
+    }
+  )
+
+  value[is_object] <- lapply(value[is_object], as.character)
   value
 })
+
+format_keep_na <- function(x, ...) {
+  is_na <- is.na(x)
+  ret <- format(x, ...)
+  ret[is_na] <- NA
+  ret
+}
 
 
 #' @export
@@ -135,7 +162,7 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) 
 setMethod("dbRemoveTable", c("PqConnection", "character"),
   function(conn, name) {
     name <- dbQuoteIdentifier(conn, name)
-    dbGetQuery(conn, paste("DROP TABLE ", name))
+    dbExecute(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
   }
 )

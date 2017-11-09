@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PqConnection.h"
 #include "encode.h"
-#include <cstdlib>
 
 
 PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::string> values) :
@@ -15,7 +14,7 @@ PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::strin
   }
   c_keys[n] = NULL;
   c_values[n] = NULL;
-  setenv("PGTZ", "UTC", 1);
+
   pConn_ = PQconnectdbParams(&c_keys[0], &c_values[0], false);
 
   if (PQstatus(pConn_) != CONNECTION_OK) {

@@ -32,7 +32,7 @@ dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
 dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 
 dbBegin(con)
-dbGetQuery(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
+dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
 dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 dbRollback(con)
 

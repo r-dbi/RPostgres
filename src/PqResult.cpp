@@ -76,6 +76,7 @@ void PqResult::bind(List params) {
       c_params[i] = NULL;
       c_formats[i] = 0;
     } else {
+      // FIXME: Need PQescapeByteaConn for BYTEA
       s_params[i] = as<std::string>(param[0]);
       c_params[i] = s_params[i].c_str();
       c_formats[i] = 0;
@@ -113,6 +114,7 @@ void PqResult::bind_rows(List params) {
 
     for (int j = 0; j < nparams_; ++j) {
       CharacterVector param(params[j]);
+      // FIXME: Need PQescapeByteaConn for BYTEA
       s_params[j] = as<std::string>(param[i]);
       c_params[j] = s_params[j].c_str();
     }
@@ -151,6 +153,11 @@ List PqResult::fetch(int n_max) {
 
   int i = 0;
   fetch_row_if_needed();
+
+  if (!pNextRow_->has_data() && out.length() == 0) {
+    warning("Don't need to call dbFetch() for statements, only for queries");
+  }
+
   while (pNextRow_->has_data()) {
     if (i >= n) {
       if (n_max < 0) {
@@ -327,7 +334,7 @@ std::vector<PGTypes> PqResult::get_column_types() const {
 
     default:
       types.push_back(PGString);
-      warning("Unknown field type (%s) in column %s", type, PQfname(pSpec_, i));
+      warning("Unknown field type (%d) in column %s", type, PQfname(pSpec_, i));
     }
   }
 

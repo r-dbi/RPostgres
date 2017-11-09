@@ -74,14 +74,16 @@ setMethod("dbConnect", "PqDriver",
       ptr <- connection_create(names(opts), as.vector(opts))
     }
 
-    new("PqConnection", ptr = ptr)
+    con <- new("PqConnection", ptr = ptr)
+    dbExecute(con, "SET TIMEZONE='UTC'")
+    con
   })
 
 #' @export
 #' @rdname dbConnect-PqDriver-method
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   connection_release(conn@ptr)
-  TRUE
+  invisible(TRUE)
 })
 
 #' Determine database type for R vector.

@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "PqRow.h"
 
+#ifdef WIN32
+#define timegm _mkgmtime
+#endif
+
 
 PqRow::PqRow(PGconn* conn) {
   if (conn == NULL)
@@ -81,11 +85,19 @@ SEXP PqRow::get_string(int j) {
 }
 
 SEXP PqRow::get_raw(int j) {
-  int size = PQgetlength(pRes_, 0, j);
+  if (is_null(j)) {
+    return R_NilValue;
+  }
+
   const void* blob = PQgetvalue(pRes_, 0, j);
 
-  SEXP bytes = Rf_allocVector(RAWSXP, size);
-  memcpy(RAW(bytes), blob, size);
+  size_t to_length = 0;
+  unsigned char* unescaped_blob = PQunescapeBytea(static_cast<const unsigned char*>(blob), &to_length);
+
+  SEXP bytes = Rf_allocVector(RAWSXP, static_cast<R_xlen_t>(to_length));
+  memcpy(RAW(bytes), unescaped_blob, to_length);
+
+  PQfreemem(unescaped_blob);
 
   return bytes;
 }
