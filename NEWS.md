@@ -1,3 +1,10 @@
+## RPostgres 0.1-8 (2017-11-09)
+
+- Improve DBI compatibility (#24, #41, #52, #53, #61, #62, #70, #79, #104, #121).
+- Define `timegm` for Windows and add missing function (#136).
+- The time zone is set by executing `SET TIMEZONE='UTC'` instead of setting an environment variable (#136).
+
+
 ## RPostgres 0.1-7 (2017-11-06)
 
 - All tests pass again.
