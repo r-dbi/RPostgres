@@ -32,12 +32,9 @@ DBItest::test_all(c(
   "rows_affected_query",                        #
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
-  "bind_empty.*",                               # #70, #95
   "bind_multi_row.*",                           # #100
   "bind_logical",                               #
   "bind_return_value",
-  "bind_too_many",
-  "bind_not_enough",
   "bind_blob",
   "bind_named_param.*",
   "bind_named_param_unnamed_placeholders",
@@ -48,7 +45,6 @@ DBItest::test_all(c(
   "bind_character",
   "bind_date",                                  # #24
   "bind_factor",
-  "bind_wrong_name",                            #
   "bind_raw.*",                                 # #66
   "bind_repeated.*",                            # #87
   "bind_timestamp.*",                           # #53
@@ -59,18 +55,11 @@ DBItest::test_all(c(
   "commit_without_begin",                       # #98
   "rollback_without_begin",                     # #98
   "begin_begin",                                # #98
-  "begin_write_disconnect",                     #
   "with_transaction_error_nested",
 
   # compliance
   "compliance",                                 # #68
   "ellipsis",                                   # #101
-
-  # visibility
-  "can_disconnect",
-  "write_table_return",                         # #62
-  "remove_table_return",
-  "clear_result_return_.*",
 
   NULL
 ))
