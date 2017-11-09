@@ -13,43 +13,23 @@ DBItest::test_all(c(
   "data_raw",                                   # not a failure, can't cast to raw
 
   # sql
-  "write_table_name",                           #
-  "list_tables",                                #
-  "roundtrip_keywords",                         #
   "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
   "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
   "roundtrip_raw",                              # #66
   "roundtrip_blob",                             # #66
   "roundtrip_time",                             # #61
-  "roundtrip_logical",                          #
-  "roundtrip_quotes",                           #
-  "roundtrip_null",                             #
-  "roundtrip_numeric",                          #
-  "roundtrip_integer",                          #
   "roundtrip_date",                             # #24, #61
-  "roundtrip_factor",                           #
-  "roundtrip_character",                        #
-  "roundtrip_character_empty",                  #
-  "roundtrip_character_native",                 #
-  "roundtrip_mixed",                            #
-
-  "roundtrip_timestamp",                        # #61, #104
-  "roundtrip_field_types",                      #
 
   "read_table_check_names",                     #
   "read_table_error",                           #
-  "read_table_name",                            #
   "write_table_error",                          #
   "exists_table_error",                         #
   "exists_table_name",                          #
-  "remove_table_name",                          #
 
   # meta
   "is_valid_connection",                        # #64
   "get_statement_error",                        #
   "rows_affected_query",                        #
-  "rows_affected_statement",
-  "row_count_statement",
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_empty.*",                               # #70, #95
