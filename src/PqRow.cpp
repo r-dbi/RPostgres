@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "PqRow.h"
 
+#ifdef WIN32
+#define timegm _mkgmtime
+#endif
+
 
 PqRow::PqRow(PGconn* conn) {
   if (conn == NULL)
