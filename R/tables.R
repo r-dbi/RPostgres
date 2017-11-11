@@ -146,8 +146,8 @@ setMethod("dbReadTable", c("PqConnection", "character"),
 #' @rdname postgres-tables
 setMethod("dbListTables", "PqConnection", function(conn) {
   dbGetQuery(conn, paste0(
-    "SELECT tablename FROM pg_tables WHERE schemaname !='information_schema'",
-    " AND schemaname !='pg_catalog'")
+    "SELECT table_name FROM INFORMATION_SCHEMA.tables ",
+    "WHERE table_schema = ANY (current_schemas(false))")
   )[[1]]
 })
 
