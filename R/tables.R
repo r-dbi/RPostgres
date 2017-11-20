@@ -46,8 +46,24 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
            field.types = NULL, temporary = FALSE, copy = TRUE) {
 
-    if (overwrite && append)
-      stop("overwrite and append cannot both be TRUE", call. = FALSE)
+    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
+      stopc("`row.names` must be a logical scalar or a string")
+    }
+    if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite))  {
+      stopc("`overwrite` must be a logical scalar")
+    }
+    if (!is.logical(append) || length(append) != 1L || is.na(append))  {
+      stopc("`append` must be a logical scalar")
+    }
+    if (!is.logical(temporary) || length(temporary) != 1L)  {
+      stopc("`temporary` must be a logical scalar")
+    }
+    if (overwrite && append) {
+      stopc("overwrite and append cannot both be TRUE")
+    }
+    if (append && !is.null(field.types)) {
+      stopc("Cannot specify field.types with append = TRUE")
+    }
 
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {

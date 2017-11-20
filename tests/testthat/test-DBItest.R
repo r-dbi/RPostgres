@@ -13,7 +13,6 @@ DBItest::test_all(c(
   "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
   "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
 
-  "write_table_error",                          #
   "exists_table_error",                         #
   "exists_table_name",                          #
 
