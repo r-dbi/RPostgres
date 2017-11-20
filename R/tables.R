@@ -136,9 +136,15 @@ format_keep_na <- function(x, ...) {
 #' @export
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
-  function(conn, name, ..., row.names = FALSE) {
+  function(conn, name, ..., check.names = TRUE, row.names = FALSE) {
     name <- dbQuoteIdentifier(conn, name)
-    dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
+    out <- dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
+
+    if (check.names) {
+      names(out) <- make.names(names(out), unique = TRUE)
+    }
+
+    out
   }
 )
 
