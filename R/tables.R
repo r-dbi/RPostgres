@@ -184,6 +184,7 @@ setMethod("dbListTables", "PqConnection", function(conn) {
 #' @export
 #' @rdname postgres-tables
 setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) {
+  stopifnot(length(name) == 1L)
   name %in% dbListTables(conn)
 })
 
