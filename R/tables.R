@@ -174,7 +174,7 @@ setMethod("dbReadTable", c("PqConnection", "character"),
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbListTables", "PqConnection", function(conn) {
+setMethod("dbListTables", "PqConnection", function(conn, ...) {
   dbGetQuery(conn, paste0(
     "SELECT tablename FROM pg_tables WHERE schemaname != 'information_schema'",
     " AND schemaname != 'pg_catalog'")
@@ -183,7 +183,7 @@ setMethod("dbListTables", "PqConnection", function(conn) {
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) {
+setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, ...) {
   stopifnot(length(name) == 1L)
   name <- dbQuoteIdentifier(conn, name)
   # Convert to plain string
@@ -202,7 +202,7 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) 
 #' @export
 #' @rdname postgres-tables
 setMethod("dbRemoveTable", c("PqConnection", "character"),
-  function(conn, name) {
+  function(conn, name, ...) {
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
@@ -212,7 +212,7 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 #' @export
 #' @rdname postgres-tables
 setMethod("dbListFields", c("PqConnection", "character"),
-  function(conn, name) {
+  function(conn, name, ...) {
     name <- dbQuoteString(conn, name)
     dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
 WHERE table_name=", name))$column_name

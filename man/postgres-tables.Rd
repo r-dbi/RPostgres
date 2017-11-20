@@ -21,13 +21,13 @@
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
   check.names = TRUE, row.names = FALSE)
 
-\S4method{dbListTables}{PqConnection}(conn)
+\S4method{dbListTables}{PqConnection}(conn, ...)
 
-\S4method{dbExistsTable}{PqConnection,character}(conn, name)
+\S4method{dbExistsTable}{PqConnection,character}(conn, name, ...)
 
-\S4method{dbRemoveTable}{PqConnection,character}(conn, name)
+\S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...)
 
-\S4method{dbListFields}{PqConnection,character}(conn, name)
+\S4method{dbListFields}{PqConnection,character}(conn, name, ...)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by

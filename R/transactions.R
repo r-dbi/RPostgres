@@ -27,21 +27,21 @@ NULL
 
 #' @export
 #' @rdname postgres-transactions
-setMethod("dbBegin", "PqConnection", function(conn) {
+setMethod("dbBegin", "PqConnection", function(conn, ...) {
   dbExecute(conn, "BEGIN")
   invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
-setMethod("dbCommit", "PqConnection", function(conn) {
+setMethod("dbCommit", "PqConnection", function(conn, ...) {
   dbExecute(conn, "COMMIT")
   invisible(TRUE)
 })
 
 #' @export
 #' @rdname postgres-transactions
-setMethod("dbRollback", "PqConnection", function(conn) {
+setMethod("dbRollback", "PqConnection", function(conn, ...) {
   dbExecute(conn, "ROLLBACK")
   invisible(TRUE)
 })
