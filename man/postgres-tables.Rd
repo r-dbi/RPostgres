@@ -19,7 +19,7 @@
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, copy = TRUE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
-  row.names = FALSE)
+  check.names = TRUE, row.names = FALSE)
 
 \S4method{dbListTables}{PqConnection}(conn)
 
