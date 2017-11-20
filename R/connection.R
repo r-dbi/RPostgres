@@ -16,6 +16,12 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
   connection_info(dbObj@ptr)
 })
 
+#' @rdname PqConnection-class
+#' @export
+setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
+  TRUE
+})
+
 #' @export
 #' @rdname PqConnection-class
 setMethod("show", "PqConnection", function(object) {

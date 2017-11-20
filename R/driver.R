@@ -25,3 +25,9 @@ setClass("PqDriver", contains = "DBIDriver")
 setMethod("dbUnloadDriver", "PqDriver", function(drv, ...) {
   NULL
 })
+
+#' @rdname PqResult-class
+#' @export
+setMethod("dbIsValid", "PqDriver", function(dbObj, ...) {
+  TRUE
+})

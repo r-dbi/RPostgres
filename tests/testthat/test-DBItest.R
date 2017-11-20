@@ -45,7 +45,6 @@ DBItest::test_all(c(
   "with_transaction_error_nested",
 
   # compliance
-  "compliance",                                 # #68
   "ellipsis",                                   # #101
 
   NULL
