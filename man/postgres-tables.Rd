@@ -74,6 +74,9 @@ with \code{\link[DBI]{dbDataType}}).}
   SQL string.}
 
 \item{con}{A database connection.}
+
+\item{check.names}{If `TRUE`, the default, column names will be
+converted to valid R identifiers.}
 }
 \description{
 Convenience functions for reading/writing DBMS tables

@@ -150,6 +150,8 @@ format_keep_na <- function(x, ...) {
 
 
 #' @export
+#' @param check.names If `TRUE`, the default, column names will be
+#'   converted to valid R identifiers.
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
   function(conn, name, ..., check.names = TRUE, row.names = FALSE) {

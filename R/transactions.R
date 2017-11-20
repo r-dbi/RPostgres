@@ -5,6 +5,7 @@
 #'
 #' @param conn a \code{\linkS4class{PqConnection}} object, produced by
 #'   \code{\link[DBI]{dbConnect}}
+#' @param ... Unused, for extensibility.
 #' @return A boolean, indicating success or failure.
 #' @examples
 #' library(DBI)

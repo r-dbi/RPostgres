@@ -17,6 +17,8 @@
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
 \code{\link[DBI]{dbConnect}}}
+
+\item{...}{Unused, for extensibility.}
 }
 \value{
 A boolean, indicating success or failure.
