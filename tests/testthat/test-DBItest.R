@@ -13,12 +13,6 @@ DBItest::test_all(c(
   "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
   "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
 
-  "read_table_check_names",                     #
-  "read_table_error",                           #
-  "write_table_error",                          #
-  "exists_table_error",                         #
-  "exists_table_name",                          #
-
   # meta
   "is_valid_connection",                        # #64
   "get_statement_error",                        #
@@ -49,10 +43,6 @@ DBItest::test_all(c(
   "rollback_without_begin",                     # #98
   "begin_begin",                                # #98
   "with_transaction_error_nested",
-
-  # compliance
-  "compliance",                                 # #68
-  "ellipsis",                                   # #101
 
   NULL
 ))

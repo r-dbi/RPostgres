@@ -46,8 +46,24 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
            field.types = NULL, temporary = FALSE, copy = TRUE) {
 
-    if (overwrite && append)
-      stop("overwrite and append cannot both be TRUE", call. = FALSE)
+    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
+      stopc("`row.names` must be a logical scalar or a string")
+    }
+    if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite))  {
+      stopc("`overwrite` must be a logical scalar")
+    }
+    if (!is.logical(append) || length(append) != 1L || is.na(append))  {
+      stopc("`append` must be a logical scalar")
+    }
+    if (!is.logical(temporary) || length(temporary) != 1L)  {
+      stopc("`temporary` must be a logical scalar")
+    }
+    if (overwrite && append) {
+      stopc("overwrite and append cannot both be TRUE")
+    }
+    if (append && !is.null(field.types)) {
+      stopc("Cannot specify field.types with append = TRUE")
+    }
 
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
@@ -136,31 +152,57 @@ format_keep_na <- function(x, ...) {
 #' @export
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
-  function(conn, name, ..., row.names = FALSE) {
+  function(conn, name, ..., check.names = TRUE, row.names = FALSE) {
+    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
+      stopc("`row.names` must be a logical scalar or a string")
+    }
+
+    if (!is.logical(check.names) || length(check.names) != 1L)  {
+      stopc("`check.names` must be a logical scalar")
+    }
+
     name <- dbQuoteIdentifier(conn, name)
-    dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
+    out <- dbGetQuery(conn, paste("SELECT * FROM ", name), row.names = row.names)
+
+    if (check.names) {
+      names(out) <- make.names(names(out), unique = TRUE)
+    }
+
+    out
   }
 )
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbListTables", "PqConnection", function(conn) {
+setMethod("dbListTables", "PqConnection", function(conn, ...) {
   dbGetQuery(conn, paste0(
-    "SELECT tablename FROM pg_tables WHERE schemaname !='information_schema'",
-    " AND schemaname !='pg_catalog'")
+    "SELECT tablename FROM pg_tables WHERE schemaname != 'information_schema'",
+    " AND schemaname != 'pg_catalog'")
   )[[1]]
 })
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name) {
-  name %in% dbListTables(conn)
+setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, ...) {
+  stopifnot(length(name) == 1L)
+  name <- dbQuoteIdentifier(conn, name)
+  # Convert to plain string
+  name <- paste0(gsub('^"|"$', '', name))
+  name <- dbQuoteString(conn, name)
+
+  query <- paste0(
+    "SELECT COUNT(*) FROM pg_tables WHERE tablename = ",
+    name,
+    " AND schemaname != 'information_schema'",
+    " AND schemaname != 'pg_catalog'"
+  )
+  dbGetQuery(conn, query)[[1]] >= 1
 })
 
 #' @export
 #' @rdname postgres-tables
 setMethod("dbRemoveTable", c("PqConnection", "character"),
-  function(conn, name) {
+  function(conn, name, ...) {
     name <- dbQuoteIdentifier(conn, name)
     dbExecute(conn, paste("DROP TABLE ", name))
     invisible(TRUE)
@@ -170,7 +212,7 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 #' @export
 #' @rdname postgres-tables
 setMethod("dbListFields", c("PqConnection", "character"),
-  function(conn, name) {
+  function(conn, name, ...) {
     name <- dbQuoteString(conn, name)
     dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
 WHERE table_name=", name))$column_name

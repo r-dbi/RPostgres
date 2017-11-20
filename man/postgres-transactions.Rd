@@ -8,11 +8,11 @@
 \alias{dbRollback,PqConnection-method}
 \title{Transaction management.}
 \usage{
-\S4method{dbBegin}{PqConnection}(conn)
+\S4method{dbBegin}{PqConnection}(conn, ...)
 
-\S4method{dbCommit}{PqConnection}(conn)
+\S4method{dbCommit}{PqConnection}(conn, ...)
 
-\S4method{dbRollback}{PqConnection}(conn)
+\S4method{dbRollback}{PqConnection}(conn, ...)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
