@@ -31,6 +31,7 @@ LinkingTo:
     plogr,
     Rcpp
 Remotes:
+    r-dbi/DBI,
     r-dbi/DBItest
 Collate: 
     'RcppExports.R'
