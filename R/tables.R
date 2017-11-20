@@ -46,6 +46,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
            field.types = NULL, temporary = FALSE, copy = TRUE) {
 
+    if (is.null(row.names)) row.names <- FALSE
     if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
       stopc("`row.names` must be a logical scalar or a string")
     }
@@ -110,6 +111,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-tables
 setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, copy = TRUE) {
+  if (is.null(row.names)) row.names <- FALSE
   value <- sqlRownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
@@ -155,6 +157,8 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 setMethod("dbReadTable", c("PqConnection", "character"),
   function(conn, name, ..., check.names = TRUE, row.names = FALSE) {
+
+    if (is.null(row.names)) row.names <- FALSE
     if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
       stopc("`row.names` must be a logical scalar or a string")
     }
