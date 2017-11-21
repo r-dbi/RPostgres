@@ -68,23 +68,15 @@ void PqResult::bind(List params) {
   }
 
   std::vector<const char*> c_params(nparams_);
-  std::vector<int> c_formats(nparams_);
-  std::vector<std::string> s_params(nparams_);
   for (int i = 0; i < nparams_; ++i) {
     CharacterVector param(params[i]);
-    if (CharacterVector::is_na(param[0])) {
-      c_params[i] = NULL;
-      c_formats[i] = 0;
-    } else {
-      // FIXME: Need PQescapeByteaConn for BYTEA
-      s_params[i] = as<std::string>(param[0]);
-      c_params[i] = s_params[i].c_str();
-      c_formats[i] = 0;
-    }
+    const char* param_value = CHAR(param[0]);
+    if (strcmp(param_value, "NULL") != 0)
+      c_params[i] = param_value;
   }
 
   if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
-                           NULL, &c_formats[0], 0))
+                           NULL, NULL, 0))
     stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))

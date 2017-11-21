@@ -6,6 +6,7 @@
 setClass("PqResult",
   contains = "DBIResult",
   slots = list(
+    conn = "PqConnection",
     ptr = "externalptr",
     sql = "character"
   )
@@ -83,6 +84,7 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
+    conn = conn,
     ptr = result_create(conn@ptr, statement),
     sql = statement)
 
@@ -110,7 +112,8 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
-  params <- lapply(params, as.character, usetz = TRUE)
+  params <- lapply(params, dbQuoteLiteral, conn = res@conn)
+  params <- lapply(params, gsub, pattern = "::.*$", replacement = "")
   result_bind_params(res@ptr, params)
   invisible(res)
 })
