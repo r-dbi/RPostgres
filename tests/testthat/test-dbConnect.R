@@ -36,7 +36,7 @@ test_that("passing other options parameters", {
   con <- dbConnect(Postgres(), application_name = "apple")
   pid <- dbGetInfo(con)$pid
   r <- dbGetQuery(con, "SELECT application_name FROM pg_stat_activity WHERE pid=$1",
-    list(pid = pid))
+    list(pid))
   expect_identical(r$application_name, "apple")
 })
 
