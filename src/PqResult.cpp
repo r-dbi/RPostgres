@@ -200,6 +200,7 @@ List PqResult::fetch(int n_max) {
 
 int PqResult::n_rows_affected() {
   if (!bound_) return NA_INTEGER;
+  if (ncols_ > 0) return 0;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
 }

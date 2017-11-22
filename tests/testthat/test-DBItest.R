@@ -16,7 +16,6 @@ DBItest::test_all(c(
   # meta
   "is_valid_connection",                        # #64
   "get_statement_error",                        #
-  "rows_affected_query",                        #
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
