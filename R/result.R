@@ -112,12 +112,21 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
+  params <- factor_to_string(params, warn = TRUE)
   params <- lapply(params, dbQuoteLiteral, conn = res@conn)
   params <- lapply(params, gsub, pattern = "::.*$", replacement = "")
   result_bind_params(res@ptr, params)
   invisible(res)
 })
 
+factor_to_string <- function(value, warn = FALSE) {
+  is_factor <- vlapply(value, is.factor)
+  if (warn && any(is_factor)) {
+    warning("Factors converted to character", call. = FALSE)
+  }
+  value[is_factor] <- lapply(value[is_factor], as.character)
+  value
+}
 
 #' @rdname postgres-query
 #' @export

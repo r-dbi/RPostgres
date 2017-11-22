@@ -22,7 +22,6 @@ DBItest::test_all(c(
   "bind_multi_row.*",                           # #100
   "bind_named_param_unnamed_placeholders",
   "bind_unnamed_param_named_placeholders",
-  "bind_factor",
   "bind_repeated.*",                            # #87
   "bind_timestamp.*",                           # #53
   "bind_timestamp_lt.*",                        # #53
