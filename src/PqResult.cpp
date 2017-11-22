@@ -6,6 +6,9 @@
 
 PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
   pConn_(pConn), nrows_(0), bound_(false) {
+
+  LOG_DEBUG << sql;
+
   pConn_->check_connection();
   pConn->set_current_result(this);
 
