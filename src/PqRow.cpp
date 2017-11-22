@@ -46,7 +46,9 @@ bool PqRow::has_data() {
 }
 
 int PqRow::n_rows_affected() {
-  return atoi(PQcmdTuples(pRes_));
+  char* tuples = PQcmdTuples(pRes_);
+  LOG_VERBOSE << tuples;
+  return atoi(tuples);
 }
 
 List PqRow::get_exception_info() {

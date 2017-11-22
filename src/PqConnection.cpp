@@ -83,6 +83,8 @@ bool PqConnection::has_query() {
 }
 
 void PqConnection::copy_data(std::string sql, List df) {
+  LOG_DEBUG << sql;
+
   R_xlen_t p = df.size();
   if (p == 0)
     return;

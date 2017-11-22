@@ -6,6 +6,9 @@
 
 PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
   pConn_(pConn), nrows_(0), bound_(false) {
+
+  LOG_DEBUG << sql;
+
   pConn_->check_connection();
   pConn->set_current_result(this);
 
@@ -68,23 +71,15 @@ void PqResult::bind(List params) {
   }
 
   std::vector<const char*> c_params(nparams_);
-  std::vector<int> c_formats(nparams_);
-  std::vector<std::string> s_params(nparams_);
   for (int i = 0; i < nparams_; ++i) {
     CharacterVector param(params[i]);
-    if (CharacterVector::is_na(param[0])) {
-      c_params[i] = NULL;
-      c_formats[i] = 0;
-    } else {
-      // FIXME: Need PQescapeByteaConn for BYTEA
-      s_params[i] = as<std::string>(param[0]);
-      c_params[i] = s_params[i].c_str();
-      c_formats[i] = 0;
-    }
+    const char* param_value = CHAR(param[0]);
+    if (strcmp(param_value, "NULL") != 0)
+      c_params[i] = param_value;
   }
 
   if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
-                           NULL, &c_formats[0], 0))
+                           NULL, NULL, 0))
     stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))
@@ -204,6 +199,8 @@ List PqResult::fetch(int n_max) {
 }
 
 int PqResult::n_rows_affected() {
+  if (!bound_) return NA_INTEGER;
+  if (ncols_ > 0) return 0;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
 }
@@ -213,6 +210,7 @@ int PqResult::n_rows_fetched() {
 }
 
 bool PqResult::is_complete() {
+  if (!bound_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
 }

@@ -6,6 +6,7 @@
 setClass("PqResult",
   contains = "DBIResult",
   slots = list(
+    conn = "PqConnection",
     ptr = "externalptr",
     sql = "character"
   )
@@ -14,6 +15,9 @@ setClass("PqResult",
 #' @rdname PqResult-class
 #' @export
 setMethod("dbGetStatement", "PqResult", function(res, ...) {
+  if (!dbIsValid(res)) {
+    stop("Invalid result set.", call. = FALSE)
+  }
   res@sql
 })
 
@@ -83,6 +87,7 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
+    conn = conn,
     ptr = result_create(conn@ptr, statement),
     sql = statement)
 
@@ -110,11 +115,31 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
-  params <- lapply(params, as.character, usetz = TRUE)
+  if (!is.null(names(params))) {
+    stop("Named parameters not supported", call. = FALSE)
+  }
+  params <- factor_to_string(params, warn = TRUE)
+  params <- posixlt_to_posixct(params)
+  params <- lapply(params, dbQuoteLiteral, conn = res@conn)
+  params <- lapply(params, gsub, pattern = "::.*$", replacement = "")
   result_bind_params(res@ptr, params)
   invisible(res)
 })
 
+factor_to_string <- function(value, warn = FALSE) {
+  is_factor <- vlapply(value, is.factor)
+  if (warn && any(is_factor)) {
+    warning("Factors converted to character", call. = FALSE)
+  }
+  value[is_factor] <- lapply(value[is_factor], as.character)
+  value
+}
+
+posixlt_to_posixct <- function(value) {
+  is_posixlt <- vlapply(value, inherits, "POSIXlt")
+  value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
+  value
+}
 
 #' @rdname postgres-query
 #' @export
