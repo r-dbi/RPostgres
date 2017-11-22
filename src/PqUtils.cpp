@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PqUtils.h"
+#include "integer64.h"
 
 
 List df_resize(Rcpp::List df, int n) {
@@ -34,6 +35,11 @@ List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>
     case PGTime:
       out[j] = Rf_allocVector(REALSXP, n);
       break;
+
+    case PGInt64:
+      out[j] = Rf_allocVector(INT64SXP, n);
+      break;
+
     default:
       out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
     }

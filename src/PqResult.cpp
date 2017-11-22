@@ -191,6 +191,9 @@ List PqResult::fetch(int n_max) {
       col.attr("class") = CharacterVector::create("hms", "difftime");
       col.attr("units") = CharacterVector::create("secs");
       break;
+    case PGInt64:
+      col.attr("class") = CharacterVector::create("integer64");
+      break;
     default:
       break;
     }
@@ -248,6 +251,9 @@ List PqResult::get_column_info() {
     case PGDatetimeTZ:
       types[i] = "POSIXct";
       break;
+    case PGInt64:
+      types[i] = "integer64";
+      break;
     default:
       stop("Unknown variable type");
     }
@@ -281,6 +287,9 @@ std::vector<PGTypes> PqResult::get_column_types() const {
     // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
     switch (type) {
     case 20: // BIGINT
+      types.push_back(PGInt64);
+      break;
+
     case 21: // SMALLINT
     case 23: // INTEGER
     case 26: // OID

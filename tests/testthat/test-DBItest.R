@@ -5,7 +5,6 @@ DBItest::test_all(c(
   "get_info_result",
 
   # result
-  "data_64_bit_.*",                             # #51
   "data_raw",                                   # not a failure, can't cast to raw
 
   # sql

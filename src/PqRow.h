@@ -24,6 +24,7 @@ public:
   // Value accessors -----------------------------------------------------------
   bool is_null(int j);
   int get_int(int j);
+  int64_t get_int64(int j);
   double get_double(int j);
   SEXP get_string(int j);
   SEXP get_raw(int j);
