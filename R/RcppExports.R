@@ -5,6 +5,10 @@ connection_create <- function(keys, values) {
     .Call(`_RPostgres_connection_create`, keys, values)
 }
 
+connection_is_valid <- function(con) {
+    .Call(`_RPostgres_connection_is_valid`, con)
+}
+
 connection_release <- function(con) {
     invisible(.Call(`_RPostgres_connection_release`, con))
 }

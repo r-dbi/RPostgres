@@ -12,6 +12,11 @@ XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
 }
 
 // [[Rcpp::export]]
+bool connection_is_valid(XPtr<PqConnectionPtr> con) {
+  return (con.get() != NULL);
+}
+
+// [[Rcpp::export]]
 void connection_release(XPtr<PqConnectionPtr> con) {
   if (con.get() != NULL) {
     if ((*con)->has_query()) {

@@ -18,6 +18,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// connection_is_valid
+bool connection_is_valid(XPtr<PqConnectionPtr> con);
+RcppExport SEXP _RPostgres_connection_is_valid(SEXP conSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_is_valid(con));
+    return rcpp_result_gen;
+END_RCPP
+}
 // connection_release
 void connection_release(XPtr<PqConnectionPtr> con);
 RcppExport SEXP _RPostgres_connection_release(SEXP conSEXP) {
@@ -244,6 +255,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 2},
+    {"_RPostgres_connection_is_valid", (DL_FUNC) &_RPostgres_connection_is_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
     {"_RPostgres_connection_info", (DL_FUNC) &_RPostgres_connection_info, 1},
     {"_RPostgres_connection_escape_string", (DL_FUNC) &_RPostgres_connection_escape_string, 2},

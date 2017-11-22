@@ -8,11 +8,9 @@ DBItest::test_all(c(
   "data_raw",                                   # not a failure, can't cast to raw
 
   # meta
-  "is_valid_connection",                        # #64
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
   "bind_repeated.*",                            # #87
-  "is_valid_stale_connection",
 
   NULL
 ))
