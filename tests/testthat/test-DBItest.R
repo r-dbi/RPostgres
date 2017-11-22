@@ -20,7 +20,6 @@ DBItest::test_all(c(
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
-  "bind_named_param_unnamed_placeholders",
   "bind_unnamed_param_named_placeholders",
   "bind_repeated.*",                            # #87
   "is_valid_stale_connection",
