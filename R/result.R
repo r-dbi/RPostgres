@@ -113,6 +113,7 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
   params <- factor_to_string(params, warn = TRUE)
+  params <- posixlt_to_posixct(params)
   params <- lapply(params, dbQuoteLiteral, conn = res@conn)
   params <- lapply(params, gsub, pattern = "::.*$", replacement = "")
   result_bind_params(res@ptr, params)
@@ -125,6 +126,12 @@ factor_to_string <- function(value, warn = FALSE) {
     warning("Factors converted to character", call. = FALSE)
   }
   value[is_factor] <- lapply(value[is_factor], as.character)
+  value
+}
+
+posixlt_to_posixct <- function(value) {
+  is_posixlt <- vlapply(value, inherits, "POSIXlt")
+  value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
   value
 }
 
