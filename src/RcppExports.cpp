@@ -109,6 +109,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// init_logging
+void init_logging(const std::string& log_level);
+RcppExport SEXP _RPostgres_init_logging(SEXP log_levelSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type log_level(log_levelSEXP);
+    init_logging(log_level);
+    return R_NilValue;
+END_RCPP
+}
 // result_create
 XPtr<PqResult> result_create(XPtr<PqConnectionPtr> con, std::string sql);
 RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP) {
@@ -220,6 +230,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},
+    {"_RPostgres_init_logging", (DL_FUNC) &_RPostgres_init_logging, 1},
     {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
     {"_RPostgres_result_bind_params", (DL_FUNC) &_RPostgres_result_bind_params, 2},
