@@ -1,9 +1,8 @@
 DBItest::test_all(c(
-  # driver
-  "get_info_driver",                            # rstats-db/RSQLite#117
-
-  # connection
-  "get_info_connection",                        # rstats-db/RSQLite#117
+  # deliberately skipped, not required with next version of DBI
+  "get_info_driver",
+  "get_info_connection",
+  "get_info_result",
 
   # result
   "data_64_bit_.*",                             # #51
@@ -15,7 +14,6 @@ DBItest::test_all(c(
 
   # meta
   "is_valid_connection",                        # #64
-  "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
   "bind_repeated.*",                            # #87
