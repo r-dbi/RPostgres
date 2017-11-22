@@ -13,3 +13,9 @@ stopc <- function(...) {
 warningc <- function(...) {
   warning(..., call. = FALSE, domain = NA)
 }
+
+is_whole_number_vector <- function(x) {
+  if (!is.numeric(x)) return(FALSE)
+  is_value <- which(!is.na(x))
+  isTRUE(all.equal(x[is_value] - trunc(x[is_value]), rep_len(0, length(is_value))))
+}

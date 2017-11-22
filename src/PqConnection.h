@@ -17,6 +17,7 @@ typedef boost::shared_ptr<PqConnection> PqConnectionPtr;
 class PqConnection : boost::noncopyable {
   PGconn* pConn_;
   PqResult* pCurrentResult_;
+  bool transacting_;
 
 public:
   PqConnection(std::vector<std::string> keys, std::vector<std::string> values);
@@ -37,6 +38,9 @@ public:
 
   SEXP escape_string(std::string x);
   SEXP escape_identifier(std::string x);
+
+  bool is_transacting() const;
+  void set_transacting(bool transacting);
 };
 
 #endif

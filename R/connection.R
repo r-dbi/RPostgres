@@ -19,7 +19,7 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @rdname PqConnection-class
 #' @export
 setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
-  TRUE
+  connection_is_valid(dbObj@ptr)
 })
 
 #' @export

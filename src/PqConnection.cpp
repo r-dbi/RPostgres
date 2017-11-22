@@ -4,7 +4,9 @@
 
 
 PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::string> values) :
-  pCurrentResult_(NULL) {
+pCurrentResult_(NULL),
+transacting_(false)
+{
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
 
@@ -177,4 +179,12 @@ SEXP PqConnection::escape_identifier(std::string x) {
   PQfreemem(pq_escaped);
 
   return escaped;
+}
+
+bool PqConnection::is_transacting() const {
+  return transacting_;
+}
+
+void PqConnection::set_transacting(bool transacting) {
+  transacting_ = transacting;
 }

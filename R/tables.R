@@ -115,10 +115,11 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, cop
   value <- sqlRownamesToColumn(value, row.names)
 
   # C code takes care of atomic vectors, just need to coerce objects
-  is_object <- vapply(value, is.object, logical(1))
-  is_posix <- vapply(value, function(c) inherits(c, "POSIXt"), logical(1))
-  is_difftime <- vapply(value, function(c) inherits(c, "difftime"), logical(1))
-  is_blob <- vapply(value, function(c) is.list(c), logical(1))
+  is_object <- vlapply(value, is.object)
+  is_posix <- vlapply(value, function(c) inherits(c, "POSIXt"))
+  is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
+  is_blob <- vlapply(value, function(c) is.list(c))
+  is_whole_number <- vlapply(value, is_whole_number_vector)
 
   withr::with_options(
     list(digits.secs = 6),
@@ -136,6 +137,15 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, cop
         },
         character(1)
       )
+    }
+  )
+
+  value[is_whole_number] <- lapply(
+    value[is_whole_number],
+    function(x) {
+      is_value <- which(!is.na(x))
+      x[is_value] <- format(x[is_value], scientific = FALSE, na.encode = FALSE)
+      x
     }
   )
 
