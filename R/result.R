@@ -15,6 +15,9 @@ setClass("PqResult",
 #' @rdname PqResult-class
 #' @export
 setMethod("dbGetStatement", "PqResult", function(res, ...) {
+  if (!dbIsValid(res)) {
+    stop("Invalid result set.", call. = FALSE)
+  }
   res@sql
 })
 
