@@ -7,10 +7,6 @@ DBItest::test_all(c(
   # result
   "data_raw",                                   # not a failure, can't cast to raw
 
-  # sql
-  "roundtrip_64_bit_.*",                        # rstats-db/DBI#48, #51
-  "roundtrip_64_bit_character",                 # rstats-db/DBI#48, #51
-
   # meta
   "is_valid_connection",                        # #64
   "column_info",                                # #50
