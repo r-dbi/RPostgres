@@ -20,10 +20,8 @@ DBItest::test_all(c(
   "get_info_result",                            # rstats-db/DBI#55
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
-  "bind_return_value",
   "bind_named_param_unnamed_placeholders",
   "bind_unnamed_param_named_placeholders",
-  "bind_return_value",
   "bind_factor",
   "bind_repeated.*",                            # #87
   "bind_timestamp.*",                           # #53
