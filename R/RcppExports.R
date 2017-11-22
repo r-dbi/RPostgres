@@ -25,6 +25,14 @@ connection_copy_data <- function(con, sql, df) {
     invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
+connection_is_transacting <- function(con) {
+    .Call(`_RPostgres_connection_is_transacting`, con)
+}
+
+connection_set_transacting <- function(con, transacting) {
+    invisible(.Call(`_RPostgres_connection_set_transacting`, con, transacting))
+}
+
 encode_vector <- function(x) {
     .Call(`_RPostgres_encode_vector`, x)
 }

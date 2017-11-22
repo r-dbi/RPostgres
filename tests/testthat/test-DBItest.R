@@ -14,11 +14,5 @@ DBItest::test_all(c(
   "bind_repeated.*",                            # #87
   "is_valid_stale_connection",
 
-  # transactions
-  "commit_without_begin",                       # #98
-  "rollback_without_begin",                     # #98
-  "begin_begin",                                # #98
-  "with_transaction_error_nested",
-
   NULL
 ))

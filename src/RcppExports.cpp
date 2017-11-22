@@ -75,6 +75,28 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// connection_is_transacting
+bool connection_is_transacting(XPtr<PqConnectionPtr> con);
+RcppExport SEXP _RPostgres_connection_is_transacting(SEXP conSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_is_transacting(con));
+    return rcpp_result_gen;
+END_RCPP
+}
+// connection_set_transacting
+void connection_set_transacting(XPtr<PqConnectionPtr> con, bool transacting);
+RcppExport SEXP _RPostgres_connection_set_transacting(SEXP conSEXP, SEXP transactingSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
+    Rcpp::traits::input_parameter< bool >::type transacting(transactingSEXP);
+    connection_set_transacting(con, transacting);
+    return R_NilValue;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP _RPostgres_encode_vector(SEXP xSEXP) {
@@ -227,6 +249,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_escape_string", (DL_FUNC) &_RPostgres_connection_escape_string, 2},
     {"_RPostgres_connection_escape_identifier", (DL_FUNC) &_RPostgres_connection_escape_identifier, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
+    {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
+    {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},

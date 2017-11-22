@@ -67,3 +67,13 @@ CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
 void connection_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
   return (*con)->copy_data(sql, df);
 }
+
+// [[Rcpp::export]]
+bool connection_is_transacting(XPtr<PqConnectionPtr> con) {
+  return (*con)->is_transacting();
+}
+
+// [[Rcpp::export]]
+void connection_set_transacting(XPtr<PqConnectionPtr> con, bool transacting) {
+  (*con)->set_transacting(transacting);
+}
