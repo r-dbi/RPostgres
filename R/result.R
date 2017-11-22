@@ -112,6 +112,9 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
+  if (!is.null(names(params))) {
+    stop("Named parameters not supported", call. = FALSE)
+  }
   params <- factor_to_string(params, warn = TRUE)
   params <- posixlt_to_posixct(params)
   params <- lapply(params, dbQuoteLiteral, conn = res@conn)
