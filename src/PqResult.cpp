@@ -196,6 +196,7 @@ List PqResult::fetch(int n_max) {
 }
 
 int PqResult::n_rows_affected() {
+  if (!bound_) return NA_INTEGER;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
 }
@@ -205,6 +206,7 @@ int PqResult::n_rows_fetched() {
 }
 
 bool PqResult::is_complete() {
+  if (!bound_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
 }
