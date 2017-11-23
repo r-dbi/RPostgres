@@ -1,3 +1,8 @@
+## RPostgres 0.1-9 (2017-11-23)
+
+- Improve DBI compliance for `dbBind()` and others, in particular for the `BYTEA` data type, and for 64-bit integer support and transactions (#51, #64, #66, #68, #98, #101).
+
+
 ## RPostgres 0.1-8 (2017-11-09)
 
 - Improve DBI compatibility (#24, #41, #52, #53, #61, #62, #70, #79, #104, #121).
