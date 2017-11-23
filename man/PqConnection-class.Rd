@@ -4,10 +4,13 @@
 \name{PqConnection-class}
 \alias{PqConnection-class}
 \alias{dbGetInfo,PqConnection-method}
+\alias{dbIsValid,PqConnection-method}
 \alias{show,PqConnection-method}
 \title{PqConnection and methods.}
 \usage{
 \S4method{dbGetInfo}{PqConnection}(dbObj, ...)
+
+\S4method{dbIsValid}{PqConnection}(dbObj, ...)
 
 \S4method{show}{PqConnection}(object)
 }

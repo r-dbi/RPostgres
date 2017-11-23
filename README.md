@@ -20,10 +20,8 @@ RPostgres is an DBI-compliant interface to the postgres database. It's a ground-
 RPostgres isn't available from CRAN yet, but you can get it from github with:
 
 ```R
-# install.packages("devtools")
-devtools::install_github("RcppCore/Rcpp")
-devtools::install_github("rstats-db/DBI")
-devtools::install_github("rstats-db/RPostgres")
+# install.packages("remotes")
+remotes::install_github("rstats-db/RPostgres")
 ```
 
 ## Basic usage

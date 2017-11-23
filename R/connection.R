@@ -16,6 +16,12 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
   connection_info(dbObj@ptr)
 })
 
+#' @rdname PqConnection-class
+#' @export
+setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
+  connection_is_valid(dbObj@ptr)
+})
+
 #' @export
 #' @rdname PqConnection-class
 setMethod("show", "PqConnection", function(object) {
@@ -93,14 +99,14 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @param obj Object to convert
 #' @keywords internal
 #' @rdname dbDataType
-setMethod("dbDataType", "PqDriver", function(dbObj, obj) {
+setMethod("dbDataType", "PqDriver", function(dbObj, obj, ...) {
   if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
   get_data_type(obj)
 })
 
 #' @export
 #' @rdname dbDataType
-setMethod("dbDataType", "PqConnection", function(dbObj, obj) {
+setMethod("dbDataType", "PqConnection", function(dbObj, obj, ...) {
   if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
   get_data_type(obj)
 })

@@ -1,5 +1,7 @@
 #include "pch.h"
+#include <boost/lexical_cast.hpp>
 #include "PqRow.h"
+#include "integer64.h"
 
 #ifdef WIN32
 #define timegm _mkgmtime
@@ -46,7 +48,9 @@ bool PqRow::has_data() {
 }
 
 int PqRow::n_rows_affected() {
-  return atoi(PQcmdTuples(pRes_));
+  char* tuples = PQcmdTuples(pRes_);
+  LOG_VERBOSE << tuples;
+  return atoi(tuples);
 }
 
 List PqRow::get_exception_info() {
@@ -70,6 +74,14 @@ bool PqRow::is_null(int j) {
 
 int PqRow::get_int(int j) {
   return is_null(j) ? NA_INTEGER : atoi(PQgetvalue(pRes_, 0, j));
+}
+
+int64_t PqRow::get_int64(int j) {
+  if (is_null(j))
+    return NA_INTEGER64;
+
+  char* value = PQgetvalue(pRes_, 0, j);
+  return boost::lexical_cast<int64_t>(value);
 }
 
 double PqRow::get_double(int j) {
@@ -189,6 +201,9 @@ void PqRow::set_list_value(SEXP x, int i, int j, const std::vector<PGTypes>& typ
     break;
   case PGInt:
     INTEGER(x)[i] = get_int(j);
+    break;
+  case PGInt64:
+    INTEGER64(x)[i] = get_int64(j);
     break;
   case PGReal:
     REAL(x)[i] = get_double(j);

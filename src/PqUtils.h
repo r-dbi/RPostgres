@@ -9,6 +9,7 @@ enum PGTypes {
   PGString = STRSXP,
   PGLogical = LGLSXP,
   PGVector = VECSXP,
+  PGInt64,
   PGDate,
   PGDatetime,
   PGDatetimeTZ,

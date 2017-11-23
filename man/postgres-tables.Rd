@@ -19,15 +19,15 @@
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, copy = TRUE)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
-  row.names = FALSE)
+  check.names = TRUE, row.names = FALSE)
 
-\S4method{dbListTables}{PqConnection}(conn)
+\S4method{dbListTables}{PqConnection}(conn, ...)
 
-\S4method{dbExistsTable}{PqConnection,character}(conn, name)
+\S4method{dbExistsTable}{PqConnection,character}(conn, name, ...)
 
-\S4method{dbRemoveTable}{PqConnection,character}(conn, name)
+\S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...)
 
-\S4method{dbListFields}{PqConnection,character}(conn, name)
+\S4method{dbListFields}{PqConnection,character}(conn, name, ...)
 }
 \arguments{
 \item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
@@ -74,6 +74,9 @@ with \code{\link[DBI]{dbDataType}}).}
   SQL string.}
 
 \item{con}{A database connection.}
+
+\item{check.names}{If `TRUE`, the default, column names will be
+converted to valid R identifiers.}
 }
 \description{
 Convenience functions for reading/writing DBMS tables

@@ -5,6 +5,10 @@ connection_create <- function(keys, values) {
     .Call(`_RPostgres_connection_create`, keys, values)
 }
 
+connection_is_valid <- function(con) {
+    .Call(`_RPostgres_connection_is_valid`, con)
+}
+
 connection_release <- function(con) {
     invisible(.Call(`_RPostgres_connection_release`, con))
 }
@@ -25,6 +29,14 @@ connection_copy_data <- function(con, sql, df) {
     invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
+connection_is_transacting <- function(con) {
+    .Call(`_RPostgres_connection_is_transacting`, con)
+}
+
+connection_set_transacting <- function(con, transacting) {
+    invisible(.Call(`_RPostgres_connection_set_transacting`, con, transacting))
+}
+
 encode_vector <- function(x) {
     .Call(`_RPostgres_encode_vector`, x)
 }
@@ -35,6 +47,10 @@ encode_data_frame <- function(x) {
 
 encrypt_password <- function(password, user) {
     .Call(`_RPostgres_encrypt_password`, password, user)
+}
+
+init_logging <- function(log_level) {
+    invisible(.Call(`_RPostgres_init_logging`, log_level))
 }
 
 result_create <- function(con, sql) {
