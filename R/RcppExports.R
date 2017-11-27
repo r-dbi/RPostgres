@@ -9,8 +9,8 @@ connection_is_valid <- function(con) {
     .Call(`_RPostgres_connection_is_valid`, con)
 }
 
-connection_release <- function(con) {
-    invisible(.Call(`_RPostgres_connection_release`, con))
+connection_release <- function(con_) {
+    invisible(.Call(`_RPostgres_connection_release`, con_))
 }
 
 connection_info <- function(con) {
@@ -73,8 +73,8 @@ result_release <- function(rs) {
     invisible(.Call(`_RPostgres_result_release`, rs))
 }
 
-result_active <- function(rs) {
-    .Call(`_RPostgres_result_active`, rs)
+result_active <- function(rs_) {
+    .Call(`_RPostgres_result_active`, rs_)
 }
 
 result_rows_fetched <- function(rs) {

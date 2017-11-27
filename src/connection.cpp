@@ -17,28 +17,28 @@ bool connection_is_valid(XPtr<PqConnectionPtr> con) {
 }
 
 // [[Rcpp::export]]
-void connection_release(XPtr<PqConnectionPtr> con) {
-  if (con.get() != NULL) {
-    if ((*con)->has_query()) {
+void connection_release(XPtr<PqConnectionPtr> con_) {
+  PqConnectionPtr* con = con_.get();
+  if (con != NULL) {
+    if (con->get()->has_query()) {
       warning("%s\n%s",
               "There is a result object still in use.",
               "The connection will be automatically released when it is closed"
              );
     }
-    con.release();
+    con_.release();
   } else {
     warning("connections is invalid");
   }
 }
 
 // [[Rcpp::export]]
-List connection_info(XPtr<PqConnectionPtr> con) {
-  return (*con)->info();
+List connection_info(PqConnection* con) {
+  return con->info();
 }
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
-                                         CharacterVector xs) {
+CharacterVector connection_escape_string(PqConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
@@ -47,7 +47,7 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
       escaped[i] = "NULL";
     }
     else {
-      escaped[i] = (*con)->escape_string(std::string(xs[i]));
+      escaped[i] = con->escape_string(std::string(xs[i]));
     }
   }
 
@@ -55,30 +55,41 @@ CharacterVector connection_escape_string(XPtr<PqConnectionPtr> con,
 }
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_identifier(XPtr<PqConnectionPtr> con,
-    CharacterVector xs) {
+CharacterVector connection_escape_identifier(PqConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
     std::string x(xs[i]);
-    escaped[i] = (*con)->escape_identifier(x);
+    escaped[i] = con->escape_identifier(x);
   }
 
   return escaped;
 }
 
 // [[Rcpp::export]]
-void connection_copy_data(XPtr<PqConnectionPtr> con, std::string sql, List df) {
-  return (*con)->copy_data(sql, df);
+void connection_copy_data(PqConnection* con, std::string sql, List df) {
+  return con->copy_data(sql, df);
 }
 
 // [[Rcpp::export]]
-bool connection_is_transacting(XPtr<PqConnectionPtr> con) {
-  return (*con)->is_transacting();
+bool connection_is_transacting(PqConnection* con) {
+  return con->is_transacting();
 }
 
 // [[Rcpp::export]]
-void connection_set_transacting(XPtr<PqConnectionPtr> con, bool transacting) {
-  (*con)->set_transacting(transacting);
+void connection_set_transacting(PqConnection* con, bool transacting) {
+  con->set_transacting(transacting);
+}
+
+namespace Rcpp {
+
+template<>
+PqConnection* as(SEXP x) {
+  PqConnectionPtr* connection = (PqConnectionPtr*)(R_ExternalPtrAddr(x));
+  if (!connection)
+    stop("Invalid connection");
+  return connection->get();
+}
+
 }
