@@ -17,15 +17,16 @@ bool connection_is_valid(XPtr<PqConnectionPtr> con) {
 }
 
 // [[Rcpp::export]]
-void connection_release(XPtr<PqConnectionPtr> con) {
-  if (con.get() != NULL) {
-    if ((*con)->has_query()) {
+void connection_release(XPtr<PqConnectionPtr> con_) {
+  PqConnectionPtr* con = con_.get();
+  if (con != NULL) {
+    if (con->get()->has_query()) {
       warning("%s\n%s",
               "There is a result object still in use.",
               "The connection will be automatically released when it is closed"
              );
     }
-    con.release();
+    con_.release();
   } else {
     warning("connections is invalid");
   }

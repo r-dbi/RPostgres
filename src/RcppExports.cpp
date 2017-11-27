@@ -30,12 +30,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // connection_release
-void connection_release(XPtr<PqConnectionPtr> con);
-RcppExport SEXP _RPostgres_connection_release(SEXP conSEXP) {
+void connection_release(XPtr<PqConnectionPtr> con_);
+RcppExport SEXP _RPostgres_connection_release(SEXP con_SEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
-    connection_release(con);
+    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con_(con_SEXP);
+    connection_release(con_);
     return R_NilValue;
 END_RCPP
 }
