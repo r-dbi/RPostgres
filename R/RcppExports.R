@@ -73,8 +73,8 @@ result_release <- function(rs) {
     invisible(.Call(`_RPostgres_result_release`, rs))
 }
 
-result_active <- function(rs) {
-    .Call(`_RPostgres_result_active`, rs)
+result_active <- function(rs_) {
+    .Call(`_RPostgres_result_active`, rs_)
 }
 
 result_rows_fetched <- function(rs) {
