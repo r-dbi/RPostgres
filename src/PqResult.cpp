@@ -56,12 +56,7 @@ PqResult::~PqResult() {
 }
 
 void PqResult::bind() {
-  bound_ = true;
-  if (!PQsendQueryPrepared(pConn_->conn(), "", 0, NULL, NULL, NULL, 0))
-    pConn_->conn_stop("Failed to send query");
-
-  if (!PQsetSingleRowMode(pConn_->conn()))
-    pConn_->conn_stop("Failed to set single row mode");
+  bind(List());
 }
 
 void PqResult::bind(List params) {
