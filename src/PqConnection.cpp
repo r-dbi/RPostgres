@@ -48,6 +48,7 @@ void PqConnection::set_current_result(PqResult* pResult) {
       warning("Cancelling previous query");
 
     cancel_query();
+    finish_query();
   }
   pCurrentResult_ = pResult;
 }
@@ -68,7 +69,9 @@ void PqConnection::cancel_query() {
   }
 
   PQfreeCancel(cancel);
+}
 
+void PqConnection::finish_query() const {
   // Clear pending results
   PGresult* result;
   while ((result = PQgetResult(pConn_)) != NULL) {
