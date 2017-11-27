@@ -47,8 +47,7 @@ void PqConnection::set_current_result(PqResult* pResult) {
     if (pResult != NULL)
       warning("Cancelling previous query");
 
-    cancel_query();
-    finish_query();
+    cleanup_query();
   }
   pCurrentResult_ = pResult;
 }
@@ -194,4 +193,9 @@ void PqConnection::set_transacting(bool transacting) {
 
 void PqConnection::conn_stop(const char* msg) {
   stop("%s: %s", msg, PQerrorMessage(conn()));
+}
+
+void PqConnection::cleanup_query() {
+  cancel_query();
+  finish_query();
 }

@@ -27,9 +27,6 @@ public:
   PGconn* conn();
 
   void set_current_result(PqResult* pResult);
-  void cancel_query();
-  void finish_query() const;
-
   bool is_current_result(PqResult* pResult);
   bool has_query();
 
@@ -45,6 +42,12 @@ public:
   void set_transacting(bool transacting);
 
   void conn_stop(const char* msg);
+
+  void cleanup_query();
+
+private:
+  void cancel_query();
+  void finish_query() const;
 };
 
 #endif
