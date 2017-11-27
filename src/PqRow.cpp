@@ -29,7 +29,7 @@ PqRow::PqRow(PGconn* conn) {
 
   if (PQresultStatus(pRes_) == PGRES_FATAL_ERROR) {
     PQclear(pRes_);
-    stop(PQerrorMessage(conn));
+    stop("Failed to fetch row: %s", PQerrorMessage(conn));
   }
 }
 

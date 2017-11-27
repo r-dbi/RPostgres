@@ -94,7 +94,7 @@ void PqConnection::copy_data(std::string sql, List df) {
   PGresult* pInit = PQexec(pConn_, sql.c_str());
   if (PQresultStatus(pInit) != PGRES_COPY_IN) {
     PQclear(pInit);
-    stop("Failed to initialise COPY");
+    conn_stop("Failed to initialise COPY");
   }
   PQclear(pInit);
 
@@ -108,19 +108,19 @@ void PqConnection::copy_data(std::string sql, List df) {
     encode_row_in_buffer(df, i, buffer);
 
     if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
-      stop(PQerrorMessage(pConn_));
+      conn_stop("Failed to put data");
     }
   }
 
 
   if (PQputCopyEnd(pConn_, NULL) != 1) {
-    stop(PQerrorMessage(pConn_));
+    conn_stop("Failed to finish COPY");
   }
 
   PGresult* pComplete = PQgetResult(pConn_);
   if (PQresultStatus(pComplete) != PGRES_COMMAND_OK) {
     PQclear(pComplete);
-    stop(PQerrorMessage(pConn_));
+    conn_stop("COPY returned error");
   }
   PQclear(pComplete);
 }
@@ -134,7 +134,7 @@ void PqConnection::check_connection() {
   status = PQstatus(pConn_);
   if (status == CONNECTION_OK) return;
 
-  stop("Lost connection to database");
+  conn_stop("Lost connection to database");
 }
 
 List PqConnection::info() {
@@ -187,4 +187,8 @@ bool PqConnection::is_transacting() const {
 
 void PqConnection::set_transacting(bool transacting) {
   transacting_ = transacting;
+}
+
+void PqConnection::conn_stop(const char* msg) {
+  stop("%s: %s", msg, PQerrorMessage(conn()));
 }

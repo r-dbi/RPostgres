@@ -41,6 +41,8 @@ public:
 
   bool is_transacting() const;
   void set_transacting(bool transacting);
+
+  void conn_stop(const char* msg);
 };
 
 #endif

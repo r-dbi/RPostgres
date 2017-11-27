@@ -17,7 +17,7 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
     PGresult* prep = PQprepare(pConn_->conn(), "", sql.c_str(), 0, NULL);
     if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
       PQclear(prep);
-      stop(PQerrorMessage(pConn_->conn()));
+      pConn->conn_stop("Failed to prepare query");
     }
     PQclear(prep);
 
@@ -25,7 +25,7 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
     pSpec_ = PQdescribePrepared(pConn_->conn(), "");
     if (PQresultStatus(pSpec_) != PGRES_COMMAND_OK) {
       PQclear(pSpec_);
-      stop(PQerrorMessage(pConn_->conn()));
+      pConn->conn_stop("Failed to retrieve query result metadata");
     }
 
     // Find number of parameters, and auto bind if 0
@@ -58,10 +58,10 @@ PqResult::~PqResult() {
 void PqResult::bind() {
   bound_ = true;
   if (!PQsendQueryPrepared(pConn_->conn(), "", 0, NULL, NULL, NULL, 0))
-    stop("Failed to send query");
+    pConn_->conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))
-    stop("Failed to set single row mode");
+    pConn_->conn_stop("Failed to set single row mode");
 }
 
 void PqResult::bind(List params) {
@@ -80,10 +80,10 @@ void PqResult::bind(List params) {
 
   if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
                            NULL, NULL, 0))
-    stop("Failed to send query");
+    pConn_->conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))
-    stop("Failed to set single row mode");
+    pConn_->conn_stop("Failed to set single row mode");
 
   bound_ = true;
 }
@@ -117,7 +117,7 @@ void PqResult::bind_rows(List params) {
     PGresult* res = PQexecPrepared(pConn_->conn(), "", nparams_,
                                    &c_params[0], NULL, &c_formats[0], 0);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
-      stop("%s (row %i)", PQerrorMessage(pConn_->conn()), i + 1);
+      pConn_->conn_stop("Failed to execute prepared command");
   }
 }
 
