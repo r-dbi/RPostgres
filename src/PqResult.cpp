@@ -65,6 +65,13 @@ void PqResult::bind(List params) {
          nparams_, params.size());
   }
 
+  if (params.size() == 0 && bound_) {
+    stop("dbBind() can only be called for queries or statements with parameters");
+  }
+
+  pConn_->cleanup_query();
+  pNextRow_.reset();
+
   std::vector<const char*> c_params(nparams_);
   for (int i = 0; i < nparams_; ++i) {
     CharacterVector param(params[i]);

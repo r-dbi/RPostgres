@@ -10,7 +10,6 @@ DBItest::test_all(c(
   # meta
   "column_info",                                # #50
   "bind_multi_row.*",                           # #100
-  "bind_repeated.*",                            # #87
 
   NULL
 ))
