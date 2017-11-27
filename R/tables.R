@@ -191,10 +191,12 @@ setMethod("dbReadTable", c("PqConnection", "character"),
 #' @export
 #' @rdname postgres-tables
 setMethod("dbListTables", "PqConnection", function(conn, ...) {
-  dbGetQuery(conn, paste0(
-    "SELECT tablename FROM pg_tables WHERE schemaname != 'information_schema'",
-    " AND schemaname != 'pg_catalog'")
-  )[[1]]
+  query <- paste0(
+    "SELECT table_name FROM INFORMATION_SCHEMA.tables ",
+    "WHERE ",
+    "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+  )
+  dbGetQuery(conn, query)[[1]]
 })
 
 #' @export
@@ -207,10 +209,10 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, 
   name <- dbQuoteString(conn, name)
 
   query <- paste0(
-    "SELECT COUNT(*) FROM pg_tables WHERE tablename = ",
-    name,
-    " AND schemaname != 'information_schema'",
-    " AND schemaname != 'pg_catalog'"
+    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables WHERE table_name = ",
+    name, " ",
+    "AND ",
+    "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
   )
   dbGetQuery(conn, query)[[1]] >= 1
 })

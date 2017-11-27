@@ -56,12 +56,7 @@ PqResult::~PqResult() {
 }
 
 void PqResult::bind() {
-  bound_ = true;
-  if (!PQsendQueryPrepared(pConn_->conn(), "", 0, NULL, NULL, NULL, 0))
-    pConn_->conn_stop("Failed to send query");
-
-  if (!PQsetSingleRowMode(pConn_->conn()))
-    pConn_->conn_stop("Failed to set single row mode");
+  bind(List());
 }
 
 void PqResult::bind(List params) {
@@ -69,6 +64,13 @@ void PqResult::bind(List params) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
   }
+
+  if (params.size() == 0 && bound_) {
+    stop("dbBind() can only be called for queries or statements with parameters");
+  }
+
+  pConn_->cleanup_query();
+  pNextRow_.reset();
 
   std::vector<const char*> c_params(nparams_);
   for (int i = 0; i < nparams_; ++i) {
