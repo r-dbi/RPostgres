@@ -8,6 +8,9 @@
 namespace Rcpp {
 
 template<>
+PqConnection* as(SEXP x);
+
+template<>
 PqResult* as(SEXP x);
 
 }
