@@ -64,7 +64,7 @@ void PqConnection::cancel_query() {
   }
 
   char errbuf[256];
-  if (!PQcancel(cancel, errbuf, 256)) {
+  if (!PQcancel(cancel, errbuf, sizeof(errbuf))) {
     warning(errbuf);
   }
 
