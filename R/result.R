@@ -120,6 +120,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   }
   params <- factor_to_string(params, warn = TRUE)
   params <- posixlt_to_posixct(params)
+  params <- difftime_to_hms(params)
   params <- prepare_for_binding(params)
   result_bind_params(res@ptr, params)
   invisible(res)
@@ -137,6 +138,12 @@ factor_to_string <- function(value, warn = FALSE) {
 posixlt_to_posixct <- function(value) {
   is_posixlt <- vlapply(value, inherits, "POSIXlt")
   value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
+  value
+}
+
+difftime_to_hms <- function(value) {
+  is_difftime <- vlapply(value, inherits, "difftime")
+  value[is_difftime] <- lapply(value[is_difftime], hms::as.hms)
   value
 }
 
