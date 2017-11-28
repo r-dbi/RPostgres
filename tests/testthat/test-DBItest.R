@@ -8,6 +8,8 @@ DBItest::test_all(c(
   "data_raw",                                   # not a failure, can't cast to raw
 
   # meta
+  "bind_raw",                                   #
+  "bind_blob",                                  #
   "bind_multi_row.*",                           # #100
 
   NULL

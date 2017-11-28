@@ -68,3 +68,49 @@ setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...)
   ret[is.na(x)] <- "NULL"
   SQL(ret)
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "factor"), function(conn, x, ...) {
+  dbQuoteLiteral(conn, as.character(x))
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
+  ret <- paste0("'", as.character(x), "'::date")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) {
+  ret <- paste0("'", as.character(x), "'::timestamp")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
+  ret <- paste0(as.character(x), "::time")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
+  blob_data <- vcapply(
+    x,
+    function(x) {
+      if (is.null(x)) "NULL"
+      else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
+      else {
+        stop("Lists must contain raw vectors or NULL", call. = FALSE)
+      }
+    }
+  )
+  SQL(blob_data)
+})
