@@ -87,9 +87,9 @@ void PqResult::bind(List params) {
     }
     else {
       CharacterVector param(params[i]);
-      const char* param_value = CHAR(param[0]);
-      if (strcmp(param_value, "NULL") != 0)
-        c_params[i] = param_value;
+      if (param[0] != NA_STRING) {
+        c_params[i] = CHAR(param[0]);
+      }
     }
   }
 
