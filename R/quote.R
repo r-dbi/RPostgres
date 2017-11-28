@@ -98,3 +98,19 @@ setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...
   ret[is.na(x)] <- "NULL"
   SQL(ret)
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
+  blob_data <- vcapply(
+    x,
+    function(x) {
+      if (is.null(x)) "NULL"
+      else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
+      else {
+        stop("Lists must contain raw vectors or NULL", call. = FALSE)
+      }
+    }
+  )
+  SQL(blob_data)
+})

@@ -14,6 +14,7 @@
 \alias{dbQuoteLiteral,PqConnection,Date-method}
 \alias{dbQuoteLiteral,PqConnection,POSIXt-method}
 \alias{dbQuoteLiteral,PqConnection,difftime-method}
+\alias{dbQuoteLiteral,PqConnection,list-method}
 \title{Quote postgres strings and identifiers.}
 \usage{
 \S4method{dbQuoteString}{PqConnection,character}(conn, x, ...)
@@ -37,6 +38,8 @@
 \S4method{dbQuoteLiteral}{PqConnection,POSIXt}(conn, x, ...)
 
 \S4method{dbQuoteLiteral}{PqConnection,difftime}(conn, x, ...)
+
+\S4method{dbQuoteLiteral}{PqConnection,list}(conn, x, ...)
 }
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}
