@@ -68,3 +68,9 @@ setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...)
   ret[is.na(x)] <- "NULL"
   SQL(ret)
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "factor"), function(conn, x, ...) {
+  dbQuoteLiteral(conn, as.character(x))
+})
