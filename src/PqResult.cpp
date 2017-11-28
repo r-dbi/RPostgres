@@ -73,15 +73,28 @@ void PqResult::bind(List params) {
   pNextRow_.reset();
 
   std::vector<const char*> c_params(nparams_);
+  std::vector<int> formats(nparams_);
+  std::vector<int> lengths(nparams_);
   for (int i = 0; i < nparams_; ++i) {
-    CharacterVector param(params[i]);
-    const char* param_value = CHAR(param[0]);
-    if (strcmp(param_value, "NULL") != 0)
-      c_params[i] = param_value;
+    if (TYPEOF(params[i]) == VECSXP) {
+      List param(params[i]);
+      if (!Rf_isNull(param[0])) {
+        Rbyte* param_value = RAW(param[0]);
+        c_params[i] = reinterpret_cast<const char*>(param_value);
+        formats[i] = 1;
+        lengths[i] = Rf_length(param[0]);
+      }
+    }
+    else {
+      CharacterVector param(params[i]);
+      const char* param_value = CHAR(param[0]);
+      if (strcmp(param_value, "NULL") != 0)
+        c_params[i] = param_value;
+    }
   }
 
   if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
-                           NULL, NULL, 0))
+                           &lengths[0], &formats[0], 0))
     pConn_->conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))

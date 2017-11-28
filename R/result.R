@@ -120,8 +120,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   }
   params <- factor_to_string(params, warn = TRUE)
   params <- posixlt_to_posixct(params)
-  params <- lapply(params, dbQuoteLiteral, conn = res@conn)
-  params <- lapply(params, gsub, pattern = "::.*$", replacement = "")
+  params <- prepare_for_binding(params)
   result_bind_params(res@ptr, params)
   invisible(res)
 })
@@ -138,6 +137,12 @@ factor_to_string <- function(value, warn = FALSE) {
 posixlt_to_posixct <- function(value) {
   is_posixlt <- vlapply(value, inherits, "POSIXlt")
   value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
+  value
+}
+
+prepare_for_binding <- function(value) {
+  is_list <- vlapply(value, is.list)
+  value[!is_list] <- lapply(value[!is_list], as.character)
   value
 }
 
