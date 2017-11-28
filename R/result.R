@@ -151,6 +151,15 @@ difftime_to_hms <- function(value) {
 prepare_for_binding <- function(value) {
   is_list <- vlapply(value, is.list)
   value[!is_list] <- lapply(value[!is_list], as.character)
+  value[!is_list] <- lapply(value[!is_list], enc2utf8)
+  value[is_list] <- lapply(value[is_list], vcapply, function(x) {
+    if (is.null(x)) NA_character_
+    else if (is.raw(x)) {
+      paste(sprintf("\\%.3o", as.integer(x)), collapse = "")
+    } else {
+      stop("Lists must contain raw vectors or NULL", call. = FALSE)
+    }
+  })
   value
 }
 
