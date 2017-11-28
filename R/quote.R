@@ -74,3 +74,27 @@ setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...)
 setMethod("dbQuoteLiteral", c("PqConnection", "factor"), function(conn, x, ...) {
   dbQuoteLiteral(conn, as.character(x))
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
+  ret <- paste0("'", as.character(x), "'::date")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) {
+  ret <- paste0("'", as.character(x), "'::timestamp")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
+  ret <- paste0(as.character(x), "::time")
+  ret[is.na(x)] <- "NULL"
+  SQL(ret)
+})
