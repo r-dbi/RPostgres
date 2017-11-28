@@ -118,6 +118,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   if (!is.null(names(params))) {
     stop("Named parameters not supported", call. = FALSE)
   }
+  if (!is.list(params)) params <- as.list(params)
   params <- factor_to_string(params, warn = TRUE)
   params <- posixlt_to_posixct(params)
   params <- difftime_to_hms(params)
