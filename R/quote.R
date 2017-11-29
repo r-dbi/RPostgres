@@ -102,6 +102,20 @@ setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
+  quote_blob(x)
+})
+
+# Workaround, remove when blob > 1.1.0 is on CRAN
+setOldClass("blob")
+
+#' @export
+#' @rdname quote
+#' @importFrom blob blob
+setMethod("dbQuoteLiteral", c("PqConnection", "blob"), function(conn, x, ...) {
+  quote_blob(x)
+})
+
+quote_blob <- function(x) {
   blob_data <- vcapply(
     x,
     function(x) {
@@ -113,4 +127,4 @@ setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
     }
   )
   SQL(blob_data)
-})
+}
