@@ -164,15 +164,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// result_release
+void result_release(XPtr<DbResult> res);
+RcppExport SEXP _RPostgres_result_release(SEXP resSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<DbResult> >::type res(resSEXP);
+    result_release(res);
+    return R_NilValue;
+END_RCPP
+}
 // result_fetch
-List result_fetch(DbResult* rs, const int n);
-RcppExport SEXP _RPostgres_result_fetch(SEXP rsSEXP, SEXP nSEXP) {
+List result_fetch(DbResult* res, const int n);
+RcppExport SEXP _RPostgres_result_fetch(SEXP resSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_fetch(rs, n));
+    rcpp_result_gen = Rcpp::wrap(result_fetch(res, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -196,16 +206,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
     rcpp_result_gen = Rcpp::wrap(result_is_complete(rs));
     return rcpp_result_gen;
-END_RCPP
-}
-// result_release
-void result_release(XPtr<DbResult> rs);
-RcppExport SEXP _RPostgres_result_release(SEXP rsSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<DbResult> >::type rs(rsSEXP);
-    result_release(rs);
-    return R_NilValue;
 END_RCPP
 }
 // result_active
@@ -268,10 +268,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},
     {"_RPostgres_init_logging", (DL_FUNC) &_RPostgres_init_logging, 1},
     {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
+    {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
     {"_RPostgres_result_bind_params", (DL_FUNC) &_RPostgres_result_bind_params, 2},
     {"_RPostgres_result_is_complete", (DL_FUNC) &_RPostgres_result_is_complete, 1},
-    {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_active", (DL_FUNC) &_RPostgres_result_active, 1},
     {"_RPostgres_result_rows_fetched", (DL_FUNC) &_RPostgres_result_rows_fetched, 1},
     {"_RPostgres_result_rows_affected", (DL_FUNC) &_RPostgres_result_rows_affected, 1},

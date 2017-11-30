@@ -9,6 +9,11 @@ XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql) {
 }
 
 // [[Rcpp::export]]
+void result_release(XPtr<DbResult> res) {
+  res.release();
+}
+
+// [[Rcpp::export]]
 List result_fetch(DbResult* res, const int n) {
   return res->fetch(n);
 }
@@ -25,11 +30,6 @@ bool result_is_complete(DbResult* rs) {
   } catch (...) {
     return false;
   }
-}
-
-// [[Rcpp::export]]
-void result_release(XPtr<DbResult> rs) {
-  rs.release();
 }
 
 // [[Rcpp::export]]

@@ -57,8 +57,12 @@ result_create <- function(con, sql) {
     .Call(`_RPostgres_result_create`, con, sql)
 }
 
-result_fetch <- function(rs, n) {
-    .Call(`_RPostgres_result_fetch`, rs, n)
+result_release <- function(res) {
+    invisible(.Call(`_RPostgres_result_release`, res))
+}
+
+result_fetch <- function(res, n) {
+    .Call(`_RPostgres_result_fetch`, res, n)
 }
 
 result_bind_params <- function(rs, params) {
@@ -67,10 +71,6 @@ result_bind_params <- function(rs, params) {
 
 result_is_complete <- function(rs) {
     .Call(`_RPostgres_result_is_complete`, rs)
-}
-
-result_release <- function(rs) {
-    invisible(.Call(`_RPostgres_result_release`, rs))
 }
 
 result_active <- function(rs_) {
