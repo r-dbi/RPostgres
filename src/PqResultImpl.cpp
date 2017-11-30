@@ -42,8 +42,25 @@ PqResultImpl::~PqResultImpl() {
   } catch (...) {}
 }
 
-void PqResultImpl::bind() {
-  bind(List());
+
+
+// Publics /////////////////////////////////////////////////////////////////////
+
+bool PqResultImpl::complete() {
+  if (!bound_) return false;
+  fetch_row_if_needed();
+  return !pNextRow_->has_data();
+}
+
+int PqResultImpl::n_rows_fetched() {
+  return nrows_ - (pNextRow_.get() != NULL);
+}
+
+int PqResultImpl::n_rows_affected() {
+  if (!bound_) return NA_INTEGER;
+  if (ncols_ > 0) return 0;
+  fetch_row_if_needed();
+  return pNextRow_->n_rows_affected();
 }
 
 void PqResultImpl::bind(const List& params) {
@@ -89,51 +106,6 @@ void PqResultImpl::bind(const List& params) {
   bound_ = true;
 }
 
-void PqResultImpl::bind_rows(List params) {
-  if (params.size() != nparams_) {
-    stop("Query requires %i params; %i supplied.",
-         nparams_, params.size());
-  }
-
-  R_xlen_t n = CharacterVector(params[0]).size();
-
-  std::vector<const char*> c_params(nparams_);
-  std::vector<std::string> s_params(nparams_);
-  std::vector<int> c_formats(nparams_);
-  for (int j = 0; j < nparams_; ++j) {
-    c_formats[j] = 0;
-  }
-
-  for (int i = 0; i < n; ++i) {
-    if (i % 1000 == 0)
-      checkUserInterrupt();
-
-    for (int j = 0; j < nparams_; ++j) {
-      CharacterVector param(params[j]);
-      // FIXME: Need PQescapeByteaConn for BYTEA
-      s_params[j] = as<std::string>(param[i]);
-      c_params[j] = s_params[j].c_str();
-    }
-
-    PGresult* res = PQexecPrepared(pConn_, "", nparams_,
-                                   &c_params[0], NULL, &c_formats[0], 0);
-    if (PQresultStatus(res) != PGRES_COMMAND_OK)
-      conn_stop("Failed to execute prepared command");
-  }
-}
-
-void PqResultImpl::fetch_row() {
-  pNextRow_.reset(new PqRow(pConn_));
-  nrows_++;
-}
-
-void PqResultImpl::fetch_row_if_needed() {
-  if (pNextRow_.get() != NULL)
-    return;
-
-  fetch_row();
-}
-
 List PqResultImpl::fetch(int n_max) {
   if (!bound_)
     stop("Query needs to be bound before fetching");
@@ -174,48 +146,6 @@ List PqResultImpl::fetch(int n_max) {
   }
 
   return finish_df(out);
-}
-
-List PqResultImpl::finish_df(List out) const {
-  for (int i = 0; i < out.size(); i++) {
-    RObject col(out[i]);
-    switch (types_[i]) {
-    case PGDate:
-      col.attr("class") = CharacterVector::create("Date");
-      break;
-    case PGDatetime:
-    case PGDatetimeTZ:
-      col.attr("class") = CharacterVector::create("POSIXct", "POSIXt");
-      break;
-    case PGTime:
-      col.attr("class") = CharacterVector::create("hms", "difftime");
-      col.attr("units") = CharacterVector::create("secs");
-      break;
-    case PGInt64:
-      col.attr("class") = CharacterVector::create("integer64");
-      break;
-    default:
-      break;
-    }
-  }
-  return out;
-}
-
-int PqResultImpl::n_rows_affected() {
-  if (!bound_) return NA_INTEGER;
-  if (ncols_ > 0) return 0;
-  fetch_row_if_needed();
-  return pNextRow_->n_rows_affected();
-}
-
-int PqResultImpl::n_rows_fetched() {
-  return nrows_ - (pNextRow_.get() != NULL);
-}
-
-bool PqResultImpl::complete() {
-  if (!bound_) return false;
-  fetch_row_if_needed();
-  return !pNextRow_->has_data();
 }
 
 List PqResultImpl::get_column_info() {
@@ -267,6 +197,88 @@ List PqResultImpl::get_column_info() {
   return out;
 }
 
+
+
+// Publics (custom) ////////////////////////////////////////////////////////////
+
+
+
+
+// Privates ////////////////////////////////////////////////////////////////////
+
+void PqResultImpl::bind() {
+  bind(List());
+}
+
+void PqResultImpl::bind_rows(List params) {
+  if (params.size() != nparams_) {
+    stop("Query requires %i params; %i supplied.",
+         nparams_, params.size());
+  }
+
+  R_xlen_t n = CharacterVector(params[0]).size();
+
+  std::vector<const char*> c_params(nparams_);
+  std::vector<std::string> s_params(nparams_);
+  std::vector<int> c_formats(nparams_);
+  for (int j = 0; j < nparams_; ++j) {
+    c_formats[j] = 0;
+  }
+
+  for (int i = 0; i < n; ++i) {
+    if (i % 1000 == 0)
+      checkUserInterrupt();
+
+    for (int j = 0; j < nparams_; ++j) {
+      CharacterVector param(params[j]);
+      // FIXME: Need PQescapeByteaConn for BYTEA
+      s_params[j] = as<std::string>(param[i]);
+      c_params[j] = s_params[j].c_str();
+    }
+
+    PGresult* res = PQexecPrepared(pConn_, "", nparams_,
+                                   &c_params[0], NULL, &c_formats[0], 0);
+    if (PQresultStatus(res) != PGRES_COMMAND_OK)
+      conn_stop("Failed to execute prepared command");
+  }
+}
+
+void PqResultImpl::fetch_row() {
+  pNextRow_.reset(new PqRow(pConn_));
+  nrows_++;
+}
+
+void PqResultImpl::fetch_row_if_needed() {
+  if (pNextRow_.get() != NULL)
+    return;
+
+  fetch_row();
+}
+
+List PqResultImpl::finish_df(List out) const {
+  for (int i = 0; i < out.size(); i++) {
+    RObject col(out[i]);
+    switch (types_[i]) {
+    case PGDate:
+      col.attr("class") = CharacterVector::create("Date");
+      break;
+    case PGDatetime:
+    case PGDatetimeTZ:
+      col.attr("class") = CharacterVector::create("POSIXct", "POSIXt");
+      break;
+    case PGTime:
+      col.attr("class") = CharacterVector::create("hms", "difftime");
+      col.attr("units") = CharacterVector::create("secs");
+      break;
+    case PGInt64:
+      col.attr("class") = CharacterVector::create("integer64");
+      break;
+    default:
+      break;
+    }
+  }
+  return out;
+}
 
 std::vector<std::string> PqResultImpl::get_column_names() const {
   std::vector<std::string> names;
