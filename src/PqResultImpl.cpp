@@ -185,7 +185,13 @@ void PqResultImpl::bind(const List& params) {
 
   set_params(params);
 
-  groups_ = 1;
+  if (params.length() > 0) {
+    SEXP first_col = params[0];
+    groups_ = Rf_length(first_col);
+  }
+  else {
+    groups_ = 1;
+  }
   group_ = 0;
 
   rows_affected_ = 0;
