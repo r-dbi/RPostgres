@@ -10,13 +10,19 @@ class PqRow;
 typedef boost::shared_ptr<PqRow> PqRowPtr;
 
 class PqResultImpl : boost::noncopyable {
+  // Wrapped pointer
   PGconn* pConn_;
   PGresult* pSpec_;
-  PqRowPtr pNextRow_;
-  std::vector<PGTypes> types_;
+
+  // Cache
   std::vector<std::string> names_;
-  int ncols_, nrows_, nparams_;
+  int ncols_, nparams_;
+
+  // State
+  PqRowPtr pNextRow_;
   bool ready_;
+  int nrows_;
+  std::vector<PGTypes> types_;
 
 public:
   PqResultImpl(PGconn* pConn, const std::string& sql);

@@ -4,7 +4,13 @@
 #include "PqRow.h"
 
 PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql) :
-  pConn_(pConn), nrows_(0), ready_(false) {
+pConn_(pConn),
+pSpec_(NULL),
+ncols_(0),
+nparams_(0),
+ready_(false),
+nrows_(0)
+{
 
   LOG_DEBUG << sql;
 
