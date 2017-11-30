@@ -28,7 +28,7 @@ public:
   int n_rows_affected();
 
   void bind(const List& params);
-  List fetch(int n_max = -1);
+  List fetch(const int n_max);
 
   List get_column_info();
 
