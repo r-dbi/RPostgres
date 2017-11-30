@@ -29,6 +29,26 @@ List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>
   int j = 0;
   for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
     switch (*it) {
+    case PGInt:
+      out[j] = Rf_allocVector(INTSXP, n);
+      break;
+
+    case PGReal:
+      out[j] = Rf_allocVector(REALSXP, n);
+      break;
+
+    case PGLogical:
+      out[j] = Rf_allocVector(LGLSXP, n);
+      break;
+
+    case PGString:
+      out[j] = Rf_allocVector(STRSXP, n);
+      break;
+
+    case PGVector:
+      out[j] = Rf_allocVector(VECSXP, n);
+      break;
+
     case PGDate:
     case PGDatetime:
     case PGDatetimeTZ:
@@ -41,7 +61,7 @@ List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>
       break;
 
     default:
-      out[j] = Rf_allocVector(static_cast<SEXPTYPE>(*it), n);
+      stop("Unknown datatype %d", *it);
     }
   }
   return out;

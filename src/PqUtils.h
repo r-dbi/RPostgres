@@ -4,11 +4,11 @@
 // Generic data frame utils ----------------------------------------------------
 
 enum PGTypes {
-  PGInt = INTSXP,
-  PGReal = REALSXP,
-  PGString = STRSXP,
-  PGLogical = LGLSXP,
-  PGVector = VECSXP,
+  PGInt,
+  PGReal,
+  PGString,
+  PGLogical,
+  PGVector,
   PGInt64,
   PGDate,
   PGDatetime,
