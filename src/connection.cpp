@@ -49,33 +49,29 @@ List connection_info(DbConnection* con) {
 // Quoting
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_string(DbConnection* con, CharacterVector xs) {
+CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
-  CharacterVector escaped(n);
+  CharacterVector output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    if (CharacterVector::is_na(xs[i])) {
-      escaped[i] = "NULL";
-    }
-    else {
-      escaped[i] = con->escape_string(std::string(xs[i]));
-    }
+    String x = xs[i];
+    output[i] = con->quote_string(x);
   }
 
-  return escaped;
+  return output;
 }
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_identifier(DbConnection* con, CharacterVector xs) {
+CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
-  CharacterVector escaped(n);
+  CharacterVector output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    std::string x(xs[i]);
-    escaped[i] = con->escape_identifier(x);
+    String x = xs[i];
+    output[i] = con->quote_identifier(x);
   }
 
-  return escaped;
+  return output;
 }
 
 // Transactions

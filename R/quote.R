@@ -20,7 +20,7 @@ NULL
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
   if (length(x) == 0) return(SQL(character()))
-  res <- SQL(paste0(connection_escape_string(conn@ptr, enc2utf8(x)), "::varchar"))
+  res <- SQL(paste0(connection_quote_string(conn@ptr, enc2utf8(x)), "::varchar"))
   res
 })
 
@@ -33,10 +33,10 @@ setMethod("dbQuoteString", c("PqConnection", "SQL"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x, ...) {
-  if (any(is.na(x))) {
+  if (anyNA(x)) {
     stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
   }
-  SQL(connection_escape_identifier(conn@ptr, x))
+  SQL(connection_quote_identifier(conn@ptr, x))
 })
 
 #' @export

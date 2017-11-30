@@ -17,12 +17,12 @@ connection_info <- function(con) {
     .Call(`_RPostgres_connection_info`, con)
 }
 
-connection_escape_string <- function(con, xs) {
-    .Call(`_RPostgres_connection_escape_string`, con, xs)
+connection_quote_string <- function(con, xs) {
+    .Call(`_RPostgres_connection_quote_string`, con, xs)
 }
 
-connection_escape_identifier <- function(con, xs) {
-    .Call(`_RPostgres_connection_escape_identifier`, con, xs)
+connection_quote_identifier <- function(con, xs) {
+    .Call(`_RPostgres_connection_quote_identifier`, con, xs)
 }
 
 connection_is_transacting <- function(con) {

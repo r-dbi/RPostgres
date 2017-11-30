@@ -50,27 +50,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// connection_escape_string
-CharacterVector connection_escape_string(DbConnection* con, CharacterVector xs);
-RcppExport SEXP _RPostgres_connection_escape_string(SEXP conSEXP, SEXP xsSEXP) {
+// connection_quote_string
+CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs);
+RcppExport SEXP _RPostgres_connection_quote_string(SEXP conSEXP, SEXP xsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_escape_string(con, xs));
+    rcpp_result_gen = Rcpp::wrap(connection_quote_string(con, xs));
     return rcpp_result_gen;
 END_RCPP
 }
-// connection_escape_identifier
-CharacterVector connection_escape_identifier(DbConnection* con, CharacterVector xs);
-RcppExport SEXP _RPostgres_connection_escape_identifier(SEXP conSEXP, SEXP xsSEXP) {
+// connection_quote_identifier
+CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector xs);
+RcppExport SEXP _RPostgres_connection_quote_identifier(SEXP conSEXP, SEXP xsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_escape_identifier(con, xs));
+    rcpp_result_gen = Rcpp::wrap(connection_quote_identifier(con, xs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -258,8 +258,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_valid", (DL_FUNC) &_RPostgres_connection_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
     {"_RPostgres_connection_info", (DL_FUNC) &_RPostgres_connection_info, 1},
-    {"_RPostgres_connection_escape_string", (DL_FUNC) &_RPostgres_connection_escape_string, 2},
-    {"_RPostgres_connection_escape_identifier", (DL_FUNC) &_RPostgres_connection_escape_identifier, 2},
+    {"_RPostgres_connection_quote_string", (DL_FUNC) &_RPostgres_connection_quote_string, 2},
+    {"_RPostgres_connection_quote_identifier", (DL_FUNC) &_RPostgres_connection_quote_identifier, 2},
     {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},

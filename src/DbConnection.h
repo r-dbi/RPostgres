@@ -37,8 +37,9 @@ public:
   void check_connection();
   List info();
 
-  SEXP escape_string(std::string x);
-  SEXP escape_identifier(std::string x);
+  SEXP quote_string(const String& x);
+  SEXP quote_identifier(const String& x);
+  static SEXP get_null_string();
 
   bool is_transacting() const;
   void set_transacting(bool transacting);

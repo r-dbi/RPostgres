@@ -170,26 +170,34 @@ List DbConnection::info() {
     );
 }
 
-SEXP DbConnection::escape_string(std::string x) {
+SEXP DbConnection::quote_string(const String& x) {
   // Returns a single CHRSXP
   check_connection();
 
-  char* pq_escaped = PQescapeLiteral(pConn_, x.c_str(), x.length());
+  if (x == NA_STRING)
+    return get_null_string();
+
+  char* pq_escaped = PQescapeLiteral(pConn_, x.get_cstring(), static_cast<size_t>(-1));
   SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
   PQfreemem(pq_escaped);
 
   return escaped;
 }
 
-SEXP DbConnection::escape_identifier(std::string x) {
+SEXP DbConnection::quote_identifier(const String& x) {
   // Returns a single CHRSXP
   check_connection();
 
-  char* pq_escaped = PQescapeIdentifier(pConn_, x.c_str(), x.length());
+  char* pq_escaped = PQescapeIdentifier(pConn_, x.get_cstring(), static_cast<size_t>(-1));
   SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
   PQfreemem(pq_escaped);
 
   return escaped;
+}
+
+SEXP DbConnection::get_null_string() {
+  static RObject null = Rf_mkCharCE("NULL", CE_UTF8);
+  return null;
 }
 
 bool DbConnection::is_transacting() const {
