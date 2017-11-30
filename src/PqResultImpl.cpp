@@ -5,41 +5,16 @@
 
 PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql) :
 pConn_(pConn),
-pSpec_(NULL),
-ncols_(0),
-nparams_(0),
+pSpec_(prepare(pConn, sql)),
+cache(pSpec_),
 ready_(false),
-nrows_(0)
-{
+nrows_(0) {
 
   LOG_DEBUG << sql;
 
-  // Prepare query
-  PGresult* prep = PQprepare(pConn_, "", sql.c_str(), 0, NULL);
-  if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
-    PQclear(prep);
-    conn_stop("Failed to prepare query");
-  }
-  PQclear(prep);
-
-  // Retrieve query specification
-  pSpec_ = PQdescribePrepared(pConn_, "");
-  if (PQresultStatus(pSpec_) != PGRES_COMMAND_OK) {
-    PQclear(pSpec_);
-    conn_stop("Failed to retrieve query result metadata");
-  }
-
-  // Find number of parameters, and auto bind if 0
-  nparams_ = PQnparams(pSpec_);
-  if (nparams_ == 0) {
+  if (cache.nparams_ == 0) {
     bind();
   }
-
-  // Cache query metadata
-  ncols_ = PQnfields(pSpec_);
-  names_ = get_column_names();
-  types_ = get_column_types();
-
 }
 
 PqResultImpl::~PqResultImpl() {
@@ -48,7 +23,33 @@ PqResultImpl::~PqResultImpl() {
   } catch (...) {}
 }
 
+PqResultImpl::_cache::_cache(PGresult* spec) :
+names_(get_column_names(spec)),
+types_(get_column_types(spec)),
+ncols_(static_cast<int>(names_.size())),
+nparams_(PQnparams(spec))
+{
+}
 
+
+PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
+  // Prepare query
+  PGresult* prep = PQprepare(conn, "", sql.c_str(), 0, NULL);
+  if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
+    PQclear(prep);
+    DbConnection::conn_stop(conn, "Failed to prepare query");
+  }
+  PQclear(prep);
+
+  // Retrieve query specification
+  PGresult* spec = PQdescribePrepared(conn, "");
+  if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
+    PQclear(spec);
+    DbConnection::conn_stop(conn, "Failed to retrieve query result metadata");
+  }
+
+  return spec;
+}
 
 // Publics /////////////////////////////////////////////////////////////////////
 
@@ -64,15 +65,15 @@ int PqResultImpl::n_rows_fetched() {
 
 int PqResultImpl::n_rows_affected() {
   if (!ready_) return NA_INTEGER;
-  if (ncols_ > 0) return 0;
+  if (cache.ncols_ > 0) return 0;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
 }
 
 void PqResultImpl::bind(const List& params) {
-  if (params.size() != nparams_) {
+  if (params.size() != cache.nparams_) {
     stop("Query requires %i params; %i supplied.",
-         nparams_, params.size());
+         cache.nparams_, params.size());
   }
 
   if (params.size() == 0 && ready_) {
@@ -81,10 +82,10 @@ void PqResultImpl::bind(const List& params) {
 
   pNextRow_.reset();
 
-  std::vector<const char*> c_params(nparams_);
-  std::vector<int> formats(nparams_);
-  std::vector<int> lengths(nparams_);
-  for (int i = 0; i < nparams_; ++i) {
+  std::vector<const char*> c_params(cache.nparams_);
+  std::vector<int> formats(cache.nparams_);
+  std::vector<int> lengths(cache.nparams_);
+  for (int i = 0; i < cache.nparams_; ++i) {
     if (TYPEOF(params[i]) == VECSXP) {
       List param(params[i]);
       if (!Rf_isNull(param[0])) {
@@ -102,7 +103,7 @@ void PqResultImpl::bind(const List& params) {
     }
   }
 
-  if (!PQsendQueryPrepared(pConn_, "", nparams_, &c_params[0],
+  if (!PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
                            &lengths[0], &formats[0], 0))
     conn_stop("Failed to send query");
 
@@ -117,7 +118,7 @@ List PqResultImpl::fetch(int n_max) {
     stop("Query needs to be bound before fetching");
 
   int n = (n_max < 0) ? 100 : n_max;
-  List out = df_create(types_, names_, n);
+  List out = df_create(cache.types_, cache.names_, n);
 
   int i = 0;
   fetch_row_if_needed();
@@ -136,8 +137,8 @@ List PqResultImpl::fetch(int n_max) {
       }
     }
 
-    for (int j = 0; j < ncols_; ++j) {
-      pNextRow_->set_list_value(out[j], i, j, types_);
+    for (int j = 0; j < cache.ncols_; ++j) {
+      pNextRow_->set_list_value(out[j], i, j, cache.types_);
     }
     fetch_row();
     ++i;
@@ -155,14 +156,14 @@ List PqResultImpl::fetch(int n_max) {
 }
 
 List PqResultImpl::get_column_info() {
-  CharacterVector names(ncols_);
-  for (int i = 0; i < ncols_; i++) {
-    names[i] = names_[i];
+  CharacterVector names(cache.ncols_);
+  for (int i = 0; i < cache.ncols_; i++) {
+    names[i] = cache.names_[i];
   }
 
-  CharacterVector types(ncols_);
-  for (int i = 0; i < ncols_; i++) {
-    switch (types_[i]) {
+  CharacterVector types(cache.ncols_);
+  for (int i = 0; i < cache.ncols_; i++) {
+    switch (cache.types_[i]) {
     case PGString:
       types[i] = "character";
       break;
@@ -196,7 +197,7 @@ List PqResultImpl::get_column_info() {
   }
 
   List out = Rcpp::List::create(names, types);
-  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -ncols_);
+  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
   out.attr("class") = "data.frame";
   out.attr("names") = CharacterVector::create("name", "type");
 
@@ -216,39 +217,6 @@ void PqResultImpl::bind() {
   bind(List());
 }
 
-void PqResultImpl::bind_rows(List params) {
-  if (params.size() != nparams_) {
-    stop("Query requires %i params; %i supplied.",
-         nparams_, params.size());
-  }
-
-  R_xlen_t n = CharacterVector(params[0]).size();
-
-  std::vector<const char*> c_params(nparams_);
-  std::vector<std::string> s_params(nparams_);
-  std::vector<int> c_formats(nparams_);
-  for (int j = 0; j < nparams_; ++j) {
-    c_formats[j] = 0;
-  }
-
-  for (int i = 0; i < n; ++i) {
-    if (i % 1000 == 0)
-      checkUserInterrupt();
-
-    for (int j = 0; j < nparams_; ++j) {
-      CharacterVector param(params[j]);
-      // FIXME: Need PQescapeByteaConn for BYTEA
-      s_params[j] = as<std::string>(param[i]);
-      c_params[j] = s_params[j].c_str();
-    }
-
-    PGresult* res = PQexecPrepared(pConn_, "", nparams_,
-                                   &c_params[0], NULL, &c_formats[0], 0);
-    if (PQresultStatus(res) != PGRES_COMMAND_OK)
-      conn_stop("Failed to execute prepared command");
-  }
-}
-
 void PqResultImpl::fetch_row() {
   pNextRow_.reset(new PqRow(pConn_));
   nrows_++;
@@ -264,7 +232,7 @@ void PqResultImpl::fetch_row_if_needed() {
 List PqResultImpl::finish_df(List out) const {
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
-    switch (types_[i]) {
+    switch (cache.types_[i]) {
     case PGDate:
       col.attr("class") = CharacterVector::create("Date");
       break;
@@ -286,23 +254,25 @@ List PqResultImpl::finish_df(List out) const {
   return out;
 }
 
-std::vector<std::string> PqResultImpl::get_column_names() const {
+std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) {
   std::vector<std::string> names;
+  int ncols_ = PQnfields(spec);
   names.reserve(ncols_);
 
   for (int i = 0; i < ncols_; ++i) {
-    names.push_back(std::string(PQfname(pSpec_, i)));
+    names.push_back(std::string(PQfname(spec, i)));
   }
 
   return names;
 }
 
-std::vector<PGTypes> PqResultImpl::get_column_types() const {
+std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
   std::vector<PGTypes> types;
+  int ncols_ = PQnfields(spec);
   types.reserve(ncols_);
 
   for (int i = 0; i < ncols_; ++i) {
-    Oid type = PQftype(pSpec_, i);
+    Oid type = PQftype(spec, i);
     // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
     switch (type) {
     case 20: // BIGINT
@@ -360,7 +330,7 @@ std::vector<PGTypes> PqResultImpl::get_column_types() const {
 
     default:
       types.push_back(PGString);
-      warning("Unknown field type (%d) in column %s", type, PQfname(pSpec_, i));
+      warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
     }
   }
 
