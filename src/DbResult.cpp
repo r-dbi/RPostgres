@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "PqResult.h"
-#include "PqConnection.h"
+#include "DbResult.h"
+#include "DbConnection.h"
 #include "PqRow.h"
 
 

@@ -2,8 +2,8 @@
 #define __RPOSTGRES_TYPES__
 
 #include "pch.h"
-#include "PqConnection.h"
-#include "PqResult.h"
+#include "DbConnection.h"
+#include "DbResult.h"
 
 namespace Rcpp {
 
