@@ -16,7 +16,7 @@ class PqResultImpl : boost::noncopyable {
   std::vector<PGTypes> types_;
   std::vector<std::string> names_;
   int ncols_, nrows_, nparams_;
-  bool bound_;
+  bool ready_;
 
 public:
   PqResultImpl(PGconn* pConn, const std::string& sql);

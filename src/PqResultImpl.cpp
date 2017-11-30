@@ -4,7 +4,7 @@
 #include "PqRow.h"
 
 PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql) :
-  pConn_(pConn), nrows_(0), bound_(false) {
+  pConn_(pConn), nrows_(0), ready_(false) {
 
   LOG_DEBUG << sql;
 
@@ -47,7 +47,7 @@ PqResultImpl::~PqResultImpl() {
 // Publics /////////////////////////////////////////////////////////////////////
 
 bool PqResultImpl::complete() {
-  if (!bound_) return false;
+  if (!ready_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
 }
@@ -57,7 +57,7 @@ int PqResultImpl::n_rows_fetched() {
 }
 
 int PqResultImpl::n_rows_affected() {
-  if (!bound_) return NA_INTEGER;
+  if (!ready_) return NA_INTEGER;
   if (ncols_ > 0) return 0;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
@@ -69,7 +69,7 @@ void PqResultImpl::bind(const List& params) {
          nparams_, params.size());
   }
 
-  if (params.size() == 0 && bound_) {
+  if (params.size() == 0 && ready_) {
     stop("dbBind() can only be called for queries or statements with parameters");
   }
 
@@ -103,11 +103,11 @@ void PqResultImpl::bind(const List& params) {
   if (!PQsetSingleRowMode(pConn_))
     conn_stop("Failed to set single row mode");
 
-  bound_ = true;
+  ready_ = true;
 }
 
 List PqResultImpl::fetch(int n_max) {
-  if (!bound_)
+  if (!ready_)
     stop("Query needs to be bound before fetching");
 
   int n = (n_max < 0) ? 100 : n_max;
