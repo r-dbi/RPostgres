@@ -36,6 +36,7 @@ class PqResultImpl : boost::noncopyable {
   PqRowPtr pNextRow_;
   bool ready_;
   int nrows_;
+  List params_;
 
 public:
   PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql);
@@ -61,6 +62,8 @@ private:
   void fetch_row_if_needed();
 
 private:
+  void set_params(const List& params);
+
   List finish_df(List out) const;
 
 

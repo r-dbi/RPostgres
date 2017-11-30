@@ -304,6 +304,10 @@ List PqResultImpl::get_column_info() {
 
 // Privates ////////////////////////////////////////////////////////////////////
 
+void PqResultImpl::set_params(const List& params) {
+  params_ = params;
+}
+
 void PqResultImpl::bind() {
   bind(List());
 }
