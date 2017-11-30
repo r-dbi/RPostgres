@@ -20,37 +20,37 @@ List result_fetch(DbResult* res, const int n) {
 
 // [[Rcpp::export]]
 void result_bind(DbResult* res, List params) {
-  return res->bind(params);
+  res->bind(params);
 }
 
 // [[Rcpp::export]]
-bool result_is_complete(DbResult* rs) {
+bool result_has_completed(DbResult* res) {
   try {
-    return rs->is_complete();
+    return res->is_complete();
   } catch (...) {
     return false;
   }
 }
 
 // [[Rcpp::export]]
-bool result_active(XPtr<DbResult> rs_) {
-  DbResult* rs = rs_.get();
-  return rs != NULL && rs->active();
+bool result_valid(XPtr<DbResult> res_) {
+  DbResult* res = res_.get();
+  return res != NULL && res->active();
 }
 
 // [[Rcpp::export]]
-int result_rows_fetched(DbResult* rs) {
-  return rs->n_rows_fetched();
+int result_rows_fetched(DbResult* res) {
+  return res->n_rows_fetched();
 }
 
 // [[Rcpp::export]]
-int result_rows_affected(DbResult* rs) {
-  return rs->n_rows_affected();
+int result_rows_affected(DbResult* res) {
+  return res->n_rows_affected();
 }
 
 // [[Rcpp::export]]
-List result_column_info(DbResult* rs) {
-  return rs->get_column_info();
+List result_column_info(DbResult* res) {
+  return res->get_column_info();
 }
 
 namespace Rcpp {

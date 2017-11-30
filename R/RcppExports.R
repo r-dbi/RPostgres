@@ -69,23 +69,23 @@ result_bind <- function(res, params) {
     invisible(.Call(`_RPostgres_result_bind`, res, params))
 }
 
-result_is_complete <- function(rs) {
-    .Call(`_RPostgres_result_is_complete`, rs)
+result_has_completed <- function(res) {
+    .Call(`_RPostgres_result_has_completed`, res)
 }
 
-result_active <- function(rs_) {
-    .Call(`_RPostgres_result_active`, rs_)
+result_valid <- function(res_) {
+    .Call(`_RPostgres_result_valid`, res_)
 }
 
-result_rows_fetched <- function(rs) {
-    .Call(`_RPostgres_result_rows_fetched`, rs)
+result_rows_fetched <- function(res) {
+    .Call(`_RPostgres_result_rows_fetched`, res)
 }
 
-result_rows_affected <- function(rs) {
-    .Call(`_RPostgres_result_rows_affected`, rs)
+result_rows_affected <- function(res) {
+    .Call(`_RPostgres_result_rows_affected`, res)
 }
 
-result_column_info <- function(rs) {
-    .Call(`_RPostgres_result_column_info`, rs)
+result_column_info <- function(res) {
+    .Call(`_RPostgres_result_column_info`, res)
 }
 

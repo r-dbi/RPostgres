@@ -197,58 +197,58 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// result_is_complete
-bool result_is_complete(DbResult* rs);
-RcppExport SEXP _RPostgres_result_is_complete(SEXP rsSEXP) {
+// result_has_completed
+bool result_has_completed(DbResult* res);
+RcppExport SEXP _RPostgres_result_has_completed(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_is_complete(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_has_completed(res));
     return rcpp_result_gen;
 END_RCPP
 }
-// result_active
-bool result_active(XPtr<DbResult> rs_);
-RcppExport SEXP _RPostgres_result_active(SEXP rs_SEXP) {
+// result_valid
+bool result_valid(XPtr<DbResult> res_);
+RcppExport SEXP _RPostgres_result_valid(SEXP res_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<DbResult> >::type rs_(rs_SEXP);
-    rcpp_result_gen = Rcpp::wrap(result_active(rs_));
+    Rcpp::traits::input_parameter< XPtr<DbResult> >::type res_(res_SEXP);
+    rcpp_result_gen = Rcpp::wrap(result_valid(res_));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_rows_fetched
-int result_rows_fetched(DbResult* rs);
-RcppExport SEXP _RPostgres_result_rows_fetched(SEXP rsSEXP) {
+int result_rows_fetched(DbResult* res);
+RcppExport SEXP _RPostgres_result_rows_fetched(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_rows_fetched(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_rows_fetched(res));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_rows_affected
-int result_rows_affected(DbResult* rs);
-RcppExport SEXP _RPostgres_result_rows_affected(SEXP rsSEXP) {
+int result_rows_affected(DbResult* res);
+RcppExport SEXP _RPostgres_result_rows_affected(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_rows_affected(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_rows_affected(res));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_column_info
-List result_column_info(DbResult* rs);
-RcppExport SEXP _RPostgres_result_column_info(SEXP rsSEXP) {
+List result_column_info(DbResult* res);
+RcppExport SEXP _RPostgres_result_column_info(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_column_info(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_column_info(res));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -271,8 +271,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
     {"_RPostgres_result_bind", (DL_FUNC) &_RPostgres_result_bind, 2},
-    {"_RPostgres_result_is_complete", (DL_FUNC) &_RPostgres_result_is_complete, 1},
-    {"_RPostgres_result_active", (DL_FUNC) &_RPostgres_result_active, 1},
+    {"_RPostgres_result_has_completed", (DL_FUNC) &_RPostgres_result_has_completed, 1},
+    {"_RPostgres_result_valid", (DL_FUNC) &_RPostgres_result_valid, 1},
     {"_RPostgres_result_rows_fetched", (DL_FUNC) &_RPostgres_result_rows_fetched, 1},
     {"_RPostgres_result_rows_affected", (DL_FUNC) &_RPostgres_result_rows_affected, 1},
     {"_RPostgres_result_column_info", (DL_FUNC) &_RPostgres_result_column_info, 1},
