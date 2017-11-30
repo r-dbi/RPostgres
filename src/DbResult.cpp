@@ -59,7 +59,7 @@ void DbResult::bind() {
   bind(List());
 }
 
-void DbResult::bind(List params) {
+void DbResult::bind(const List& params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -136,7 +136,7 @@ void DbResult::bind_rows(List params) {
   }
 }
 
-bool DbResult::active() {
+bool DbResult::active() const {
   return pConn_->is_current_result(this);
 }
 

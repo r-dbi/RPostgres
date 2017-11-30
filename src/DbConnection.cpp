@@ -43,7 +43,7 @@ PGconn* DbConnection::conn() {
   return pConn_;
 }
 
-void DbConnection::set_current_result(DbResult* pResult) {
+void DbConnection::set_current_result(const DbResult* pResult) {
   // Cancels previous query, if needed.
   if (pResult == pCurrentResult_)
     return;
@@ -83,7 +83,7 @@ void DbConnection::finish_query() const {
   }
 }
 
-bool DbConnection::is_current_result(DbResult* pResult) {
+bool DbConnection::is_current_result(const DbResult* pResult) {
   return pCurrentResult_ == pResult;
 }
 

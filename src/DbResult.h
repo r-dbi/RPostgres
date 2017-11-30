@@ -20,6 +20,8 @@ typedef boost::shared_ptr<PqRow> PqRowPtr;
 
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
+
+private:
   PGresult* pSpec_;
   PqRowPtr pNextRow_;
   std::vector<PGTypes> types_;
@@ -33,20 +35,21 @@ public:
 
 public:
   bool complete();
-  bool active();
+  bool active() const;
+  int n_rows_fetched();
+  int n_rows_affected();
 
+  void bind(const List& params);
+  List fetch(int n_max = -1);
+
+  List get_column_info();
+
+private:
   void bind();
-  void bind(List params);
   void bind_rows(List params);
 
   void fetch_row();
   void fetch_row_if_needed();
-  List fetch(int n_max = -1);
-
-  int n_rows_affected();
-  int n_rows_fetched();
-
-  List get_column_info();
 
 private:
   List finish_df(List out) const;

@@ -16,7 +16,7 @@ typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 class DbConnection : boost::noncopyable {
   PGconn* pConn_;
-  DbResult* pCurrentResult_;
+  const DbResult* pCurrentResult_;
   bool transacting_;
 
 public:
@@ -28,8 +28,8 @@ public:
 
   PGconn* conn();
 
-  void set_current_result(DbResult* pResult);
-  bool is_current_result(DbResult* pResult);
+  void set_current_result(const DbResult* pResult);
+  bool is_current_result(const DbResult* pResult);
   bool has_query();
 
   void copy_data(std::string sql, List df);
