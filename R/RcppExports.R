@@ -53,8 +53,8 @@ init_logging <- function(log_level) {
     invisible(.Call(`_RPostgres_init_logging`, log_level))
 }
 
-result_create <- function(con, sql) {
-    .Call(`_RPostgres_result_create`, con, sql)
+result_create <- function(con, sql, is_statement = FALSE) {
+    .Call(`_RPostgres_result_create`, con, sql, is_statement)
 }
 
 result_release <- function(res) {
