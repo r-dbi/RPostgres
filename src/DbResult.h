@@ -32,6 +32,7 @@ public:
   ~DbResult();
 
 public:
+  bool complete();
   bool active();
 
   void bind();
@@ -44,7 +45,6 @@ public:
 
   int n_rows_affected();
   int n_rows_fetched();
-  bool is_complete();
 
   List get_column_info();
 

@@ -31,11 +31,7 @@ void result_bind(DbResult* res, List params) {
 
 // [[Rcpp::export]]
 bool result_has_completed(DbResult* res) {
-  try {
-    return res->is_complete();
-  } catch (...) {
-    return false;
-  }
+  return res->complete();
 }
 
 // [[Rcpp::export]]

@@ -232,7 +232,7 @@ int DbResult::n_rows_fetched() {
   return nrows_ - (pNextRow_.get() != NULL);
 }
 
-bool DbResult::is_complete() {
+bool DbResult::complete() {
   if (!bound_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
