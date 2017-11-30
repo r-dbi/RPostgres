@@ -11,7 +11,7 @@ pConn_(pConn)
   pConn->set_current_result(this);
 
   try {
-    impl.reset(new PqResultImpl(pConn->conn(), sql));
+    impl.reset(new PqResultImpl(this, pConn->conn(), sql));
   }
   catch (...) {
     pConn->set_current_result(NULL);
@@ -28,7 +28,6 @@ DbResult::~DbResult() {
 }
 
 void DbResult::bind(const List& params) {
-  pConn_->cleanup_query();
   return impl->bind(params);
 }
 
@@ -57,4 +56,8 @@ bool DbResult::complete() {
 
 List DbResult::get_column_info() {
   return impl->get_column_info();
+}
+
+void DbResult::cleanup_query() {
+  pConn_->cleanup_query();
 }

@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "PqResultImpl.h"
 #include "DbConnection.h"
+#include "DbResult.h"
 #include "PqRow.h"
 
-PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql) :
+PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql) :
+pRes_(pRes),
 pConn_(pConn),
 pSpec_(prepare(pConn, sql)),
 cache(pSpec_),
@@ -168,6 +170,8 @@ void PqResultImpl::bind(const List& params) {
   }
 
   pNextRow_.reset();
+
+  pRes_->cleanup_query();
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);

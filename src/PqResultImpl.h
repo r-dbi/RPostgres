@@ -6,10 +6,15 @@
 
 #include "PqUtils.h"
 
+class DbResult;
+
 class PqRow;
 typedef boost::shared_ptr<PqRow> PqRowPtr;
 
 class PqResultImpl : boost::noncopyable {
+  // Back pointer for query cancellation
+  DbResult* pRes_;
+
   // Wrapped pointer
   PGconn* pConn_;
   PGresult* pSpec_;
@@ -33,7 +38,7 @@ class PqResultImpl : boost::noncopyable {
   int nrows_;
 
 public:
-  PqResultImpl(PGconn* pConn, const std::string& sql);
+  PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql);
   ~PqResultImpl();
 
 private:

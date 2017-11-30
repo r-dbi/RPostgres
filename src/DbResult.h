@@ -34,6 +34,9 @@ public:
   List fetch(int n_max = -1);
 
   List get_column_info();
+
+public:
+  void cleanup_query();
 };
 
 #endif
