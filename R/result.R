@@ -119,6 +119,11 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
     stop("Named parameters not supported", call. = FALSE)
   }
   if (!is.list(params)) params <- as.list(params)
+  lengths <- unique(viapply(params, length))
+  if (length(lengths) > 1) {
+    stop("All parameters must have the same length.", call. = FALSE)
+  }
+
   params <- factor_to_string(params, warn = TRUE)
   params <- posixlt_to_posixct(params)
   params <- difftime_to_hms(params)
