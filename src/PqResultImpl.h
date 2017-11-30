@@ -37,7 +37,9 @@ class PqResultImpl : boost::noncopyable {
   bool complete_;
   bool ready_;
   int nrows_;
+  int rows_affected_;
   List params_;
+  int group_, groups_;
 
 public:
   PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql);
@@ -65,6 +67,8 @@ private:
 
 private:
   void set_params(const List& params);
+  bool bind_row();
+  void after_bind(bool params_have_rows);
 
   List finish_df(List out) const;
 

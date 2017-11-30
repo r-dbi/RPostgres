@@ -177,7 +177,24 @@ void PqResultImpl::bind(const List& params) {
     stop("Query does not require parameters.");
   }
 
+  set_params(params);
+
+  groups_ = 1;
+  group_ = 0;
+
+  rows_affected_ = 0;
+
+  bool has_params = bind_row();
+  after_bind(has_params);
+
   pNextRow_.reset();
+}
+
+bool PqResultImpl::bind_row() {
+  LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
+
+  if (group_ >= groups_)
+    return false;
 
   pRes_->cleanup_query();
 
@@ -185,19 +202,19 @@ void PqResultImpl::bind(const List& params) {
   std::vector<int> formats(cache.nparams_);
   std::vector<int> lengths(cache.nparams_);
   for (int i = 0; i < cache.nparams_; ++i) {
-    if (TYPEOF(params[i]) == VECSXP) {
-      List param(params[i]);
-      if (!Rf_isNull(param[0])) {
-        Rbyte* param_value = RAW(param[0]);
+    if (TYPEOF(params_[i]) == VECSXP) {
+      List param(params_[i]);
+      if (!Rf_isNull(param[group_])) {
+        Rbyte* param_value = RAW(param[group_]);
         c_params[i] = reinterpret_cast<const char*>(param_value);
         formats[i] = 1;
-        lengths[i] = Rf_length(param[0]);
+        lengths[i] = Rf_length(param[group_]);
       }
     }
     else {
-      CharacterVector param(params[i]);
-      if (param[0] != NA_STRING) {
-        c_params[i] = CHAR(param[0]);
+      CharacterVector param(params_[i]);
+      if (param[group_] != NA_STRING) {
+        c_params[i] = CHAR(param[group_]);
       }
     }
   }
@@ -209,7 +226,11 @@ void PqResultImpl::bind(const List& params) {
   if (!PQsetSingleRowMode(pConn_))
     conn_stop("Failed to set single row mode");
 
-  ready_ = true;
+  return true;
+}
+
+void PqResultImpl::after_bind(bool params_have_rows) {
+  init(params_have_rows);
 }
 
 List PqResultImpl::fetch(int n_max) {
