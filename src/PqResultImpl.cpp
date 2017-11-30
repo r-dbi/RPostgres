@@ -190,49 +190,6 @@ void PqResultImpl::bind(const List& params) {
   pNextRow_.reset();
 }
 
-bool PqResultImpl::bind_row() {
-  LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
-
-  if (group_ >= groups_)
-    return false;
-
-  pRes_->cleanup_query();
-
-  std::vector<const char*> c_params(cache.nparams_);
-  std::vector<int> formats(cache.nparams_);
-  std::vector<int> lengths(cache.nparams_);
-  for (int i = 0; i < cache.nparams_; ++i) {
-    if (TYPEOF(params_[i]) == VECSXP) {
-      List param(params_[i]);
-      if (!Rf_isNull(param[group_])) {
-        Rbyte* param_value = RAW(param[group_]);
-        c_params[i] = reinterpret_cast<const char*>(param_value);
-        formats[i] = 1;
-        lengths[i] = Rf_length(param[group_]);
-      }
-    }
-    else {
-      CharacterVector param(params_[i]);
-      if (param[group_] != NA_STRING) {
-        c_params[i] = CHAR(param[group_]);
-      }
-    }
-  }
-
-  if (!PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                           &lengths[0], &formats[0], 0))
-    conn_stop("Failed to send query");
-
-  if (!PQsetSingleRowMode(pConn_))
-    conn_stop("Failed to set single row mode");
-
-  return true;
-}
-
-void PqResultImpl::after_bind(bool params_have_rows) {
-  init(params_have_rows);
-}
-
 List PqResultImpl::fetch(int n_max) {
   if (!ready_)
     stop("Query needs to be bound before fetching");
@@ -335,6 +292,49 @@ List PqResultImpl::get_column_info() {
 
 void PqResultImpl::set_params(const List& params) {
   params_ = params;
+}
+
+bool PqResultImpl::bind_row() {
+  LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
+
+  if (group_ >= groups_)
+    return false;
+
+  pRes_->cleanup_query();
+
+  std::vector<const char*> c_params(cache.nparams_);
+  std::vector<int> formats(cache.nparams_);
+  std::vector<int> lengths(cache.nparams_);
+  for (int i = 0; i < cache.nparams_; ++i) {
+    if (TYPEOF(params_[i]) == VECSXP) {
+      List param(params_[i]);
+      if (!Rf_isNull(param[group_])) {
+        Rbyte* param_value = RAW(param[group_]);
+        c_params[i] = reinterpret_cast<const char*>(param_value);
+        formats[i] = 1;
+        lengths[i] = Rf_length(param[group_]);
+      }
+    }
+    else {
+      CharacterVector param(params_[i]);
+      if (param[group_] != NA_STRING) {
+        c_params[i] = CHAR(param[group_]);
+      }
+    }
+  }
+
+  if (!PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
+                           &lengths[0], &formats[0], 0))
+    conn_stop("Failed to send query");
+
+  if (!PQsetSingleRowMode(pConn_))
+    conn_stop("Failed to set single row mode");
+
+  return true;
+}
+
+void PqResultImpl::after_bind(bool params_have_rows) {
+  init(params_have_rows);
 }
 
 void PqResultImpl::bind() {
