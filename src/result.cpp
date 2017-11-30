@@ -9,8 +9,8 @@ XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql) {
 }
 
 // [[Rcpp::export]]
-List result_fetch(DbResult* rs, int n) {
-  return rs->fetch(n);
+List result_fetch(DbResult* res, const int n) {
+  return res->fetch(n);
 }
 
 // [[Rcpp::export]]

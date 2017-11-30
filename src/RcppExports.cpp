@@ -165,13 +165,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // result_fetch
-List result_fetch(DbResult* rs, int n);
+List result_fetch(DbResult* rs, const int n);
 RcppExport SEXP _RPostgres_result_fetch(SEXP rsSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     rcpp_result_gen = Rcpp::wrap(result_fetch(rs, n));
     return rcpp_result_gen;
 END_RCPP
