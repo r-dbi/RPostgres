@@ -23,6 +23,10 @@ PqResultImpl::~PqResultImpl() {
   } catch (...) {}
 }
 
+
+
+// Cache ///////////////////////////////////////////////////////////////////////
+
 PqResultImpl::_cache::_cache(PGresult* spec) :
 names_(get_column_names(spec)),
 types_(get_column_types(spec)),
@@ -31,6 +35,89 @@ nparams_(PQnparams(spec))
 {
 }
 
+
+std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) {
+  std::vector<std::string> names;
+  int ncols_ = PQnfields(spec);
+  names.reserve(ncols_);
+
+  for (int i = 0; i < ncols_; ++i) {
+    names.push_back(std::string(PQfname(spec, i)));
+  }
+
+  return names;
+}
+
+std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
+  std::vector<PGTypes> types;
+  int ncols_ = PQnfields(spec);
+  types.reserve(ncols_);
+
+  for (int i = 0; i < ncols_; ++i) {
+    Oid type = PQftype(spec, i);
+    // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
+    switch (type) {
+    case 20: // BIGINT
+      types.push_back(PGInt64);
+      break;
+
+    case 21: // SMALLINT
+    case 23: // INTEGER
+    case 26: // OID
+      types.push_back(PGInt);
+      break;
+
+    case 1700: // DECIMAL
+    case 701: // FLOAT8
+    case 700: // FLOAT
+    case 790: // MONEY
+      types.push_back(PGReal);
+      break;
+
+    case 18: // CHAR
+    case 19: // NAME
+    case 25: // TEXT
+    case 114: // JSON
+    case 1042: // CHAR
+    case 1043: // VARCHAR
+      types.push_back(PGString);
+      break;
+    case 1082: // DATE
+      types.push_back(PGDate);
+      break;
+    case 1083: // TIME
+    case 1266: // TIMETZOID
+      types.push_back(PGTime);
+      break;
+    case 1114: // TIMESTAMP
+      types.push_back(PGDatetime);
+      break;
+    case 1184: // TIMESTAMPTZOID
+      types.push_back(PGDatetimeTZ);
+      break;
+    case 1186: // INTERVAL
+    case 3802: // JSONB
+    case 2950: // UUID
+      types.push_back(PGString);
+      break;
+
+    case 16: // BOOL
+      types.push_back(PGLogical);
+      break;
+
+    case 17: // BYTEA
+    case 2278: // NULL
+      types.push_back(PGVector);
+      break;
+
+    default:
+      types.push_back(PGString);
+      warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
+    }
+  }
+
+  return types;
+}
 
 PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   // Prepare query
@@ -252,89 +339,6 @@ List PqResultImpl::finish_df(List out) const {
     }
   }
   return out;
-}
-
-std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) {
-  std::vector<std::string> names;
-  int ncols_ = PQnfields(spec);
-  names.reserve(ncols_);
-
-  for (int i = 0; i < ncols_; ++i) {
-    names.push_back(std::string(PQfname(spec, i)));
-  }
-
-  return names;
-}
-
-std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
-  std::vector<PGTypes> types;
-  int ncols_ = PQnfields(spec);
-  types.reserve(ncols_);
-
-  for (int i = 0; i < ncols_; ++i) {
-    Oid type = PQftype(spec, i);
-    // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
-    switch (type) {
-    case 20: // BIGINT
-      types.push_back(PGInt64);
-      break;
-
-    case 21: // SMALLINT
-    case 23: // INTEGER
-    case 26: // OID
-      types.push_back(PGInt);
-      break;
-
-    case 1700: // DECIMAL
-    case 701: // FLOAT8
-    case 700: // FLOAT
-    case 790: // MONEY
-      types.push_back(PGReal);
-      break;
-
-    case 18: // CHAR
-    case 19: // NAME
-    case 25: // TEXT
-    case 114: // JSON
-    case 1042: // CHAR
-    case 1043: // VARCHAR
-      types.push_back(PGString);
-      break;
-    case 1082: // DATE
-      types.push_back(PGDate);
-      break;
-    case 1083: // TIME
-    case 1266: // TIMETZOID
-      types.push_back(PGTime);
-      break;
-    case 1114: // TIMESTAMP
-      types.push_back(PGDatetime);
-      break;
-    case 1184: // TIMESTAMPTZOID
-      types.push_back(PGDatetimeTZ);
-      break;
-    case 1186: // INTERVAL
-    case 3802: // JSONB
-    case 2950: // UUID
-      types.push_back(PGString);
-      break;
-
-    case 16: // BOOL
-      types.push_back(PGLogical);
-      break;
-
-    case 17: // BYTEA
-    case 2278: // NULL
-      types.push_back(PGVector);
-      break;
-
-    default:
-      types.push_back(PGString);
-      warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
-    }
-  }
-
-  return types;
 }
 
 void PqResultImpl::conn_stop(const char* msg) const {
