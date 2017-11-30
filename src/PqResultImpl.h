@@ -34,6 +34,7 @@ class PqResultImpl : boost::noncopyable {
 
   // State
   PqRowPtr pNextRow_;
+  bool complete_;
   bool ready_;
   int nrows_;
   List params_;
@@ -44,6 +45,7 @@ public:
 
 private:
   static PGresult* prepare(PGconn* conn, const std::string& sql);
+  void init(bool params_have_rows);
 
 public:
   bool complete();

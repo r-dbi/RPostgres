@@ -140,6 +140,14 @@ PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   return spec;
 }
 
+void PqResultImpl::init(bool params_have_rows) {
+  ready_ = true;
+  nrows_ = 0;
+  complete_ = !params_have_rows;
+}
+
+
+
 // Publics /////////////////////////////////////////////////////////////////////
 
 bool PqResultImpl::complete() {
