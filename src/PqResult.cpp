@@ -192,6 +192,11 @@ List PqResult::fetch(int n_max) {
   if (i < n) {
     out = df_resize(out, i);
   }
+
+  return finish_df(out);
+}
+
+List PqResult::finish_df(List out) const {
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
     switch (types_[i]) {

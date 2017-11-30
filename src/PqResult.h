@@ -49,6 +49,8 @@ public:
   List get_column_info();
 
 private:
+  List finish_df(List out) const;
+
   std::vector<std::string> get_column_names() const;
   std::vector<PGTypes> get_column_types() const;
 };
