@@ -14,8 +14,14 @@ nrows_(0) {
 
   LOG_DEBUG << sql;
 
-  if (cache.nparams_ == 0) {
-    bind();
+  try {
+    if (cache.nparams_ == 0) {
+      bind();
+    }
+  } catch (...) {
+    PQclear(pSpec_);
+    pSpec_ = NULL;
+    throw;
   }
 }
 
@@ -190,7 +196,7 @@ void PqResultImpl::bind(const List& params) {
   pNextRow_.reset();
 }
 
-List PqResultImpl::fetch(int n_max) {
+List PqResultImpl::fetch(const int n_max) {
   if (!ready_)
     stop("Query needs to be bound before fetching");
 
