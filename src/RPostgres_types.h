@@ -5,4 +5,14 @@
 #include "PqConnection.h"
 #include "PqResult.h"
 
+namespace Rcpp {
+
+template<>
+PqConnection* as(SEXP x);
+
+template<>
+PqResult* as(SEXP x);
+
+}
+
 #endif

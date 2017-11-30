@@ -9,19 +9,17 @@ XPtr<PqResult> result_create(XPtr<PqConnectionPtr> con, std::string sql) {
 }
 
 // [[Rcpp::export]]
-List result_fetch(XPtr<PqResult> rs, int n) {
+List result_fetch(PqResult* rs, int n) {
   return rs->fetch(n);
 }
 
 // [[Rcpp::export]]
-void result_bind_params(XPtr<PqResult> rs, List params) {
+void result_bind_params(PqResult* rs, List params) {
   return rs->bind(params);
 }
 
 // [[Rcpp::export]]
-bool result_is_complete(XPtr<PqResult> rs) {
-  if (rs.get() == NULL)
-    stop("invalid result set");
+bool result_is_complete(PqResult* rs) {
   try {
     return rs->is_complete();
   } catch (...) {
@@ -35,21 +33,34 @@ void result_release(XPtr<PqResult> rs) {
 }
 
 // [[Rcpp::export]]
-bool result_active(XPtr<PqResult> rs) {
-  return rs.get() != NULL && rs->active();
+bool result_active(XPtr<PqResult> rs_) {
+  PqResult* rs = rs_.get();
+  return rs != NULL && rs->active();
 }
 
 // [[Rcpp::export]]
-int result_rows_fetched(XPtr<PqResult> rs) {
+int result_rows_fetched(PqResult* rs) {
   return rs->n_rows_fetched();
 }
 
 // [[Rcpp::export]]
-int result_rows_affected(XPtr<PqResult> rs) {
+int result_rows_affected(PqResult* rs) {
   return rs->n_rows_affected();
 }
 
 // [[Rcpp::export]]
-List result_column_info(XPtr<PqResult> rs) {
+List result_column_info(PqResult* rs) {
   return rs->get_column_info();
+}
+
+namespace Rcpp {
+
+template<>
+PqResult* as(SEXP x) {
+  PqResult* result = (PqResult*)(R_ExternalPtrAddr(x));
+  if (!result)
+    stop("Invalid result set");
+  return result;
+}
+
 }

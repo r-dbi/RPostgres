@@ -17,7 +17,7 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
     PGresult* prep = PQprepare(pConn_->conn(), "", sql.c_str(), 0, NULL);
     if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
       PQclear(prep);
-      stop(PQerrorMessage(pConn_->conn()));
+      pConn->conn_stop("Failed to prepare query");
     }
     PQclear(prep);
 
@@ -25,7 +25,7 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
     pSpec_ = PQdescribePrepared(pConn_->conn(), "");
     if (PQresultStatus(pSpec_) != PGRES_COMMAND_OK) {
       PQclear(pSpec_);
-      stop(PQerrorMessage(pConn_->conn()));
+      pConn->conn_stop("Failed to retrieve query result metadata");
     }
 
     // Find number of parameters, and auto bind if 0
@@ -56,12 +56,7 @@ PqResult::~PqResult() {
 }
 
 void PqResult::bind() {
-  bound_ = true;
-  if (!PQsendQueryPrepared(pConn_->conn(), "", 0, NULL, NULL, NULL, 0))
-    stop("Failed to send query");
-
-  if (!PQsetSingleRowMode(pConn_->conn()))
-    stop("Failed to set single row mode");
+  bind(List());
 }
 
 void PqResult::bind(List params) {
@@ -70,20 +65,40 @@ void PqResult::bind(List params) {
          nparams_, params.size());
   }
 
+  if (params.size() == 0 && bound_) {
+    stop("dbBind() can only be called for queries or statements with parameters");
+  }
+
+  pConn_->cleanup_query();
+  pNextRow_.reset();
+
   std::vector<const char*> c_params(nparams_);
+  std::vector<int> formats(nparams_);
+  std::vector<int> lengths(nparams_);
   for (int i = 0; i < nparams_; ++i) {
-    CharacterVector param(params[i]);
-    const char* param_value = CHAR(param[0]);
-    if (strcmp(param_value, "NULL") != 0)
-      c_params[i] = param_value;
+    if (TYPEOF(params[i]) == VECSXP) {
+      List param(params[i]);
+      if (!Rf_isNull(param[0])) {
+        Rbyte* param_value = RAW(param[0]);
+        c_params[i] = reinterpret_cast<const char*>(param_value);
+        formats[i] = 1;
+        lengths[i] = Rf_length(param[0]);
+      }
+    }
+    else {
+      CharacterVector param(params[i]);
+      if (param[0] != NA_STRING) {
+        c_params[i] = CHAR(param[0]);
+      }
+    }
   }
 
   if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
-                           NULL, NULL, 0))
-    stop("Failed to send query");
+                           &lengths[0], &formats[0], 0))
+    pConn_->conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_->conn()))
-    stop("Failed to set single row mode");
+    pConn_->conn_stop("Failed to set single row mode");
 
   bound_ = true;
 }
@@ -117,7 +132,7 @@ void PqResult::bind_rows(List params) {
     PGresult* res = PQexecPrepared(pConn_->conn(), "", nparams_,
                                    &c_params[0], NULL, &c_formats[0], 0);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
-      stop("%s (row %i)", PQerrorMessage(pConn_->conn()), i + 1);
+      pConn_->conn_stop("Failed to execute prepared command");
   }
 }
 

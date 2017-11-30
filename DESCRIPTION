@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1-9
-Date: 2017-11-23
+Version: 0.1-10
+Date: 2017-11-30
 Title: Experimental Rcpp Interface to PostgreSQL
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
@@ -19,6 +19,7 @@ Depends:
     R (>= 3.1.0)
 Imports:
     bit64,
+    blob,
     DBI (>= 0.3.1.9008),
     hms,
     methods,

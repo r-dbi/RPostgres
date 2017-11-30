@@ -1,3 +1,12 @@
+## RPostgres 0.1-10 (2017-11-30)
+
+- `dbBind()` checks that all parameters have the same length.
+- Strings and other data types are now passed correctly with prepared statements (#140).
+- Improve repeated binding and querying table information (#58, #59, #87).
+- Better error reporting.
+- Refactorings.
+
+
 ## RPostgres 0.1-9 (2017-11-23)
 
 - Improve DBI compliance for `dbBind()` and others, in particular for the `BYTEA` data type, and for 64-bit integer support and transactions (#51, #64, #66, #68, #98, #101).
