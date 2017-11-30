@@ -164,7 +164,7 @@ void PqResultImpl::bind(const List& params) {
   }
 
   if (params.size() == 0 && ready_) {
-    stop("dbBind() can only be called for queries or statements with parameters");
+    stop("Query does not require parameters.");
   }
 
   pNextRow_.reset();
