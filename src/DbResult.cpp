@@ -4,39 +4,45 @@
 #include "PqRow.h"
 
 
-DbResult::DbResult(DbConnectionPtr pConn, std::string sql) :
-  pConn_(pConn), nrows_(0), bound_(false) {
-
-  LOG_DEBUG << sql;
-
-  pConn_->check_connection();
+DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
+pConn_(pConn)
+{
+  pConn->check_connection();
   pConn->set_current_result(this);
 
   try {
-    // Prepare query
-    PGresult* prep = PQprepare(pConn_->conn(), "", sql.c_str(), 0, NULL);
-    if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
-      PQclear(prep);
-      pConn->conn_stop("Failed to prepare query");
-    }
-    PQclear(prep);
-
-    // Retrieve query specification
-    pSpec_ = PQdescribePrepared(pConn_->conn(), "");
-    if (PQresultStatus(pSpec_) != PGRES_COMMAND_OK) {
-      PQclear(pSpec_);
-      pConn->conn_stop("Failed to retrieve query result metadata");
-    }
-
-    // Find number of parameters, and auto bind if 0
-    nparams_ = PQnparams(pSpec_);
-    if (nparams_ == 0) {
-      bind();
-    }
-
-  } catch (...) {
+    impl.reset(new PqResultImpl(pConn->conn(), sql));
+  }
+  catch (...) {
     pConn->set_current_result(NULL);
     throw;
+  }
+}
+
+PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql) :
+  pConn_(pConn), nrows_(0), bound_(false) {
+  
+  LOG_DEBUG << sql;
+
+  // Prepare query
+  PGresult* prep = PQprepare(pConn_, "", sql.c_str(), 0, NULL);
+  if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
+    PQclear(prep);
+    conn_stop("Failed to prepare query");
+  }
+  PQclear(prep);
+
+  // Retrieve query specification
+  pSpec_ = PQdescribePrepared(pConn_, "");
+  if (PQresultStatus(pSpec_) != PGRES_COMMAND_OK) {
+    PQclear(pSpec_);
+    conn_stop("Failed to retrieve query result metadata");
+  }
+
+  // Find number of parameters, and auto bind if 0
+  nparams_ = PQnparams(pSpec_);
+  if (nparams_ == 0) {
+    bind();
   }
 
   // Cache query metadata
@@ -49,17 +55,27 @@ DbResult::DbResult(DbConnectionPtr pConn, std::string sql) :
 DbResult::~DbResult() {
   try {
     if (active()) {
-      PQclear(pSpec_);
       pConn_->set_current_result(NULL);
     }
   } catch (...) {}
 }
 
-void DbResult::bind() {
+PqResultImpl::~PqResultImpl() {
+  try {
+    PQclear(pSpec_);
+  } catch (...) {}
+}
+
+void PqResultImpl::bind() {
   bind(List());
 }
 
 void DbResult::bind(const List& params) {
+  pConn_->cleanup_query();
+  return impl->bind(params);
+}
+
+void PqResultImpl::bind(const List& params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -69,7 +85,6 @@ void DbResult::bind(const List& params) {
     stop("dbBind() can only be called for queries or statements with parameters");
   }
 
-  pConn_->cleanup_query();
   pNextRow_.reset();
 
   std::vector<const char*> c_params(nparams_);
@@ -93,17 +108,17 @@ void DbResult::bind(const List& params) {
     }
   }
 
-  if (!PQsendQueryPrepared(pConn_->conn(), "", nparams_, &c_params[0],
+  if (!PQsendQueryPrepared(pConn_, "", nparams_, &c_params[0],
                            &lengths[0], &formats[0], 0))
-    pConn_->conn_stop("Failed to send query");
+    conn_stop("Failed to send query");
 
-  if (!PQsetSingleRowMode(pConn_->conn()))
-    pConn_->conn_stop("Failed to set single row mode");
+  if (!PQsetSingleRowMode(pConn_))
+    conn_stop("Failed to set single row mode");
 
   bound_ = true;
 }
 
-void DbResult::bind_rows(List params) {
+void PqResultImpl::bind_rows(List params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -129,10 +144,10 @@ void DbResult::bind_rows(List params) {
       c_params[j] = s_params[j].c_str();
     }
 
-    PGresult* res = PQexecPrepared(pConn_->conn(), "", nparams_,
+    PGresult* res = PQexecPrepared(pConn_, "", nparams_,
                                    &c_params[0], NULL, &c_formats[0], 0);
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
-      pConn_->conn_stop("Failed to execute prepared command");
+      conn_stop("Failed to execute prepared command");
   }
 }
 
@@ -140,12 +155,12 @@ bool DbResult::active() const {
   return pConn_->is_current_result(this);
 }
 
-void DbResult::fetch_row() {
-  pNextRow_.reset(new PqRow(pConn_->conn()));
+void PqResultImpl::fetch_row() {
+  pNextRow_.reset(new PqRow(pConn_));
   nrows_++;
 }
 
-void DbResult::fetch_row_if_needed() {
+void PqResultImpl::fetch_row_if_needed() {
   if (pNextRow_.get() != NULL)
     return;
 
@@ -153,10 +168,15 @@ void DbResult::fetch_row_if_needed() {
 }
 
 List DbResult::fetch(int n_max) {
-  if (!bound_)
-    stop("Query needs to be bound before fetching");
   if (!active())
     stop("Inactive result set");
+
+  return impl->fetch(n_max);
+}
+
+List PqResultImpl::fetch(int n_max) {
+  if (!bound_)
+    stop("Query needs to be bound before fetching");
 
   int n = (n_max < 0) ? 100 : n_max;
   List out = df_create(types_, names_, n);
@@ -196,7 +216,7 @@ List DbResult::fetch(int n_max) {
   return finish_df(out);
 }
 
-List DbResult::finish_df(List out) const {
+List PqResultImpl::finish_df(List out) const {
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
     switch (types_[i]) {
@@ -222,6 +242,10 @@ List DbResult::finish_df(List out) const {
 }
 
 int DbResult::n_rows_affected() {
+  return impl->n_rows_affected();
+}
+
+int PqResultImpl::n_rows_affected() {
   if (!bound_) return NA_INTEGER;
   if (ncols_ > 0) return 0;
   fetch_row_if_needed();
@@ -229,16 +253,28 @@ int DbResult::n_rows_affected() {
 }
 
 int DbResult::n_rows_fetched() {
+  return impl->n_rows_fetched();
+}
+
+int PqResultImpl::n_rows_fetched() {
   return nrows_ - (pNextRow_.get() != NULL);
 }
 
 bool DbResult::complete() {
+  return impl->complete();
+}
+
+bool PqResultImpl::complete() {
   if (!bound_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
 }
 
 List DbResult::get_column_info() {
+  return impl->get_column_info();
+}
+
+List PqResultImpl::get_column_info() {
   CharacterVector names(ncols_);
   for (int i = 0; i < ncols_; i++) {
     names[i] = names_[i];
@@ -287,7 +323,7 @@ List DbResult::get_column_info() {
   return out;
 }
 
-std::vector<std::string> DbResult::get_column_names() const {
+std::vector<std::string> PqResultImpl::get_column_names() const {
   std::vector<std::string> names;
   names.reserve(ncols_);
 
@@ -298,7 +334,7 @@ std::vector<std::string> DbResult::get_column_names() const {
   return names;
 }
 
-std::vector<PGTypes> DbResult::get_column_types() const {
+std::vector<PGTypes> PqResultImpl::get_column_types() const {
   std::vector<PGTypes> types;
   types.reserve(ncols_);
 
@@ -366,4 +402,8 @@ std::vector<PGTypes> DbResult::get_column_types() const {
   }
 
   return types;
+}
+
+void PqResultImpl::conn_stop(const char* msg) const {
+  DbConnection::conn_stop(pConn_, msg);
 }

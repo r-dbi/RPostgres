@@ -45,6 +45,7 @@ public:
   void set_transacting(bool transacting);
 
   void conn_stop(const char* msg);
+  static void conn_stop(PGconn* conn, const char* msg);
 
   void cleanup_query();
 

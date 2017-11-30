@@ -209,7 +209,11 @@ void DbConnection::set_transacting(bool transacting) {
 }
 
 void DbConnection::conn_stop(const char* msg) {
-  stop("%s: %s", msg, PQerrorMessage(conn()));
+  conn_stop(conn(), msg);
+}
+
+void DbConnection::conn_stop(PGconn* conn, const char* msg) {
+  stop("%s: %s", msg, PQerrorMessage(conn));
 }
 
 void DbConnection::cleanup_query() {

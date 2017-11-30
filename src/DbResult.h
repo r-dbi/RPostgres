@@ -3,6 +3,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "PqUtils.h"
 
@@ -18,10 +19,30 @@ typedef boost::shared_ptr<PqRow> PqRowPtr;
 // like object for the R API. There is only ever one active result set (the
 // most recent) for each connection.
 
+class PqResultImpl;
+
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
+  boost::scoped_ptr<PqResultImpl> impl;
 
-private:
+public:
+  DbResult(const DbConnectionPtr& pConn, const std::string& sql);
+  ~DbResult();
+
+public:
+  bool complete();
+  bool active() const;
+  int n_rows_fetched();
+  int n_rows_affected();
+
+  void bind(const List& params);
+  List fetch(int n_max = -1);
+
+  List get_column_info();
+};
+
+class PqResultImpl : boost::noncopyable {
+  PGconn* pConn_;
   PGresult* pSpec_;
   PqRowPtr pNextRow_;
   std::vector<PGTypes> types_;
@@ -30,12 +51,11 @@ private:
   bool bound_;
 
 public:
-  DbResult(DbConnectionPtr pConn, std::string sql);
-  ~DbResult();
+  PqResultImpl(PGconn* pConn, const std::string& sql);
+  ~PqResultImpl();
 
 public:
   bool complete();
-  bool active() const;
   int n_rows_fetched();
   int n_rows_affected();
 
@@ -56,6 +76,8 @@ private:
 
   std::vector<std::string> get_column_names() const;
   std::vector<PGTypes> get_column_types() const;
+
+  void conn_stop(const char* msg) const;
 };
 
 #endif
