@@ -24,6 +24,8 @@ public:
   virtual ~DbConnection();
 
 public:
+  void disconnect();
+
   PGconn* conn();
 
   void set_current_result(DbResult* pResult);

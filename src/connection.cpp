@@ -3,39 +3,50 @@
 
 
 // [[Rcpp::export]]
-XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys,
-                                        std::vector<std::string> values) {
+XPtr<DbConnectionPtr> connection_create(
+  std::vector<std::string> keys,
+  std::vector<std::string> values
+) {
+  LOG_VERBOSE;
+
   DbConnectionPtr* pConn = new DbConnectionPtr(
     new DbConnection(keys, values)
   );
+
   return XPtr<DbConnectionPtr>(pConn, true);
 }
 
 // [[Rcpp::export]]
-bool connection_is_valid(XPtr<DbConnectionPtr> con) {
-  return (con.get() != NULL);
+bool connection_valid(XPtr<DbConnectionPtr> con_) {
+  DbConnectionPtr* con = con_.get();
+  return con;
 }
 
 // [[Rcpp::export]]
 void connection_release(XPtr<DbConnectionPtr> con_) {
-  DbConnectionPtr* con = con_.get();
-  if (con != NULL) {
-    if (con->get()->has_query()) {
-      warning("%s\n%s",
-              "There is a result object still in use.",
-              "The connection will be automatically released when it is closed"
-             );
-    }
-    con_.release();
-  } else {
-    warning("connections is invalid");
+  if (!connection_valid(con_)) {
+    warning("Already disconnected");
+    return;
   }
+
+  DbConnectionPtr* con = con_.get();
+  if (con->get()->has_query()) {
+    warning("%s\n%s",
+            "There is a result object still in use.",
+            "The connection will be automatically released when it is closed"
+           );
+  }
+
+  con->get()->disconnect();
+  con_.release();
 }
 
 // [[Rcpp::export]]
 List connection_info(DbConnection* con) {
   return con->info();
 }
+
+// Quoting
 
 // [[Rcpp::export]]
 CharacterVector connection_escape_string(DbConnection* con, CharacterVector xs) {
@@ -67,10 +78,7 @@ CharacterVector connection_escape_identifier(DbConnection* con, CharacterVector 
   return escaped;
 }
 
-// [[Rcpp::export]]
-void connection_copy_data(DbConnection* con, std::string sql, List df) {
-  return con->copy_data(sql, df);
-}
+// Transactions
 
 // [[Rcpp::export]]
 bool connection_is_transacting(DbConnection* con) {
@@ -81,6 +89,16 @@ bool connection_is_transacting(DbConnection* con) {
 void connection_set_transacting(DbConnection* con, bool transacting) {
   con->set_transacting(transacting);
 }
+
+// Specific functions
+
+// [[Rcpp::export]]
+void connection_copy_data(DbConnection* con, std::string sql, List df) {
+  return con->copy_data(sql, df);
+}
+
+
+// as() override
 
 namespace Rcpp {
 

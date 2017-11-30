@@ -14,6 +14,12 @@ void result_release(XPtr<DbResult> res) {
 }
 
 // [[Rcpp::export]]
+bool result_valid(XPtr<DbResult> res_) {
+  DbResult* res = res_.get();
+  return res != NULL && res->active();
+}
+
+// [[Rcpp::export]]
 List result_fetch(DbResult* res, const int n) {
   return res->fetch(n);
 }
@@ -30,12 +36,6 @@ bool result_has_completed(DbResult* res) {
   } catch (...) {
     return false;
   }
-}
-
-// [[Rcpp::export]]
-bool result_valid(XPtr<DbResult> res_) {
-  DbResult* res = res_.get();
-  return res != NULL && res->active();
 }
 
 // [[Rcpp::export]]

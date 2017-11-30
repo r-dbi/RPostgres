@@ -5,8 +5,8 @@ connection_create <- function(keys, values) {
     .Call(`_RPostgres_connection_create`, keys, values)
 }
 
-connection_is_valid <- function(con) {
-    .Call(`_RPostgres_connection_is_valid`, con)
+connection_valid <- function(con_) {
+    .Call(`_RPostgres_connection_valid`, con_)
 }
 
 connection_release <- function(con_) {
@@ -25,16 +25,16 @@ connection_escape_identifier <- function(con, xs) {
     .Call(`_RPostgres_connection_escape_identifier`, con, xs)
 }
 
-connection_copy_data <- function(con, sql, df) {
-    invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
-}
-
 connection_is_transacting <- function(con) {
     .Call(`_RPostgres_connection_is_transacting`, con)
 }
 
 connection_set_transacting <- function(con, transacting) {
     invisible(.Call(`_RPostgres_connection_set_transacting`, con, transacting))
+}
+
+connection_copy_data <- function(con, sql, df) {
+    invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
 encode_vector <- function(x) {
@@ -61,6 +61,10 @@ result_release <- function(res) {
     invisible(.Call(`_RPostgres_result_release`, res))
 }
 
+result_valid <- function(res_) {
+    .Call(`_RPostgres_result_valid`, res_)
+}
+
 result_fetch <- function(res, n) {
     .Call(`_RPostgres_result_fetch`, res, n)
 }
@@ -71,10 +75,6 @@ result_bind <- function(res, params) {
 
 result_has_completed <- function(res) {
     .Call(`_RPostgres_result_has_completed`, res)
-}
-
-result_valid <- function(res_) {
-    .Call(`_RPostgres_result_valid`, res_)
 }
 
 result_rows_fetched <- function(res) {

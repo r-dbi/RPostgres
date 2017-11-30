@@ -29,8 +29,13 @@ transacting_(false)
 }
 
 DbConnection::~DbConnection() {
+  disconnect();
+}
+
+void DbConnection::disconnect() {
   try {
     PQfinish(pConn_);
+    pConn_ = NULL;
   } catch (...) {}
 }
 
@@ -128,6 +133,10 @@ void DbConnection::copy_data(std::string sql, List df) {
 }
 
 void DbConnection::check_connection() {
+  if (!pConn_) {
+    stop("Disconnected");
+  }
+
   ConnStatusType status = PQstatus(pConn_);
   if (status == CONNECTION_OK) return;
 

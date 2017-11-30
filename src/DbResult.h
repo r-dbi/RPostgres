@@ -32,11 +32,11 @@ public:
   ~DbResult();
 
 public:
+  bool active();
+
   void bind();
   void bind(List params);
   void bind_rows(List params);
-
-  bool active();
 
   void fetch_row();
   void fetch_row_if_needed();
