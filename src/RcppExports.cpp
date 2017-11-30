@@ -186,14 +186,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// result_bind_params
-void result_bind_params(DbResult* rs, List params);
-RcppExport SEXP _RPostgres_result_bind_params(SEXP rsSEXP, SEXP paramsSEXP) {
+// result_bind
+void result_bind(DbResult* res, List params);
+RcppExport SEXP _RPostgres_result_bind(SEXP resSEXP, SEXP paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DbResult* >::type rs(rsSEXP);
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
     Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    result_bind_params(rs, params);
+    result_bind(res, params);
     return R_NilValue;
 END_RCPP
 }
@@ -270,7 +270,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
     {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
-    {"_RPostgres_result_bind_params", (DL_FUNC) &_RPostgres_result_bind_params, 2},
+    {"_RPostgres_result_bind", (DL_FUNC) &_RPostgres_result_bind, 2},
     {"_RPostgres_result_is_complete", (DL_FUNC) &_RPostgres_result_is_complete, 1},
     {"_RPostgres_result_active", (DL_FUNC) &_RPostgres_result_active, 1},
     {"_RPostgres_result_rows_fetched", (DL_FUNC) &_RPostgres_result_rows_fetched, 1},

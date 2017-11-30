@@ -19,8 +19,8 @@ List result_fetch(DbResult* res, const int n) {
 }
 
 // [[Rcpp::export]]
-void result_bind_params(DbResult* rs, List params) {
-  return rs->bind(params);
+void result_bind(DbResult* res, List params) {
+  return res->bind(params);
 }
 
 // [[Rcpp::export]]

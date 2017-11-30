@@ -65,8 +65,8 @@ result_fetch <- function(res, n) {
     .Call(`_RPostgres_result_fetch`, res, n)
 }
 
-result_bind_params <- function(rs, params) {
-    invisible(.Call(`_RPostgres_result_bind_params`, rs, params))
+result_bind <- function(res, params) {
+    invisible(.Call(`_RPostgres_result_bind`, res, params))
 }
 
 result_is_complete <- function(rs) {
