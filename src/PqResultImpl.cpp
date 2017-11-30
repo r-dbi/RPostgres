@@ -56,8 +56,8 @@ std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) 
   return names;
 }
 
-std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
-  std::vector<PGTypes> types;
+std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
+  std::vector<DATA_TYPE> types;
   int ncols_ = PQnfields(spec);
   types.reserve(ncols_);
 
@@ -66,20 +66,20 @@ std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
     // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
     switch (type) {
     case 20: // BIGINT
-      types.push_back(PGInt64);
+      types.push_back(DT_INT64);
       break;
 
     case 21: // SMALLINT
     case 23: // INTEGER
     case 26: // OID
-      types.push_back(PGInt);
+      types.push_back(DT_INT);
       break;
 
     case 1700: // DECIMAL
     case 701: // FLOAT8
     case 700: // FLOAT
     case 790: // MONEY
-      types.push_back(PGReal);
+      types.push_back(DT_REAL);
       break;
 
     case 18: // CHAR
@@ -88,38 +88,38 @@ std::vector<PGTypes> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
     case 114: // JSON
     case 1042: // CHAR
     case 1043: // VARCHAR
-      types.push_back(PGString);
+      types.push_back(DT_STRING);
       break;
     case 1082: // DATE
-      types.push_back(PGDate);
+      types.push_back(DT_DATE);
       break;
     case 1083: // TIME
     case 1266: // TIMETZOID
-      types.push_back(PGTime);
+      types.push_back(DT_TIME);
       break;
     case 1114: // TIMESTAMP
-      types.push_back(PGDatetime);
+      types.push_back(DT_DATETIME);
       break;
     case 1184: // TIMESTAMPTZOID
-      types.push_back(PGDatetimeTZ);
+      types.push_back(DT_DATETIMETZ);
       break;
     case 1186: // INTERVAL
     case 3802: // JSONB
     case 2950: // UUID
-      types.push_back(PGString);
+      types.push_back(DT_STRING);
       break;
 
     case 16: // BOOL
-      types.push_back(PGLogical);
+      types.push_back(DT_BOOL);
       break;
 
     case 17: // BYTEA
     case 2278: // NULL
-      types.push_back(PGVector);
+      types.push_back(DT_BLOB);
       break;
 
     default:
-      types.push_back(PGString);
+      types.push_back(DT_STRING);
       warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
     }
   }
@@ -253,31 +253,31 @@ List PqResultImpl::get_column_info() {
   CharacterVector types(cache.ncols_);
   for (int i = 0; i < cache.ncols_; i++) {
     switch (cache.types_[i]) {
-    case PGString:
+    case DT_STRING:
       types[i] = "character";
       break;
-    case PGInt:
+    case DT_INT:
       types[i] = "integer";
       break;
-    case PGReal:
+    case DT_REAL:
       types[i] = "double";
       break;
-    case PGVector:
+    case DT_BLOB:
       types[i] = "list";
       break;
-    case PGLogical:
+    case DT_BOOL:
       types[i] = "logical";
       break;
-    case PGDate:
+    case DT_DATE:
       types[i] = "Date";
       break;
-    case PGDatetime:
+    case DT_DATETIME:
       types[i] = "POSIXct";
       break;
-    case PGDatetimeTZ:
+    case DT_DATETIMETZ:
       types[i] = "POSIXct";
       break;
-    case PGInt64:
+    case DT_INT64:
       types[i] = "integer64";
       break;
     default:
@@ -369,18 +369,18 @@ List PqResultImpl::finish_df(List out) const {
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
     switch (cache.types_[i]) {
-    case PGDate:
+    case DT_DATE:
       col.attr("class") = CharacterVector::create("Date");
       break;
-    case PGDatetime:
-    case PGDatetimeTZ:
+    case DT_DATETIME:
+    case DT_DATETIMETZ:
       col.attr("class") = CharacterVector::create("POSIXct", "POSIXt");
       break;
-    case PGTime:
+    case DT_TIME:
       col.attr("class") = CharacterVector::create("hms", "difftime");
       col.attr("units") = CharacterVector::create("secs");
       break;
-    case PGInt64:
+    case DT_INT64:
       col.attr("class") = CharacterVector::create("integer64");
       break;
     default:

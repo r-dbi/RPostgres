@@ -18,7 +18,7 @@ List df_resize(Rcpp::List df, int n) {
   return out;
 }
 
-List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n) {
+List df_create(const std::vector<DATA_TYPE>& types, const std::vector<std::string>& names, int n) {
   R_xlen_t p = types.size();
 
   List out(p);
@@ -27,36 +27,36 @@ List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -n);
 
   int j = 0;
-  for (std::vector<PGTypes>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
+  for (std::vector<DATA_TYPE>::const_iterator it = types.begin(); it != types.end(); ++it, j++) {
     switch (*it) {
-    case PGInt:
+    case DT_INT:
       out[j] = Rf_allocVector(INTSXP, n);
       break;
 
-    case PGReal:
+    case DT_REAL:
       out[j] = Rf_allocVector(REALSXP, n);
       break;
 
-    case PGLogical:
+    case DT_BOOL:
       out[j] = Rf_allocVector(LGLSXP, n);
       break;
 
-    case PGString:
+    case DT_STRING:
       out[j] = Rf_allocVector(STRSXP, n);
       break;
 
-    case PGVector:
+    case DT_BLOB:
       out[j] = Rf_allocVector(VECSXP, n);
       break;
 
-    case PGDate:
-    case PGDatetime:
-    case PGDatetimeTZ:
-    case PGTime:
+    case DT_DATE:
+    case DT_DATETIME:
+    case DT_DATETIMETZ:
+    case DT_TIME:
       out[j] = Rf_allocVector(REALSXP, n);
       break;
 
-    case PGInt64:
+    case DT_INT64:
       out[j] = Rf_allocVector(INT64SXP, n);
       break;
 

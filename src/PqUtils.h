@@ -3,20 +3,21 @@
 
 // Generic data frame utils ----------------------------------------------------
 
-enum PGTypes {
-  PGInt,
-  PGReal,
-  PGString,
-  PGLogical,
-  PGVector,
-  PGInt64,
-  PGDate,
-  PGDatetime,
-  PGDatetimeTZ,
-  PGTime
+enum DATA_TYPE {
+  DT_UNKNOWN,
+  DT_BOOL,
+  DT_INT,
+  DT_INT64,
+  DT_REAL,
+  DT_STRING,
+  DT_BLOB,
+  DT_DATE,
+  DT_DATETIME,
+  DT_DATETIMETZ,
+  DT_TIME
 };
 
 List df_resize(Rcpp::List df, int n);
-List df_create(const std::vector<PGTypes>& types, const std::vector<std::string>& names, int n);
+List df_create(const std::vector<DATA_TYPE>& types, const std::vector<std::string>& names, int n);
 
 #endif

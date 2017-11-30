@@ -33,7 +33,7 @@ public:
   double get_time(int j);
   int get_logical(int j);
 
-  void set_list_value(SEXP x, int i, int j, const std::vector<PGTypes>& types);
+  void set_list_value(SEXP x, int i, int j, const std::vector<DATA_TYPE>& types);
 };
 
 #endif

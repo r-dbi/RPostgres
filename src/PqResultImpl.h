@@ -22,14 +22,14 @@ class PqResultImpl : boost::noncopyable {
   // Cache
   struct _cache {
     const std::vector<std::string> names_;
-    const std::vector<PGTypes> types_;
+    const std::vector<DATA_TYPE> types_;
     const int ncols_;
     const int nparams_;
 
     _cache(PGresult* spec);
 
     static std::vector<std::string> get_column_names(PGresult* spec);
-    static std::vector<PGTypes> get_column_types(PGresult* spec);
+    static std::vector<DATA_TYPE> get_column_types(PGresult* spec);
   } cache;
 
   // State

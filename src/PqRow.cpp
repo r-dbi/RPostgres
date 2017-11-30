@@ -194,36 +194,39 @@ int PqRow::get_logical(int j) {
          (strcmp(PQgetvalue(pRes_, 0, j), "t") == 0);
 }
 
-void PqRow::set_list_value(SEXP x, int i, int j, const std::vector<PGTypes>& types) {
+void PqRow::set_list_value(SEXP x, int i, int j, const std::vector<DATA_TYPE>& types) {
   switch (types[j]) {
-  case PGLogical:
+  case DT_BOOL:
     LOGICAL(x)[i] = get_logical(j);
     break;
-  case PGInt:
+  case DT_INT:
     INTEGER(x)[i] = get_int(j);
     break;
-  case PGInt64:
+  case DT_INT64:
     INTEGER64(x)[i] = get_int64(j);
     break;
-  case PGReal:
+  case DT_REAL:
     REAL(x)[i] = get_double(j);
     break;
-  case PGVector:
+  case DT_BLOB:
     SET_VECTOR_ELT(x, i, get_raw(j));
     break;
-  case PGString:
+  case DT_STRING:
     SET_STRING_ELT(x, i, get_string(j));
     break;
-  case PGDate:
+  case DT_DATE:
     REAL(x)[i] = get_date(j);
     break;
-  case PGDatetimeTZ:
+  case DT_DATETIMETZ:
     REAL(x)[i] = get_datetime(j, false);
     break;
-  case PGDatetime:
+  case DT_DATETIME:
     REAL(x)[i] = get_datetime(j, true);
     break;
-  case PGTime:
+  case DT_TIME:
     REAL(x)[i] = get_time(j);
+    break;
+  case DT_UNKNOWN:
+    break;
   }
 }
