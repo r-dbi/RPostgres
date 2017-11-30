@@ -1,7 +1,7 @@
 #' PostgreSQL results.
 #'
 #' @keywords internal
-#' @include connection.R
+#' @include PqConnection.R
 #' @export
 setClass("PqResult",
   contains = "DBIResult",

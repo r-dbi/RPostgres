@@ -36,12 +36,12 @@ Remotes:
     r-dbi/DBI,
     r-dbi/DBItest
 Collate: 
+    'PqDriver.R'
+    'PqConnection.R'
+    'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
-    'driver.R'
-    'connection.R'
     'quote.R'
-    'result.R'
     'tables.R'
     'transactions.R'
     'utils.R'

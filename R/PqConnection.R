@@ -1,4 +1,4 @@
-#' @include driver.R
+#' @include PqDriver.R
 NULL
 
 #' PqConnection and methods.

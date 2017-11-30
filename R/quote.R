@@ -1,4 +1,4 @@
-#' @include connection.R
+#' @include PqConnection.R
 NULL
 
 #' Quote postgres strings and identifiers.
