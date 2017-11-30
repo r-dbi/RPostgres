@@ -7,19 +7,19 @@
 #include "PqUtils.h"
 
 
-class PqConnection;
-typedef boost::shared_ptr<PqConnection> PqConnectionPtr;
+class DbConnection;
+typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 class PqRow;
 typedef boost::shared_ptr<PqRow> PqRowPtr;
 
-// PqResult --------------------------------------------------------------------
-// There is no object analogous to PqResult in libpq: this provides a result set
+// DbResult --------------------------------------------------------------------
+// There is no object analogous to DbResult in libpq: this provides a result set
 // like object for the R API. There is only ever one active result set (the
 // most recent) for each connection.
 
-class PqResult : boost::noncopyable {
-  PqConnectionPtr pConn_;
+class DbResult : boost::noncopyable {
+  DbConnectionPtr pConn_;
   PGresult* pSpec_;
   PqRowPtr pNextRow_;
   std::vector<PGTypes> types_;
@@ -28,8 +28,8 @@ class PqResult : boost::noncopyable {
   bool bound_;
 
 public:
-  PqResult(PqConnectionPtr pConn, std::string sql);
-  ~PqResult();
+  DbResult(DbConnectionPtr pConn, std::string sql);
+  ~DbResult();
 
 public:
   void bind();

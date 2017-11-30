@@ -3,7 +3,7 @@
 #include "encode.h"
 
 
-PqConnection::PqConnection(std::vector<std::string> keys, std::vector<std::string> values) :
+DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values) :
 pCurrentResult_(NULL),
 transacting_(false)
 {
@@ -28,17 +28,17 @@ transacting_(false)
   PQsetClientEncoding(pConn_, "UTF-8");
 }
 
-PqConnection::~PqConnection() {
+DbConnection::~DbConnection() {
   try {
     PQfinish(pConn_);
   } catch (...) {}
 }
 
-PGconn* PqConnection::conn() {
+PGconn* DbConnection::conn() {
   return pConn_;
 }
 
-void PqConnection::set_current_result(PqResult* pResult) {
+void DbConnection::set_current_result(DbResult* pResult) {
   // Cancels previous query, if needed.
   if (pResult == pCurrentResult_)
     return;
@@ -52,7 +52,7 @@ void PqConnection::set_current_result(PqResult* pResult) {
   pCurrentResult_ = pResult;
 }
 
-void PqConnection::cancel_query() {
+void DbConnection::cancel_query() {
   check_connection();
 
   // Cancel running query
@@ -70,7 +70,7 @@ void PqConnection::cancel_query() {
   PQfreeCancel(cancel);
 }
 
-void PqConnection::finish_query() const {
+void DbConnection::finish_query() const {
   // Clear pending results
   PGresult* result;
   while ((result = PQgetResult(pConn_)) != NULL) {
@@ -78,15 +78,15 @@ void PqConnection::finish_query() const {
   }
 }
 
-bool PqConnection::is_current_result(PqResult* pResult) {
+bool DbConnection::is_current_result(DbResult* pResult) {
   return pCurrentResult_ == pResult;
 }
 
-bool PqConnection::has_query() {
+bool DbConnection::has_query() {
   return pCurrentResult_ != NULL;
 }
 
-void PqConnection::copy_data(std::string sql, List df) {
+void DbConnection::copy_data(std::string sql, List df) {
   LOG_DEBUG << sql;
 
   R_xlen_t p = df.size();
@@ -127,7 +127,7 @@ void PqConnection::copy_data(std::string sql, List df) {
   PQclear(pComplete);
 }
 
-void PqConnection::check_connection() {
+void DbConnection::check_connection() {
   ConnStatusType status = PQstatus(pConn_);
   if (status == CONNECTION_OK) return;
 
@@ -139,7 +139,7 @@ void PqConnection::check_connection() {
   conn_stop("Lost connection to database");
 }
 
-List PqConnection::info() {
+List DbConnection::info() {
   check_connection();
 
   const char* dbnm = PQdb(pConn_);
@@ -161,7 +161,7 @@ List PqConnection::info() {
     );
 }
 
-SEXP PqConnection::escape_string(std::string x) {
+SEXP DbConnection::escape_string(std::string x) {
   // Returns a single CHRSXP
   check_connection();
 
@@ -172,7 +172,7 @@ SEXP PqConnection::escape_string(std::string x) {
   return escaped;
 }
 
-SEXP PqConnection::escape_identifier(std::string x) {
+SEXP DbConnection::escape_identifier(std::string x) {
   // Returns a single CHRSXP
   check_connection();
 
@@ -183,19 +183,19 @@ SEXP PqConnection::escape_identifier(std::string x) {
   return escaped;
 }
 
-bool PqConnection::is_transacting() const {
+bool DbConnection::is_transacting() const {
   return transacting_;
 }
 
-void PqConnection::set_transacting(bool transacting) {
+void DbConnection::set_transacting(bool transacting) {
   transacting_ = transacting;
 }
 
-void PqConnection::conn_stop(const char* msg) {
+void DbConnection::conn_stop(const char* msg) {
   stop("%s: %s", msg, PQerrorMessage(conn()));
 }
 
-void PqConnection::cleanup_query() {
+void DbConnection::cleanup_query() {
   cancel_query();
   finish_query();
 }

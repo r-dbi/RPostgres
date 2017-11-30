@@ -6,28 +6,28 @@
 
 #include "PqUtils.h"
 
-class PqResult;
+class DbResult;
 
-// convenience typedef for shared_ptr to PqConnection
-class PqConnection;
-typedef boost::shared_ptr<PqConnection> PqConnectionPtr;
+// convenience typedef for shared_ptr to DbConnection
+class DbConnection;
+typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
-// PqConnection ----------------------------------------------------------------
+// DbConnection ----------------------------------------------------------------
 
-class PqConnection : boost::noncopyable {
+class DbConnection : boost::noncopyable {
   PGconn* pConn_;
-  PqResult* pCurrentResult_;
+  DbResult* pCurrentResult_;
   bool transacting_;
 
 public:
-  PqConnection(std::vector<std::string> keys, std::vector<std::string> values);
-  virtual ~PqConnection();
+  DbConnection(std::vector<std::string> keys, std::vector<std::string> values);
+  virtual ~DbConnection();
 
 public:
   PGconn* conn();
 
-  void set_current_result(PqResult* pResult);
-  bool is_current_result(PqResult* pResult);
+  void set_current_result(DbResult* pResult);
+  bool is_current_result(DbResult* pResult);
   bool has_query();
 
   void copy_data(std::string sql, List df);

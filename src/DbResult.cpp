@@ -4,7 +4,7 @@
 #include "PqRow.h"
 
 
-PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
+DbResult::DbResult(DbConnectionPtr pConn, std::string sql) :
   pConn_(pConn), nrows_(0), bound_(false) {
 
   LOG_DEBUG << sql;
@@ -46,7 +46,7 @@ PqResult::PqResult(PqConnectionPtr pConn, std::string sql) :
 
 }
 
-PqResult::~PqResult() {
+DbResult::~DbResult() {
   try {
     if (active()) {
       PQclear(pSpec_);
@@ -55,11 +55,11 @@ PqResult::~PqResult() {
   } catch (...) {}
 }
 
-void PqResult::bind() {
+void DbResult::bind() {
   bind(List());
 }
 
-void PqResult::bind(List params) {
+void DbResult::bind(List params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -103,7 +103,7 @@ void PqResult::bind(List params) {
   bound_ = true;
 }
 
-void PqResult::bind_rows(List params) {
+void DbResult::bind_rows(List params) {
   if (params.size() != nparams_) {
     stop("Query requires %i params; %i supplied.",
          nparams_, params.size());
@@ -136,23 +136,23 @@ void PqResult::bind_rows(List params) {
   }
 }
 
-bool PqResult::active() {
+bool DbResult::active() {
   return pConn_->is_current_result(this);
 }
 
-void PqResult::fetch_row() {
+void DbResult::fetch_row() {
   pNextRow_.reset(new PqRow(pConn_->conn()));
   nrows_++;
 }
 
-void PqResult::fetch_row_if_needed() {
+void DbResult::fetch_row_if_needed() {
   if (pNextRow_.get() != NULL)
     return;
 
   fetch_row();
 }
 
-List PqResult::fetch(int n_max) {
+List DbResult::fetch(int n_max) {
   if (!bound_)
     stop("Query needs to be bound before fetching");
   if (!active())
@@ -196,7 +196,7 @@ List PqResult::fetch(int n_max) {
   return finish_df(out);
 }
 
-List PqResult::finish_df(List out) const {
+List DbResult::finish_df(List out) const {
   for (int i = 0; i < out.size(); i++) {
     RObject col(out[i]);
     switch (types_[i]) {
@@ -221,24 +221,24 @@ List PqResult::finish_df(List out) const {
   return out;
 }
 
-int PqResult::n_rows_affected() {
+int DbResult::n_rows_affected() {
   if (!bound_) return NA_INTEGER;
   if (ncols_ > 0) return 0;
   fetch_row_if_needed();
   return pNextRow_->n_rows_affected();
 }
 
-int PqResult::n_rows_fetched() {
+int DbResult::n_rows_fetched() {
   return nrows_ - (pNextRow_.get() != NULL);
 }
 
-bool PqResult::is_complete() {
+bool DbResult::is_complete() {
   if (!bound_) return false;
   fetch_row_if_needed();
   return !pNextRow_->has_data();
 }
 
-List PqResult::get_column_info() {
+List DbResult::get_column_info() {
   CharacterVector names(ncols_);
   for (int i = 0; i < ncols_; i++) {
     names[i] = names_[i];
@@ -287,7 +287,7 @@ List PqResult::get_column_info() {
   return out;
 }
 
-std::vector<std::string> PqResult::get_column_names() const {
+std::vector<std::string> DbResult::get_column_names() const {
   std::vector<std::string> names;
   names.reserve(ncols_);
 
@@ -298,7 +298,7 @@ std::vector<std::string> PqResult::get_column_names() const {
   return names;
 }
 
-std::vector<PGTypes> PqResult::get_column_types() const {
+std::vector<PGTypes> DbResult::get_column_types() const {
   std::vector<PGTypes> types;
   types.reserve(ncols_);
 

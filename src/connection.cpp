@@ -3,22 +3,22 @@
 
 
 // [[Rcpp::export]]
-XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys,
+XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys,
                                         std::vector<std::string> values) {
-  PqConnectionPtr* pConn = new PqConnectionPtr(
-    new PqConnection(keys, values)
+  DbConnectionPtr* pConn = new DbConnectionPtr(
+    new DbConnection(keys, values)
   );
-  return XPtr<PqConnectionPtr>(pConn, true);
+  return XPtr<DbConnectionPtr>(pConn, true);
 }
 
 // [[Rcpp::export]]
-bool connection_is_valid(XPtr<PqConnectionPtr> con) {
+bool connection_is_valid(XPtr<DbConnectionPtr> con) {
   return (con.get() != NULL);
 }
 
 // [[Rcpp::export]]
-void connection_release(XPtr<PqConnectionPtr> con_) {
-  PqConnectionPtr* con = con_.get();
+void connection_release(XPtr<DbConnectionPtr> con_) {
+  DbConnectionPtr* con = con_.get();
   if (con != NULL) {
     if (con->get()->has_query()) {
       warning("%s\n%s",
@@ -33,12 +33,12 @@ void connection_release(XPtr<PqConnectionPtr> con_) {
 }
 
 // [[Rcpp::export]]
-List connection_info(PqConnection* con) {
+List connection_info(DbConnection* con) {
   return con->info();
 }
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_string(PqConnection* con, CharacterVector xs) {
+CharacterVector connection_escape_string(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
@@ -55,7 +55,7 @@ CharacterVector connection_escape_string(PqConnection* con, CharacterVector xs) 
 }
 
 // [[Rcpp::export]]
-CharacterVector connection_escape_identifier(PqConnection* con, CharacterVector xs) {
+CharacterVector connection_escape_identifier(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector escaped(n);
 
@@ -68,25 +68,25 @@ CharacterVector connection_escape_identifier(PqConnection* con, CharacterVector 
 }
 
 // [[Rcpp::export]]
-void connection_copy_data(PqConnection* con, std::string sql, List df) {
+void connection_copy_data(DbConnection* con, std::string sql, List df) {
   return con->copy_data(sql, df);
 }
 
 // [[Rcpp::export]]
-bool connection_is_transacting(PqConnection* con) {
+bool connection_is_transacting(DbConnection* con) {
   return con->is_transacting();
 }
 
 // [[Rcpp::export]]
-void connection_set_transacting(PqConnection* con, bool transacting) {
+void connection_set_transacting(DbConnection* con, bool transacting) {
   con->set_transacting(transacting);
 }
 
 namespace Rcpp {
 
 template<>
-PqConnection* as(SEXP x) {
-  PqConnectionPtr* connection = (PqConnectionPtr*)(R_ExternalPtrAddr(x));
+DbConnection* as(SEXP x) {
+  DbConnectionPtr* connection = (DbConnectionPtr*)(R_ExternalPtrAddr(x));
   if (!connection)
     stop("Invalid connection");
   return connection->get();
