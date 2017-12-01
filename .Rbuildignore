@@ -4,3 +4,4 @@
 ^src/Makevars$
 windows
 ^clion-test\.R$
+^cran-comments\.md$
