@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: RPostgres
 Version: 0.1-11
 Date: 2017-12-01
-Title: Experimental Rcpp Interface to PostgreSQL
+Title: 'Rcpp' Interface to 'PostgreSQL'
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
@@ -13,7 +13,7 @@ Authors@R: c(
     comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
     )
-Description: DBI-compatible Rcpp-backed interface to PostgreSQL.
+Description: Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL'.
 License: GPL-2
 LazyLoad: true
 Depends:
