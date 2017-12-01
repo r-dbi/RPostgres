@@ -9,6 +9,7 @@ DBItest::make_context(
     date_cast = function(x) paste0("date '", x, "'"),
     time_cast = function(x) paste0("time '", x, "'"),
     timestamp_cast = function(x) paste0("timestamp '", x, "'"),
-    is_null_check = function(x) paste0("(", x, "::text IS NULL)")
+    is_null_check = function(x) paste0("(", x, "::text IS NULL)"),
+    blob_cast = function(x) paste0("(", x, "::bytea)")
   )
 )
