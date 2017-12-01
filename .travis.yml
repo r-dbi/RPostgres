@@ -13,6 +13,7 @@ addons:
       - libpq-dev
 
 matrix:
+  include:
   - os: osx
   - os: linux
     r: devel
