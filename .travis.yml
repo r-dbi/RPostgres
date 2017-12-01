@@ -12,6 +12,19 @@ addons:
     packages:
       - libpq-dev
 
+matrix:
+  - os: osx
+  - os: linux
+    r: devel
+  - os: linux
+    r: release
+  - os: linux
+    r: oldrel
+  - os: linux
+    r: 3.2
+  - os: linux
+    r: 3.1
+
 after_success:
   - Rscript -e 'covr::codecov()'
 
