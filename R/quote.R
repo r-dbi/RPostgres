@@ -46,6 +46,7 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) 
 })
 
 # locally for now, requires DBI > 0.7
+#' @rdname quote
 setGeneric("dbQuoteLiteral",
   def = function(conn, x, ...) standardGeneric("dbQuoteLiteral")
 )
