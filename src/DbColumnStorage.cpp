@@ -106,23 +106,23 @@ DbColumnStorage* DbColumnStorage::append_data_to_new(DATA_TYPE new_dt) {
 void DbColumnStorage::fetch_value() {
   switch (dt) {
   case DT_INT:
-    source.fetch_int(data, i);
+    INTEGER(data)[i] = source.fetch_int();
     break;
 
   case DT_INT64:
-    source.fetch_int64(data, i);
+    INTEGER64(data)[i] = source.fetch_int64();
     break;
 
   case DT_REAL:
-    source.fetch_real(data, i);
+    REAL(data)[i] = source.fetch_real();
     break;
 
   case DT_STRING:
-    source.fetch_string(data, i);
+    SET_STRING_ELT(data, i, source.fetch_string());
     break;
 
   case DT_BLOB:
-    source.fetch_blob(data, i);
+    SET_VECTOR_ELT(data, i, source.fetch_blob());
     break;
 
   default:

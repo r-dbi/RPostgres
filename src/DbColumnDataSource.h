@@ -18,11 +18,11 @@ public:
 
   virtual bool is_null() const = 0;
 
-  virtual void fetch_int(SEXP x, int i) const = 0;
-  virtual void fetch_int64(SEXP x, int i) const = 0;
-  virtual void fetch_real(SEXP x, int i) const = 0;
-  virtual void fetch_string(SEXP x, int i) const = 0;
-  virtual void fetch_blob(SEXP x, int i) const = 0;
+  virtual int fetch_int() const = 0;
+  virtual int64_t fetch_int64() const = 0;
+  virtual double fetch_real() const = 0;
+  virtual SEXP fetch_string() const = 0;
+  virtual SEXP fetch_blob() const = 0;
 
 protected:
   int get_j() const;
