@@ -1,3 +1,11 @@
+## RPostgres 0.1-11 (2017-12-01)
+
+- Improved documentation of the `dbname` argument to `dbConnect()`, it now specifically mentions that connection strings cannot be used (#135).
+- `dbConnect()` gains a `bigint` argument that optionally coerces 64-bit integer values to `integer`, `numeric` or `character`. By default, the `bit64::integer64` data type is used (#141).
+- Use `blob_cast` tweak to pass blob tests.
+- Adapt data fetching logic from RSQLite, for multi-row binding (#100).
+
+
 ## RPostgres 0.1-10 (2017-11-30)
 
 - `dbBind()` checks that all parameters have the same length.
