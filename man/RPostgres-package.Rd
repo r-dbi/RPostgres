@@ -9,17 +9,18 @@
 DBI-compatible Rcpp-backed interface to PostgreSQL.
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com}
+\strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org}
 
 Authors:
 \itemize{
+  \item Hadley Wickham
   \item Jeroen Ooms
 }
 
 Other contributors:
 \itemize{
-  \item Kirill Müller [contributor]
   \item RStudio [copyright holder]
+  \item R Consortium [copyright holder]
   \item Tomoaki Nishiyama (Code for encoding vectors into strings derived from RPostgreSQL) [contributor]
   \item Kungliga Tekniska Högskolan (Source code for timegm) [contributor]
 }

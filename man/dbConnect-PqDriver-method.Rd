@@ -9,7 +9,8 @@
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
-  port = NULL, password = NULL, user = NULL, service = NULL, ...)
+  port = NULL, password = NULL, user = NULL, service = NULL, ...,
+  bigint = c("integer64", "integer", "numeric", "character"))
 }
 \arguments{
 \item{conn}{Connection to disconnect.}
