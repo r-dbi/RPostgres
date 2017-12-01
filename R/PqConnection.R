@@ -7,7 +7,7 @@ NULL
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
-  slots = list(ptr = "externalptr")
+  slots = list(ptr = "externalptr", bigint = "character")
 )
 
 # show()
@@ -120,6 +120,9 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
 #'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
+#' @param bigint The R type that 64-bit integer types should be mapped to,
+#'   default is [bit64::integer64], which allows the full range of 64 bit
+#'   integers.
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
@@ -128,13 +131,15 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
-           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
+           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
+           bigint = c("integer64", "integer", "numeric", "character")) {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
     if (!is.character(opts)) {
       stop("All options should be strings", call. = FALSE)
     }
+    bigint <- match.arg(bigint)
 
     if (length(opts) == 0) {
       ptr <- connection_create(character(), character())
@@ -142,7 +147,7 @@ setMethod("dbConnect", "PqDriver",
       ptr <- connection_create(names(opts), as.vector(opts))
     }
 
-    con <- new("PqConnection", ptr = ptr)
+    con <- new("PqConnection", ptr = ptr, bigint = bigint)
     dbExecute(con, "SET TIMEZONE='UTC'")
     con
   })

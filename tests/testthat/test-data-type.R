@@ -7,5 +7,4 @@ test_that("dbDataType works on a data frame", {
   types <- dbDataType(con, df)
 
   expect_equal(types, c(x = "INTEGER", y = "REAL"))
-
 })

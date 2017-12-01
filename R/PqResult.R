@@ -8,7 +8,8 @@ setClass("PqResult",
   slots = list(
     conn = "PqConnection",
     ptr = "externalptr",
-    sql = "character"
+    sql = "character",
+    bigint = "character"
   )
 )
 
@@ -89,7 +90,9 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
   rs <- new("PqResult",
     conn = conn,
     ptr = result_create(conn@ptr, statement),
-    sql = statement)
+    sql = statement,
+    bigint = conn@bigint
+  )
 
   if (!is.null(params)) {
     dbBind(rs, params)
@@ -109,8 +112,21 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
   if (n < -1) stopc("n must be nonnegative or -1")
   if (is.infinite(n)) n <- -1
   if (trunc(n) != n) stopc("n must be a whole number")
-  sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
+  ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
+  convert_bigint(ret, res@bigint)
 })
+
+convert_bigint <- function(ret, bigint) {
+  if (bigint == "integer64") return(ret)
+  fun <- switch(bigint,
+    integer = as.integer,
+    numeric = as.numeric,
+    character = as.character
+  )
+  is_int64 <- which(vlapply(ret, inherits, "integer64"))
+  ret[is_int64] <- lapply(ret[is_int64], fun)
+  ret
+}
 
 #' @rdname postgres-query
 #' @export
