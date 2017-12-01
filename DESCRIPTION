@@ -33,6 +33,9 @@ LinkingTo:
     BH,
     plogr,
     Rcpp
+Remotes:
+    r-dbi/DBI,
+    r-dbi/DBItest
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
