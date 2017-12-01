@@ -54,7 +54,7 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' fetches and clears for you.
 #'
 #' @param conn A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.
-#' @param statement An SQL string to execture
+#' @param statement An SQL string to execute
 #' @param params A list of query parameters to be substituted into
 #'   a parameterised query. Query parameters are sent as strings, and the
 #'   correct type is imputed by PostgreSQL. If this fails, you can manually

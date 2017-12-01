@@ -24,7 +24,7 @@
 \arguments{
 \item{conn}{A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.}
 
-\item{statement}{An SQL string to execture}
+\item{statement}{An SQL string to execute}
 
 \item{params}{A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the

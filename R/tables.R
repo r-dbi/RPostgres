@@ -3,7 +3,7 @@
 #' @param conn a \code{\linkS4class{PqConnection}} object, produced by
 #'   \code{\link[DBI]{dbConnect}}
 #' @param name a character string specifying a table name. Names will be
-#'   automatically quoted so you can use any sequence of characaters, not
+#'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
 #' @inheritParams DBI::sqlCreateTable

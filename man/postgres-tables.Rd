@@ -34,7 +34,7 @@
 \code{\link[DBI]{dbConnect}}}
 
 \item{name}{a character string specifying a table name. Names will be
-automatically quoted so you can use any sequence of characaters, not
+automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.}
 
 \item{value}{A data.frame to write to the database.}
