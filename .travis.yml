@@ -12,13 +12,6 @@ addons:
     packages:
       - libpq-dev
 
-#r_check_revdep: true
-
-r_github_packages:
-  - rstats-db/DBI
-  - jimhester/covr
-  - rstats-db/DBItest@production
-
 after_success:
   - Rscript -e 'covr::codecov()'
 
