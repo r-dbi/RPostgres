@@ -5,3 +5,5 @@
 windows
 ^clion-test\.R$
 ^cran-comments\.md$
+^src/.*\.d$
+^src/.*\.gch$
