@@ -5,9 +5,11 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 note
 
 * This is a new release.
+
+* We link libpq statically on Windows, hence the size.
 
 ## Reverse dependencies
 
