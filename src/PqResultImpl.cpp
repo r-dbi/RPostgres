@@ -48,6 +48,8 @@ types_(get_column_types(spec)),
 ncols_(names_.size()),
 nparams_(PQnparams(spec))
 {
+  for (int i = 0; i < nparams_; ++i)
+    LOG_VERBOSE << PQparamtype(spec, i);
 }
 
 
