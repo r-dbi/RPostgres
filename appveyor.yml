@@ -1,0 +1,62 @@
+# DO NOT CHANGE the "init" and "install" sections below
+
+# Download script file from GitHub
+init:
+  ps: |
+        $ErrorActionPreference = "Stop"
+        Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
+        Import-Module '..\appveyor-tool.ps1'
+
+install:
+  - ps: Bootstrap
+  - cmd: rm -f *.Rproj
+  - ps: |
+          $iniPath="C:\ProgramData\MySQL\MySQL Server 5.7\my.ini"
+          $newText = ([System.IO.File]::ReadAllText($iniPath)).Replace("# enable-named-pipe", "enable-named-pipe")
+          [System.IO.File]::WriteAllText($iniPath, $newText)
+          Restart-Service MySQL57
+  - cmd: |
+           "%PROGRAMFILES%\MySql\MySQL Server 5.7\bin\mysql" --user=%MYSQL_USER% -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8mb4'; FLUSH PRIVILEGES;"
+           "%PROGRAMFILES%\MySql\MySQL Server 5.7\bin\mysql" --user=%MYSQL_USER% -e "CREATE USER IF NOT EXISTS 'appveyor'@'localhost' IDENTIFIED BY '%MYSQL_PWD%'; FLUSH PRIVILEGES;"
+           "%PROGRAMFILES%\MySql\MySQL Server 5.7\bin\mysql" --user=%MYSQL_USER% -e "GRANT ALL PRIVILEGES ON test.* TO 'appveyor'@'localhost'; FLUSH PRIVILEGES;"
+
+# Adapt as necessary starting from here
+
+# 2017: doesn't seem to work (anymore)
+services:
+  - appveyor
+
+environment:
+  POSTGRES_USER: postgres
+  POSTGRES_PWD: Password12!
+
+build_script:
+  - travis-tool.sh install_github rstats-db/DBI
+  - travis-tool.sh install_github rstats-db/DBItest
+  - travis-tool.sh install_deps
+
+test_script:
+  - travis-tool.sh run_tests
+
+on_failure:
+  - 7z a failure.zip *.Rcheck\*
+  - appveyor PushArtifact failure.zip
+
+artifacts:
+  - path: '*.Rcheck\**\*.log'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.out'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.fail'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.Rout'
+    name: Logs
+
+  - path: '\*_*.tar.gz'
+    name: Bits
+
+  - path: '\*_*.zip'
+    name: Bits
