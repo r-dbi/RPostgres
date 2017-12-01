@@ -1,7 +1,7 @@
 #' PostgreSQL results.
 #'
 #' @keywords internal
-#' @include connection.R
+#' @include PqConnection.R
 #' @export
 setClass("PqResult",
   contains = "DBIResult",
@@ -24,7 +24,7 @@ setMethod("dbGetStatement", "PqResult", function(res, ...) {
 #' @rdname PqResult-class
 #' @export
 setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
-  result_active(dbObj@ptr)
+  result_valid(dbObj@ptr)
 })
 
 #' @rdname PqResult-class
@@ -128,7 +128,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   params <- posixlt_to_posixct(params)
   params <- difftime_to_hms(params)
   params <- prepare_for_binding(params)
-  result_bind_params(res@ptr, params)
+  result_bind(res@ptr, params)
   invisible(res)
 })
 
@@ -171,7 +171,7 @@ prepare_for_binding <- function(value) {
 #' @rdname postgres-query
 #' @export
 setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_is_complete(res@ptr)
+  result_has_completed(res@ptr)
 })
 
 #' @rdname postgres-query

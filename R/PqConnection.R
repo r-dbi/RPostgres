@@ -1,4 +1,4 @@
-#' @include driver.R
+#' @include PqDriver.R
 NULL
 
 #' PqConnection and methods.
@@ -10,18 +10,7 @@ setClass("PqConnection",
   slots = list(ptr = "externalptr")
 )
 
-#' @export
-#' @rdname PqConnection-class
-setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
-  connection_info(dbObj@ptr)
-})
-
-#' @rdname PqConnection-class
-#' @export
-setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
-  connection_is_valid(dbObj@ptr)
-})
-
+# show()
 #' @export
 #' @rdname PqConnection-class
 setMethod("show", "PqConnection", function(object) {
@@ -35,6 +24,79 @@ setMethod("show", "PqConnection", function(object) {
 
   cat("<PqConnection> ", info$dbname, "@", host, "\n", sep = "")
 })
+
+# dbIsValid()
+#' @export
+#' @rdname PqConnection-class
+setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
+  connection_valid(dbObj@ptr)
+})
+
+# dbDisconnect()
+#' @export
+#' @rdname dbConnect-PqDriver-method
+setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
+  connection_release(conn@ptr)
+  invisible(TRUE)
+})
+
+# dbSendQuery()
+
+# dbSendStatement()
+
+# dbDataType()
+#' @export
+#' @rdname dbDataType
+setMethod("dbDataType", "PqConnection", function(dbObj, obj, ...) {
+  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
+  get_data_type(obj)
+})
+
+get_data_type <- function(obj) {
+  if (is.factor(obj)) return("TEXT")
+  if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
+  if (inherits(obj, "Date")) return("DATE")
+  if (inherits(obj, "difftime")) return("TIME")
+  switch(typeof(obj),
+    integer = "INTEGER",
+    double = "REAL",
+    character = "TEXT",
+    logical = "BOOLEAN",
+    list = "BYTEA",
+    stop("Unsupported type", call. = FALSE)
+  )
+}
+
+# dbQuoteString()
+
+# dbQuoteIdentifier()
+
+# dbWriteTable()
+
+# dbReadTable()
+
+# dbListTables()
+
+# dbExistsTable()
+
+# dbListFields()
+
+# dbRemoveTable()
+
+# dbGetInfo()
+#' @export
+#' @rdname PqConnection-class
+setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
+  connection_info(dbObj@ptr)
+})
+
+# dbBegin()
+
+# dbCommit()
+
+# dbRollback()
+
+# other
 
 #' Connect to a PostgreSQL database.
 #'
@@ -85,12 +147,6 @@ setMethod("dbConnect", "PqDriver",
     con
   })
 
-#' @export
-#' @rdname dbConnect-PqDriver-method
-setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
-  connection_release(conn@ptr)
-  invisible(TRUE)
-})
 
 #' Determine database type for R vector.
 #'
@@ -103,25 +159,3 @@ setMethod("dbDataType", "PqDriver", function(dbObj, obj, ...) {
   if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
   get_data_type(obj)
 })
-
-#' @export
-#' @rdname dbDataType
-setMethod("dbDataType", "PqConnection", function(dbObj, obj, ...) {
-  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
-  get_data_type(obj)
-})
-
-get_data_type <- function(obj) {
-  if (is.factor(obj)) return("TEXT")
-  if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
-  if (inherits(obj, "Date")) return("DATE")
-  if (inherits(obj, "difftime")) return("TIME")
-  switch(typeof(obj),
-    integer = "INTEGER",
-    double = "REAL",
-    character = "TEXT",
-    logical = "BOOLEAN",
-    list = "BYTEA",
-    stop("Unsupported type", call. = FALSE)
-  )
-}
