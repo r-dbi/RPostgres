@@ -57,6 +57,7 @@ results (and they'll fit in memory) use \code{dbGetQuery} which sends,
 fetches and clears for you.
 }
 \examples{
+\dontrun{
 library(DBI)
 db <- dbConnect(RPostgres::Postgres())
 dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
@@ -74,4 +75,5 @@ dbClearResult(res)
 dbRemoveTable(db, "usarrests")
 
 dbDisconnect(db)
+}
 }

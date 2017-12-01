@@ -23,6 +23,7 @@
 #'   benchmarks revealed that this was considerably slower than using a single
 #'   SQL string.
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbListTables(con)
@@ -37,6 +38,7 @@
 #' dbReadTable(con, "mtcars2")
 #'
 #' dbDisconnect(con)
+#' }
 #' @name postgres-tables
 NULL
 

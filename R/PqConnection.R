@@ -131,9 +131,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
+#' }
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,

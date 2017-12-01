@@ -7,12 +7,14 @@ NULL
 #' @param x A character to escaped
 #' @param ... Other arguments needed for compatibility with generic
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #'
 #' x <- c("a", "b c", "d'e", "\\f")
 #' dbQuoteString(con, x)
 #' dbQuoteIdentifier(con, x)
+#' }
 #' @name quote
 NULL
 

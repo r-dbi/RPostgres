@@ -58,10 +58,12 @@ dbQuoteLiteral(conn, x, ...)
 Quote postgres strings and identifiers.
 }
 \examples{
+\dontrun{
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")
 dbQuoteString(con, x)
 dbQuoteIdentifier(con, x)
+}
 }

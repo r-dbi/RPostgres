@@ -82,6 +82,7 @@ converted to valid R identifiers.}
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
+\dontrun{
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbListTables(con)
@@ -96,4 +97,5 @@ dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 dbReadTable(con, "mtcars2")
 
 dbDisconnect(con)
+}
 }

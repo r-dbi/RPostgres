@@ -62,6 +62,7 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' db <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
@@ -79,6 +80,7 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' dbRemoveTable(db, "usarrests")
 #'
 #' dbDisconnect(db)
+#' }
 #' @name postgres-query
 NULL
 
