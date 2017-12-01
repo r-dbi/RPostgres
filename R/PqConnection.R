@@ -100,12 +100,17 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 
 #' Connect to a PostgreSQL database.
 #'
-#' Note that manually disconnecting a connection is not necessary with RPostgres;
+#' Manually disconnecting a connection is not necessary with RPostgres, but
+#' still recommended;
 #' if you delete the object containing the connection, it will be automatcally
-#' disconnected during the next GC.
+#' disconnected during the next GC with a warning.
 #'
 #' @param drv \code{RPostgres::Postgres()}
 #' @param dbname Database name. If \code{NULL}, defaults to the user name.
+#'   Note that this argument can only contain the database name, it will not
+#'   be parsed as a connection string (internally, `expand_dbname` is set to
+#'   `false` in the call to
+#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).
 #' @param user,password User name and password. If \code{NULL}, will be
 #'   retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
 #'   appropriate line in \code{~/.pgpass}. See

@@ -21,7 +21,11 @@ options as described at
 
 \item{drv}{\code{RPostgres::Postgres()}}
 
-\item{dbname}{Database name. If \code{NULL}, defaults to the user name.}
+\item{dbname}{Database name. If \code{NULL}, defaults to the user name.
+Note that this argument can only contain the database name, it will not
+be parsed as a connection string (internally, `expand_dbname` is set to
+`false` in the call to
+[`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).}
 
 \item{host, port}{Host and port. If \code{NULL}, will be retrieved from
 \code{PGHOST} and \code{PGPORT} env vars.}
@@ -36,11 +40,16 @@ more details.}
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
 file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
 for details on this file and syntax.}
+
+\item{bigint}{The R type that 64-bit integer types should be mapped to,
+default is [bit64::integer64], which allows the full range of 64 bit
+integers.}
 }
 \description{
-Note that manually disconnecting a connection is not necessary with RPostgres;
+Manually disconnecting a connection is not necessary with RPostgres, but
+still recommended;
 if you delete the object containing the connection, it will be automatcally
-disconnected during the next GC.
+disconnected during the next GC with a warning.
 }
 \examples{
 library(DBI)
