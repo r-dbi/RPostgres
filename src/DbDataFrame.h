@@ -23,6 +23,7 @@ public:
   void set_col_values();
   bool advance();
 
+  List get_data();
   List get_data(std::vector<DATA_TYPE>& types);
   size_t get_ncols() const;
 

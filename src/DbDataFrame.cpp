@@ -38,6 +38,12 @@ bool DbDataFrame::advance() {
   return (n_max < 0 || i < n_max);
 }
 
+List DbDataFrame::get_data() {
+  // Throws away new data types
+  std::vector<DATA_TYPE> types_;
+  return get_data(types_);
+}
+
 List DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   // Trim back to what we actually used
   finalize_cols();

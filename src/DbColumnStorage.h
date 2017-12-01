@@ -43,6 +43,7 @@ private:
 
   // allocate()
   static Rcpp::RObject class_from_datatype(DATA_TYPE dt);
+  static void set_attribs_from_datatype(SEXP x, DATA_TYPE dt);
 
   // copy_to()
   static void fill_default_value(SEXP data, DATA_TYPE dt, R_xlen_t i);

@@ -2,15 +2,22 @@
 #include "PqResultImpl.h"
 #include "DbConnection.h"
 #include "DbResult.h"
-#include "PqRow.h"
+#include "DbColumnStorage.h"
+#include "PqDataFrame.h"
 
 PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql) :
-pRes_(pRes),
+res(pRes),
 pConn_(pConn),
 pSpec_(prepare(pConn, sql)),
 cache(pSpec_),
+complete_(false),
 ready_(false),
-nrows_(0) {
+nrows_(0),
+rows_affected_(0),
+group_(0),
+groups_(0),
+pRes_(NULL)
+{
 
   LOG_DEBUG << sql;
 
@@ -38,7 +45,7 @@ PqResultImpl::~PqResultImpl() {
 PqResultImpl::_cache::_cache(PGresult* spec) :
 names_(get_column_names(spec)),
 types_(get_column_types(spec)),
-ncols_(static_cast<int>(names_.size())),
+ncols_(names_.size()),
 nparams_(PQnparams(spec))
 {
 }
@@ -157,20 +164,17 @@ void PqResultImpl::init(bool params_have_rows) {
 // Publics /////////////////////////////////////////////////////////////////////
 
 bool PqResultImpl::complete() {
-  if (!ready_) return false;
-  fetch_row_if_needed();
-  return !pNextRow_->has_data();
+  return complete_;
 }
 
 int PqResultImpl::n_rows_fetched() {
-  return nrows_ - (pNextRow_.get() != NULL);
+  return nrows_;
 }
 
 int PqResultImpl::n_rows_affected() {
   if (!ready_) return NA_INTEGER;
   if (cache.ncols_ > 0) return 0;
-  fetch_row_if_needed();
-  return pNextRow_->n_rows_affected();
+  return rows_affected_;
 }
 
 void PqResultImpl::bind(const List& params) {
@@ -198,91 +202,31 @@ void PqResultImpl::bind(const List& params) {
 
   bool has_params = bind_row();
   after_bind(has_params);
-
-  pNextRow_.reset();
 }
 
 List PqResultImpl::fetch(const int n_max) {
   if (!ready_)
     stop("Query needs to be bound before fetching");
 
-  int n = (n_max < 0) ? 100 : n_max;
-  List out = df_create(cache.types_, cache.names_, n);
+  int n = 0;
+  List out;
 
-  int i = 0;
-  fetch_row_if_needed();
+  if (n_max != 0)
+    out = fetch_rows(n_max, n);
+  else
+    out = peek_first_row();
 
-  if (!pNextRow_->has_data() && out.length() == 0) {
-    warning("Don't need to call dbFetch() for statements, only for queries");
-  }
-
-  while (pNextRow_->has_data()) {
-    if (i >= n) {
-      if (n_max < 0) {
-        n *= 2;
-        out = df_resize(out, n);
-      } else {
-        break;
-      }
-    }
-
-    for (int j = 0; j < cache.ncols_; ++j) {
-      pNextRow_->set_list_value(out[j], i, j, cache.types_);
-    }
-    fetch_row();
-    ++i;
-
-    if (i % 1000 == 0)
-      checkUserInterrupt();
-  }
-
-  // Trim back to what we actually used
-  if (i < n) {
-    out = df_resize(out, i);
-  }
-
-  return finish_df(out);
+  return out;
 }
 
 List PqResultImpl::get_column_info() {
-  CharacterVector names(cache.ncols_);
-  for (int i = 0; i < cache.ncols_; i++) {
-    names[i] = cache.names_[i];
-  }
+  peek_first_row();
+
+  CharacterVector names(cache.names_.begin(), cache.names_.end());
 
   CharacterVector types(cache.ncols_);
-  for (int i = 0; i < cache.ncols_; i++) {
-    switch (cache.types_[i]) {
-    case DT_STRING:
-      types[i] = "character";
-      break;
-    case DT_INT:
-      types[i] = "integer";
-      break;
-    case DT_REAL:
-      types[i] = "double";
-      break;
-    case DT_BLOB:
-      types[i] = "list";
-      break;
-    case DT_BOOL:
-      types[i] = "logical";
-      break;
-    case DT_DATE:
-      types[i] = "Date";
-      break;
-    case DT_DATETIME:
-      types[i] = "POSIXct";
-      break;
-    case DT_DATETIMETZ:
-      types[i] = "POSIXct";
-      break;
-    case DT_INT64:
-      types[i] = "integer64";
-      break;
-    default:
-      stop("Unknown variable type");
-    }
+  for (size_t i = 0; i < cache.ncols_; i++) {
+    types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
   List out = Rcpp::List::create(names, types);
@@ -312,7 +256,7 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  pRes_->cleanup_query();
+  res->cleanup_query();
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);
@@ -347,49 +291,105 @@ bool PqResultImpl::bind_row() {
 
 void PqResultImpl::after_bind(bool params_have_rows) {
   init(params_have_rows);
+  if (params_have_rows)
+    step();
+}
+
+List PqResultImpl::fetch_rows(const int n_max, int& n) {
+  n = (n_max < 0) ? 100 : n_max;
+
+  PqDataFrame data(this, cache.names_, n_max, cache.types_);
+
+  if (complete_ && data.get_ncols() == 0) {
+    warning("Don't need to call dbFetch() for statements, only for queries");
+  }
+
+  while (!complete_) {
+    LOG_VERBOSE << nrows_ << "/" << n;
+
+    data.set_col_values();
+    step();
+    nrows_++;
+    if (!data.advance())
+      break;
+  }
+
+  LOG_VERBOSE << nrows_;
+  return data.get_data();
+}
+
+void PqResultImpl::step() {
+  while (step_run())
+    ;
+}
+
+bool PqResultImpl::step_run() {
+  LOG_VERBOSE;
+
+  pRes_ = PQgetResult(pConn_);
+
+  // We're done, but we need to call PQgetResult until it returns NULL
+  if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
+    PGresult* next = PQgetResult(pConn_);
+    while (next != NULL) {
+      PQclear(next);
+      next = PQgetResult(pConn_);
+    }
+  }
+
+  if (pRes_ == NULL) {
+    PQclear(pRes_);
+    stop("No active query");
+  }
+
+  ExecStatusType status = PQresultStatus(pRes_);
+
+  switch (status) {
+  case PGRES_FATAL_ERROR:
+    {
+      PQclear(pRes_);
+      conn_stop("Failed to fetch row: %s");
+      return false;
+    }
+  case PGRES_SINGLE_TUPLE:
+    return false;
+  default:
+    return step_done();
+  }
+}
+
+bool PqResultImpl::step_done() {
+  char* tuples = PQcmdTuples(pRes_);
+  rows_affected_ += atoi(tuples);
+
+  ++group_;
+  bool more_params = bind_row();
+
+  if (!more_params)
+    complete_ = true;
+
+  LOG_VERBOSE << "group: " << group_ << ", more_params: " << more_params;
+  return more_params;
+}
+
+List PqResultImpl::peek_first_row() {
+  PqDataFrame data(this, cache.names_, 1, cache.types_);
+
+  if (!complete_)
+    data.set_col_values();
+  // Not calling data.advance(), remains a zero-row data frame
+
+  return data.get_data();
+}
+
+void PqResultImpl::conn_stop(const char* msg) const {
+  DbConnection::conn_stop(pConn_, msg);
 }
 
 void PqResultImpl::bind() {
   bind(List());
 }
 
-void PqResultImpl::fetch_row() {
-  pNextRow_.reset(new PqRow(pConn_));
-  nrows_++;
-}
-
-void PqResultImpl::fetch_row_if_needed() {
-  if (pNextRow_.get() != NULL)
-    return;
-
-  fetch_row();
-}
-
-List PqResultImpl::finish_df(List out) const {
-  for (int i = 0; i < out.size(); i++) {
-    RObject col(out[i]);
-    switch (cache.types_[i]) {
-    case DT_DATE:
-      col.attr("class") = CharacterVector::create("Date");
-      break;
-    case DT_DATETIME:
-    case DT_DATETIMETZ:
-      col.attr("class") = CharacterVector::create("POSIXct", "POSIXt");
-      break;
-    case DT_TIME:
-      col.attr("class") = CharacterVector::create("hms", "difftime");
-      col.attr("units") = CharacterVector::create("secs");
-      break;
-    case DT_INT64:
-      col.attr("class") = CharacterVector::create("integer64");
-      break;
-    default:
-      break;
-    }
-  }
-  return out;
-}
-
-void PqResultImpl::conn_stop(const char* msg) const {
-  DbConnection::conn_stop(pConn_, msg);
+PGresult* PqResultImpl::get_result() {
+  return pRes_;
 }

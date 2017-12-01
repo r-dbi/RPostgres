@@ -10,7 +10,6 @@ DBItest::test_all(c(
   # meta
   "bind_raw",                                   #
   "bind_blob",                                  #
-  "bind_multi_row.*",                           # #100
 
   NULL
 ))
