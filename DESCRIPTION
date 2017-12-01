@@ -1,13 +1,14 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1-10
-Date: 2017-11-30
+Version: 0.1-11
+Date: 2017-12-01
 Title: Experimental Rcpp Interface to PostgreSQL
 Authors@R: c(
-    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
+    person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
-    person("Kirill", "Müller", role = "ctb"),
+    person("Kirill", "Müller", role = "cre", email = "krlmlr+r@mailbox.org"),
     person("RStudio", role = "cph"),
+    person("R Consortium", role = "cph"),
     person("Tomoaki", "Nishiyama", role = "ctb",
     comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
@@ -36,12 +37,12 @@ Remotes:
     r-dbi/DBI,
     r-dbi/DBItest
 Collate: 
+    'PqDriver.R'
+    'PqConnection.R'
+    'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
-    'driver.R'
-    'connection.R'
     'quote.R'
-    'result.R'
     'tables.R'
     'transactions.R'
     'utils.R'

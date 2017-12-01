@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // connection_create
-XPtr<PqConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values);
+XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values);
 RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -18,93 +18,93 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// connection_is_valid
-bool connection_is_valid(XPtr<PqConnectionPtr> con);
-RcppExport SEXP _RPostgres_connection_is_valid(SEXP conSEXP) {
+// connection_valid
+bool connection_valid(XPtr<DbConnectionPtr> con_);
+RcppExport SEXP _RPostgres_connection_valid(SEXP con_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_is_valid(con));
+    Rcpp::traits::input_parameter< XPtr<DbConnectionPtr> >::type con_(con_SEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_valid(con_));
     return rcpp_result_gen;
 END_RCPP
 }
 // connection_release
-void connection_release(XPtr<PqConnectionPtr> con_);
+void connection_release(XPtr<DbConnectionPtr> con_);
 RcppExport SEXP _RPostgres_connection_release(SEXP con_SEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con_(con_SEXP);
+    Rcpp::traits::input_parameter< XPtr<DbConnectionPtr> >::type con_(con_SEXP);
     connection_release(con_);
     return R_NilValue;
 END_RCPP
 }
 // connection_info
-List connection_info(PqConnection* con);
+List connection_info(DbConnection* con);
 RcppExport SEXP _RPostgres_connection_info(SEXP conSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     rcpp_result_gen = Rcpp::wrap(connection_info(con));
     return rcpp_result_gen;
 END_RCPP
 }
-// connection_escape_string
-CharacterVector connection_escape_string(PqConnection* con, CharacterVector xs);
-RcppExport SEXP _RPostgres_connection_escape_string(SEXP conSEXP, SEXP xsSEXP) {
+// connection_quote_string
+CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs);
+RcppExport SEXP _RPostgres_connection_quote_string(SEXP conSEXP, SEXP xsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_escape_string(con, xs));
+    rcpp_result_gen = Rcpp::wrap(connection_quote_string(con, xs));
     return rcpp_result_gen;
 END_RCPP
 }
-// connection_escape_identifier
-CharacterVector connection_escape_identifier(PqConnection* con, CharacterVector xs);
-RcppExport SEXP _RPostgres_connection_escape_identifier(SEXP conSEXP, SEXP xsSEXP) {
+// connection_quote_identifier
+CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector xs);
+RcppExport SEXP _RPostgres_connection_quote_identifier(SEXP conSEXP, SEXP xsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type xs(xsSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_escape_identifier(con, xs));
+    rcpp_result_gen = Rcpp::wrap(connection_quote_identifier(con, xs));
     return rcpp_result_gen;
-END_RCPP
-}
-// connection_copy_data
-void connection_copy_data(PqConnection* con, std::string sql, List df);
-RcppExport SEXP _RPostgres_connection_copy_data(SEXP conSEXP, SEXP sqlSEXP, SEXP dfSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
-    Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
-    Rcpp::traits::input_parameter< List >::type df(dfSEXP);
-    connection_copy_data(con, sql, df);
-    return R_NilValue;
 END_RCPP
 }
 // connection_is_transacting
-bool connection_is_transacting(PqConnection* con);
+bool connection_is_transacting(DbConnection* con);
 RcppExport SEXP _RPostgres_connection_is_transacting(SEXP conSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     rcpp_result_gen = Rcpp::wrap(connection_is_transacting(con));
     return rcpp_result_gen;
 END_RCPP
 }
 // connection_set_transacting
-void connection_set_transacting(PqConnection* con, bool transacting);
+void connection_set_transacting(DbConnection* con, bool transacting);
 RcppExport SEXP _RPostgres_connection_set_transacting(SEXP conSEXP, SEXP transactingSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
     Rcpp::traits::input_parameter< bool >::type transacting(transactingSEXP);
     connection_set_transacting(con, transacting);
+    return R_NilValue;
+END_RCPP
+}
+// connection_copy_data
+void connection_copy_data(DbConnection* con, std::string sql, List df);
+RcppExport SEXP _RPostgres_connection_copy_data(SEXP conSEXP, SEXP sqlSEXP, SEXP dfSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< List >::type df(dfSEXP);
+    connection_copy_data(con, sql, df);
     return R_NilValue;
 END_RCPP
 }
@@ -153,126 +153,127 @@ BEGIN_RCPP
 END_RCPP
 }
 // result_create
-XPtr<PqResult> result_create(XPtr<PqConnectionPtr> con, std::string sql);
-RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP) {
+XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool is_statement);
+RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP, SEXP is_statementSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqConnectionPtr> >::type con(conSEXP);
+    Rcpp::traits::input_parameter< XPtr<DbConnectionPtr> >::type con(conSEXP);
     Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_create(con, sql));
-    return rcpp_result_gen;
-END_RCPP
-}
-// result_fetch
-List result_fetch(PqResult* rs, int n);
-RcppExport SEXP _RPostgres_result_fetch(SEXP rsSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_fetch(rs, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// result_bind_params
-void result_bind_params(PqResult* rs, List params);
-RcppExport SEXP _RPostgres_result_bind_params(SEXP rsSEXP, SEXP paramsSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    result_bind_params(rs, params);
-    return R_NilValue;
-END_RCPP
-}
-// result_is_complete
-bool result_is_complete(PqResult* rs);
-RcppExport SEXP _RPostgres_result_is_complete(SEXP rsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_is_complete(rs));
+    Rcpp::traits::input_parameter< bool >::type is_statement(is_statementSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_create(con, sql, is_statement));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_release
-void result_release(XPtr<PqResult> rs);
-RcppExport SEXP _RPostgres_result_release(SEXP rsSEXP) {
+void result_release(XPtr<DbResult> res);
+RcppExport SEXP _RPostgres_result_release(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs(rsSEXP);
-    result_release(rs);
+    Rcpp::traits::input_parameter< XPtr<DbResult> >::type res(resSEXP);
+    result_release(res);
     return R_NilValue;
 END_RCPP
 }
-// result_active
-bool result_active(XPtr<PqResult> rs_);
-RcppExport SEXP _RPostgres_result_active(SEXP rs_SEXP) {
+// result_valid
+bool result_valid(XPtr<DbResult> res_);
+RcppExport SEXP _RPostgres_result_valid(SEXP res_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<PqResult> >::type rs_(rs_SEXP);
-    rcpp_result_gen = Rcpp::wrap(result_active(rs_));
+    Rcpp::traits::input_parameter< XPtr<DbResult> >::type res_(res_SEXP);
+    rcpp_result_gen = Rcpp::wrap(result_valid(res_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// result_fetch
+List result_fetch(DbResult* res, const int n);
+RcppExport SEXP _RPostgres_result_fetch(SEXP resSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_fetch(res, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// result_bind
+void result_bind(DbResult* res, List params);
+RcppExport SEXP _RPostgres_result_bind(SEXP resSEXP, SEXP paramsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
+    result_bind(res, params);
+    return R_NilValue;
+END_RCPP
+}
+// result_has_completed
+bool result_has_completed(DbResult* res);
+RcppExport SEXP _RPostgres_result_has_completed(SEXP resSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_has_completed(res));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_rows_fetched
-int result_rows_fetched(PqResult* rs);
-RcppExport SEXP _RPostgres_result_rows_fetched(SEXP rsSEXP) {
+int result_rows_fetched(DbResult* res);
+RcppExport SEXP _RPostgres_result_rows_fetched(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_rows_fetched(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_rows_fetched(res));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_rows_affected
-int result_rows_affected(PqResult* rs);
-RcppExport SEXP _RPostgres_result_rows_affected(SEXP rsSEXP) {
+int result_rows_affected(DbResult* res);
+RcppExport SEXP _RPostgres_result_rows_affected(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_rows_affected(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_rows_affected(res));
     return rcpp_result_gen;
 END_RCPP
 }
 // result_column_info
-List result_column_info(PqResult* rs);
-RcppExport SEXP _RPostgres_result_column_info(SEXP rsSEXP) {
+List result_column_info(DbResult* res);
+RcppExport SEXP _RPostgres_result_column_info(SEXP resSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< PqResult* >::type rs(rsSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_column_info(rs));
+    Rcpp::traits::input_parameter< DbResult* >::type res(resSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_column_info(res));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 2},
-    {"_RPostgres_connection_is_valid", (DL_FUNC) &_RPostgres_connection_is_valid, 1},
+    {"_RPostgres_connection_valid", (DL_FUNC) &_RPostgres_connection_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
     {"_RPostgres_connection_info", (DL_FUNC) &_RPostgres_connection_info, 1},
-    {"_RPostgres_connection_escape_string", (DL_FUNC) &_RPostgres_connection_escape_string, 2},
-    {"_RPostgres_connection_escape_identifier", (DL_FUNC) &_RPostgres_connection_escape_identifier, 2},
-    {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
+    {"_RPostgres_connection_quote_string", (DL_FUNC) &_RPostgres_connection_quote_string, 2},
+    {"_RPostgres_connection_quote_identifier", (DL_FUNC) &_RPostgres_connection_quote_identifier, 2},
     {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
+    {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},
     {"_RPostgres_init_logging", (DL_FUNC) &_RPostgres_init_logging, 1},
-    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
-    {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
-    {"_RPostgres_result_bind_params", (DL_FUNC) &_RPostgres_result_bind_params, 2},
-    {"_RPostgres_result_is_complete", (DL_FUNC) &_RPostgres_result_is_complete, 1},
+    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 3},
     {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
-    {"_RPostgres_result_active", (DL_FUNC) &_RPostgres_result_active, 1},
+    {"_RPostgres_result_valid", (DL_FUNC) &_RPostgres_result_valid, 1},
+    {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},
+    {"_RPostgres_result_bind", (DL_FUNC) &_RPostgres_result_bind, 2},
+    {"_RPostgres_result_has_completed", (DL_FUNC) &_RPostgres_result_has_completed, 1},
     {"_RPostgres_result_rows_fetched", (DL_FUNC) &_RPostgres_result_rows_fetched, 1},
     {"_RPostgres_result_rows_affected", (DL_FUNC) &_RPostgres_result_rows_affected, 1},
     {"_RPostgres_result_column_info", (DL_FUNC) &_RPostgres_result_column_info, 1},

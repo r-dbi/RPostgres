@@ -1,4 +1,4 @@
-#' @include driver.R
+#' @include PqDriver.R
 NULL
 
 #' PqConnection and methods.
@@ -7,21 +7,10 @@ NULL
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
-  slots = list(ptr = "externalptr")
+  slots = list(ptr = "externalptr", bigint = "character")
 )
 
-#' @export
-#' @rdname PqConnection-class
-setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
-  connection_info(dbObj@ptr)
-})
-
-#' @rdname PqConnection-class
-#' @export
-setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
-  connection_is_valid(dbObj@ptr)
-})
-
+# show()
 #' @export
 #' @rdname PqConnection-class
 setMethod("show", "PqConnection", function(object) {
@@ -36,55 +25,14 @@ setMethod("show", "PqConnection", function(object) {
   cat("<PqConnection> ", info$dbname, "@", host, "\n", sep = "")
 })
 
-#' Connect to a PostgreSQL database.
-#'
-#' Note that manually disconnecting a connection is not necessary with RPostgres;
-#' if you delete the object containing the connection, it will be automatcally
-#' disconnected during the next GC.
-#'
-#' @param drv \code{RPostgres::Postgres()}
-#' @param dbname Database name. If \code{NULL}, defaults to the user name.
-#' @param user,password User name and password. If \code{NULL}, will be
-#'   retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
-#'   appropriate line in \code{~/.pgpass}. See
-#'   \url{http://www.postgresql.org/docs/9.4/static/libpq-pgpass.html} for
-#'   more details.
-#' @param host,port Host and port. If \code{NULL}, will be retrieved from
-#'   \code{PGHOST} and \code{PGPORT} env vars.
-#' @param service Name of service to connect as.  If \code{NULL}, will be
-#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-#'   file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
-#'   for details on this file and syntax.
-#' @param ... Other name-value pairs that describe additional connection
-#'   options as described at
-#'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
-#' @param conn Connection to disconnect.
+# dbIsValid()
 #' @export
-#' @examples
-#' library(DBI)
-#' con <- dbConnect(RPostgres::Postgres())
-#' dbDisconnect(con)
-setMethod("dbConnect", "PqDriver",
-  function(drv, dbname = NULL,
-           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...) {
+#' @rdname PqConnection-class
+setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
+  connection_valid(dbObj@ptr)
+})
 
-    opts <- unlist(list(dbname = dbname, user = user, password = password,
-      host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
-    if (!is.character(opts)) {
-      stop("All options should be strings", call. = FALSE)
-    }
-
-    if (length(opts) == 0) {
-      ptr <- connection_create(character(), character())
-    } else {
-      ptr <- connection_create(names(opts), as.vector(opts))
-    }
-
-    con <- new("PqConnection", ptr = ptr)
-    dbExecute(con, "SET TIMEZONE='UTC'")
-    con
-  })
-
+# dbDisconnect()
 #' @export
 #' @rdname dbConnect-PqDriver-method
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
@@ -92,18 +40,11 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   invisible(TRUE)
 })
 
-#' Determine database type for R vector.
-#'
-#' @export
-#' @param dbObj Postgres driver or connection.
-#' @param obj Object to convert
-#' @keywords internal
-#' @rdname dbDataType
-setMethod("dbDataType", "PqDriver", function(dbObj, obj, ...) {
-  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
-  get_data_type(obj)
-})
+# dbSendQuery()
 
+# dbSendStatement()
+
+# dbDataType()
 #' @export
 #' @rdname dbDataType
 setMethod("dbDataType", "PqConnection", function(dbObj, obj, ...) {
@@ -125,3 +66,106 @@ get_data_type <- function(obj) {
     stop("Unsupported type", call. = FALSE)
   )
 }
+
+# dbQuoteString()
+
+# dbQuoteIdentifier()
+
+# dbWriteTable()
+
+# dbReadTable()
+
+# dbListTables()
+
+# dbExistsTable()
+
+# dbListFields()
+
+# dbRemoveTable()
+
+# dbGetInfo()
+#' @export
+#' @rdname PqConnection-class
+setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
+  connection_info(dbObj@ptr)
+})
+
+# dbBegin()
+
+# dbCommit()
+
+# dbRollback()
+
+# other
+
+#' Connect to a PostgreSQL database.
+#'
+#' Manually disconnecting a connection is not necessary with RPostgres, but
+#' still recommended;
+#' if you delete the object containing the connection, it will be automatcally
+#' disconnected during the next GC with a warning.
+#'
+#' @param drv \code{RPostgres::Postgres()}
+#' @param dbname Database name. If \code{NULL}, defaults to the user name.
+#'   Note that this argument can only contain the database name, it will not
+#'   be parsed as a connection string (internally, `expand_dbname` is set to
+#'   `false` in the call to
+#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).
+#' @param user,password User name and password. If \code{NULL}, will be
+#'   retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
+#'   appropriate line in \code{~/.pgpass}. See
+#'   \url{http://www.postgresql.org/docs/9.4/static/libpq-pgpass.html} for
+#'   more details.
+#' @param host,port Host and port. If \code{NULL}, will be retrieved from
+#'   \code{PGHOST} and \code{PGPORT} env vars.
+#' @param service Name of service to connect as.  If \code{NULL}, will be
+#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
+#'   file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
+#'   for details on this file and syntax.
+#' @param ... Other name-value pairs that describe additional connection
+#'   options as described at
+#'   \url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}
+#' @param bigint The R type that 64-bit integer types should be mapped to,
+#'   default is [bit64::integer64], which allows the full range of 64 bit
+#'   integers.
+#' @param conn Connection to disconnect.
+#' @export
+#' @examples
+#' library(DBI)
+#' con <- dbConnect(RPostgres::Postgres())
+#' dbDisconnect(con)
+setMethod("dbConnect", "PqDriver",
+  function(drv, dbname = NULL,
+           host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
+           bigint = c("integer64", "integer", "numeric", "character")) {
+
+    opts <- unlist(list(dbname = dbname, user = user, password = password,
+      host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
+    if (!is.character(opts)) {
+      stop("All options should be strings", call. = FALSE)
+    }
+    bigint <- match.arg(bigint)
+
+    if (length(opts) == 0) {
+      ptr <- connection_create(character(), character())
+    } else {
+      ptr <- connection_create(names(opts), as.vector(opts))
+    }
+
+    con <- new("PqConnection", ptr = ptr, bigint = bigint)
+    dbExecute(con, "SET TIMEZONE='UTC'")
+    con
+  })
+
+
+#' Determine database type for R vector.
+#'
+#' @export
+#' @param dbObj Postgres driver or connection.
+#' @param obj Object to convert
+#' @keywords internal
+#' @rdname dbDataType
+setMethod("dbDataType", "PqDriver", function(dbObj, obj, ...) {
+  if (is.data.frame(obj)) return(vapply(obj, dbDataType, "", dbObj = dbObj))
+  get_data_type(obj)
+})

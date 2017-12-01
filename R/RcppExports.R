@@ -5,8 +5,8 @@ connection_create <- function(keys, values) {
     .Call(`_RPostgres_connection_create`, keys, values)
 }
 
-connection_is_valid <- function(con) {
-    .Call(`_RPostgres_connection_is_valid`, con)
+connection_valid <- function(con_) {
+    .Call(`_RPostgres_connection_valid`, con_)
 }
 
 connection_release <- function(con_) {
@@ -17,16 +17,12 @@ connection_info <- function(con) {
     .Call(`_RPostgres_connection_info`, con)
 }
 
-connection_escape_string <- function(con, xs) {
-    .Call(`_RPostgres_connection_escape_string`, con, xs)
+connection_quote_string <- function(con, xs) {
+    .Call(`_RPostgres_connection_quote_string`, con, xs)
 }
 
-connection_escape_identifier <- function(con, xs) {
-    .Call(`_RPostgres_connection_escape_identifier`, con, xs)
-}
-
-connection_copy_data <- function(con, sql, df) {
-    invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
+connection_quote_identifier <- function(con, xs) {
+    .Call(`_RPostgres_connection_quote_identifier`, con, xs)
 }
 
 connection_is_transacting <- function(con) {
@@ -35,6 +31,10 @@ connection_is_transacting <- function(con) {
 
 connection_set_transacting <- function(con, transacting) {
     invisible(.Call(`_RPostgres_connection_set_transacting`, con, transacting))
+}
+
+connection_copy_data <- function(con, sql, df) {
+    invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
 encode_vector <- function(x) {
@@ -53,39 +53,39 @@ init_logging <- function(log_level) {
     invisible(.Call(`_RPostgres_init_logging`, log_level))
 }
 
-result_create <- function(con, sql) {
-    .Call(`_RPostgres_result_create`, con, sql)
+result_create <- function(con, sql, is_statement = FALSE) {
+    .Call(`_RPostgres_result_create`, con, sql, is_statement)
 }
 
-result_fetch <- function(rs, n) {
-    .Call(`_RPostgres_result_fetch`, rs, n)
+result_release <- function(res) {
+    invisible(.Call(`_RPostgres_result_release`, res))
 }
 
-result_bind_params <- function(rs, params) {
-    invisible(.Call(`_RPostgres_result_bind_params`, rs, params))
+result_valid <- function(res_) {
+    .Call(`_RPostgres_result_valid`, res_)
 }
 
-result_is_complete <- function(rs) {
-    .Call(`_RPostgres_result_is_complete`, rs)
+result_fetch <- function(res, n) {
+    .Call(`_RPostgres_result_fetch`, res, n)
 }
 
-result_release <- function(rs) {
-    invisible(.Call(`_RPostgres_result_release`, rs))
+result_bind <- function(res, params) {
+    invisible(.Call(`_RPostgres_result_bind`, res, params))
 }
 
-result_active <- function(rs_) {
-    .Call(`_RPostgres_result_active`, rs_)
+result_has_completed <- function(res) {
+    .Call(`_RPostgres_result_has_completed`, res)
 }
 
-result_rows_fetched <- function(rs) {
-    .Call(`_RPostgres_result_rows_fetched`, rs)
+result_rows_fetched <- function(res) {
+    .Call(`_RPostgres_result_rows_fetched`, res)
 }
 
-result_rows_affected <- function(rs) {
-    .Call(`_RPostgres_result_rows_affected`, rs)
+result_rows_affected <- function(res) {
+    .Call(`_RPostgres_result_rows_affected`, res)
 }
 
-result_column_info <- function(rs) {
-    .Call(`_RPostgres_result_column_info`, rs)
+result_column_info <- function(res) {
+    .Call(`_RPostgres_result_column_info`, res)
 }
 
