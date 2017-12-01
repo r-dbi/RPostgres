@@ -1,5 +1,7 @@
 context("Encoding")
 
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
 # Specific to RPostgres
 test_that("NAs encoded as NULLs", {
   expect_equal(encode_vector(NA), "\\N")
@@ -21,3 +23,5 @@ test_that("special string values are escaped", {
   expect_equal(encode_vector("\r"), "\\r")
   expect_equal(encode_vector("\b"), "\\b")
 })
+
+}

@@ -1,5 +1,7 @@
 context("Connection")
 
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
 test_that("querying closed connection throws error", {
   db <- dbConnect(Postgres())
   dbDisconnect(db)
@@ -43,3 +45,5 @@ test_that("passing other options parameters", {
 test_that("error if passing unkown parameters", {
   expect_error(dbConnect(Postgres(), fruit = "apple"), 'invalid connection option "fruit"')
 })
+
+}

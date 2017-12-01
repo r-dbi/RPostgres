@@ -1,5 +1,7 @@
 context("dbGetQuery")
 
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
 test_that("special characters work", {
   angstrom <- enc2utf8("\\u00e5")
 
@@ -56,3 +58,5 @@ test_that("uuid format is recognized", {
   dbDisconnect(con)
 
 })
+
+}
