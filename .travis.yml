@@ -12,6 +12,10 @@ addons:
     packages:
       - libpq-dev
 
+env:
+  global:
+  - NOT_CRAN: true
+
 matrix:
   include:
   - os: osx
