@@ -19,6 +19,9 @@ install:
           $newText = ([System.IO.File]::ReadAllText($iniPath)).Replace("# enable-named-pipe", "enable-named-pipe")
           [System.IO.File]::WriteAllText($iniPath, $newText)
           Restart-Service MySQL57
+  - cmd: |
+           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createuser" -s appveyor
+           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createdb" appveyor
 
 # Adapt as necessary starting from here
 
@@ -26,8 +29,8 @@ services:
   - postgresql
 
 environment:
-  POSTGRES_USER: postgres
-  POSTGRES_PWD: Password12!
+  PGUSER: postgres
+  PGPASSWORD: Password12!
   NOT_CRAN: true
 
 build_script:
