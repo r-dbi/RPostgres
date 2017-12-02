@@ -14,14 +14,6 @@ on_finish:
 install:
   - ps: Bootstrap
   - cmd: rm -f *.Rproj
-  - ps: |
-          $iniPath="C:\ProgramData\MySQL\MySQL Server 5.7\my.ini"
-          $newText = ([System.IO.File]::ReadAllText($iniPath)).Replace("# enable-named-pipe", "enable-named-pipe")
-          [System.IO.File]::WriteAllText($iniPath, $newText)
-          Restart-Service MySQL57
-  - cmd: |
-           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createuser" -s appveyor
-           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createdb" appveyor
 
 # Adapt as necessary starting from here
 
@@ -33,7 +25,11 @@ environment:
   PGPASSWORD: Password12!
   NOT_CRAN: true
 
+# PostgreSQL isn't yet available in the "install" section
 build_script:
+  - cmd: |
+           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createuser" -s appveyor
+           "%PROGRAMFILES%\PostgreSQL\9.6\bin\createdb" appveyor
   - travis-tool.sh install_github rstats-db/DBI
   - travis-tool.sh install_github rstats-db/DBItest
   - travis-tool.sh install_deps
