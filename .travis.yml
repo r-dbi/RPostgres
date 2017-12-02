@@ -46,8 +46,8 @@ before_script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm -rf /usr/local/var/postgres; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then initdb /usr/local/var/postgres; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pg_ctl -D /usr/local/var/postgres start; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createuser -s travis; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createdb travis; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createuser -s travis || true; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createdb travis || true; fi
 
 after_success:
   - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
