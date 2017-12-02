@@ -16,7 +16,6 @@ addons:
 
 env:
   global:
-  - NOT_CRAN: true
   - MAKEFLAGS="-j8"
 
 matrix:
