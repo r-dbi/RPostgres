@@ -354,7 +354,7 @@ bool PqResultImpl::step_run() {
   case PGRES_FATAL_ERROR:
     {
       PQclear(pRes_);
-      conn_stop("Failed to fetch row: %s");
+      conn_stop("Failed to fetch row");
       return false;
     }
   case PGRES_SINGLE_TUPLE:
