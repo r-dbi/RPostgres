@@ -129,7 +129,7 @@ double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
   date.tm_min += (*(++val) - 0x30);
   val++;
   double sec = strtod(++val, &end);
-  date.tm_sec = static_cast<int>(sec);
+  date.tm_sec = static_cast<time_t>(sec);
   if (use_local) {
     return static_cast<double>(mktime(&date)) + (sec - date.tm_sec);
   } else {
