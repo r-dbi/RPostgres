@@ -126,26 +126,42 @@ double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
   date.tm_year += (*(++val) - 0x30);
   date.tm_year *= 10;
   date.tm_year += (*(++val) - 0x30) - 1900;
+  LOG_VERBOSE << date.tm_year;
+
   val++;
   date.tm_mon = (*(++val) - 0x30) * 10;
   date.tm_mon += (*(++val) - 0x30) - 1;
+  LOG_VERBOSE << date.tm_mon;
+
   val++;
   date.tm_mday = (*(++val) - 0x30) * 10;
   date.tm_mday += (*(++val) - 0x30);
+  LOG_VERBOSE << date.tm_mday;
+
   val++;
   date.tm_hour = (*(++val) - 0x30) * 10;
   date.tm_hour += (*(++val) - 0x30);
+  LOG_VERBOSE << date.tm_hour;
+
   val++;
   date.tm_min = (*(++val) - 0x30) * 10;
   date.tm_min += (*(++val) - 0x30);
+  LOG_VERBOSE << date.tm_min;
+
   val++;
   double sec = strtod(++val, &end);
+  LOG_VERBOSE << sec;
+
   date.tm_sec = static_cast<int>(sec);
-  if (use_local) {
-    return static_cast<double>(mktime(&date)) + (sec - date.tm_sec);
-  } else {
-    return static_cast<double>(timegm(&date)) + (sec - date.tm_sec);
-  }
+  LOG_VERBOSE << date.tm_sec;
+
+  time_t time = use_local ? mktime(&date) : timegm(&date);
+  LOG_VERBOSE << time;
+
+  double ret = static_cast<double>(time) + (sec - date.tm_sec);
+  LOG_VERBOSE << ret;
+
+  return ret;
 }
 
 PGresult* PqColumnDataSource::get_result() const {
