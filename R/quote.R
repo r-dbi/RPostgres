@@ -22,7 +22,7 @@ NULL
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
   if (length(x) == 0) return(SQL(character()))
-  res <- SQL(paste0(connection_quote_string(conn@ptr, enc2utf8(x)), "::varchar"))
+  res <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
   res
 })
 
