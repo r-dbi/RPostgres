@@ -26,35 +26,42 @@ DATA_TYPE PqColumnDataSource::get_decl_data_type() const {
 }
 
 bool PqColumnDataSource::is_null() const {
+  LOG_VERBOSE;
   return PQgetisnull(get_result(), 0, get_j()) != 0;
 }
 
 int PqColumnDataSource::fetch_bool() const {
+  LOG_VERBOSE;
   return (strcmp(get_result_value(), "t") == 0);
 }
 
 
 int PqColumnDataSource::fetch_int() const {
+  LOG_VERBOSE;
   return atoi(get_result_value());
 }
 
 int64_t PqColumnDataSource::fetch_int64() const {
+  LOG_VERBOSE;
   return boost::lexical_cast<int64_t>(get_result_value());
 }
 
 double PqColumnDataSource::fetch_real() const {
+  LOG_VERBOSE;
   return atof(get_result_value());
 }
 
 SEXP PqColumnDataSource::fetch_string() const {
+  LOG_VERBOSE;
   return Rf_mkCharCE(get_result_value(), CE_UTF8);
 }
 
 SEXP PqColumnDataSource::fetch_blob() const {
-  const void* blob = get_result_value();
+  LOG_VERBOSE;
+  const void* val = get_result_value();
 
   size_t to_length = 0;
-  unsigned char* unescaped_blob = PQunescapeBytea(static_cast<const unsigned char*>(blob), &to_length);
+  unsigned char* unescaped_blob = PQunescapeBytea(static_cast<const unsigned char*>(val), &to_length);
 
   SEXP bytes = Rf_allocVector(RAWSXP, static_cast<R_xlen_t>(to_length));
   memcpy(RAW(bytes), unescaped_blob, to_length);
@@ -65,6 +72,7 @@ SEXP PqColumnDataSource::fetch_blob() const {
 }
 
 double PqColumnDataSource::fetch_date() const {
+  LOG_VERBOSE;
   const char* val = get_result_value();
   struct tm date = tm();
   date.tm_isdst = -1;
@@ -85,14 +93,17 @@ double PqColumnDataSource::fetch_date() const {
 }
 
 double PqColumnDataSource::fetch_datetime_local() const {
+  LOG_VERBOSE;
   return convert_datetime(get_result_value(), true);
 }
 
 double PqColumnDataSource::fetch_datetime() const {
+  LOG_VERBOSE;
   return convert_datetime(get_result_value(), false);
 }
 
 double PqColumnDataSource::fetch_time() const {
+  LOG_VERBOSE;
   const char* val = get_result_value();
   int hour = (*val - 0x30) * 10;
   hour += (*(++val) - 0x30);
@@ -142,5 +153,7 @@ PGresult* PqColumnDataSource::get_result() const {
 }
 
 const char* PqColumnDataSource::get_result_value() const {
-  return PQgetvalue(get_result(), 0, get_j());
+  const char* val = PQgetvalue(get_result(), 0, get_j());
+  LOG_VERBOSE << val;
+  return val;
 }
