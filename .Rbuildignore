@@ -7,3 +7,4 @@ windows
 ^cran-comments\.md$
 ^src/.*\.d$
 ^src/.*\.gch$
+^appveyor\.yml$
