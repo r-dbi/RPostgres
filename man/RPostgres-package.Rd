@@ -4,9 +4,9 @@
 \name{RPostgres-package}
 \alias{RPostgres}
 \alias{RPostgres-package}
-\title{RPostgres: Experimental Rcpp Interface to PostgreSQL}
+\title{RPostgres: 'Rcpp' Interface to 'PostgreSQL'}
 \description{
-DBI-compatible Rcpp-backed interface to PostgreSQL.
+Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL'.
 }
 \author{
 \strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org}

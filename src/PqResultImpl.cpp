@@ -127,6 +127,10 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
       types.push_back(DT_BLOB);
       break;
 
+    case 705: // UNKNOWN
+      types.push_back(DT_STRING);
+      break;
+
     default:
       types.push_back(DT_STRING);
       warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
@@ -258,7 +262,8 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  res->cleanup_query();
+  if (ready_ || group_ > 0)
+    res->finish_query();
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);
@@ -350,7 +355,7 @@ bool PqResultImpl::step_run() {
   case PGRES_FATAL_ERROR:
     {
       PQclear(pRes_);
-      conn_stop("Failed to fetch row: %s");
+      conn_stop("Failed to fetch row");
       return false;
     }
   case PGRES_SINGLE_TUPLE:

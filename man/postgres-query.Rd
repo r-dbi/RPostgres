@@ -24,7 +24,7 @@
 \arguments{
 \item{conn}{A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.}
 
-\item{statement}{An SQL string to execture}
+\item{statement}{An SQL string to execute}
 
 \item{params}{A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the
@@ -57,6 +57,7 @@ results (and they'll fit in memory) use \code{dbGetQuery} which sends,
 fetches and clears for you.
 }
 \examples{
+\dontrun{
 library(DBI)
 db <- dbConnect(RPostgres::Postgres())
 dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
@@ -74,4 +75,5 @@ dbClearResult(res)
 dbRemoveTable(db, "usarrests")
 
 dbDisconnect(db)
+}
 }

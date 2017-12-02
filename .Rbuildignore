@@ -4,3 +4,7 @@
 ^src/Makevars$
 windows
 ^clion-test\.R$
+^cran-comments\.md$
+^src/.*\.d$
+^src/.*\.gch$
+^appveyor\.yml$

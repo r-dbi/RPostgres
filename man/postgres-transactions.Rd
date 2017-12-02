@@ -28,6 +28,7 @@ A boolean, indicating success or failure.
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
+\dontrun{
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
@@ -43,4 +44,5 @@ dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 
 dbRemoveTable(con, "USarrests")
 dbDisconnect(con)
+}
 }

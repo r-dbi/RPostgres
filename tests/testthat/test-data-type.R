@@ -1,5 +1,7 @@
 context("dbDataType")
 
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
 # Taken from DBI
 test_that("dbDataType works on a data frame", {
   con <- dbConnect(Postgres())
@@ -8,3 +10,5 @@ test_that("dbDataType works on a data frame", {
 
   expect_equal(types, c(x = "INTEGER", y = "REAL"))
 })
+
+}

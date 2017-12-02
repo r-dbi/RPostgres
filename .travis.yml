@@ -2,7 +2,9 @@
 
 language: r
 cache: packages
+latex: false
 sudo: false
+warnings_are_errors: true
 
 services:
   - postgresql
@@ -12,17 +14,40 @@ addons:
     packages:
       - libpq-dev
 
-#r_check_revdep: true
+env:
+  global:
+  - NOT_CRAN: true
+  - MAKEFLAGS="-j8"
 
-r_github_packages:
-  - rstats-db/DBI
-  - jimhester/covr
-  - rstats-db/DBItest@production
+matrix:
+  include:
+  - os: osx
+  - os: linux
+    r: devel
+  - os: linux
+    r: release
+    env:
+    - R_CODECOV: true
+  - os: linux
+    r: oldrel
+  - os: linux
+    r: 3.2
 
-after_success:
-  - Rscript -e 'covr::codecov()'
+
+r_packages:
+  - covr
 
 notifications:
   email:
     on_success: change
     on_failure: change
+
+before_script:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm -rf /usr/local/var/postgres; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then initdb /usr/local/var/postgres; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pg_ctl -D /usr/local/var/postgres start; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createuser -s travis || true; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createdb travis || true; fi
+
+after_success:
+  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi

@@ -58,6 +58,6 @@ List DbResult::get_column_info() {
   return impl->get_column_info();
 }
 
-void DbResult::cleanup_query() {
-  pConn_->cleanup_query();
+void DbResult::finish_query() {
+  pConn_->finish_query();
 }

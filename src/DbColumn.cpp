@@ -6,7 +6,6 @@
 
 DbColumn::DbColumn(DATA_TYPE dt, const int n_max_, DbColumnDataSourceFactory* factory, const int j)
   : source(factory->create(j)),
-    i(0),
     n(0)
 {
   if (dt == DT_BOOL)

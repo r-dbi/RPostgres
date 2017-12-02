@@ -102,7 +102,7 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'
 #' Manually disconnecting a connection is not necessary with RPostgres, but
 #' still recommended;
-#' if you delete the object containing the connection, it will be automatcally
+#' if you delete the object containing the connection, it will be automatically
 #' disconnected during the next GC with a warning.
 #'
 #' @param drv \code{RPostgres::Postgres()}
@@ -131,9 +131,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
+#' }
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,

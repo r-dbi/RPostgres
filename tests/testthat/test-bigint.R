@@ -1,5 +1,7 @@
 context("bigint")
 
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
 test_that("integer", {
   con <- dbConnect(Postgres(), bigint = "integer")
   on.exit(dbDisconnect(con))
@@ -20,3 +22,5 @@ test_that("character", {
 
   expect_identical(dbGetQuery(con, "SELECT COUNT(*) FROM (SELECT 1) A")[[1]], "1")
 })
+
+}
