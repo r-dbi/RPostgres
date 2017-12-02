@@ -127,6 +127,10 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
       types.push_back(DT_BLOB);
       break;
 
+    case 705: // UNKNOWN
+      types.push_back(DT_STRING);
+      break;
+
     default:
       types.push_back(DT_STRING);
       warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
