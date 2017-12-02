@@ -7,12 +7,14 @@ NULL
 #' @param x A character to escaped
 #' @param ... Other arguments needed for compatibility with generic
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #'
 #' x <- c("a", "b c", "d'e", "\\f")
 #' dbQuoteString(con, x)
 #' dbQuoteIdentifier(con, x)
+#' }
 #' @name quote
 NULL
 
@@ -20,7 +22,7 @@ NULL
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
   if (length(x) == 0) return(SQL(character()))
-  res <- SQL(paste0(connection_quote_string(conn@ptr, enc2utf8(x)), "::varchar"))
+  res <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
   res
 })
 
@@ -44,6 +46,12 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x,
 setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
   x
 })
+
+# locally for now, requires DBI > 0.7
+#' @rdname quote
+setGeneric("dbQuoteLiteral",
+  def = function(conn, x, ...) standardGeneric("dbQuoteLiteral")
+)
 
 #' @export
 #' @rdname quote

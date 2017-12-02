@@ -7,6 +7,7 @@
 \alias{dbQuoteString,PqConnection,SQL-method}
 \alias{dbQuoteIdentifier,PqConnection,character-method}
 \alias{dbQuoteIdentifier,PqConnection,SQL-method}
+\alias{dbQuoteLiteral}
 \alias{dbQuoteLiteral,PqConnection,logical-method}
 \alias{dbQuoteLiteral,PqConnection,integer-method}
 \alias{dbQuoteLiteral,PqConnection,numeric-method}
@@ -25,6 +26,8 @@
 \S4method{dbQuoteIdentifier}{PqConnection,character}(conn, x, ...)
 
 \S4method{dbQuoteIdentifier}{PqConnection,SQL}(conn, x, ...)
+
+dbQuoteLiteral(conn, x, ...)
 
 \S4method{dbQuoteLiteral}{PqConnection,logical}(conn, x, ...)
 
@@ -55,10 +58,12 @@
 Quote postgres strings and identifiers.
 }
 \examples{
+\dontrun{
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")
 dbQuoteString(con, x)
 dbQuoteIdentifier(con, x)
+}
 }

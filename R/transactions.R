@@ -8,6 +8,7 @@
 #' @param ... Unused, for extensibility.
 #' @return A boolean, indicating success or failure.
 #' @examples
+#' \dontrun{
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
@@ -23,6 +24,7 @@
 #'
 #' dbRemoveTable(con, "USarrests")
 #' dbDisconnect(con)
+#' }
 #' @name postgres-transactions
 NULL
 

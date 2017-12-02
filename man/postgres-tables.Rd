@@ -34,7 +34,7 @@
 \code{\link[DBI]{dbConnect}}}
 
 \item{name}{a character string specifying a table name. Names will be
-automatically quoted so you can use any sequence of characaters, not
+automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.}
 
 \item{value}{A data.frame to write to the database.}
@@ -82,6 +82,7 @@ converted to valid R identifiers.}
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
+\dontrun{
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbListTables(con)
@@ -96,4 +97,5 @@ dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 dbReadTable(con, "mtcars2")
 
 dbDisconnect(con)
+}
 }
