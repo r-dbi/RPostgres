@@ -31,7 +31,10 @@ matrix:
     r: oldrel
   - os: linux
     r: 3.2
-
+  - os: linux
+    r: 3.1
+    env:
+    - NOT_CRAN: false
 
 r_packages:
   - covr
