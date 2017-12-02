@@ -262,7 +262,8 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  res->cleanup_query();
+  if (ready_ || group_ > 0)
+    res->finish_query();
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);

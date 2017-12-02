@@ -46,10 +46,10 @@ public:
   static void conn_stop(PGconn* conn, const char* msg);
 
   void cleanup_query();
+  void finish_query() const;
 
 private:
   void cancel_query();
-  void finish_query() const;
 };
 
 #endif

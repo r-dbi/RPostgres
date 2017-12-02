@@ -36,7 +36,7 @@ public:
   List get_column_info();
 
 public:
-  void cleanup_query();
+  void finish_query();
 };
 
 #endif
