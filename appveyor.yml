@@ -24,6 +24,7 @@ environment:
   PGUSER: postgres
   PGPASSWORD: Password12!
   NOT_CRAN: true
+  R_ARCH: x64
 
 # PostgreSQL isn't yet available in the "install" section
 build_script:
