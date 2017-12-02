@@ -23,7 +23,7 @@ install:
 # Adapt as necessary starting from here
 
 services:
-  - postgres
+  - postgresql
 
 environment:
   POSTGRES_USER: postgres
