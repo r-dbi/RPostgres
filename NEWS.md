@@ -1,18 +1,4 @@
-<<<<<<< HEAD
-## RPostgres 0.1-12 (2017-12-02)
-
-- Eliminated race condition that could lead to `"Query cancelled on user's request"` errors (#145).
-- Prepare for CRAN release.
-- CI for OS X and Windows (#69).
-- `dbQuoteString()` no longer adds `::varchar` suffix (#146).
-
-
-## RPostgres 0.1-11 (2017-12-01)
-||||||| merged common ancestors
-## RPostgres 0.1-11 (2017-12-01)
-=======
 # RPostgres 1.0 (2017-12-01)
->>>>>>> NEWS
 
 Initial release, compliant to the DBI specification.
 
