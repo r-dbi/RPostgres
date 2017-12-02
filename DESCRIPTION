@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1-11
-Date: 2017-12-01
+Version: 0.1-12
+Date: 2017-12-02
 Title: 'Rcpp' Interface to 'PostgreSQL'
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
