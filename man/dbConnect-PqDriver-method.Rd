@@ -17,15 +17,15 @@
 
 \item{...}{Other name-value pairs that describe additional connection
 options as described at
-\url{http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
+\url{http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{drv}{\code{RPostgres::Postgres()}}
 
 \item{dbname}{Database name. If \code{NULL}, defaults to the user name.
 Note that this argument can only contain the database name, it will not
-be parsed as a connection string (internally, `expand_dbname` is set to
-`false` in the call to
-[`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).}
+be parsed as a connection string (internally, \code{expand_dbname} is set to
+\code{false} in the call to
+\href{https://www.postgresql.org/docs/9.6/static/libpq-connect.html}{PQconnectdbParams()}).}
 
 \item{host, port}{Host and port. If \code{NULL}, will be retrieved from
 \code{PGHOST} and \code{PGPORT} env vars.}
@@ -33,16 +33,16 @@ be parsed as a connection string (internally, `expand_dbname` is set to
 \item{user, password}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
 appropriate line in \code{~/.pgpass}. See
-\url{http://www.postgresql.org/docs/9.4/static/libpq-pgpass.html} for
+\url{http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html} for
 more details.}
 
 \item{service}{Name of service to connect as.  If \code{NULL}, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-file and used.  See \url{http://www.postgresql.org/docs/9.4/static/libpq-pgservice.html}
+file and used.  See \url{http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html}
 for details on this file and syntax.}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
-default is [bit64::integer64], which allows the full range of 64 bit
+default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 }
 \description{

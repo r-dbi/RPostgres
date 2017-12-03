@@ -15,8 +15,8 @@
 \S4method{dbRollback}{PqConnection}(conn, ...)
 }
 \arguments{
-\item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
-\code{\link[DBI]{dbConnect}}}
+\item{conn}{a \linkS4class{PqConnection} object, produced by
+\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{...}{Unused, for extensibility.}
 }
@@ -24,7 +24,7 @@
 A boolean, indicating success or failure.
 }
 \description{
-\code{dbBegin} starts a transaction. \code{dbCommit} and \code{dbRollback}
+\code{dbBegin()} starts a transaction. \code{dbCommit()} and \code{dbRollback()}
 end the transaction by either committing or rolling back the changes.
 }
 \examples{

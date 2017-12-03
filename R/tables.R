@@ -1,22 +1,22 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
-#' @param conn a \code{\linkS4class{PqConnection}} object, produced by
-#'   \code{\link[DBI]{dbConnect}}
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
 #' @param name a character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
 #' @param value A data.frame to write to the database.
 #' @inheritParams DBI::sqlCreateTable
 #' @param overwrite a logical specifying whether to overwrite an existing table
-#'   or not. Its default is \code{FALSE}.
+#'   or not. Its default is `FALSE`.
 #' @param append a logical specifying whether to append to an existing table
-#'   in the DBMS. Its default is \code{FALSE}.
+#'   in the DBMS. Its default is `FALSE`.
 #' @param field.types character vector of named SQL field types where
 #'   the names are the names of new table's columns. If missing, types inferred
-#'   with \code{\link[DBI]{dbDataType}}).
-#' @param copy If \code{TRUE}, serializes the data frame to a single string
-#'   and uses \code{COPY name FROM stdin}. This is fast, but not supported by
-#'   all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
+#'   with [DBI::dbDataType()]).
+#' @param copy If `TRUE`, serializes the data frame to a single string
+#'   and uses `COPY name FROM stdin`. This is fast, but not supported by
+#'   all postgres servers (e.g. Amazon's redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
 #'
 #'   RPostgres does not use parameterised queries to insert rows because

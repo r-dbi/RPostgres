@@ -3,7 +3,7 @@ NULL
 
 #' Quote postgres strings and identifiers.
 #'
-#' @param conn A \linkS4class{PqConnection} created by \code{dbConnect()}
+#' @param conn A [PqConnection-class] created by `dbConnect()`
 #' @param x A character to escaped
 #' @param ... Other arguments needed for compatibility with generic
 #' @examples

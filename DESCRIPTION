@@ -46,3 +46,4 @@ Collate:
     'transactions.R'
     'utils.R'
 RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)

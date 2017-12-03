@@ -1,10 +1,10 @@
 #' Transaction management.
 #'
-#' \code{dbBegin} starts a transaction. \code{dbCommit} and \code{dbRollback}
+#' `dbBegin()` starts a transaction. `dbCommit()` and `dbRollback()`
 #' end the transaction by either committing or rolling back the changes.
 #'
-#' @param conn a \code{\linkS4class{PqConnection}} object, produced by
-#'   \code{\link[DBI]{dbConnect}}
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
 #' @param ... Unused, for extensibility.
 #' @return A boolean, indicating success or failure.
 #' @examples
