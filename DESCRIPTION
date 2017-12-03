@@ -13,7 +13,9 @@ Authors@R: c(
     comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
     )
-Description: Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL'.
+Description: 
+    Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
+    an open-source relational database.
 License: GPL-2
 LazyLoad: true
 Depends:
