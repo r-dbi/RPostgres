@@ -13,7 +13,7 @@ PKG_DEB_NAME="libpq-dev"
 PKG_RPM_NAME="postgresql-devel"
 PKG_AMZ_RPM_NAMES="postgreql8-devel, psstgresql92-devel, postgresql93-devel, or postgresql94-devel"
 PKG_CSW_NAME="postgresql_dev"
-PKG_BREW_NAME="postgresql"
+PKG_BREW_NAME="libpq"
 PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
 PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
@@ -22,9 +22,15 @@ PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
 if [ $(command -v pkg-config) ]; then
   PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
   PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
+
+  # MacOS seems to ship a broken libpq.pc file
+  if [[ "$PKGCONFIG_CFLAGS" == *"Internal.sdk"* ]]; then
+    unset PKGCONFIG_CFLAGS
+    unset PKGCONFIG_LIBS
+  fi
 fi
 
-# pg_config vlaues (if available)
+# pg_config values (if available)
 if [ $(command -v pg_config) ]; then
   PG_INC_DIR=$(pg_config --includedir)
   PG_LIB_DIR=$(pg_config --libdir)
@@ -50,8 +56,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     curl -sfL "https://jeroen.github.io/autobrew/$PKG_BREW_NAME" > autobrew
     source autobrew
   fi
-  PKG_CFLAGS="-I$BREWDIR/opt/postgresql/include"
-  PKG_LIBS="-L$BREWDIR/opt/{openssl,postgresql}/lib $PKG_LIBS"
+  PKG_CFLAGS="-I$BREWDIR/opt/$PKG_BREW_NAME/include"
+  PKG_LIBS="-L$BREWDIR/opt/$PKG_BREW_NAME/lib $PKG_LIBS"
 fi
 
 # For debugging
