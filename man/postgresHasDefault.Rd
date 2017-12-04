@@ -5,7 +5,7 @@
 \alias{postgresDefault}
 \title{Check if default database is available.}
 \usage{
-postgresHasDefault()
+postgresHasDefault(...)
 
 postgresDefault(...)
 }
