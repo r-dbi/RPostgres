@@ -18,6 +18,9 @@ test_that("special characters work", {
 test_that("JSONB format is recognized", {
   con <- postgresDefault()
 
+  n_json <- dbGetQuery(con, "SELECT count(*) FROM pg_type WHERE typname = 'jsonb' AND typtype = 'b'")[[1]]
+  if (as.integer(n_json) == 0) skip("No jsonb type installed")
+
   jsonb <- '{\"name\": \"mike\"}'
 
   dbExecute(con, "CREATE TEMPORARY TABLE test2 (data JSONB)")
