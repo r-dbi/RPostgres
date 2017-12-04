@@ -79,11 +79,14 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
     if (!found || overwrite) {
       if (!is.null(field.types)) {
-        types <- structure(field.types, .Names = colnames(value))
+        if (is.null(names(field.types)))
+          types <- structure(field.types, .Names = colnames(value))
+        else
+          types <- field.types
       } else {
         types <- value
       }
-      sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else field.types,
+      sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else types,
         row.names = row.names, temporary = temporary)
       dbExecute(conn, sql)
     }
