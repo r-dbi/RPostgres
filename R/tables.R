@@ -23,22 +23,23 @@
 #'   benchmarks revealed that this was considerably slower than using a single
 #'   SQL string.
 #' @examples
-#' \dontrun{
-#' library(DBI)
-#' con <- dbConnect(RPostgres::Postgres())
-#' dbListTables(con)
-#' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-#' dbReadTable(con, "mtcars")
+#' # For running the examples on systems without PostgreSQL connection:
+#' run <- postgresHasDefault()
 #'
-#' dbListTables(con)
-#' dbExistsTable(con, "mtcars")
+#' library(DBI)
+#' if (run) con <- dbConnect(RPostgres::Postgres())
+#' if (run) dbListTables(con)
+#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' if (run) dbReadTable(con, "mtcars")
+#'
+#' if (run) dbListTables(con)
+#' if (run) dbExistsTable(con, "mtcars")
 #'
 #' # A zero row data frame just creates a table definition.
-#' dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-#' dbReadTable(con, "mtcars2")
+#' if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+#' if (run) dbReadTable(con, "mtcars2")
 #'
-#' dbDisconnect(con)
-#' }
+#' if (run) dbDisconnect(con)
 #' @name postgres-tables
 NULL
 

@@ -1,7 +1,5 @@
 context("dbWriteTable")
 
-if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-
 with_database_connection({
   describe("Writing to the database", {
     test_that("writing to a database table is successful", {

@@ -131,8 +131,9 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
-#' \dontrun{
+#' if (postgresHasDefault()) {
 #' library(DBI)
+#' # Pass more arguments as necessary to dbConnect()
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 #' }

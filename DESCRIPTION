@@ -41,6 +41,7 @@ Collate:
     'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
+    'default.R'
     'quote.R'
     'tables.R'
     'transactions.R'

@@ -62,25 +62,26 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
-#' \dontrun{
+#' # For running the examples on systems without PostgreSQL connection:
+#' run <- postgresHasDefault()
+#'
 #' library(DBI)
-#' db <- dbConnect(RPostgres::Postgres())
-#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+#' if (run) db <- dbConnect(RPostgres::Postgres())
+#' if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
-#' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+#' if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 #'
 #' # Send query to pull requests in batches
-#' res <- dbSendQuery(db, "SELECT * FROM usarrests")
-#' dbFetch(res, n = 2)
-#' dbFetch(res, n = 2)
-#' dbHasCompleted(res)
-#' dbClearResult(res)
+#' if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
+#' if (run) dbFetch(res, n = 2)
+#' if (run) dbFetch(res, n = 2)
+#' if (run) dbHasCompleted(res)
+#' if (run) dbClearResult(res)
 #'
-#' dbRemoveTable(db, "usarrests")
+#' if (run) dbRemoveTable(db, "usarrests")
 #'
-#' dbDisconnect(db)
-#' }
+#' if (run) dbDisconnect(db)
 #' @name postgres-query
 NULL
 

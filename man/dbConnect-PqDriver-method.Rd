@@ -52,8 +52,9 @@ if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.
 }
 \examples{
-\dontrun{
+if (postgresHasDefault()) {
 library(DBI)
+# Pass more arguments as necessary to dbConnect()
 con <- dbConnect(RPostgres::Postgres())
 dbDisconnect(con)
 }
