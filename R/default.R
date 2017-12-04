@@ -12,7 +12,7 @@
 #'   dbListTables(db)
 #'   dbDisconnect(db)
 #' }
-postgresHasDefault <- function() {
+postgresHasDefault <- function(...) {
   tryCatch({
     con <- connect_default(...)
     dbDisconnect(con)
