@@ -1,6 +1,6 @@
 Resubmission upon CRAN's request.
 
-- Version 1.0-2 now runs tests and examples if a default PostgreSQL connection is available (via env vars listed in <https://www.postgresql.org/docs/9.6/static/libpq-envars.html>), and silently succeeds if not.
+- Version 1.0-3 now runs tests and examples if a default PostgreSQL connection is available (via env vars listed in <https://www.postgresql.org/docs/9.6/static/libpq-envars.html>), and silently succeeds if not. Version 1.0-2 did the same with testthat 2.0.0 which is not on CRAN yet, sorry for the omission.
 
 ## Test environments
 * local ubuntu install, R 3.4.2
