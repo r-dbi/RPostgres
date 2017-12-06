@@ -31,6 +31,9 @@ matrix:
     r: oldrel
   - os: linux
     r: 3.2
+  - os: linux
+    env:
+    - PGUSER: bogus
 
 r_packages:
   - covr
