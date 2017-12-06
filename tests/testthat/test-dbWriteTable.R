@@ -1,5 +1,7 @@
 context("dbWriteTable")
 
+if (postgresHasDefault()) {
+
 with_database_connection({
   describe("Writing to the database", {
     test_that("writing to a database table is successful", {
@@ -83,3 +85,5 @@ with_database_connection({
     })
   })
 })
+
+}
