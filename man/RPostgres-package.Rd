@@ -8,6 +8,14 @@
 \description{
 Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL'.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/r-dbi/RPostgres}
+  \item Report bugs at \url{https://github.com/r-dbi/RPostgres/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org}
 
