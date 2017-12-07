@@ -15,8 +15,8 @@
 \S4method{dbRollback}{PqConnection}(conn, ...)
 }
 \arguments{
-\item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
-\code{\link[DBI]{dbConnect}}}
+\item{conn}{a \linkS4class{PqConnection} object, produced by
+\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{...}{Unused, for extensibility.}
 }
@@ -24,25 +24,26 @@
 A boolean, indicating success or failure.
 }
 \description{
-\code{dbBegin} starts a transaction. \code{dbCommit} and \code{dbRollback}
+\code{dbBegin()} starts a transaction. \code{dbCommit()} and \code{dbRollback()}
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
-\dontrun{
-library(DBI)
-con <- dbConnect(RPostgres::Postgres())
-dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
-dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+# For running the examples on systems without PostgreSQL connection:
+run <- postgresHasDefault()
 
-dbBegin(con)
-dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
-dbGetQuery(con, 'SELECT count(*) from "USarrests"')
-dbRollback(con)
+library(DBI)
+if (run) con <- dbConnect(RPostgres::Postgres())
+if (run) dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
+if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+
+if (run) dbBegin(con)
+if (run) dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
+if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+if (run) dbRollback(con)
 
 # Rolling back changes leads to original count
-dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 
-dbRemoveTable(con, "USarrests")
-dbDisconnect(con)
-}
+if (run) dbRemoveTable(con, "USarrests")
+if (run) dbDisconnect(con)
 }

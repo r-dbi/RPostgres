@@ -19,7 +19,6 @@ services:
 environment:
   PGUSER: postgres
   PGPASSWORD: Password12!
-  NOT_CRAN: true
   R_ARCH: x64
 
 # PostgreSQL isn't yet available in the "install" section
@@ -27,8 +26,8 @@ build_script:
   - cmd: |
            "%PROGRAMFILES%\PostgreSQL\9.6\bin\createuser" -s appveyor
            "%PROGRAMFILES%\PostgreSQL\9.6\bin\createdb" appveyor
-  - travis-tool.sh install_github rstats-db/DBI
-  - travis-tool.sh install_github rstats-db/DBItest
+  - travis-tool.sh install_github r-dbi/DBI
+  - travis-tool.sh install_github r-dbi/DBItest
   - travis-tool.sh install_deps
 
 test_script:

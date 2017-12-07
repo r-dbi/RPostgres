@@ -21,7 +21,7 @@ RPostgres isn't available from CRAN yet, but you can get it from github with:
 
 ```R
 # install.packages("remotes")
-remotes::install_github("rstats-db/RPostgres")
+remotes::install_github("r-dbi/RPostgres")
 ```
 
 ## Basic usage

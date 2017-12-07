@@ -48,39 +48,40 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 
 #' Execute a SQL statement on a database connection
 #'
-#' To retrieve results a chunk at a time, use \code{dbSendQuery},
-#' \code{dbFetch}, then \code{ClearResult}. Alternatively, if you want all the
-#' results (and they'll fit in memory) use \code{dbGetQuery} which sends,
+#' To retrieve results a chunk at a time, use `dbSendQuery()`,
+#' `dbFetch()`, then `dbClearResult()`. Alternatively, if you want all the
+#' results (and they'll fit in memory) use `dbGetQuery()` which sends,
 #' fetches and clears for you.
 #'
-#' @param conn A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.
+#' @param conn A [PqConnection-class] created by [dbConnect()].
 #' @param statement An SQL string to execute
 #' @param params A list of query parameters to be substituted into
 #'   a parameterised query. Query parameters are sent as strings, and the
 #'   correct type is imputed by PostgreSQL. If this fails, you can manually
-#'   cast the parameter with e.g. \code{"$1::bigint"}.
+#'   cast the parameter with e.g. `"$1::bigint"`.
 #' @param ... Another arguments needed for compatibility with generic (
 #'   currently ignored).
 #' @examples
-#' \dontrun{
+#' # For running the examples on systems without PostgreSQL connection:
+#' run <- postgresHasDefault()
+#'
 #' library(DBI)
-#' db <- dbConnect(RPostgres::Postgres())
-#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+#' if (run) db <- dbConnect(RPostgres::Postgres())
+#' if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
-#' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+#' if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 #'
 #' # Send query to pull requests in batches
-#' res <- dbSendQuery(db, "SELECT * FROM usarrests")
-#' dbFetch(res, n = 2)
-#' dbFetch(res, n = 2)
-#' dbHasCompleted(res)
-#' dbClearResult(res)
+#' if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
+#' if (run) dbFetch(res, n = 2)
+#' if (run) dbFetch(res, n = 2)
+#' if (run) dbHasCompleted(res)
+#' if (run) dbClearResult(res)
 #'
-#' dbRemoveTable(db, "usarrests")
+#' if (run) dbRemoveTable(db, "usarrests")
 #'
-#' dbDisconnect(db)
-#' }
+#' if (run) dbDisconnect(db)
 #' @name postgres-query
 NULL
 
@@ -103,8 +104,8 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
   rs
 })
 
-#' @param res Code a \linkS4class{PqResult} produced by
-#'   \code{\link[DBI]{dbSendQuery}}.
+#' @param res Code a [PqResult-class] produced by
+#'   [DBI::dbSendQuery()].
 #' @param n Number of rows to return. If less than zero returns all rows.
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @export

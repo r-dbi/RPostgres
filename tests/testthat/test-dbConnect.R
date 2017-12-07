@@ -1,15 +1,15 @@
 context("Connection")
 
-if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-
 test_that("querying closed connection throws error", {
-  db <- dbConnect(Postgres())
+  db <- postgresDefault()
   dbDisconnect(db)
   expect_error(dbSendQuery(db, "select * from foo"), "not valid")
 })
 
 test_that("warn if previous result set is invalidated", {
-  con <- dbConnect(Postgres())
+  con <- postgresDefault()
+  on.exit(dbDisconnect(con))
+
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
 
   expect_warning(rs2 <- dbSendQuery(con, "SELECT 1 + 1"), "Cancelling previous query")
@@ -19,7 +19,9 @@ test_that("warn if previous result set is invalidated", {
 })
 
 test_that("no warning if previous result set is closed", {
-  con <- dbConnect(Postgres())
+  con <- postgresDefault()
+  on.exit(dbDisconnect(con))
+
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
   dbClearResult(rs1)
 
@@ -28,14 +30,17 @@ test_that("no warning if previous result set is closed", {
 })
 
 test_that("warning if close connection with open results", {
-  con <- dbConnect(Postgres())
+  con <- postgresDefault()
+
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
 
   expect_warning(dbDisconnect(con), "still in use")
 })
 
 test_that("passing other options parameters", {
-  con <- dbConnect(Postgres(), application_name = "apple")
+  con <- postgresDefault(application_name = "apple")
+  on.exit(dbDisconnect(con))
+
   pid <- dbGetInfo(con)$pid
   r <- dbGetQuery(con, "SELECT application_name FROM pg_stat_activity WHERE pid=$1",
     list(pid))
@@ -43,7 +48,6 @@ test_that("passing other options parameters", {
 })
 
 test_that("error if passing unkown parameters", {
+  skip_on_cran()
   expect_error(dbConnect(Postgres(), fruit = "apple"), 'invalid connection option "fruit"')
 })
-
-}
