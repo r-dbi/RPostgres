@@ -30,8 +30,8 @@
 \S4method{dbListFields}{PqConnection,character}(conn, name, ...)
 }
 \arguments{
-\item{conn}{a \code{\linkS4class{PqConnection}} object, produced by
-\code{\link[DBI]{dbConnect}}}
+\item{conn}{a \linkS4class{PqConnection} object, produced by
+\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{name}{a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
@@ -60,42 +60,43 @@ in the DBMS. Its default is \code{FALSE}.}
 
 \item{field.types}{character vector of named SQL field types where
 the names are the names of new table's columns. If missing, types inferred
-with \code{\link[DBI]{dbDataType}}).}
+with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).}
 
 \item{temporary}{If \code{TRUE}, will generate a temporary table statement.}
 
 \item{copy}{If \code{TRUE}, serializes the data frame to a single string
-  and uses \code{COPY name FROM stdin}. This is fast, but not supported by
-  all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
-  a single SQL string. This is slower, but always supported.
+and uses \code{COPY name FROM stdin}. This is fast, but not supported by
+all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
+a single SQL string. This is slower, but always supported.
 
-  RPostgres does not use parameterised queries to insert rows because
-  benchmarks revealed that this was considerably slower than using a single
-  SQL string.}
+RPostgres does not use parameterised queries to insert rows because
+benchmarks revealed that this was considerably slower than using a single
+SQL string.}
 
 \item{con}{A database connection.}
 
-\item{check.names}{If `TRUE`, the default, column names will be
+\item{check.names}{If \code{TRUE}, the default, column names will be
 converted to valid R identifiers.}
 }
 \description{
 Convenience functions for reading/writing DBMS tables
 }
 \examples{
-\dontrun{
-library(DBI)
-con <- dbConnect(RPostgres::Postgres())
-dbListTables(con)
-dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-dbReadTable(con, "mtcars")
+# For running the examples on systems without PostgreSQL connection:
+run <- postgresHasDefault()
 
-dbListTables(con)
-dbExistsTable(con, "mtcars")
+library(DBI)
+if (run) con <- dbConnect(RPostgres::Postgres())
+if (run) dbListTables(con)
+if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+if (run) dbReadTable(con, "mtcars")
+
+if (run) dbListTables(con)
+if (run) dbExistsTable(con, "mtcars")
 
 # A zero row data frame just creates a table definition.
-dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-dbReadTable(con, "mtcars2")
+if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+if (run) dbReadTable(con, "mtcars2")
 
-dbDisconnect(con)
-}
+if (run) dbDisconnect(con)
 }

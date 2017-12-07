@@ -4,7 +4,7 @@
 #' @param con PqConnection. A database connection, by default.
 #'    \code{dbConnect(RPostgres::Postgres())}.
 #' @return the return value of the evaluated \code{expr}.
-with_database_connection <- function(expr, con = DBI::dbConnect(RPostgres::Postgres())) {
+with_database_connection <- function(expr, con = postgresDefault()) {
   context <- list2env(list(con = con), parent = parent.frame())
   eval(substitute(expr), envir = context)
 }
