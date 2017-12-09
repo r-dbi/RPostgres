@@ -1,3 +1,8 @@
+# RPostgres 1.0-4
+
+- Fix installation on MacOS
+- Check libpq version in configure script (need at least 9.0)
+
 # RPostgres 1.0-3 (2017-12-01)
 
 Initial release, compliant to the DBI specification.
