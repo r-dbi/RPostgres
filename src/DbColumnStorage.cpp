@@ -210,7 +210,8 @@ Rcpp::RObject DbColumnStorage::class_from_datatype(DATA_TYPE dt) {
 void DbColumnStorage::set_attribs_from_datatype(SEXP x, DATA_TYPE dt) {
   switch (dt) {
   case DT_TIME:
-    Rf_setAttrib(x, CharacterVector::create("units"), CharacterVector::create("secs"));
+    Rf_setAttrib(x, PROTECT(CharacterVector::create("units")), PROTECT(CharacterVector::create("secs")));
+    UNPROTECT(2);
     break;
 
   default:
