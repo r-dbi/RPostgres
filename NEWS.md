@@ -1,9 +1,10 @@
 # RPostgres 1.0-4
 
-- Fix installation on MacOS
-- Check libpq version in configure script (need at least 9.0)
-- Fix UBSAN warning: reference binding to null pointer (#156)
-- Fix rchk warning: PROTECT internal temporary SEXP objects (#157)
+- Fix installation on MacOS.
+- Check libpq version in configure script (need at least 9.0).
+- Fix UBSAN warning: reference binding to null pointer (#156).
+- Fix rchk warning: PROTECT internal temporary SEXP objects (#157).
+- Fix severe memory leak when fetching results (#154).
 
 # RPostgres 1.0-3 (2017-12-01)
 

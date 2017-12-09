@@ -34,8 +34,9 @@ pRes_(NULL)
 
 PqResultImpl::~PqResultImpl() {
   try {
-    PQclear(pSpec_);
+    if (pSpec_) PQclear(pSpec_);
   } catch (...) {}
+  if (pRes_) PQclear(pRes_);
 }
 
 
@@ -338,6 +339,7 @@ void PqResultImpl::step() {
 bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
+  if (pRes_) PQclear(pRes_);
   pRes_ = PQgetResult(pConn_);
 
   // We're done, but we need to call PQgetResult until it returns NULL
@@ -350,7 +352,6 @@ bool PqResultImpl::step_run() {
   }
 
   if (pRes_ == NULL) {
-    PQclear(pRes_);
     stop("No active query");
   }
 
@@ -360,6 +361,7 @@ bool PqResultImpl::step_run() {
   case PGRES_FATAL_ERROR:
     {
       PQclear(pRes_);
+      pRes_ = NULL;
       conn_stop("Failed to fetch row");
       return false;
     }
