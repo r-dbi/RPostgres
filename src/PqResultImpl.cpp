@@ -286,8 +286,13 @@ bool PqResultImpl::bind_row() {
     }
   }
 
-  if (!PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                           &lengths[0], &formats[0], 0))
+  // Pointer to first element of empty vector is undefined behavior!
+  int success = cache.nparams_ ?
+    PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
+                      &lengths[0], &formats[0], 0) :
+    PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
+
+  if (!success)
     conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_))

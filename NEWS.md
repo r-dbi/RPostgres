@@ -2,6 +2,7 @@
 
 - Fix installation on MacOS
 - Check libpq version in configure script (need at least 9.0)
+- Fix UBSAN warning: reference binding to null pointer (#156)
 
 # RPostgres 1.0-3 (2017-12-01)
 
