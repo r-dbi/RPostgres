@@ -1,6 +1,6 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 1.0-3
+Version: 1.0-4
 Date: 2017-12-06
 Title: 'Rcpp' Interface to 'PostgreSQL'
 Authors@R: c(
