@@ -25,7 +25,7 @@ if [ $(command -v pkg-config) ]; then
   PKGCONFIG_MODVERSION=$(pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME})
 
   # MacOS seems to ship a broken libpq.pc file
-  if [[ "$PKGCONFIG_CFLAGS" == *"Internal.sdk"* ]]; then
+  if [[ "$PKGCONFIG_CFLAGS" == *"Internal.sdk"* ]] || [ -d "/Volumes/SSD-Data/Builds/R-dev-web/QA/Simon" ]; then
     unset PKGCONFIG_CFLAGS
     unset PKGCONFIG_LIBS
   fi
