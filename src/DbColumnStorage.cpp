@@ -38,9 +38,10 @@ SEXP DbColumnStorage::allocate(const R_xlen_t length, DATA_TYPE dt) {
   SEXPTYPE type = sexptype_from_datatype(dt);
   RObject class_ = class_from_datatype(dt);
 
-  SEXP ret = Rf_allocVector(type, length);
+  SEXP ret = PROTECT(Rf_allocVector(type, length));
   if (!Rf_isNull(class_)) Rf_setAttrib(ret, R_ClassSymbol, class_);
   set_attribs_from_datatype(ret, dt);
+  UNPROTECT(1);
   return ret;
 }
 
