@@ -16,6 +16,8 @@ Authors@R: c(
 Description: 
     Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
     an open-source relational database.
+URL: https://github.com/r-dbi/RPostgres
+BugReports: https://github.com/r-dbi/RPostgres/issues
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 License: GPL-2
 LazyLoad: true
