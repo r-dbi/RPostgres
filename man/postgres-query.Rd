@@ -22,7 +22,7 @@
 \S4method{dbClearResult}{PqResult}(res, ...)
 }
 \arguments{
-\item{conn}{A \code{\linkS4class{PqConnection}} created by \code{dbConnect}.}
+\item{conn}{A \linkS4class{PqConnection} created by \code{\link[=dbConnect]{dbConnect()}}.}
 
 \item{statement}{An SQL string to execute}
 
@@ -35,7 +35,7 @@ cast the parameter with e.g. \code{"$1::bigint"}.}
 currently ignored).}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
-\code{\link[DBI]{dbSendQuery}}.}
+\code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
 
 \item{n}{Number of rows to return. If less than zero returns all rows.}
 
@@ -51,29 +51,30 @@ default name.
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 }
 \description{
-To retrieve results a chunk at a time, use \code{dbSendQuery},
-\code{dbFetch}, then \code{ClearResult}. Alternatively, if you want all the
-results (and they'll fit in memory) use \code{dbGetQuery} which sends,
+To retrieve results a chunk at a time, use \code{dbSendQuery()},
+\code{dbFetch()}, then \code{dbClearResult()}. Alternatively, if you want all the
+results (and they'll fit in memory) use \code{dbGetQuery()} which sends,
 fetches and clears for you.
 }
 \examples{
-\dontrun{
+# For running the examples on systems without PostgreSQL connection:
+run <- postgresHasDefault()
+
 library(DBI)
-db <- dbConnect(RPostgres::Postgres())
-dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+if (run) db <- dbConnect(RPostgres::Postgres())
+if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 
 # Run query to get results as dataframe
-dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 
 # Send query to pull requests in batches
-res <- dbSendQuery(db, "SELECT * FROM usarrests")
-dbFetch(res, n = 2)
-dbFetch(res, n = 2)
-dbHasCompleted(res)
-dbClearResult(res)
+if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
+if (run) dbFetch(res, n = 2)
+if (run) dbFetch(res, n = 2)
+if (run) dbHasCompleted(res)
+if (run) dbClearResult(res)
 
-dbRemoveTable(db, "usarrests")
+if (run) dbRemoveTable(db, "usarrests")
 
-dbDisconnect(db)
-}
+if (run) dbDisconnect(db)
 }

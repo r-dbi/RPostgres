@@ -16,7 +16,6 @@ addons:
 
 env:
   global:
-  - NOT_CRAN: true
   - MAKEFLAGS="-j8"
 
 matrix:
@@ -32,7 +31,9 @@ matrix:
     r: oldrel
   - os: linux
     r: 3.2
-
+  - os: linux
+    env:
+    - PGUSER: bogus
 
 r_packages:
   - covr

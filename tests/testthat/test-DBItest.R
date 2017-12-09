@@ -1,4 +1,4 @@
-if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (postgresHasDefault() && identical(Sys.getenv("NOT_CRAN"), "true")) {
 
 DBItest::test_all(c(
   # deliberately skipped, not required with upcoming version of DBI

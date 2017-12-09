@@ -34,8 +34,9 @@ pRes_(NULL)
 
 PqResultImpl::~PqResultImpl() {
   try {
-    PQclear(pSpec_);
+    if (pSpec_) PQclear(pSpec_);
   } catch (...) {}
+  if (pRes_) PQclear(pRes_);
 }
 
 
@@ -286,8 +287,13 @@ bool PqResultImpl::bind_row() {
     }
   }
 
-  if (!PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                           &lengths[0], &formats[0], 0))
+  // Pointer to first element of empty vector is undefined behavior!
+  int success = cache.nparams_ ?
+    PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
+                      &lengths[0], &formats[0], 0) :
+    PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
+
+  if (!success)
     conn_stop("Failed to send query");
 
   if (!PQsetSingleRowMode(pConn_))
@@ -333,6 +339,7 @@ void PqResultImpl::step() {
 bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
+  if (pRes_) PQclear(pRes_);
   pRes_ = PQgetResult(pConn_);
 
   // We're done, but we need to call PQgetResult until it returns NULL
@@ -345,7 +352,6 @@ bool PqResultImpl::step_run() {
   }
 
   if (pRes_ == NULL) {
-    PQclear(pRes_);
     stop("No active query");
   }
 
@@ -355,6 +361,7 @@ bool PqResultImpl::step_run() {
   case PGRES_FATAL_ERROR:
     {
       PQclear(pRes_);
+      pRes_ = NULL;
       conn_stop("Failed to fetch row");
       return false;
     }

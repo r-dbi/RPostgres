@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 0.1-12
-Date: 2017-12-02
+Version: 1.0-4
+Date: 2017-12-06
 Title: 'Rcpp' Interface to 'PostgreSQL'
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
@@ -13,9 +13,12 @@ Authors@R: c(
     comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
     )
-Description: Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL'.
+Description: 
+    Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
+    an open-source relational database.
 URL: https://github.com/r-dbi/RPostgres
 BugReports: https://github.com/r-dbi/RPostgres/issues
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 License: GPL-2
 LazyLoad: true
 Depends:
@@ -23,7 +26,7 @@ Depends:
 Imports:
     bit64,
     blob,
-    DBI (>= 0.3.1.9008),
+    DBI (>= 0.7),
     hms,
     methods,
     Rcpp (>= 0.11.4.2),
@@ -35,17 +38,16 @@ LinkingTo:
     BH,
     plogr,
     Rcpp
-Remotes:
-    r-dbi/DBI,
-    r-dbi/DBItest
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
     'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
+    'default.R'
     'quote.R'
     'tables.R'
     'transactions.R'
     'utils.R'
 RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)

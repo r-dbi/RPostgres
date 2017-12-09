@@ -1,6 +1,6 @@
 #' Postgres driver
 #'
-#' This driver never needs to be unloaded and hence \code{dbUnload()} is a
+#' This driver never needs to be unloaded and hence `dbUnload()` is a
 #' null-op.
 #'
 #' @export
