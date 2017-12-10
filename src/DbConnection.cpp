@@ -64,7 +64,7 @@ void DbConnection::set_current_result(const DbResult* pResult) {
  * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
-  warning("cancelling previous query");
+  warning("Cancelling previous query");
 
   check_connection();
 
