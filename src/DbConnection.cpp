@@ -73,10 +73,7 @@ void DbConnection::cancel_query() {
   //  * the connection is NULL or
   //  * the connection is invalid.
   PGcancel* cancel = PQgetCancel(pConn_);
-  if (cancel == NULL) {
-    check_connection();  // should throw an error, but just in case...
-    stop("Connection error detected in PQgetCancel()");
-  }
+  if (cancel == NULL) stop("Connection error detected via PQgetCancel()");
 
   // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
@@ -230,7 +227,7 @@ void DbConnection::conn_stop(PGconn* conn, const char* msg) {
 }
 
 void DbConnection::cleanup_query() {
-  if(pCurrentResult_ != NULL && !(const_cast<DbResult*>(pCurrentResult_))->complete()) {
+  if(pCurrentResult_ != NULL && !(pCurrentResult_->complete())) {
     cancel_query();
   }
   finish_query();

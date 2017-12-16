@@ -47,7 +47,7 @@ private:
   void init(bool params_have_rows);
 
 public:
-  bool complete();
+  bool complete() const;
   int n_rows_fetched();
   int n_rows_affected();
   void bind(const List& params);
