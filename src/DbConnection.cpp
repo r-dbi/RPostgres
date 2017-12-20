@@ -52,6 +52,10 @@ void DbConnection::set_current_result(const DbResult* pResult) {
   // try to clean up remnants of any previous queries.
   // (even if (the new) pResult is NULL, we should try to reset the back-end.)
   if (pCurrentResult_ != NULL) {
+    if (pResult != NULL) {
+      warning("Closing open result set, cancelling previous query");
+    }
+
     cleanup_query();
   }
 
@@ -64,8 +68,6 @@ void DbConnection::set_current_result(const DbResult* pResult) {
  * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
-  warning("Cancelling previous query");
-
   check_connection();
 
   // first allocate a 'cancel command' data structure.
