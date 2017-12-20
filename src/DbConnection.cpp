@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "DbConnection.h"
 #include "encode.h"
+#include "DbResult.h"
 
 
 DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values) :
@@ -44,34 +45,43 @@ PGconn* DbConnection::conn() {
 }
 
 void DbConnection::set_current_result(const DbResult* pResult) {
-  // Cancels previous query, if needed.
+  // same result pointer, nothing to do.
   if (pResult == pCurrentResult_)
     return;
 
+  // try to clean up remnants of any previous queries.
+  // (even if (the new) pResult is NULL, we should try to reset the back-end.)
   if (pCurrentResult_ != NULL) {
-    if (pResult != NULL)
-      warning("Cancelling previous query");
-
     cleanup_query();
   }
+
   pCurrentResult_ = pResult;
 }
 
+
+/**
+ * Documentation for canceling queries:
+ * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
+ **/
 void DbConnection::cancel_query() {
+  warning("Cancelling previous query");
+
   check_connection();
 
-  // Cancel running query
+  // first allocate a 'cancel command' data structure.
+  // should only return NULL if either:
+  //  * the connection is NULL or
+  //  * the connection is invalid.
   PGcancel* cancel = PQgetCancel(pConn_);
-  if (cancel == NULL) {
-    warning("Failed to cancel running query");
-    return;
-  }
+  if (cancel == NULL) stop("Connection error detected via PQgetCancel()");
 
+  // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
   if (!PQcancel(cancel, errbuf, sizeof(errbuf))) {
     warning(errbuf);
   }
 
+  // free up the data structure allocated by PQgetCancel().
   PQfreeCancel(cancel);
 }
 
@@ -217,6 +227,8 @@ void DbConnection::conn_stop(PGconn* conn, const char* msg) {
 }
 
 void DbConnection::cleanup_query() {
-  cancel_query();
+  if(pCurrentResult_ != NULL && !(pCurrentResult_->complete())) {
+    cancel_query();
+  }
   finish_query();
 }

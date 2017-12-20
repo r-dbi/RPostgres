@@ -170,7 +170,7 @@ void PqResultImpl::init(bool params_have_rows) {
 
 // Publics /////////////////////////////////////////////////////////////////////
 
-bool PqResultImpl::complete() {
+bool PqResultImpl::complete() const {
   return complete_;
 }
 

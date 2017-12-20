@@ -50,7 +50,7 @@ int DbResult::n_rows_fetched() {
   return impl->n_rows_fetched();
 }
 
-bool DbResult::complete() {
+bool DbResult::complete() const {
   return impl->complete();
 }
 
