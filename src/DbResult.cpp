@@ -51,7 +51,7 @@ int DbResult::n_rows_fetched() {
 }
 
 bool DbResult::complete() const {
-  return impl->complete();
+  return (impl == NULL) || impl->complete();
 }
 
 List DbResult::get_column_info() {
