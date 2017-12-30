@@ -50,8 +50,8 @@ int DbResult::n_rows_fetched() {
   return impl->n_rows_fetched();
 }
 
-bool DbResult::complete() {
-  return impl->complete();
+bool DbResult::complete() const {
+  return (impl == NULL) || impl->complete();
 }
 
 List DbResult::get_column_info() {

@@ -12,7 +12,11 @@ test_that("warn if previous result set is invalidated", {
 
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
 
-  expect_warning(rs2 <- dbSendQuery(con, "SELECT 1 + 1"), "Cancelling previous query")
+  expect_warning(
+    rs2 <- dbSendQuery(con, "SELECT 1 + 1"),
+    "Closing open result set, cancelling previous query",
+    fixed = TRUE
+  )
   expect_false(dbIsValid(rs1))
 
   dbClearResult(rs2)

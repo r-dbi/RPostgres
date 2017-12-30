@@ -22,11 +22,14 @@ PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
 if [ $(command -v pkg-config) ]; then
   PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
   PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
+  PKGCONFIG_MODVERSION=$(pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME})
 
   # MacOS seems to ship a broken libpq.pc file
-  if [[ "$PKGCONFIG_CFLAGS" == *"Internal.sdk"* ]]; then
-    unset PKGCONFIG_CFLAGS
-    unset PKGCONFIG_LIBS
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$PKGCONFIG_CFLAGS" == *"Internal.sdk"* ]] || [[ -z "$PKGCONFIG_CFLAGS" ]]; then
+      unset PKGCONFIG_CFLAGS
+      unset PKGCONFIG_LIBS
+    fi
   fi
 fi
 
@@ -34,6 +37,7 @@ fi
 if [ $(command -v pg_config) ]; then
   PG_INC_DIR=$(pg_config --includedir)
   PG_LIB_DIR=$(pg_config --libdir)
+  PG_VERSION=$(pg_config --version)
 fi
 
 # Note that cflags may be empty in case of success
@@ -42,11 +46,15 @@ if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
   PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
   PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
 elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
-  echo "Using pkg-config cflags and libs!"
+  echo "Found pkg-config cflags and libs ($PKG_CONFIG_NAME $PKGCONFIG_MODVERSION)!"
   PKG_CFLAGS=${PKGCONFIG_CFLAGS}
   PKG_LIBS=${PKGCONFIG_LIBS}
 elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
-  echo "Using pg_config includedir and libdir!"
+  echo "Found pg_config includedir and libdir ($PG_VERSION)!"
+  if [[ "$PG_VERSION" == "PostgreSQL 8"* ]]; then
+    echo "This version of libpq is too old! We need at least 9.0!"
+    exit 1
+  fi
   PKG_CFLAGS="-I${PG_INC_DIR}"
   PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -94,11 +102,10 @@ fi
 
 # Write to Makevars
 sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in > src/Makevars.new
-if [ ! -f src/Makevars.new ] || (which diff > /dev/null && ! diff -q src/Makevars src/Makevars.new); then
-  mv src/Makevars.new src/Makevars
-else
-  rm src/Makevars.new
+if [ ! -f src/Makevars ] || (which diff > /dev/null && ! diff -q src/Makevars src/Makevars.new); then
+  cp -f src/Makevars.new src/Makevars
 fi
+rm -f src/Makevars.new
 
 # Success
 exit 0

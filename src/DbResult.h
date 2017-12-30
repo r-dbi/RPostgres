@@ -25,7 +25,7 @@ public:
   ~DbResult();
 
 public:
-  bool complete();
+  bool complete() const;
   bool active() const;
   int n_rows_fetched();
   int n_rows_affected();

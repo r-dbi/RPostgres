@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: RPostgres
-Version: 1.0-3
-Date: 2017-12-06
+Version: 1.0-4
+Date: 2017-12-20
 Title: 'Rcpp' Interface to 'PostgreSQL'
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
@@ -16,6 +16,9 @@ Authors@R: c(
 Description: 
     Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
     an open-source relational database.
+URL: https://github.com/r-dbi/RPostgres
+BugReports: https://github.com/r-dbi/RPostgres/issues
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 License: GPL-2
 LazyLoad: true
 Depends:
