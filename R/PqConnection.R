@@ -32,14 +32,6 @@ setMethod("dbIsValid", "PqConnection", function(dbObj, ...) {
   connection_valid(dbObj@ptr)
 })
 
-# dbDisconnect()
-#' @export
-#' @rdname dbConnect-PqDriver-method
-setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
-  connection_release(conn@ptr)
-  invisible(TRUE)
-})
-
 # dbSendQuery()
 
 # dbSendStatement()
@@ -159,6 +151,14 @@ setMethod("dbConnect", "PqDriver",
     dbExecute(con, "SET TIMEZONE='UTC'")
     con
   })
+
+# dbDisconnect() (after dbConnect() to maintain order in documentation)
+#' @export
+#' @rdname dbConnect-PqDriver-method
+setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
+  connection_release(conn@ptr)
+  invisible(TRUE)
+})
 
 
 #' Determine database type for R vector.
