@@ -1,5 +1,6 @@
-# RPostgres 1.0-4
+# RPostgres 1.0-4 (2017-12-20)
 
+- Only call `PQcancel()` if the query hasn't completed, fixes transactions on Amazon RedShift (#159, @mmuurr).
 - Fix installation on MacOS.
 - Check libpq version in configure script (need at least 9.0).
 - Fix UBSAN warning: reference binding to null pointer (#156).
