@@ -2,7 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/r-dbi/RPostgres.png?branch=master)](https://travis-ci.org/r-dbi/RPostgres) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-dbi/RPostgres?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/RPostgres) [![codecov](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/RPostgres)
 
-RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to PostgresSQL, it:
+RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to RPostgresSQL, it:
 
 * Has full support for parameterised queries via `dbSendQuery()`, and `dbBind()`.
 
