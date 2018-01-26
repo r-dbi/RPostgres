@@ -25,6 +25,9 @@ public:
   ~DbResult();
 
 public:
+  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement);
+
+public:
   bool complete() const;
   bool active() const;
   int n_rows_fetched();
