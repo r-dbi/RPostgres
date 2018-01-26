@@ -2,7 +2,7 @@
 #include "DbColumnDataSource.h"
 
 DbColumnDataSource::DbColumnDataSource(const int j_) :
-j(j_)
+  j(j_)
 {
 }
 

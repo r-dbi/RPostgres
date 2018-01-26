@@ -3,8 +3,8 @@
 #include "PqColumnDataSource.h"
 
 PqColumnDataSourceFactory::PqColumnDataSourceFactory(PqResultSource* result_source_, const std::vector<DATA_TYPE>& types_) :
-result_source(result_source_),
-types(types_)
+  result_source(result_source_),
+  types(types_)
 {
 }
 

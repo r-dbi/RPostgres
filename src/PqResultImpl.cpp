@@ -6,17 +6,17 @@
 #include "PqDataFrame.h"
 
 PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql) :
-res(pRes),
-pConn_(pConn),
-pSpec_(prepare(pConn, sql)),
-cache(pSpec_),
-complete_(false),
-ready_(false),
-nrows_(0),
-rows_affected_(0),
-group_(0),
-groups_(0),
-pRes_(NULL)
+  res(pRes),
+  pConn_(pConn),
+  pSpec_(prepare(pConn, sql)),
+  cache(pSpec_),
+  complete_(false),
+  ready_(false),
+  nrows_(0),
+  rows_affected_(0),
+  group_(0),
+  groups_(0),
+  pRes_(NULL)
 {
 
   LOG_DEBUG << sql;
@@ -44,10 +44,10 @@ PqResultImpl::~PqResultImpl() {
 // Cache ///////////////////////////////////////////////////////////////////////
 
 PqResultImpl::_cache::_cache(PGresult* spec) :
-names_(get_column_names(spec)),
-types_(get_column_types(spec)),
-ncols_(names_.size()),
-nparams_(PQnparams(spec))
+  names_(get_column_names(spec)),
+  types_(get_column_types(spec)),
+  ncols_(names_.size()),
+  nparams_(PQnparams(spec))
 {
   for (int i = 0; i < nparams_; ++i)
     LOG_VERBOSE << PQparamtype(spec, i);
@@ -288,9 +288,10 @@ bool PqResultImpl::bind_row() {
   }
 
   // Pointer to first element of empty vector is undefined behavior!
-  int success = cache.nparams_ ?
+  int success =
+    cache.nparams_ ?
     PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                      &lengths[0], &formats[0], 0) :
+                        &lengths[0], &formats[0], 0) :
     PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
 
   if (!success)

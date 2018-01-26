@@ -8,9 +8,9 @@
 #endif
 
 PqColumnDataSource::PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j) :
-DbColumnDataSource(j),
-result_source(result_source_),
-dt(dt_)
+  DbColumnDataSource(j),
+  result_source(result_source_),
+  dt(dt_)
 {
 }
 

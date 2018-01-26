@@ -5,7 +5,7 @@
 
 
 DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
-pConn_(pConn)
+  pConn_(pConn)
 {
   pConn->check_connection();
   pConn->set_current_result(this);
