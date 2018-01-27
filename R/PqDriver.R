@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @useDynLib RPostgres, .registration = TRUE
-#' @importFrom Rcpp evalCpp
+#' @importFrom Rcpp sourceCpp
 #' @import methods DBI
 #' @examples
 #' library(DBI)

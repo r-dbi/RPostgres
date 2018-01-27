@@ -45,6 +45,7 @@ Collate:
     'RPostgres-pkg.R'
     'RcppExports.R'
     'default.R'
+    'export.R'
     'quote.R'
     'tables.R'
     'transactions.R'
