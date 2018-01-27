@@ -40,7 +40,7 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x,
   if (anyNA(x)) {
     stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
   }
-  SQL(connection_quote_identifier(conn@ptr, x))
+  SQL(connection_quote_identifier(conn@ptr, x), names = names(x))
 })
 
 #' @export
@@ -58,9 +58,9 @@ setGeneric("dbQuoteLiteral",
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "logical"), function(conn, x, ...) {
-  x <- as.character(x)
-  x[is.na(x)] <- "NULL"
-  SQL(x)
+  ret <- as.character(x)
+  ret[is.na(ret)] <- "NULL"
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -68,7 +68,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "logical"), function(conn, x, ...)
 setMethod("dbQuoteLiteral", c("PqConnection", "integer"), function(conn, x, ...) {
   ret <- paste0(as.character(x), "::int4")
   ret[is.na(x)] <- "NULL"
-  SQL(ret)
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -76,7 +76,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "integer"), function(conn, x, ...)
 setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...) {
   ret <- paste0(as.character(x), "::float8")
   ret[is.na(x)] <- "NULL"
-  SQL(ret)
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -90,7 +90,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "factor"), function(conn, x, ...) 
 setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
   ret <- paste0("'", as.character(x), "'::date")
   ret[is.na(x)] <- "NULL"
-  SQL(ret)
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -98,7 +98,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
 setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) {
   ret <- paste0("'", as.character(x), "'::timestamp")
   ret[is.na(x)] <- "NULL"
-  SQL(ret)
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -106,7 +106,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) 
 setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
   ret <- paste0(as.character(x), "::time")
   ret[is.na(x)] <- "NULL"
-  SQL(ret)
+  SQL(ret, names = names(ret))
 })
 
 #' @export
@@ -136,5 +136,5 @@ quote_blob <- function(x) {
       }
     }
   )
-  SQL(blob_data)
+  SQL(blob_data, names = names(x))
 }
