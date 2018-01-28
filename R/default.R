@@ -28,6 +28,7 @@ postgresHasDefault <- function(...) {
   })
 }
 
+#' @description
 #' `postgresDefault()` works similarly but returns a connection on success and
 #' throws a testthat skip condition on failure, making it suitable for use in
 #' tests.

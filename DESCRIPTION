@@ -41,7 +41,7 @@ Remotes:
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 Collate: 
     'PqDriver.R'
