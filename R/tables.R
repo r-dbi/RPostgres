@@ -242,3 +242,47 @@ setMethod("dbListFields", c("PqConnection", "character"),
 WHERE table_name=", name))$column_name
   }
 )
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListObjects", "PqConnection", function(conn, prefix = NULL, ...) {
+  query <- NULL
+  if (is.null(prefix)) {
+    query <- paste0(
+      "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "WHERE ",
+      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')\n",
+      "UNION ALL\n",
+      "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
+    )
+  } else {
+    unquoted <- dbUnquoteIdentifier(conn, prefix)
+    is_prefix <- vlapply(unquoted, function(x) { "schema" %in% names(x@name) && !("table" %in% names(x@name)) })
+    schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
+    if (length(schemas) > 0) {
+      schema_strings <- dbQuoteString(conn, schemas)
+      query <- paste0(
+        "SELECT table_schema AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+        "WHERE ",
+        "(table_schema IN (", paste(schema_strings, collapse = ", "), "))"
+      )
+    }
+  }
+
+  if (is.null(query)) {
+    res <- data.frame(schema = character(), table = character(), stringsAsFactors = FALSE)
+  } else {
+    res <- dbGetQuery(conn, query)
+  }
+
+  is_prefix <- !is.na(res$schema) & is.na(res$table)
+  tables <- Map(res$schema, res$table, f = as_table)
+
+  ret <- data.frame(
+    table = I(unname(tables)),
+    id = SQL(vcapply(tables, dbQuoteIdentifier, conn = conn)),
+    is_prefix = is_prefix,
+    stringsAsFactors = FALSE
+  )
+  ret
+})

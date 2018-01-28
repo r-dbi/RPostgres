@@ -1,7 +1,10 @@
 #' @include PqConnection.R
 NULL
 
-#' Quote postgres strings and identifiers.
+#' Quote postgres strings, identifiers, and literals
+#'
+#' If an object of class [Table] is used for `dbQuoteIdentifier()`, it needs
+#' at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
 #' @param x A character to escaped
@@ -48,6 +51,45 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x,
 setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
   x
 })
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteIdentifier", c("PqConnection", "Table"), function(conn, x, ...) {
+  stopifnot(all(names(x@name) %in% c("schema", "table")))
+  stopifnot(!anyDuplicated(names(x@name)))
+
+  ret <- ""
+  if ("schema" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["schema"]]), ".")
+  }
+  if ("table" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["table"]]))
+  }
+  SQL(ret)
+})
+
+#' @export
+#' @rdname quote
+setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
+  rx <- '^(?:|"(.+)"[.])(?:|"(.*)")$'
+  bad <- grep(rx, x, invert = TRUE)
+  if (length(bad) > 0) {
+    stop("Can't unquote ", x[bad[[1]]], call. = FALSE)
+  }
+  schema <- gsub(rx, "\\1", x)
+  table <- gsub(rx, "\\2", x)
+
+  ret <- Map(schema, table, f = as_table)
+  names(ret) <- names(x)
+  ret
+})
+
+as_table <- function(schema, table) {
+  args <- c(schema = schema, table = table)
+  # Also omits NA args
+  args <- args[!is.na(args) & args != ""]
+  do.call(DBI:::Table, as.list(args))
+}
 
 # locally for now, requires DBI > 0.7
 #' @rdname quote
