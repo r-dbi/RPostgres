@@ -36,7 +36,7 @@ LinkingTo:
     plogr,
     Rcpp
 Remotes: 
-    r-lib/DBI
+    r-dbi/DBI
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
