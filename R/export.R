@@ -1,7 +1,7 @@
 # Created with:
 # methods::getGenerics(asNamespace("DBI")) %>%
 #   grep("^db[A-Z]", ., value = TRUE) %>%
-#   setdiff(c("dbCallProc", "dbListConnections", "dbSetDataMappings")) %>%
+#   setdiff(c("dbCallProc", "dbListConnections", "dbSetDataMappings", "dbGetException")) %>%
 #   paste0("#' @exportMethod ", ., "\nNULL\n", collapse = "\n") %>%
 #   cat(file = "R/export.R")
 
@@ -41,9 +41,6 @@ NULL
 #' @exportMethod dbFetch
 NULL
 
-#' @exportMethod dbGetException
-NULL
-
 #' @exportMethod dbGetInfo
 NULL
 
@@ -75,6 +72,9 @@ NULL
 NULL
 
 #' @exportMethod dbQuoteIdentifier
+NULL
+
+#' @exportMethod dbQuoteLiteral
 NULL
 
 #' @exportMethod dbQuoteString
