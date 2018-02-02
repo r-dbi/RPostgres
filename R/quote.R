@@ -3,7 +3,7 @@ NULL
 
 #' Quote postgres strings, identifiers, and literals
 #'
-#' If an object of class [Table] is used for `dbQuoteIdentifier()`, it needs
+#' If an object of class [Id] is used for `dbQuoteIdentifier()`, it needs
 #' at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
@@ -54,7 +54,7 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) 
 
 #' @export
 #' @rdname quote
-setMethod("dbQuoteIdentifier", c("PqConnection", "Table"), function(conn, x, ...) {
+setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
   stopifnot(all(names(x@name) %in% c("schema", "table")))
   stopifnot(!anyDuplicated(names(x@name)))
 
@@ -88,7 +88,7 @@ as_table <- function(schema, table) {
   args <- c(schema = schema, table = table)
   # Also omits NA args
   args <- args[!is.na(args) & args != ""]
-  do.call(DBI:::Table, as.list(args))
+  do.call(Id, as.list(args))
 }
 
 # locally for now, requires DBI > 0.7

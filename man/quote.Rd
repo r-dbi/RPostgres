@@ -7,7 +7,7 @@
 \alias{dbQuoteString,PqConnection,SQL-method}
 \alias{dbQuoteIdentifier,PqConnection,character-method}
 \alias{dbQuoteIdentifier,PqConnection,SQL-method}
-\alias{dbQuoteIdentifier,PqConnection,Table-method}
+\alias{dbQuoteIdentifier,PqConnection,Id-method}
 \alias{dbUnquoteIdentifier,PqConnection,SQL-method}
 \alias{dbQuoteLiteral}
 \alias{dbQuoteLiteral,PqConnection,logical-method}
@@ -29,7 +29,7 @@
 
 \S4method{dbQuoteIdentifier}{PqConnection,SQL}(conn, x, ...)
 
-\S4method{dbQuoteIdentifier}{PqConnection,Table}(conn, x, ...)
+\S4method{dbQuoteIdentifier}{PqConnection,Id}(conn, x, ...)
 
 \S4method{dbUnquoteIdentifier}{PqConnection,SQL}(conn, x, ...)
 
@@ -61,7 +61,7 @@ dbQuoteLiteral(conn, x, ...)
 \item{...}{Other arguments needed for compatibility with generic}
 }
 \description{
-If an object of class \link{Table} is used for \code{dbQuoteIdentifier()}, it needs
+If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs
 at most one \code{table} component and at most one \code{schema} component.
 }
 \examples{
