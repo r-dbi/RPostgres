@@ -245,7 +245,7 @@ WHERE table_name=", name))$column_name
 
 #' @export
 #' @rdname postgres-tables
-setMethod("dbListObjects", "PqConnection", function(conn, prefix = NULL, ...) {
+setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
   if (is.null(prefix)) {
     query <- paste0(
