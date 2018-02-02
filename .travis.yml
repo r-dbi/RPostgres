@@ -58,6 +58,7 @@ matrix:
   - os: linux
     r: release
     env:
+    - BUILD_PKGDOWN: true
     - R_CODECOV: true
   - os: linux
     r: oldrel
