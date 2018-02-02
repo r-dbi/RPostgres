@@ -71,7 +71,7 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
-  rx <- '^(?:|"(.+)"[.])(?:|"(.*)")$'
+  rx <- '^(?:|"((?:[^"]|"")+)"[.])(?:|"((?:[^"]|"")*)")$'
   bad <- grep(rx, x, invert = TRUE)
   if (length(bad) > 0) {
     stop("Can't unquote ", x[bad[[1]]], call. = FALSE)
