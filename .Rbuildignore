@@ -8,3 +8,4 @@ windows
 ^src/.*\.d$
 ^src/.*\.gch$
 ^appveyor\.yml$
+^tic\.R$
