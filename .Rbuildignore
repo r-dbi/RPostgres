@@ -9,3 +9,4 @@ windows
 ^src/.*\.gch$
 ^appveyor\.yml$
 ^tic\.R$
+^_pkgdown\.yml$
