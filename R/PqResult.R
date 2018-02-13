@@ -43,7 +43,8 @@ setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
 #' @rdname PqResult-class
 #' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
-  result_column_info(res@ptr)
+  rci <- result_column_info(res@ptr)
+  merge(res@conn@typnames, rci, by = "oid")
 })
 
 #' Execute a SQL statement on a database connection
