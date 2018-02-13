@@ -8,10 +8,11 @@
 #include <boost/range/algorithm_ext/for_each.hpp>
 
 DbDataFrame::DbDataFrame(DbColumnDataSourceFactory* factory_, std::vector<std::string> names_, const int n_max_,
-                         const std::vector<DATA_TYPE>& types_)
+                         const std::vector<DATA_TYPE>& types_, std::vector<Oid> oids_)
   : n_max(n_max_),
     i(0),
-    names(names_)
+    names(names_),
+    oids(oids_)
 {
   factory.reset(factory_);
 
@@ -57,7 +58,15 @@ List DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   out.attr("names") = names;
   out.attr("class") = "data.frame";
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -i);
+  out.attr("oids") = as<IntegerVector>(wrap(oids));
   return out;
+}
+
+std::vector<Oid> get_oids() {
+  std::vector<Oid> oids;
+  oids.push_back(Oid(991));
+  oids.push_back(Oid(992));
+  return(oids);
 }
 
 size_t DbDataFrame::get_ncols() const {

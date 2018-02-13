@@ -20,6 +20,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   struct _cache {
     const std::vector<std::string> names_;
     const std::vector<DATA_TYPE> types_;
+    const std::vector<Oid> oids_;
     const size_t ncols_;
     const int nparams_;
 
@@ -27,6 +28,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
 
     static std::vector<std::string> get_column_names(PGresult* spec);
     static std::vector<DATA_TYPE> get_column_types(PGresult* spec);
+    static std::vector<Oid> get_column_oids(PGresult* spec);
   } cache;
 
   // State
