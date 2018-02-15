@@ -44,7 +44,7 @@ setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
 #' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
   rci <- result_column_info(res@ptr)
-  typeLookup(rci, res@conn)
+  cbind(rci, typname = typeLookup(rci[["oid"]], res@conn), stringsAsFactors = FALSE)
 })
 
 #' Execute a SQL statement on a database connection
@@ -138,22 +138,28 @@ finalizeTypes <- function(ret, conn) {
 
   typnames <- vapply(attr(ret, "oids"), typeLookup, character(1), conn)
   types <- vapply(ret, class, character(1))
-  class_edit <- types %in% "character" & !typnames %in% "unknown"
+  class_edit <- types %in% "character"
   ret[class_edit] <- mapply(appendClass, ret[class_edit], typnames[class_edit], SIMPLIFY = FALSE)
   ret[] <- lapply(ret, finalizeType)
   structure(ret, oids = NULL)
 }
 
+set_class <- function(x, subclass = NULL) {
+  class(x) <- c(subclass)
+  x
+}
+
 appendClass <- function(x, .class) {
-  structure(x, class = c(.class, class(x)))
+  set_class(x, c(.class, class(x)))
 }
 
 yankClass <- function(x) {
   if(length(class(x)) < 2) return(x)
-  structure(x, class = class(x)[-1])
+  set_class(x, class(x)[-1])
 }
 
 typeLookup <- function(x, conn) {
+  if(length(x) > 1) return(vapply(x, typeLookup, character(1), conn))
   with(conn@typnames, typname[oid == x])
 }
 
