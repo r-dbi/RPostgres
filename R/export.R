@@ -65,6 +65,9 @@ NULL
 #' @exportMethod dbListFields
 NULL
 
+#' @exportMethod dbListObjects
+NULL
+
 #' @exportMethod dbListResults
 NULL
 
@@ -72,6 +75,9 @@ NULL
 NULL
 
 #' @exportMethod dbQuoteIdentifier
+NULL
+
+#' @exportMethod dbQuoteLiteral
 NULL
 
 #' @exportMethod dbQuoteLiteral
