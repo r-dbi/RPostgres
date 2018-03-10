@@ -280,7 +280,6 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
 
   ret <- data.frame(
     table = I(unname(tables)),
-    id = SQL(vcapply(tables, dbQuoteIdentifier, conn = conn)),
     is_prefix = is_prefix,
     stringsAsFactors = FALSE
   )
