@@ -244,6 +244,7 @@ WHERE table_name=", name))$column_name
 )
 
 #' @export
+#' @inheritParams DBI::dbListObjects
 #' @rdname postgres-tables
 setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
