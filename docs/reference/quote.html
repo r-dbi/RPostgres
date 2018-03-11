@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quote postgres strings and identifiers. — quote • RPostgres</title>
+<title>Quote postgres strings, identifiers, and literals — quote • RPostgres</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,11 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="Quote postgres strings, identifiers, and literals — quote" />
+
+<meta property="og:description" content="If an object of class Id is used for dbQuoteIdentifier(), it needs
+at most one table component and at most one schema component." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -83,11 +90,12 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Quote postgres strings and identifiers.</h1>
+    <h1>Quote postgres strings, identifiers, and literals</h1>
     </div>
 
     
-    <p>Quote postgres strings and identifiers.</p>
+    <p>If an object of class Id is used for <code>dbQuoteIdentifier()</code>, it needs
+at most one <code>table</code> component and at most one <code>schema</code> component.</p>
     
 
     <pre class="usage"><span class='co'># S4 method for PqConnection,character</span>
@@ -101,6 +109,12 @@
 
 <span class='co'># S4 method for PqConnection,SQL</span>
 <span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for PqConnection,Id</span>
+<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for PqConnection,SQL</span>
+<span class='fu'>dbUnquoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='fu'>dbQuoteLiteral</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
 
@@ -190,3 +204,4 @@
 
   </body>
 </html>
+

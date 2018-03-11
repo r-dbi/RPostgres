@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,7 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="Function reference" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -107,6 +110,18 @@
         <tr>
           <!--  -->
           <td>
+            <p><code><a href="Postgres.html">Postgres</a></code> </p>
+          </td>
+          <td><p>Postgres driver</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="RPostgres-package.html">RPostgres-package</a></code> </p>
+          </td>
+          <td><p>RPostgres: 'Rcpp' Interface to 'PostgreSQL'</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
             <p><code><a href="dbConnect-PqDriver-method.html">dbConnect</a></code> <code><a href="dbConnect-PqDriver-method.html">dbDisconnect</a></code> </p>
           </td>
           <td><p>Connect to a PostgreSQL database.</p></td>
@@ -119,7 +134,7 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="postgres-tables.html">dbWriteTable</a></code> <code><a href="postgres-tables.html">sqlData</a></code> <code><a href="postgres-tables.html">dbReadTable</a></code> <code><a href="postgres-tables.html">dbListTables</a></code> <code><a href="postgres-tables.html">dbExistsTable</a></code> <code><a href="postgres-tables.html">dbRemoveTable</a></code> <code><a href="postgres-tables.html">dbListFields</a></code> </p>
+            <p><code><a href="postgres-tables.html">dbWriteTable</a></code> <code><a href="postgres-tables.html">sqlData</a></code> <code><a href="postgres-tables.html">dbReadTable</a></code> <code><a href="postgres-tables.html">dbListTables</a></code> <code><a href="postgres-tables.html">dbExistsTable</a></code> <code><a href="postgres-tables.html">dbRemoveTable</a></code> <code><a href="postgres-tables.html">dbListFields</a></code> <code><a href="postgres-tables.html">dbListObjects</a></code> </p>
           </td>
           <td><p>Convenience functions for reading/writing DBMS tables</p></td>
         </tr><tr>
@@ -131,27 +146,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="Postgres.html">Postgres</a></code> </p>
-          </td>
-          <td><p>Postgres driver</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="postgresHasDefault.html">postgresHasDefault</a></code> <code><a href="postgresHasDefault.html">postgresDefault</a></code> </p>
           </td>
           <td><p>Check if default database is available.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="quote.html">dbQuoteString</a></code> <code><a href="quote.html">dbQuoteIdentifier</a></code> <code><a href="quote.html">dbQuoteLiteral</a></code> </p>
+            <p><code><a href="quote.html">dbQuoteString</a></code> <code><a href="quote.html">dbQuoteIdentifier</a></code> <code><a href="quote.html">dbUnquoteIdentifier</a></code> <code><a href="quote.html">dbQuoteLiteral</a></code> </p>
           </td>
-          <td><p>Quote postgres strings and identifiers.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="RPostgres-package.html">RPostgres-package</a></code> </p>
-          </td>
-          <td><p>RPostgres: 'Rcpp' Interface to 'PostgreSQL'</p></td>
+          <td><p>Quote postgres strings, identifiers, and literals</p></td>
         </tr>
       </tbody>
       </table>
@@ -180,3 +183,4 @@
 
   </body>
 </html>
+

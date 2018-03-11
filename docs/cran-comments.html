@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check if default database is available. — postgresHasDefault • RPostgres</title>
+<title>/home/travis/build/r-dbi/RPostgres/cran-comments.md • RPostgres</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -22,21 +22,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script>
+<script src="pkgdown.js"></script>
   
   
-<meta property="og:title" content="Check if default database is available. — postgresHasDefault" />
-
-<meta property="og:description" content="RPostgres examples and tests connect to a default database via
-dbConnect(RPostgres::Postgres()). This function checks if that
-database is available, and if not, displays an informative message." />
-
-<meta property="og:description" content="postgresDefault() works similarly but returns a connection on success and
-throws a testthat skip condition on failure, making it suitable for use in
-tests." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="/home/travis/build/r-dbi/RPostgres/cran-comments.md" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -49,7 +40,7 @@ tests." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -59,21 +50,21 @@ tests." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <a class="navbar-brand" href="index.html">RPostgres</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -93,52 +84,37 @@ tests." />
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-12">
     <div class="page-header">
-    <h1>Check if default database is available.</h1>
+      <h1>/home/travis/build/r-dbi/RPostgres/cran-comments.md</h1>
     </div>
 
-    
-    <p>RPostgres examples and tests connect to a default database via
-<code>dbConnect(</code><code><a href='Postgres.html'>RPostgres::Postgres()</a></code><code>)</code>. This function checks if that
-database is available, and if not, displays an informative message.
 
-    <code>postgresDefault()</code> works similarly but returns a connection on success and
-throws a testthat skip condition on failure, making it suitable for use in
-tests.</p>
-    
-
-    <pre class="usage"><span class='fu'>postgresHasDefault</span>(<span class='no'>...</span>)
-
-<span class='fu'>postgresDefault</span>(<span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments passed on to <code>dbConnect()</code></p></td>
-    </tr>
-    </table>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>postgresHasDefault</span>()) {
-  <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>postgresDefault</span>()
-  <span class='fu'>dbListTables</span>(<span class='no'>db</span>)
-  <span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)
-}</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-  </div>
+<p>Fix for UBSAN and rchk erros, a memory leak, and compatibility problems with Amazon RedShift.</p>
+<div id="test-environments" class="section level2">
+<h2 class="hasAnchor">
+<a href="#test-environments" class="anchor"></a>Test environments</h2>
+<ul>
+<li>local ubuntu install, R 3.4.3</li>
+<li>ubuntu 14.04 (on travis-ci), R 3.4.3, devel, oldrel, 3.2</li>
+<li>windows (on appveyor), R 3.4.3</li>
+<li>win-builder (devel and release)</li>
+</ul>
 </div>
+<div id="r-cmd-check-results" class="section level2">
+<h2 class="hasAnchor">
+<a href="#r-cmd-check-results" class="anchor"></a>R CMD check results</h2>
+<p>0 errors | 0 warnings | 1 note</p>
+<ul>
+<li>We link libpq (and libcrypto) statically on Windows, hence the size.</li>
+</ul>
+</div>
+
+
+  </div>
+
+</div>
+
 
       <footer>
       <div class="copyright">

@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,7 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="All news" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -92,12 +95,12 @@
 <h1 class="hasAnchor">
 <a href="#rpostgres-1-0-4-2017-12-20" class="anchor"></a>RPostgres 1.0-4 (2017-12-20)</h1>
 <ul>
-<li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon RedShift (#159, @mmuurr).</li>
+<li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon RedShift (<a href='https://github.com/r-dbi/RPostgres/issues/159'>#159</a>, <a href='http://github.com/mmuurr'>@mmuurr</a>).</li>
 <li>Fix installation on MacOS.</li>
 <li>Check libpq version in configure script (need at least 9.0).</li>
-<li>Fix UBSAN warning: reference binding to null pointer (#156).</li>
-<li>Fix rchk warning: PROTECT internal temporary SEXP objects (#157).</li>
-<li>Fix severe memory leak when fetching results (#154).</li>
+<li>Fix UBSAN warning: reference binding to null pointer (<a href='https://github.com/r-dbi/RPostgres/issues/156'>#156</a>).</li>
+<li>Fix rchk warning: PROTECT internal temporary SEXP objects (<a href='https://github.com/r-dbi/RPostgres/issues/157'>#157</a>).</li>
+<li>Fix severe memory leak when fetching results (<a href='https://github.com/r-dbi/RPostgres/issues/154'>#154</a>).</li>
 </ul>
 </div>
     <div id="rpostgres-1-0-3-2017-12-01" class="section level1">
@@ -142,3 +145,4 @@
 
   </body>
 </html>
+
