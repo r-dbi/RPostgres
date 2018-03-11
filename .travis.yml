@@ -1,23 +1,55 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# Default configuration for use with tic package
+# Usually you shouldn't need to change the first part of the file
 
+# DO NOT CHANGE THE CODE BELOW
+before_install: R -q -e 'install.packages(c("remotes", "curl")); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages(); tic::before_install()'
+install: R -q -e 'tic::install()'
+after_install: R -q -e 'tic::after_install()'
+before_script:
+- R -q -e 'tic::before_script()'
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm -rf /usr/local/var/postgres; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then initdb /usr/local/var/postgres; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pg_ctl -D /usr/local/var/postgres start; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createuser -s travis || true; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createdb travis || true; fi
+script: R -q -e 'tic::script()'
+after_success: R -q -e 'tic::after_success()'
+after_failure: R -q -e 'tic::after_failure()'
+before_deploy: R -q -e 'tic::before_deploy()'
+deploy:
+  provider: script
+  script: R -q -e 'tic::deploy()'
+  on:
+    all_branches: true
+after_deploy: R -q -e 'tic::after_deploy()'
+after_script: R -q -e 'tic::after_script()'
+# DO NOT CHANGE THE CODE ABOVE
+
+# Custom parts:
+
+# Header
 language: r
+sudo: false
 cache: packages
 latex: false
-sudo: false
-warnings_are_errors: true
 
-services:
-  - postgresql
+#env
+env:
+  global:
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  - MAKEFLAGS="-j 2"
+
+#addons
 addons:
   postgresql: "9.4"
   apt:
     packages:
-      - libpq-dev
+    - libpq-dev
+    - libmagick++-dev
+    - libssh2-1-dev
 
-env:
-  global:
-  - MAKEFLAGS="-j8"
-
+#matrix: 3x Linux, 1x OS X
 matrix:
   include:
   - os: osx
@@ -26,6 +58,7 @@ matrix:
   - os: linux
     r: release
     env:
+    - BUILD_PKGDOWN: true
     - R_CODECOV: true
   - os: linux
     r: oldrel
@@ -35,20 +68,15 @@ matrix:
     env:
     - PGUSER: bogus
 
-r_packages:
-  - covr
-
+#notifications
 notifications:
   email:
     on_success: change
     on_failure: change
 
-before_script:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm -rf /usr/local/var/postgres; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then initdb /usr/local/var/postgres; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pg_ctl -D /usr/local/var/postgres start; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createuser -s travis || true; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then createdb travis || true; fi
+# Custom parts:
 
-after_success:
-  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+#services
+services:
+- postgresql
+
