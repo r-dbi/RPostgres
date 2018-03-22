@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PqDriver and methods. — PqDriver-class • RPostgres</title>
+<title>/home/travis/build/r-dbi/RPostgres/cran-comments.md • RPostgres</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -22,15 +22,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
-<script src="../pkgdown.js"></script>
-<meta property="og:title" content="PqDriver and methods. — PqDriver-class" />
-
-<meta property="og:description" content="PqDriver and methods." />
-<meta name="twitter:card" content="summary" />
-
-
+<link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script>
+<script src="pkgdown.js"></script>
+  
+  
+<meta property="og:title" content="/home/travis/build/r-dbi/RPostgres/cran-comments.md" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -43,7 +40,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -53,25 +50,21 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
-      </span>
+      <a class="navbar-brand" href="index.html">RPostgres</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -91,28 +84,37 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-12">
     <div class="page-header">
-    <h1>PqDriver and methods.</h1>
-    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/PqDriver.R'><code>R/PqDriver.R</code></a></small>
+      <h1>/home/travis/build/r-dbi/RPostgres/cran-comments.md</h1>
     </div>
 
-    
-    <p>PqDriver and methods.</p>
-    
 
-    <pre class="usage"><span class='co'># S4 method for PqDriver</span>
-<span class='fu'>dbUnloadDriver</span>(<span class='no'>drv</span>, <span class='no'>...</span>)</pre>
-        
-
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-                </ul>
-
-  </div>
+<p>Fix for UBSAN and rchk erros, a memory leak, and compatibility problems with Amazon RedShift.</p>
+<div id="test-environments" class="section level2">
+<h2 class="hasAnchor">
+<a href="#test-environments" class="anchor"></a>Test environments</h2>
+<ul>
+<li>local ubuntu install, R 3.4.3</li>
+<li>ubuntu 14.04 (on travis-ci), R 3.4.3, devel, oldrel, 3.2</li>
+<li>windows (on appveyor), R 3.4.3</li>
+<li>win-builder (devel and release)</li>
+</ul>
 </div>
+<div id="r-cmd-check-results" class="section level2">
+<h2 class="hasAnchor">
+<a href="#r-cmd-check-results" class="anchor"></a>R CMD check results</h2>
+<p>0 errors | 0 warnings | 1 note</p>
+<ul>
+<li>We link libpq (and libcrypto) statically on Windows, hence the size.</li>
+</ul>
+</div>
+
+
+  </div>
+
+</div>
+
 
       <footer>
       <div class="copyright">

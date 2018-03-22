@@ -210,16 +210,31 @@ setMethod("dbListTables", "PqConnection", function(conn, ...) {
 setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, ...) {
   stopifnot(length(name) == 1L)
   name <- dbQuoteIdentifier(conn, name)
-  # Convert to plain string
-  name <- paste0(gsub('^"|"$', '', name))
-  name <- dbQuoteString(conn, name)
+
+  # Convert to identifier
+  id <- dbUnquoteIdentifier(conn, name)[[1]]@name
+  table <- dbQuoteString(conn, id[["table"]])
 
   query <- paste0(
     "SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables WHERE table_name = ",
-    name, " ",
-    "AND ",
-    "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+    table
   )
+
+  if ("schema" %in% names(id)) {
+    query <- paste0(
+      query,
+      "AND ",
+      "table_schema = ",
+      dbQuoteString(conn, id[["schema"]])
+    )
+  } else {
+    query <- paste0(
+      query,
+      "AND ",
+      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+    )
+  }
+
   dbGetQuery(conn, query)[[1]] >= 1
 })
 
@@ -238,7 +253,51 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 setMethod("dbListFields", c("PqConnection", "character"),
   function(conn, name, ...) {
     name <- dbQuoteString(conn, name)
-    dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
-WHERE table_name=", name))$column_name
+    query <- paste0("SELECT column_name FROM information_schema.columns WHERE table_name = ", name)
+    dbGetQuery(conn, query)[[1]]
   }
 )
+
+#' @export
+#' @inheritParams DBI::dbListObjects
+#' @rdname postgres-tables
+setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
+  query <- NULL
+  if (is.null(prefix)) {
+    query <- paste0(
+      "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "WHERE ",
+      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')\n",
+      "UNION ALL\n",
+      "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
+    )
+  } else {
+    unquoted <- dbUnquoteIdentifier(conn, prefix)
+    is_prefix <- vlapply(unquoted, function(x) { "schema" %in% names(x@name) && !("table" %in% names(x@name)) })
+    schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
+    if (length(schemas) > 0) {
+      schema_strings <- dbQuoteString(conn, schemas)
+      query <- paste0(
+        "SELECT table_schema AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+        "WHERE ",
+        "(table_schema IN (", paste(schema_strings, collapse = ", "), "))"
+      )
+    }
+  }
+
+  if (is.null(query)) {
+    res <- data.frame(schema = character(), table = character(), stringsAsFactors = FALSE)
+  } else {
+    res <- dbGetQuery(conn, query)
+  }
+
+  is_prefix <- !is.na(res$schema) & is.na(res$table)
+  tables <- Map(res$schema, res$table, f = as_table)
+
+  ret <- data.frame(
+    table = I(unname(tables)),
+    is_prefix = is_prefix,
+    stringsAsFactors = FALSE
+  )
+  ret
+})
