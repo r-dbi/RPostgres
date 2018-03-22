@@ -210,16 +210,31 @@ setMethod("dbListTables", "PqConnection", function(conn, ...) {
 setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, ...) {
   stopifnot(length(name) == 1L)
   name <- dbQuoteIdentifier(conn, name)
-  # Convert to plain string
-  name <- paste0(gsub('^"|"$', '', name))
-  name <- dbQuoteString(conn, name)
+
+  # Convert to identifier
+  id <- dbUnquoteIdentifier(conn, name)[[1]]@name
+  table <- dbQuoteString(conn, id[["table"]])
 
   query <- paste0(
     "SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables WHERE table_name = ",
-    name, " ",
-    "AND ",
-    "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+    table
   )
+
+  if ("schema" %in% names(id)) {
+    query <- paste0(
+      query,
+      "AND ",
+      "table_schema = ",
+      dbQuoteString(conn, id[["schema"]])
+    )
+  } else {
+    query <- paste0(
+      query,
+      "AND ",
+      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+    )
+  }
+
   dbGetQuery(conn, query)[[1]] >= 1
 })
 
@@ -238,8 +253,8 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 setMethod("dbListFields", c("PqConnection", "character"),
   function(conn, name, ...) {
     name <- dbQuoteString(conn, name)
-    dbGetQuery(conn, paste("SELECT column_name FROM information_schema.columns
-WHERE table_name=", name))$column_name
+    query <- paste0("SELECT column_name FROM information_schema.columns WHERE table_name = ", name)
+    dbGetQuery(conn, query)[[1]]
   }
 )
 
