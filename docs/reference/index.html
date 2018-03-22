@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -50,8 +50,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -64,7 +68,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -86,10 +90,7 @@
       <div class="row">
   <div class="col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;1.0-4</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
     <div class="contents">
@@ -110,7 +111,7 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="Postgres.html">Postgres</a></code> </p>
+            <p><code><a href="Postgres.html">Postgres()</a></code> </p>
           </td>
           <td><p>Postgres driver</p></td>
         </tr><tr>
@@ -122,37 +123,37 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="dbConnect-PqDriver-method.html">dbConnect</a></code> <code><a href="dbConnect-PqDriver-method.html">dbDisconnect</a></code> </p>
+            <p><code><a href="dbConnect-PqDriver-method.html">dbConnect(<i>&lt;PqDriver&gt;</i>)</a></code> <code><a href="dbConnect-PqDriver-method.html">dbDisconnect(<i>&lt;PqConnection&gt;</i>)</a></code> </p>
           </td>
           <td><p>Connect to a PostgreSQL database.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="postgres-query.html">dbSendQuery</a></code> <code><a href="postgres-query.html">dbFetch</a></code> <code><a href="postgres-query.html">dbBind</a></code> <code><a href="postgres-query.html">dbHasCompleted</a></code> <code><a href="postgres-query.html">dbClearResult</a></code> </p>
+            <p><code><a href="postgres-query.html">dbSendQuery(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-query.html">dbFetch(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbBind(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbHasCompleted(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbClearResult(<i>&lt;PqResult&gt;</i>)</a></code> </p>
           </td>
           <td><p>Execute a SQL statement on a database connection</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="postgres-tables.html">dbWriteTable</a></code> <code><a href="postgres-tables.html">sqlData</a></code> <code><a href="postgres-tables.html">dbReadTable</a></code> <code><a href="postgres-tables.html">dbListTables</a></code> <code><a href="postgres-tables.html">dbExistsTable</a></code> <code><a href="postgres-tables.html">dbRemoveTable</a></code> <code><a href="postgres-tables.html">dbListFields</a></code> <code><a href="postgres-tables.html">dbListObjects</a></code> </p>
+            <p><code><a href="postgres-tables.html">dbWriteTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>,<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="postgres-tables.html">sqlData(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbReadTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListTables(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbExistsTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbRemoveTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListFields(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListObjects(<i>&lt;PqConnection&gt;</i>)</a></code> </p>
           </td>
           <td><p>Convenience functions for reading/writing DBMS tables</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="postgres-transactions.html">dbBegin</a></code> <code><a href="postgres-transactions.html">dbCommit</a></code> <code><a href="postgres-transactions.html">dbRollback</a></code> </p>
+            <p><code><a href="postgres-transactions.html">dbBegin(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-transactions.html">dbCommit(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-transactions.html">dbRollback(<i>&lt;PqConnection&gt;</i>)</a></code> </p>
           </td>
           <td><p>Transaction management.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="postgresHasDefault.html">postgresHasDefault</a></code> <code><a href="postgresHasDefault.html">postgresDefault</a></code> </p>
+            <p><code><a href="postgresHasDefault.html">postgresHasDefault()</a></code> <code><a href="postgresHasDefault.html">postgresDefault()</a></code> </p>
           </td>
           <td><p>Check if default database is available.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="quote.html">dbQuoteString</a></code> <code><a href="quote.html">dbQuoteIdentifier</a></code> <code><a href="quote.html">dbUnquoteIdentifier</a></code> <code><a href="quote.html">dbQuoteLiteral</a></code> </p>
+            <p><code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;Id&gt;</i>)</a></code> <code><a href="quote.html">dbUnquoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral()</a></code> </p>
           </td>
           <td><p>Quote postgres strings, identifiers, and literals</p></td>
         </tr>

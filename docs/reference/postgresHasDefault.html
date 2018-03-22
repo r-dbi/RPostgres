@@ -25,18 +25,17 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Check if default database is available. — postgresHasDefault" />
 
 <meta property="og:description" content="RPostgres examples and tests connect to a default database via
 dbConnect(RPostgres::Postgres()). This function checks if that
-database is available, and if not, displays an informative message." />
-
-<meta property="og:description" content="postgresDefault() works similarly but returns a connection on success and
+database is available, and if not, displays an informative message.
+postgresDefault() works similarly but returns a connection on success and
 throws a testthat skip condition on failure, making it suitable for use in
 tests." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -59,8 +58,12 @@ tests." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -73,7 +76,7 @@ tests." />
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -96,14 +99,14 @@ tests." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check if default database is available.</h1>
+    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/default.R'><code>R/default.R</code></a></small>
     </div>
 
     
     <p>RPostgres examples and tests connect to a default database via
 <code>dbConnect(</code><code><a href='Postgres.html'>RPostgres::Postgres()</a></code><code>)</code>. This function checks if that
-database is available, and if not, displays an informative message.
-
-    <code>postgresDefault()</code> works similarly but returns a connection on success and
+database is available, and if not, displays an informative message.</p>
+<p><code>postgresDefault()</code> works similarly but returns a connection on success and
 throws a testthat skip condition on failure, making it suitable for use in
 tests.</p>
     
@@ -112,7 +115,7 @@ tests.</p>
 
 <span class='fu'>postgresDefault</span>(<span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

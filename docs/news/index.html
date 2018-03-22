@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • RPostgres</title>
+<title>Changelog • RPostgres</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
-<meta property="og:title" content="All news" />
+<meta property="og:title" content="Changelog" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -50,8 +50,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -64,7 +68,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -87,13 +91,15 @@
 
   <div class="col-md-9">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Change log <small></small></h1>
+      <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div class="contents">
     <div id="rpostgres-1-0-4-2017-12-20" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rpostgres-1-0-4-2017-12-20" class="anchor"></a>RPostgres 1.0-4 (2017-12-20)</h1>
+<h1 class="page-header">
+<a href="#rpostgres-1-0-4-2017-12-20" class="anchor"></a>RPostgres 1.0-4 (2017-12-20)<small> 2017-12-20 </small>
+</h1>
 <ul>
 <li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon RedShift (<a href='https://github.com/r-dbi/RPostgres/issues/159'>#159</a>, <a href='http://github.com/mmuurr'>@mmuurr</a>).</li>
 <li>Fix installation on MacOS.</li>
@@ -104,8 +110,9 @@
 </ul>
 </div>
     <div id="rpostgres-1-0-3-2017-12-01" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rpostgres-1-0-3-2017-12-01" class="anchor"></a>RPostgres 1.0-3 (2017-12-01)</h1>
+<h1 class="page-header">
+<a href="#rpostgres-1-0-3-2017-12-01" class="anchor"></a>RPostgres 1.0-3 (2017-12-01)<small> 2017-12-06 </small>
+</h1>
 <p>Initial release, compliant to the DBI specification.</p>
 <ul>
 <li>Test almost all test cases of the DBI specification.</li>

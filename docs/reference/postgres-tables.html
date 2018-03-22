@@ -25,12 +25,12 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Convenience functions for reading/writing DBMS tables — postgres-tables" />
 
 <meta property="og:description" content="Convenience functions for reading/writing DBMS tables" />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -53,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -67,7 +71,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -90,6 +94,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convenience functions for reading/writing DBMS tables</h1>
+    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/tables.R'><code>R/tables.R</code></a></small>
     </div>
 
     
@@ -123,7 +128,7 @@
 <span class='co'># S4 method for PqConnection</span>
 <span class='fu'>dbListObjects</span>(<span class='no'>conn</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

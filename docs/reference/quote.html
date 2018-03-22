@@ -25,13 +25,13 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Quote postgres strings, identifiers, and literals — quote" />
 
 <meta property="og:description" content="If an object of class Id is used for dbQuoteIdentifier(), it needs
 at most one table component and at most one schema component." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -54,8 +54,12 @@ at most one table component and at most one schema component." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -68,7 +72,7 @@ at most one table component and at most one schema component." />
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -91,6 +95,7 @@ at most one table component and at most one schema component." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Quote postgres strings, identifiers, and literals</h1>
+    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/quote.R'><code>R/quote.R</code></a></small>
     </div>
 
     
@@ -145,7 +150,7 @@ at most one <code>table</code> component and at most one <code>schema</code> com
 <span class='co'># S4 method for PqConnection,blob</span>
 <span class='fu'>dbQuoteLiteral</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

@@ -25,8 +25,6 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Connect to a PostgreSQL database. — dbConnect,PqDriver-method" />
 
 <meta property="og:description" content="Manually disconnecting a connection is not necessary with RPostgres, but
@@ -34,6 +32,8 @@ still recommended;
 if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,8 +56,12 @@ disconnected during the next GC with a warning." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">RPostgres</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">RPostgres</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,7 +74,7 @@ disconnected during the next GC with a warning." />
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -93,6 +97,7 @@ disconnected during the next GC with a warning." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Connect to a PostgreSQL database.</h1>
+    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/PqConnection.R'><code>R/PqConnection.R</code></a></small>
     </div>
 
     
@@ -110,7 +115,7 @@ disconnected during the next GC with a warning.</p>
 <span class='co'># S4 method for PqConnection</span>
 <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
