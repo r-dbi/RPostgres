@@ -76,8 +76,11 @@ setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...
   if (length(bad) > 0) {
     stop("Can't unquote ", x[bad[[1]]], call. = FALSE)
   }
+
   schema <- gsub(rx, "\\1", x)
+  schema <- gsub('""', '"', schema)
   table <- gsub(rx, "\\2", x)
+  table <- gsub('""', '"', table)
 
   ret <- Map(schema, table, f = as_table)
   names(ret) <- names(x)
