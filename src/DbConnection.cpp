@@ -30,12 +30,15 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
 }
 
 DbConnection::~DbConnection() {
+  LOG_VERBOSE;
   disconnect();
 }
 
 void DbConnection::disconnect() {
   try {
+    LOG_VERBOSE;
     PQfinish(pConn_);
+    LOG_VERBOSE;
     pConn_ = NULL;
   } catch (...) {}
 }
