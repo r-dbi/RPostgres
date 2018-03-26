@@ -5,9 +5,9 @@ Date: 2017-12-20
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
-    person("Kirill", "Müller", role = "cre", email = "krlmlr+r@mailbox.org"),
+    person("Kirill", "M\u00fcller", role = c("aut", "cre"), email = "krlmlr+r@mailbox.org", comment = c(ORCID = "0000-0002-1416-3412")),
     person("RStudio", role = "cph"),
-    person("R Consortium", role = "cph"),
+    person("R Consortium", role = "fnd"),
     person("Tomoaki", "Nishiyama", role = "ctb",
     comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
@@ -22,8 +22,8 @@ Depends:
     R (>= 3.1.0)
 Imports: 
     bit64,
-    blob,
-    DBI (>= 0.7-14),
+    blob (>= 1.1.1),
+    DBI (>= 0.8),
     hms,
     methods,
     Rcpp (>= 0.11.4.2),
@@ -33,7 +33,7 @@ Suggests:
     testthat
 LinkingTo: 
     BH,
-    plogr,
+    plogr (>= 0.2.0),
     Rcpp
 Remotes: 
     r-dbi/DBI,
