@@ -213,6 +213,16 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, 
 
   # Convert to identifier
   id <- dbUnquoteIdentifier(conn, name)[[1]]@name
+  exists_table(conn, id)
+})
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbExistsTable", c("PqConnection", "Id"), function(conn, name, ...) {
+  exists_table(conn, id = name@name)
+})
+
+exists_table <- function(conn, id) {
   table <- dbQuoteString(conn, id[["table"]])
 
   query <- paste0(
@@ -236,7 +246,7 @@ setMethod("dbExistsTable", c("PqConnection", "character"), function(conn, name, 
   }
 
   dbGetQuery(conn, query)[[1]] >= 1
-})
+}
 
 #' @export
 #' @rdname postgres-tables
