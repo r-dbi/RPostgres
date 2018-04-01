@@ -2,10 +2,7 @@
 #include <boost/lexical_cast.hpp>
 #include "PqColumnDataSource.h"
 #include "PqResultSource.h"
-
-#if defined(WIN32) || defined(_WIN32)
-#define timegm _mkgmtime
-#endif
+#include "PqUtils.h"
 
 PqColumnDataSource::PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j) :
   DbColumnDataSource(j),
@@ -74,22 +71,20 @@ SEXP PqColumnDataSource::fetch_blob() const {
 double PqColumnDataSource::fetch_date() const {
   LOG_VERBOSE;
   const char* val = get_result_value();
-  struct tm date = tm();
-  date.tm_isdst = -1;
-  date.tm_year = *val - 0x30;
-  date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30);
-  date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30);
-  date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30) - 1900;
+  int year = *val - 0x30;
+  year *= 10;
+  year += (*(++val) - 0x30);
+  year *= 10;
+  year += (*(++val) - 0x30);
+  year *= 10;
+  year += (*(++val) - 0x30);
   val++;
-  date.tm_mon = 10 * (*(++val) - 0x30);
-  date.tm_mon += (*(++val) - 0x30) - 1;
+  int mon = 10 * (*(++val) - 0x30);
+  mon += (*(++val) - 0x30);
   val++;
-  date.tm_mday = (*(++val) - 0x30) * 10;
-  date.tm_mday += (*(++val) - 0x30);
-  return static_cast<double>(timegm(&date)) / (24.0 * 60 * 60);
+  int mday = (*(++val) - 0x30) * 10;
+  mday += (*(++val) - 0x30);
+  return days_from_civil(year, mon, mday);
 }
 
 double PqColumnDataSource::fetch_datetime_local() const {
@@ -155,7 +150,7 @@ double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
   date.tm_sec = static_cast<int>(sec);
   LOG_VERBOSE << date.tm_sec;
 
-  time_t time = use_local ? mktime(&date) : timegm(&date);
+  time_t time = use_local ? mktime(&date) : tm_to_time_t(date);
   LOG_VERBOSE << time;
 
   double ret = static_cast<double>(time) + (sec - date.tm_sec);

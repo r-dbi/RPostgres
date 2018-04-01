@@ -9,8 +9,7 @@ Authors@R: c(
     person("RStudio", role = "cph"),
     person("R Consortium", role = "fnd"),
     person("Tomoaki", "Nishiyama", role = "ctb",
-    comment = "Code for encoding vectors into strings derived from RPostgreSQL"),
-    person("Kungliga Tekniska Högskolan", role = "ctb", comment = "Source code for timegm")
+    comment = "Code for encoding vectors into strings derived from RPostgreSQL")
     )
 Description: 
     Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,

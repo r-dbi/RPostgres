@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org}
+\strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org} (0000-0002-1416-3412)
 
 Authors:
 \itemize{
@@ -29,9 +29,8 @@ Authors:
 Other contributors:
 \itemize{
   \item RStudio [copyright holder]
-  \item R Consortium [copyright holder]
+  \item R Consortium [funder]
   \item Tomoaki Nishiyama (Code for encoding vectors into strings derived from RPostgreSQL) [contributor]
-  \item Kungliga Tekniska Högskolan (Source code for timegm) [contributor]
 }
 
 }
