@@ -8,6 +8,7 @@
 \alias{dbReadTable,PqConnection,character-method}
 \alias{dbListTables,PqConnection-method}
 \alias{dbExistsTable,PqConnection,character-method}
+\alias{dbExistsTable,PqConnection,Id-method}
 \alias{dbRemoveTable,PqConnection,character-method}
 \alias{dbListFields,PqConnection,character-method}
 \alias{dbListObjects,PqConnection-method}
@@ -25,6 +26,8 @@
 \S4method{dbListTables}{PqConnection}(conn, ...)
 
 \S4method{dbExistsTable}{PqConnection,character}(conn, name, ...)
+
+\S4method{dbExistsTable}{PqConnection,Id}(conn, name, ...)
 
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...)
 
