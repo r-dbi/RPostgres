@@ -40,6 +40,8 @@
 <![endif]-->
 
 
+
+
   </head>
 
   <body>
@@ -83,6 +85,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -90,7 +93,7 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convenience functions for reading/writing DBMS tables</h1>
@@ -117,6 +120,9 @@
 <span class='fu'>dbListTables</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
+<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for PqConnection,Id</span>
 <span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
@@ -268,7 +274,7 @@ If given the method will return all objects accessible through this prefix.</p><
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Jeroen Ooms, Kirill Müller.</p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Jeroen Ooms, Kirill Müller, <a href='https://www.r-consortium.org'>R Consortium</a>.</p>
 </div>
 
 <div class="pkgdown">
@@ -277,6 +283,8 @@ If given the method will return all objects accessible through this prefix.</p><
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>
