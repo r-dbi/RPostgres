@@ -59,9 +59,6 @@ NULL
 #' @exportMethod dbHasCompleted
 NULL
 
-#' @exportMethod dbIsReadOnly
-NULL
-
 #' @exportMethod dbIsValid
 NULL
 
