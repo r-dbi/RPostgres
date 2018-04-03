@@ -46,6 +46,7 @@ PqResultImpl::~PqResultImpl() {
 PqResultImpl::_cache::_cache(PGresult* spec) :
   names_(get_column_names(spec)),
   types_(get_column_types(spec)),
+  oids_((get_column_oids(spec))),
   ncols_(names_.size()),
   nparams_(PQnparams(spec))
 {
@@ -134,12 +135,24 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
 
     default:
       types.push_back(DT_STRING);
-      warning("Unknown field type (%d) in column %s", type, PQfname(spec, i));
+      LOG_VERBOSE << "Unknown field type (" << type << ") in column " << PQfname(spec, i);
     }
   }
 
   return types;
 }
+
+std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec)  {
+  std::vector<Oid> oids;
+  int ncols_ = PQnfields(spec);
+  oids.reserve(ncols_);
+  for (int i = 0; i < ncols_; ++i) {
+    Oid oid = PQftype(spec, i);
+    oids.push_back(oid);
+  }
+  return oids;
+}
+
 
 PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   // Prepare query
@@ -236,10 +249,10 @@ List PqResultImpl::get_column_info() {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  List out = Rcpp::List::create(names, types);
+  List out = Rcpp::List::create(names, types, cache.oids_);
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
   out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type");
+  out.attr("names") = CharacterVector::create("name", "type", "oid");
 
   return out;
 }
@@ -312,7 +325,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
 List PqResultImpl::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
-  PqDataFrame data(this, cache.names_, n_max, cache.types_);
+  PqDataFrame data(this, cache.names_, n_max, cache.types_, cache.oids_);
 
   if (complete_ && data.get_ncols() == 0) {
     warning("Don't need to call dbFetch() for statements, only for queries");
@@ -388,7 +401,7 @@ bool PqResultImpl::step_done() {
 }
 
 List PqResultImpl::peek_first_row() {
-  PqDataFrame data(this, cache.names_, 1, cache.types_);
+  PqDataFrame data(this, cache.names_, 1, cache.types_, cache.oids_);
 
   if (!complete_)
     data.set_col_values();
