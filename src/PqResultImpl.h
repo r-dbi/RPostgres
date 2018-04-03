@@ -73,6 +73,8 @@ private:
 
   void bind();
 
+  void add_oids(List& data) const;
+
 public:
   // PqResultSource
   PGresult* get_result();

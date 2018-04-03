@@ -46,7 +46,7 @@ PqResultImpl::~PqResultImpl() {
 PqResultImpl::_cache::_cache(PGresult* spec) :
   names_(get_column_names(spec)),
   types_(get_column_types(spec)),
-  oids_((get_column_oids(spec))),
+  oids_(get_column_oids(spec)),
   ncols_(names_.size()),
   nparams_(PQnparams(spec))
 {
@@ -135,14 +135,14 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
 
     default:
       types.push_back(DT_STRING);
-      LOG_VERBOSE << "Unknown field type (" << type << ") in column " << PQfname(spec, i);
+      LOG_INFO << "Unknown field type (" << type << ") in column " << PQfname(spec, i);
     }
   }
 
   return types;
 }
 
-std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec)  {
+std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec) {
   std::vector<Oid> oids;
   int ncols_ = PQnfields(spec);
   oids.reserve(ncols_);
@@ -252,7 +252,7 @@ List PqResultImpl::get_column_info() {
   List out = Rcpp::List::create(names, types, cache.oids_);
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
   out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type", "oid");
+  out.attr("names") = CharacterVector::create("name", "type", ".oid");
 
   return out;
 }
@@ -342,7 +342,9 @@ List PqResultImpl::fetch_rows(const int n_max, int& n) {
   }
 
   LOG_VERBOSE << nrows_;
-  return data.get_data();
+  List ret = data.get_data();
+  add_oids(ret);
+  return ret;
 }
 
 void PqResultImpl::step() {
@@ -407,7 +409,9 @@ List PqResultImpl::peek_first_row() {
     data.set_col_values();
   // Not calling data.advance(), remains a zero-row data frame
 
-  return data.get_data();
+  List ret = data.get_data();
+  add_oids(ret);
+  return ret;
 }
 
 void PqResultImpl::conn_stop(const char* msg) const {
@@ -416,6 +420,10 @@ void PqResultImpl::conn_stop(const char* msg) const {
 
 void PqResultImpl::bind() {
   bind(List());
+}
+
+void PqResultImpl::add_oids(List& data) const {
+  data.attr("oids") = cache.oids_;
 }
 
 PGresult* PqResultImpl::get_result() {
