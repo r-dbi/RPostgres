@@ -1,4 +1,4 @@
-Fix for UBSAN and rchk erros, a memory leak, and compatibility problems with Amazon RedShift.
+Fixing Solaris error.
 
 ## Test environments
 * local ubuntu install, R 3.4.3
@@ -11,3 +11,7 @@ Fix for UBSAN and rchk erros, a memory leak, and compatibility problems with Ama
 0 errors | 0 warnings | 1 note
 
 * We link libpq (and libcrypto) statically on Windows, hence the size.
+
+## Downstream packages
+
+Tested RGreenplum, no error.
