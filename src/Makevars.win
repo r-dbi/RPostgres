@@ -3,6 +3,8 @@ PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} \
 	-lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 CXX_STD=CXX11
 
+$(SHLIB):
+
 $(OBJECTS): winlibs
 
 clean:
