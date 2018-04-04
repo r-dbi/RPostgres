@@ -44,7 +44,7 @@ setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
 #' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
   rci <- result_column_info(res@ptr)
-  cbind(rci, typname = typeLookup(rci[["oid"]], res@conn), stringsAsFactors = FALSE)
+  cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
 })
 
 #' Execute a SQL statement on a database connection
@@ -118,7 +118,7 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
   if (trunc(n) != n) stopc("n must be a whole number")
   ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
   ret <- convert_bigint(ret, res@bigint)
-  finalizeTypes(ret, res@conn)
+  finalize_types(ret, res@conn)
 })
 
 convert_bigint <- function(ret, bigint) {
@@ -133,15 +133,20 @@ convert_bigint <- function(ret, bigint) {
   ret
 }
 
-finalizeTypes <- function(ret, conn) {
-  if(nrow(conn@typnames) < 1) return(ret)
+finalize_types <- function(ret, conn) {
+  known <- attr(ret, "known")
+  is_unknown <- which(!known)
 
-  typnames <- vapply(attr(ret, "oids"), typeLookup, character(1), conn)
-  types <- vapply(ret, class, character(1))
-  class_edit <- types %in% "character"
-  ret[class_edit] <- mapply(appendClass, ret[class_edit], typnames[class_edit], SIMPLIFY = FALSE)
-  ret[] <- lapply(ret, finalizeType)
-  structure(ret, oids = NULL)
+  if (length(is_unknown) > 0) {
+    oids <- attr(ret, "oids")
+    typnames <- type_lookup(oids[is_unknown], conn)
+    typname_classes <- paste0("pq_", typnames)
+    ret[is_unknown] <- Map(set_class, ret[is_unknown], typname_classes)
+  }
+
+  attr(ret, "oids") <- NULL
+  attr(ret, "known") <- NULL
+  ret
 }
 
 set_class <- function(x, subclass = NULL) {
@@ -149,37 +154,9 @@ set_class <- function(x, subclass = NULL) {
   x
 }
 
-appendClass <- function(x, .class) {
-  set_class(x, c(.class, class(x)))
-}
-
-yankClass <- function(x) {
-  if(length(class(x)) < 2) return(x)
-  set_class(x, class(x)[-1])
-}
-
-typeLookup <- function(x, conn) {
-  if(length(x) > 1) return(vapply(x, typeLookup, character(1), conn))
-  with(conn@typnames, typname[oid == x])
-}
-
-#' Finalize Type Coercion
-#'
-#' This can be used by other packages to coerce types to specific types.
-#' @param x a list or vector column who's class is from the `pg_types` table
-#' @param ... extra arguments
-#' @details Add a generic method using `finalizeType.<typname>` where `<typname>`
-#' is taken from the `pg_types` table.
-#' @examples
-#' finalizeType.json <- function(x, ...) {
-#'   lapply(x, jsonlite::fromJSON)
-#' }
-#' dbGetQuery(conn, "SELECT 1 as a, '[1,2,3]'::json as js")
-#' @rdname quote
-finalizeType <- function(x, ...) UseMethod("finalizeType")
-
-finalizeType.default <- function(x, ...) {
-  yankClass(x)
+type_lookup <- function(x, conn) {
+  typnames <- conn@typnames
+  typnames$typname[match(x, typnames$oid)]
 }
 
 #' @rdname postgres-query

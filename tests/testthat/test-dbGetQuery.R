@@ -27,7 +27,7 @@ test_that("JSONB format is recognized", {
   dbExecute(con, paste0("INSERT INTO test2(data) values ('", jsonb, "');"))
 
   expect_warning(
-    expect_equal(dbGetQuery(con, "SELECT * FROM test2")$data, jsonb),
+    expect_equal(dbGetQuery(con, "SELECT * FROM test2")$data, structure(jsonb, class = "pq_jsonb")),
     NA
   )
 

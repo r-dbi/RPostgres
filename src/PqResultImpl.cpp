@@ -45,8 +45,9 @@ PqResultImpl::~PqResultImpl() {
 
 PqResultImpl::_cache::_cache(PGresult* spec) :
   names_(get_column_names(spec)),
-  types_(get_column_types(spec)),
-  oids_((get_column_oids(spec))),
+  oids_(get_column_oids(spec)),
+  types_(get_column_types(oids_, names_)),
+  known_(get_column_known(oids_)),
   ncols_(names_.size()),
   nparams_(PQnparams(spec))
 {
@@ -67,82 +68,70 @@ std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) 
   return names;
 }
 
-std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(PGresult* spec)  {
-  std::vector<DATA_TYPE> types;
-  int ncols_ = PQnfields(spec);
-  types.reserve(ncols_);
+DATA_TYPE PqResultImpl::_cache::get_column_type_from_oid(const Oid type) {
+  // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
+  switch (type) {
+  case 20: // BIGINT
+    return DT_INT64;
+    break;
 
-  for (int i = 0; i < ncols_; ++i) {
-    Oid type = PQftype(spec, i);
-    // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
-    switch (type) {
-    case 20: // BIGINT
-      types.push_back(DT_INT64);
-      break;
+  case 21: // SMALLINT
+  case 23: // INTEGER
+  case 26: // OID
+    return DT_INT;
+    break;
 
-    case 21: // SMALLINT
-    case 23: // INTEGER
-    case 26: // OID
-      types.push_back(DT_INT);
-      break;
+  case 1700: // DECIMAL
+  case 701: // FLOAT8
+  case 700: // FLOAT
+  case 790: // MONEY
+    return DT_REAL;
+    break;
 
-    case 1700: // DECIMAL
-    case 701: // FLOAT8
-    case 700: // FLOAT
-    case 790: // MONEY
-      types.push_back(DT_REAL);
-      break;
+  case 18: // CHAR
+  case 19: // NAME
+  case 25: // TEXT
+  case 1042: // CHAR
+  case 1043: // VARCHAR
+    return DT_STRING;
+    break;
+  case 1082: // DATE
+    return DT_DATE;
+    break;
+  case 1083: // TIME
+  case 1266: // TIMETZOID
+    return DT_TIME;
+    break;
+  case 1114: // TIMESTAMP
+    return DT_DATETIME;
+    break;
+  case 1184: // TIMESTAMPTZOID
+    return DT_DATETIMETZ;
+    break;
+  case 1186: // INTERVAL
+  case 2950: // UUID
+    return DT_STRING;
+    break;
 
-    case 18: // CHAR
-    case 19: // NAME
-    case 25: // TEXT
-    case 114: // JSON
-    case 1042: // CHAR
-    case 1043: // VARCHAR
-      types.push_back(DT_STRING);
-      break;
-    case 1082: // DATE
-      types.push_back(DT_DATE);
-      break;
-    case 1083: // TIME
-    case 1266: // TIMETZOID
-      types.push_back(DT_TIME);
-      break;
-    case 1114: // TIMESTAMP
-      types.push_back(DT_DATETIME);
-      break;
-    case 1184: // TIMESTAMPTZOID
-      types.push_back(DT_DATETIMETZ);
-      break;
-    case 1186: // INTERVAL
-    case 3802: // JSONB
-    case 2950: // UUID
-      types.push_back(DT_STRING);
-      break;
+  case 16: // BOOL
+    return DT_BOOL;
+    break;
 
-    case 16: // BOOL
-      types.push_back(DT_BOOL);
-      break;
+  case 17: // BYTEA
+  case 2278: // NULL
+    return DT_BLOB;
+    break;
 
-    case 17: // BYTEA
-    case 2278: // NULL
-      types.push_back(DT_BLOB);
-      break;
+  case 705: // UNKNOWN
+    return DT_STRING;
+    break;
 
-    case 705: // UNKNOWN
-      types.push_back(DT_STRING);
-      break;
-
-    default:
-      types.push_back(DT_STRING);
-      LOG_VERBOSE << "Unknown field type (" << type << ") in column " << PQfname(spec, i);
-    }
+  default:
+    return DT_UNKNOWN;
   }
-
-  return types;
 }
 
-std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec)  {
+std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec) {
   std::vector<Oid> oids;
   int ncols_ = PQnfields(spec);
   oids.reserve(ncols_);
@@ -153,6 +142,40 @@ std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec)  {
   return oids;
 }
 
+std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(const std::vector<Oid>& oids, const std::vector<std::string>& names) {
+  std::vector<DATA_TYPE> types;
+  size_t ncols_ = oids.size();
+  types.reserve(ncols_);
+
+  for (size_t i = 0; i < ncols_; ++i) {
+    Oid oid = oids[i];
+
+    DATA_TYPE data_type = get_column_type_from_oid(oid);
+    if (data_type == DT_UNKNOWN) {
+      LOG_INFO << "Unknown field type (" << oid << ") in column " << names[i];
+      data_type = DT_STRING;
+    }
+
+    types.push_back(data_type);
+  }
+
+  return types;
+}
+
+std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>& oids) {
+  std::vector<bool> known;
+  size_t ncols_ = oids.size();
+  known.reserve(ncols_);
+
+  for (size_t i = 0; i < ncols_; ++i) {
+    Oid oid = oids[i];
+
+    DATA_TYPE data_type = get_column_type_from_oid(oid);
+    known.push_back(data_type != DT_UNKNOWN);
+  }
+
+  return known;
+}
 
 PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   // Prepare query
@@ -249,10 +272,10 @@ List PqResultImpl::get_column_info() {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  List out = Rcpp::List::create(names, types, cache.oids_);
+  List out = Rcpp::List::create(names, types, cache.oids_, cache.known_);
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
   out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type", "oid");
+  out.attr("names") = CharacterVector::create("name", "type", ".oid", ".known");
 
   return out;
 }
@@ -342,7 +365,9 @@ List PqResultImpl::fetch_rows(const int n_max, int& n) {
   }
 
   LOG_VERBOSE << nrows_;
-  return data.get_data();
+  List ret = data.get_data();
+  add_oids(ret);
+  return ret;
 }
 
 void PqResultImpl::step() {
@@ -407,7 +432,9 @@ List PqResultImpl::peek_first_row() {
     data.set_col_values();
   // Not calling data.advance(), remains a zero-row data frame
 
-  return data.get_data();
+  List ret = data.get_data();
+  add_oids(ret);
+  return ret;
 }
 
 void PqResultImpl::conn_stop(const char* msg) const {
@@ -416,6 +443,11 @@ void PqResultImpl::conn_stop(const char* msg) const {
 
 void PqResultImpl::bind() {
   bind(List());
+}
+
+void PqResultImpl::add_oids(List& data) const {
+  data.attr("oids") = cache.oids_;
+  data.attr("known") = cache.known_;
 }
 
 PGresult* PqResultImpl::get_result() {

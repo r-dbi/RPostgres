@@ -14,14 +14,12 @@ class DbDataFrame {
   int i;
   boost::container::stable_vector<DbColumn> data;
   std::vector<std::string> names;
-  std::vector<Oid> oids;
 
 public:
   DbDataFrame(DbColumnDataSourceFactory* factory,
               std::vector<std::string> names,
               const int n_max_,
-              const std::vector<DATA_TYPE>& types,
-              std::vector<Oid> oids_);
+              const std::vector<DATA_TYPE>& types);
   virtual ~DbDataFrame();
 
 public:
