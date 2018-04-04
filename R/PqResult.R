@@ -134,22 +134,24 @@ convert_bigint <- function(ret, bigint) {
 }
 
 finalize_types <- function(ret, conn) {
-  if(nrow(conn@typnames) < 1) return(ret)
+  known <- attr(ret, "known")
+  is_unknown <- which(!known)
 
-  is_character <- which(vlapply(ret, inherits, "character"))
-  typnames <- type_lookup(attr(ret, "oids")[is_character], conn)
-  ret[is_character] <- Map(append_class, ret[is_character], typnames)
+  if (length(is_unknown) > 0) {
+    oids <- attr(ret, "oids")
+    typnames <- type_lookup(oids[is_unknown], conn)
+    typname_classes <- paste0("pq_", typnames)
+    ret[is_unknown] <- Map(set_class, ret[is_unknown], typname_classes)
+  }
+
   attr(ret, "oids") <- NULL
+  attr(ret, "known") <- NULL
   ret
 }
 
 set_class <- function(x, subclass = NULL) {
   class(x) <- c(subclass)
   x
-}
-
-append_class <- function(x, .class) {
-  set_class(x, c(.class, class(x)))
 }
 
 type_lookup <- function(x, conn) {
