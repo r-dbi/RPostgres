@@ -54,7 +54,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.0</span>
       </span>
     </div>
 
@@ -97,6 +97,21 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1-1-0-2018-04-04" class="section level1">
+<h1 class="page-header">
+<a href="#rpostgres-1-1-0-2018-04-04" class="anchor"></a>RPostgres 1.1.0 (2018-04-04)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Breaking change: <code>dbGetException()</code> is no longer reexported from DBI.</li>
+<li>Make “typname” information available after <code>dbFetch()</code> and <code>dbGetQuery()</code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code>dbColumnInfo()</code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>)(<a href='https://github.com/r-dbi/RPostgres/issues/114'>#114</a>, <a href='http://github.com/etiennebr'>@etiennebr</a>).</li>
+<li>Values of class <code>"integer64"</code> are now supported for <code>dbWriteTable()</code> and <code>dbBind()</code> (<a href='https://github.com/r-dbi/RPostgres/issues/178'>#178</a>).</li>
+<li>Schema support, as specified by DBI: <code>dbListObjects()</code>, <code>dbUnquoteIdentifier()</code> and <code>Id()</code>.</li>
+<li>Names in the <code>x</code> argument to <code>dbQuoteIdentifier()</code> are preserved in the output (r-lib/DBI<a href='https://github.com/r-dbi/RPostgres/issues/173'>#173</a>).</li>
+<li>All generics defined in DBI (e.g., <code>dbGetQuery()</code>) are now exported, even if the package doesn’t provide a custom implementation (<a href='https://github.com/r-dbi/RPostgres/issues/168'>#168</a>).</li>
+<li>Replace non-portable <code>timegm()</code> with private implementation.</li>
+<li>Correct reference to RPostgreSQL package (<a href='https://github.com/r-dbi/RPostgres/issues/165'>#165</a>, <a href='http://github.com/ClaytonJY'>@ClaytonJY</a>).</li>
+</ul>
+</div>
     <div id="rpostgres-1-0-4-2017-12-20" class="section level1">
 <h1 class="page-header">
 <a href="#rpostgres-1-0-4-2017-12-20" class="anchor"></a>RPostgres 1.0-4 (2017-12-20)<small> 2017-12-20 </small>
@@ -130,6 +145,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rpostgres-1-1-0-2018-04-04">1.1.0</a></li>
         <li><a href="#rpostgres-1-0-4-2017-12-20">1.0-4</a></li>
         <li><a href="#rpostgres-1-0-3-2017-12-01">1.0-3</a></li>
       </ul>
