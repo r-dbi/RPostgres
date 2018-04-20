@@ -21,6 +21,8 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
@@ -60,7 +62,7 @@ fetches and clears for you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.0.9000</span>
       </span>
     </div>
 
@@ -100,16 +102,18 @@ fetches and clears for you." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute a SQL statement on a database connection</h1>
-    <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R'><code>R/PqResult.R</code></a></small>
-    <p class="hidden name"><code>postgres-query.Rd</code></p>
+    <small class="dont-index">Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R'><code>R/PqResult.R</code></a></small>
+    <div class="hidden name"><code>postgres-query.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>To retrieve results a chunk at a time, use <code>dbSendQuery()</code>,
 <code>dbFetch()</code>, then <code>dbClearResult()</code>. Alternatively, if you want all the
 results (and they'll fit in memory) use <code>dbGetQuery()</code> which sends,
 fetches and clears for you.</p>
     
+    </div>
 
     <pre class="usage"><span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'>dbSendQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
