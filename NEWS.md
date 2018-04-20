@@ -1,3 +1,8 @@
+# RPostgres 1.1.0.9000 (2018-04-20)
+
+- Same as previous version.
+
+
 # RPostgres 1.1.0 (2018-04-04)
 
 - Breaking change: `dbGetException()` is no longer reexported from DBI.
