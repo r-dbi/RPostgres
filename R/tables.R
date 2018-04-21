@@ -223,10 +223,19 @@ setMethod("dbExistsTable", c("PqConnection", "Id"), function(conn, name, ...) {
 })
 
 exists_table <- function(conn, id) {
+  query <- paste0(
+    "SELECT COUNT(*) FROM ",
+    find_table(conn, id)
+  )
+
+  dbGetQuery(conn, query)[[1]] >= 1
+}
+
+find_table <- function(conn, id) {
   table <- dbQuoteString(conn, id[["table"]])
 
   query <- paste0(
-    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables WHERE table_name = ",
+    "INFORMATION_SCHEMA.tables WHERE table_name = ",
     table
   )
 
@@ -241,11 +250,9 @@ exists_table <- function(conn, id) {
     query <- paste0(
       query,
       "AND ",
-      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+      "(table_schema = ANY(current_schemas(true)))"
     )
   }
-
-  dbGetQuery(conn, query)[[1]] >= 1
 }
 
 #' @export
