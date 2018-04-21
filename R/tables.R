@@ -264,7 +264,11 @@ setMethod("dbListFields", c("PqConnection", "character"),
   function(conn, name, ...) {
     name <- dbQuoteString(conn, name)
     query <- paste0("SELECT column_name FROM information_schema.columns WHERE table_name = ", name)
-    dbGetQuery(conn, query)[[1]]
+    fields <- dbGetQuery(conn, query)[[1]]
+    if (length(fields) == 0) {
+      stop("Table ", name, " not found.", call. = FALSE)
+    }
+    fields
   }
 )
 
