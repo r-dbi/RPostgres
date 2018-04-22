@@ -286,19 +286,31 @@ setMethod("dbListFields", c("PqConnection", "character"),
     quoted <- dbQuoteIdentifier(conn, name)
     id <- dbUnquoteIdentifier(conn, quoted)[[1]]@name
 
-    query <- find_table(conn, id, "columns", only_first = TRUE)
-    query <- paste0(
-      "SELECT column_name FROM ",
-      query, " ",
-      "ORDER BY ordinal_position"
-    )
-    fields <- dbGetQuery(conn, query)[[1]]
-    if (length(fields) == 0) {
-      stop("Table ", name, " not found.", call. = FALSE)
-    }
-    fields
+    list_fields(conn, id)
   }
 )
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListFields", c("PqConnection", "Id"),
+  function(conn, name, ...) {
+    list_fields(conn, name@name)
+  }
+)
+
+list_fields <- function(conn, id) {
+  query <- find_table(conn, id, "columns", only_first = TRUE)
+  query <- paste0(
+    "SELECT column_name FROM ",
+    query, " ",
+    "ORDER BY ordinal_position"
+  )
+  fields <- dbGetQuery(conn, query)[[1]]
+  if (length(fields) == 0) {
+    stop("Table ", name, " not found.", call. = FALSE)
+  }
+  fields
+}
 
 #' @export
 #' @inheritParams DBI::dbListObjects
