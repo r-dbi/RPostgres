@@ -232,27 +232,32 @@ exists_table <- function(conn, id) {
 }
 
 find_table <- function(conn, id) {
-  table <- dbQuoteString(conn, id[["table"]])
-
-  query <- paste0(
-    "INFORMATION_SCHEMA.tables WHERE table_name = ",
-    table
-  )
-
   if ("schema" %in% names(id)) {
     query <- paste0(
-      query,
-      "AND ",
-      "table_schema = ",
-      dbQuoteString(conn, id[["schema"]])
+      "(SELECT 1 AS nr, ",
+      dbQuoteString(conn, id[["schema"]]), "::varchar",
+      " AS table_schema) t"
     )
   } else {
+    # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
-      query,
-      "AND ",
-      "(table_schema = ANY(current_schemas(true)))"
+      "(SELECT nr, schemas[nr] AS table_schema FROM ",
+      "(SELECT *, generate_subscripts(schemas, 1) AS nr FROM ",
+      "(SELECT current_schemas(true) AS schemas) ",
+      "t) ",
+      "tt) ",
+      "ttt"
     )
   }
+
+  table <- dbQuoteString(conn, id[["table"]])
+  query <- paste0(
+    query, " ",
+    "INNER JOIN INFORMATION_SCHEMA.tables USING (table_schema) ",
+    "WHERE table_name = ", table
+  )
+
+  query
 }
 
 #' @export
