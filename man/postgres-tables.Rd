@@ -11,6 +11,7 @@
 \alias{dbExistsTable,PqConnection,Id-method}
 \alias{dbRemoveTable,PqConnection,character-method}
 \alias{dbListFields,PqConnection,character-method}
+\alias{dbListFields,PqConnection,Id-method}
 \alias{dbListObjects,PqConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
@@ -32,6 +33,8 @@
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...)
 
 \S4method{dbListFields}{PqConnection,character}(conn, name, ...)
+
+\S4method{dbListFields}{PqConnection,Id}(conn, name, ...)
 
 \S4method{dbListObjects}{PqConnection}(conn, prefix = NULL, ...)
 }
