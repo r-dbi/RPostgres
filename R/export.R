@@ -11,6 +11,9 @@ NULL
 #' @exportMethod dbBind
 NULL
 
+#' @exportMethod dbCanConnect
+NULL
+
 #' @exportMethod dbClearResult
 NULL
 
@@ -59,6 +62,9 @@ NULL
 #' @exportMethod dbHasCompleted
 NULL
 
+#' @exportMethod dbIsReadOnly
+NULL
+
 #' @exportMethod dbIsValid
 NULL
 
@@ -102,6 +108,9 @@ NULL
 NULL
 
 #' @exportMethod dbUnloadDriver
+NULL
+
+#' @exportMethod dbUnquoteIdentifier
 NULL
 
 #' @exportMethod dbWithTransaction
