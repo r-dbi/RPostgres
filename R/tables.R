@@ -307,7 +307,7 @@ list_fields <- function(conn, id) {
   )
   fields <- dbGetQuery(conn, query)[[1]]
   if (length(fields) == 0) {
-    stop("Table ", name, " not found.", call. = FALSE)
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
   }
   fields
 }
