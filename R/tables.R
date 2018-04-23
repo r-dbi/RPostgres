@@ -223,29 +223,50 @@ setMethod("dbExistsTable", c("PqConnection", "Id"), function(conn, name, ...) {
 })
 
 exists_table <- function(conn, id) {
-  table <- dbQuoteString(conn, id[["table"]])
-
   query <- paste0(
-    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables WHERE table_name = ",
-    table
+    "SELECT COUNT(*) FROM ",
+    find_table(conn, id)
   )
 
+  dbGetQuery(conn, query)[[1]] >= 1
+}
+
+find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
   if ("schema" %in% names(id)) {
     query <- paste0(
-      query,
-      "AND ",
-      "table_schema = ",
-      dbQuoteString(conn, id[["schema"]])
+      "(SELECT 1 AS nr, ",
+      dbQuoteString(conn, id[["schema"]]), "::varchar",
+      " AS table_schema) t"
     )
   } else {
+    # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
-      query,
-      "AND ",
-      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+      "(SELECT nr, schemas[nr] AS table_schema FROM ",
+      "(SELECT *, generate_subscripts(schemas, 1) AS nr FROM ",
+      "(SELECT current_schemas(true) AS schemas) ",
+      "t) ",
+      "tt) ",
+      "ttt"
     )
   }
 
-  dbGetQuery(conn, query)[[1]] >= 1
+  table <- dbQuoteString(conn, id[["table"]])
+  query <- paste0(
+    query, " ",
+    "INNER JOIN INFORMATION_SCHEMA.", inf_table, " USING (table_schema) ",
+    "WHERE table_name = ", table
+  )
+
+  if (only_first) {
+    # https://stackoverflow.com/a/31814584/946850
+    query <- paste0(
+      "(SELECT *, rank() OVER (ORDER BY nr) AS rnr ",
+      "FROM ", query,
+      ") tttt WHERE rnr = 1"
+    )
+  }
+
+  query
 }
 
 #' @export
@@ -262,11 +283,34 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
 #' @rdname postgres-tables
 setMethod("dbListFields", c("PqConnection", "character"),
   function(conn, name, ...) {
-    name <- dbQuoteString(conn, name)
-    query <- paste0("SELECT column_name FROM information_schema.columns WHERE table_name = ", name)
-    dbGetQuery(conn, query)[[1]]
+    quoted <- dbQuoteIdentifier(conn, name)
+    id <- dbUnquoteIdentifier(conn, quoted)[[1]]@name
+
+    list_fields(conn, id)
   }
 )
+
+#' @export
+#' @rdname postgres-tables
+setMethod("dbListFields", c("PqConnection", "Id"),
+  function(conn, name, ...) {
+    list_fields(conn, name@name)
+  }
+)
+
+list_fields <- function(conn, id) {
+  query <- find_table(conn, id, "columns", only_first = TRUE)
+  query <- paste0(
+    "SELECT column_name FROM ",
+    query, " ",
+    "ORDER BY ordinal_position"
+  )
+  fields <- dbGetQuery(conn, query)[[1]]
+  if (length(fields) == 0) {
+    stop("Table ", name, " not found.", call. = FALSE)
+  }
+  fields
+}
 
 #' @export
 #' @inheritParams DBI::dbListObjects
