@@ -200,7 +200,7 @@ setMethod("dbListTables", "PqConnection", function(conn, ...) {
   query <- paste0(
     "SELECT table_name FROM INFORMATION_SCHEMA.tables ",
     "WHERE ",
-    "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')"
+    "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')"
   )
   dbGetQuery(conn, query)[[1]]
 })
@@ -245,7 +245,7 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       "(SELECT *, generate_subscripts(schemas, 1) AS nr FROM ",
       "(SELECT current_schemas(true) AS schemas) ",
       "t) ",
-      "tt) ",
+      "tt WHERE schemas[nr] <> 'pg_catalog') ",
       "ttt"
     )
   }
@@ -321,7 +321,7 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
     query <- paste0(
       "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
       "WHERE ",
-      "(table_schema = ANY(current_schemas(false)) OR table_type = 'LOCAL TEMPORARY')\n",
+      "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
       "UNION ALL\n",
       "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
     )
