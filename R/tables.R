@@ -272,9 +272,14 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
 #' @export
 #' @rdname postgres-tables
 setMethod("dbRemoveTable", c("PqConnection", "character"),
-  function(conn, name, ...) {
+  function(conn, name, ..., fail_if_missing = TRUE) {
     name <- dbQuoteIdentifier(conn, name)
-    dbExecute(conn, paste("DROP TABLE ", name))
+    if (fail_if_missing) {
+      extra <- ""
+    } else {
+      extra <- "IF EXISTS "
+    }
+    dbExecute(conn, paste0("DROP TABLE ", extra, name))
     invisible(TRUE)
   }
 )
