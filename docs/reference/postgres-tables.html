@@ -21,12 +21,13 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
-
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Convenience functions for reading/writing DBMS tables — postgres-tables" />
 
 <meta property="og:description" content="Convenience functions for reading/writing DBMS tables" />
@@ -40,8 +41,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-
-
 
 
   </head>
@@ -131,7 +130,8 @@
 <span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
-<span class='fu'>dbRemoveTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'>dbRemoveTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>,
+  <span class='kw'>fail_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'>dbListFields</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
@@ -212,6 +212,11 @@ SQL string.</p></td>
       <th>check.names</th>
       <td><p>If <code>TRUE</code>, the default, column names will be
 converted to valid R identifiers.</p></td>
+    </tr>
+    <tr>
+      <th>fail_if_missing</th>
+      <td><p>If <code>FALSE</code>, <code>dbRemoveTable()</code> succeeds if the
+table doesn't exist.</p></td>
     </tr>
     <tr>
       <th>prefix</th>
