@@ -10,6 +10,27 @@ setClass("PqConnection",
   slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame")
 )
 
+# format()
+#' @export
+#' @rdname PqConnection-class
+format.PqConnection <- function(x, ...) {
+  if (dbIsValid(x)) {
+    info <- dbGetInfo(x)
+
+    if (info$host == "") {
+      host <- "socket"
+    } else {
+      host <- paste0(info$host, ":", info$port)
+    }
+
+    details <- paste0(info$dbname, "@", host)
+  } else {
+    details <- "DISCONNECTED"
+  }
+
+  paste0("<PqConnection> ", details)
+}
+
 # show()
 #' @export
 #' @rdname PqConnection-class

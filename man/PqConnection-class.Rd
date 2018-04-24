@@ -3,11 +3,14 @@
 \docType{class}
 \name{PqConnection-class}
 \alias{PqConnection-class}
+\alias{format.PqConnection}
 \alias{show,PqConnection-method}
 \alias{dbIsValid,PqConnection-method}
 \alias{dbGetInfo,PqConnection-method}
 \title{PqConnection and methods.}
 \usage{
+\method{format}{PqConnection}(x, ...)
+
 \S4method{show}{PqConnection}(object)
 
 \S4method{dbIsValid}{PqConnection}(dbObj, ...)
