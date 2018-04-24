@@ -271,6 +271,8 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
 
 #' @export
 #' @rdname postgres-tables
+#' @param fail_if_missing If `FALSE`, `dbRemoveTable()` succeeds if the
+#'   table doesn't exist.
 setMethod("dbRemoveTable", c("PqConnection", "character"),
   function(conn, name, ..., fail_if_missing = TRUE) {
     name <- dbQuoteIdentifier(conn, name)

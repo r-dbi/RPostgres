@@ -30,7 +30,8 @@
 
 \S4method{dbExistsTable}{PqConnection,Id}(conn, name, ...)
 
-\S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...)
+\S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...,
+  fail_if_missing = TRUE)
 
 \S4method{dbListFields}{PqConnection,character}(conn, name, ...)
 
@@ -86,6 +87,9 @@ SQL string.}
 
 \item{check.names}{If \code{TRUE}, the default, column names will be
 converted to valid R identifiers.}
+
+\item{fail_if_missing}{If \code{FALSE}, \code{dbRemoveTable()} succeeds if the
+table doesn't exist.}
 
 \item{prefix}{A fully qualified path in the database's namespace, or \code{NULL}.
 This argument will be processed with \code{\link[=dbUnquoteIdentifier]{dbUnquoteIdentifier()}}.
