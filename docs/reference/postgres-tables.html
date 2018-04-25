@@ -114,7 +114,7 @@
   <span class='kw'>field.types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>sqlData</span>(<span class='no'>con</span>, <span class='no'>value</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>sqlData</span>(<span class='no'>con</span>, <span class='no'>value</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'>dbReadTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>,
@@ -162,7 +162,7 @@ just any valid bare table name.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments used by individual methods.</p></td>
+      <td><p>Ignored.</p></td>
     </tr>
     <tr>
       <th>row.names</th>
