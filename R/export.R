@@ -5,6 +5,9 @@
 #   paste0("#' @exportMethod ", ., "\nNULL\n", collapse = "\n") %>%
 #   cat(file = "R/export.R")
 
+#' @exportMethod dbAppendTable
+NULL
+
 #' @exportMethod dbBegin
 NULL
 
@@ -24,6 +27,9 @@ NULL
 NULL
 
 #' @exportMethod dbConnect
+NULL
+
+#' @exportMethod dbCreateTable
 NULL
 
 #' @exportMethod dbDataType

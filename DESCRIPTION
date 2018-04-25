@@ -22,7 +22,7 @@ Depends:
 Imports: 
     bit64,
     blob (>= 1.1.1),
-    DBI (>= 0.8),
+    DBI (>= 0.8.0.9001),
     hms,
     methods,
     Rcpp (>= 0.11.4.2),

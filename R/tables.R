@@ -65,8 +65,11 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (overwrite && append) {
       stopc("overwrite and append cannot both be TRUE")
     }
+    if (!is.null(field.types) && !(is.character(field.types) && !is.null(names(field.types)) && !anyDuplicated(names(field.types)))) {
+      stopc("`field.types` must be a named character vector with unique names, or NULL")
+    }
     if (append && !is.null(field.types)) {
-      stopc("Cannot specify field.types with append = TRUE")
+      stopc("Cannot specify `field.types` with `append = TRUE`")
     }
 
     found <- dbExistsTable(conn, name)
@@ -78,22 +81,31 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       dbRemoveTable(conn, name)
     }
 
+    value <- sqlRownamesToColumn(value, row.names)
+
     if (!found || overwrite) {
-      if (!is.null(field.types)) {
-        if (is.null(names(field.types)))
-          types <- structure(field.types, .Names = colnames(value))
-        else
-          types <- field.types
+      if (is.null(field.types)) {
+        combined_field_types <- lapply(value, dbDataType, dbObj = conn)
       } else {
-        types <- value
+        combined_field_types <- rep("", length(value))
+        names(combined_field_types) <- names(value)
+        field_types_idx <- match(names(field.types), names(combined_field_types))
+        stopifnot(!any(is.na(field_types_idx)))
+        combined_field_types[field_types_idx] <- field.types
+        values_idx <- setdiff(seq_along(value), field_types_idx)
+        combined_field_types[values_idx] <- lapply(value[values_idx], dbDataType, dbObj = conn)
       }
-      sql <- sqlCreateTable(conn, name, if (is.null(field.types)) value else types,
-        row.names = row.names, temporary = temporary)
-      dbExecute(conn, sql)
+
+      dbCreateTable(
+        conn = conn,
+        name = name,
+        fields = combined_field_types,
+        temporary = temporary
+      )
     }
 
     if (nrow(value) > 0) {
-      value <- sqlData(conn, value, row.names = row.names, copy = copy)
+      value <- sqlData(conn, value, row.names = FALSE, copy = copy)
       if (!copy) {
         sql <- sqlAppendTable(conn, name, value)
         dbExecute(conn, sql)
@@ -115,8 +127,9 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
 #' @export
 #' @inheritParams DBI::sqlRownamesToColumn
+#' @param ... Ignored.
 #' @rdname postgres-tables
-setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, copy = TRUE) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...) {
   if (is.null(row.names)) row.names <- FALSE
   value <- sqlRownamesToColumn(value, row.names)
 

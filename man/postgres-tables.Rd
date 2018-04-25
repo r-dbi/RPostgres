@@ -19,7 +19,7 @@
   ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, temporary = FALSE, copy = TRUE)
 
-\S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, copy = TRUE)
+\S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
   check.names = TRUE, row.names = FALSE)
@@ -49,7 +49,7 @@ just any valid bare table name.}
 
 \item{value}{A data.frame to write to the database.}
 
-\item{...}{Other arguments used by individual methods.}
+\item{...}{Ignored.}
 
 \item{row.names}{Either \code{TRUE}, \code{FALSE}, \code{NA} or a string.
 

@@ -48,6 +48,7 @@ with_database_connection({
           Species = as.character(Species)
         )
         field.types <- c("real", "double precision", "numeric", "bigint", "text")
+        names(field.types) <- names(iris2)
 
         dbWriteTable(con, "iris", iris2, field.types = field.types, temporary = TRUE)
 
@@ -75,6 +76,7 @@ with_database_connection({
         iris2       <- transform(iris, Petal.Width = as.integer(Petal.Width),
           Species = as.character(Species))
         field.types <- c("real", "double precision", "numeric", "bigint", "text")
+        names(field.types) <- names(iris2)
 
         dbWriteTable(con, "iris", iris2, field.types = field.types, temporary = TRUE)
         expect_error(
