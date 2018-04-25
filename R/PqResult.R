@@ -121,16 +121,19 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
   finalize_types(ret, res@conn)
 })
 
-convert_bigint <- function(ret, bigint) {
-  if (bigint == "integer64") return(ret)
-  fun <- switch(bigint,
+convert_bigint <- function(df, bigint) {
+  if (bigint == "integer64") return(df)
+  is_int64 <- which(vlapply(df, inherits, "integer64"))
+  if (length(is_int64) == 0) return(df)
+
+  as_bigint <- switch(bigint,
     integer = as.integer,
     numeric = as.numeric,
     character = as.character
   )
-  is_int64 <- which(vlapply(ret, inherits, "integer64"))
-  ret[is_int64] <- lapply(ret[is_int64], fun)
-  ret
+
+  df[is_int64] <- suppressWarnings(lapply(df[is_int64], as_bigint))
+  df
 }
 
 finalize_types <- function(ret, conn) {
