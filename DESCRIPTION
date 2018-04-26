@@ -50,6 +50,7 @@ Collate:
     'RcppExports.R'
     'default.R'
     'export.R'
+    'names.R'
     'quote.R'
     'tables.R'
     'transactions.R'
