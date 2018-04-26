@@ -44,7 +44,9 @@ setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
 #' @export
 setMethod("dbColumnInfo", "PqResult", function(res, ...) {
   rci <- result_column_info(res@ptr)
-  cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
+  rci <- cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
+  rci$name <- tidy_names(rci$name)
+  rci
 })
 
 #' Execute a SQL statement on a database connection
@@ -118,7 +120,8 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
   if (trunc(n) != n) stopc("n must be a whole number")
   ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
   ret <- convert_bigint(ret, res@bigint)
-  finalize_types(ret, res@conn)
+  ret <- finalize_types(ret, res@conn)
+  set_tidy_names(ret)
 })
 
 convert_bigint <- function(df, bigint) {
