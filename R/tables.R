@@ -284,15 +284,19 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
 
 #' @export
 #' @rdname postgres-tables
+#' @param temporary If `TRUE`, only temporary tables are considered.
 #' @param fail_if_missing If `FALSE`, `dbRemoveTable()` succeeds if the
 #'   table doesn't exist.
 setMethod("dbRemoveTable", c("PqConnection", "character"),
-  function(conn, name, ..., fail_if_missing = TRUE) {
+  function(conn, name, ..., temporary = FALSE, fail_if_missing = TRUE) {
     name <- dbQuoteIdentifier(conn, name)
     if (fail_if_missing) {
       extra <- ""
     } else {
       extra <- "IF EXISTS "
+    }
+    if (temporary) {
+      extra <- paste0(extra, "pg_temp.")
     }
     dbExecute(conn, paste0("DROP TABLE ", extra, name))
     invisible(TRUE)

@@ -31,7 +31,7 @@
 \S4method{dbExistsTable}{PqConnection,Id}(conn, name, ...)
 
 \S4method{dbRemoveTable}{PqConnection,character}(conn, name, ...,
-  fail_if_missing = TRUE)
+  temporary = FALSE, fail_if_missing = TRUE)
 
 \S4method{dbListFields}{PqConnection,character}(conn, name, ...)
 
