@@ -124,3 +124,6 @@ NULL
 
 #' @exportMethod dbWriteTable
 NULL
+
+#' @export Id
+NULL
