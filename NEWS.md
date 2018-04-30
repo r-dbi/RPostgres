@@ -6,7 +6,7 @@
 # RPostgres 1.1.0 (2018-04-04)
 
 - Breaking change: `dbGetException()` is no longer reexported from DBI.
-- Make "typname" information available after `dbFetch()` and `dbGetQuery()`. Values of unknown type are returned as character vector of class `"pq_xxx"`, where `"xxx"` is the "typname" returned from PostgreSQL. In particular, `JSON` and `JSONB` values now have class `"pq_json"` and `"pq_jsonb"`, respectively. The return value of `dbColumnInfo()` gains new columns `".oid"` (`integer`), `". known"` (`logical`) and `".typname"` (`character`)(#114, @etiennebr).
+- Make "typname" information available after `dbFetch()` and `dbGetQuery()`. Values of unknown type are returned as character vector of class `"pq_xxx"`, where `"xxx"` is the "typname" returned from PostgreSQL. In particular, `JSON` and `JSONB` values now have class `"pq_json"` and `"pq_jsonb"`, respectively. The return value of `dbColumnInfo()` gains new columns `".oid"` (`integer`), `". known"` (`logical`) and `".typname"` (`character`) (#114, @etiennebr).
 - Values of class `"integer64"` are now supported for `dbWriteTable()` and `dbBind()` (#178).
 - Schema support, as specified by DBI: `dbListObjects()`, `dbUnquoteIdentifier()` and `Id()`.
 - Names in the `x` argument to `dbQuoteIdentifier()` are preserved in the output (r-lib/DBI#173).
