@@ -1,6 +1,6 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
-#' @description `dbWriteTable()` executes several SQL statements that
+#' @description [dbWriteTable()] executes several SQL statements that
 #' create/overwrite a table and fill it with values.
 #' \pkg{RPostgres} does not use parameterised queries to insert rows because
 #' benchmarks revealed that this was considerably slower than using a single
@@ -182,18 +182,18 @@ format_keep_na <- function(x, ...) {
   ret
 }
 
-#' @description `dbAppendTable()` is overridden because \pkg{RPostgres}
+#' @description [dbAppendTable()] is overridden because \pkg{RPostgres}
 #' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", signature("DBIConnection"),
-  function(conn, name, values, ..., row.names = NULL) {
+  function(conn, name, value, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
     query <- sqlAppendTableTemplate(
       con = conn,
       table = name,
-      values = values,
+      values = value,
       row.names = row.names,
       prefix = "$",
       pattern = "1",

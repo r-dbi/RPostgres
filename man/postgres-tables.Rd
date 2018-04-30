@@ -22,7 +22,7 @@
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{DBIConnection}(conn, name, values, ...,
+\S4method{dbAppendTable}{DBIConnection}(conn, name, value, ...,
   row.names = NULL)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
@@ -51,7 +51,8 @@
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.}
 
-\item{value}{A data.frame to write to the database.}
+\item{value}{A data.frame to write to the database, or (for \code{dbAppendTable()})
+a named character vector of SQL types.}
 
 \item{...}{Ignored.}
 
@@ -96,13 +97,13 @@ This argument will be processed with \code{\link[=dbUnquoteIdentifier]{dbUnquote
 If given the method will return all objects accessible through this prefix.}
 }
 \description{
-\code{dbWriteTable()} executes several SQL statements that
+\code{\link[=dbWriteTable]{dbWriteTable()}} executes several SQL statements that
 create/overwrite a table and fill it with values.
 \pkg{RPostgres} does not use parameterised queries to insert rows because
 benchmarks revealed that this was considerably slower than using a single
 SQL string.
 
-\code{dbAppendTable()} is overridden because \pkg{RPostgres}
+\code{\link[=dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres}
 uses placeholders of the form \code{$1}, \code{$2} etc. instead of \code{?}.
 }
 \examples{
