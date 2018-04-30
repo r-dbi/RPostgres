@@ -1,5 +1,11 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
+#' @description `dbWriteTable()` executes several SQL statements that
+#' create/overwrite a table and fill it with values.
+#' \pkg{RPostgres} does not use parameterised queries to insert rows because
+#' benchmarks revealed that this was considerably slower than using a single
+#' SQL string.
+#'
 #' @param conn a [PqConnection-class] object, produced by
 #'   [DBI::dbConnect()]
 #' @param name a character string specifying a table name. Names will be
@@ -19,9 +25,6 @@
 #'   all postgres servers (e.g. Amazon's redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
 #'
-#'   RPostgres does not use parameterised queries to insert rows because
-#'   benchmarks revealed that this was considerably slower than using a single
-#'   SQL string.
 #' @examples
 #' # For running the examples on systems without PostgreSQL connection:
 #' run <- postgresHasDefault()
@@ -179,6 +182,27 @@ format_keep_na <- function(x, ...) {
   ret
 }
 
+#' @description `dbAppendTable()` is overridden because \pkg{RPostgres}
+#' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
+#' @rdname postgres-tables
+#' @export
+setMethod("dbAppendTable", signature("DBIConnection"),
+  function(conn, name, values, ..., row.names = NULL) {
+    stopifnot(is.null(row.names))
+
+    query <- sqlAppendTableTemplate(
+      con = conn,
+      table = name,
+      values = values,
+      row.names = row.names,
+      prefix = "$",
+      pattern = "1",
+      ...
+    )
+    values <- sqlRownamesToColumn(values, row.names)
+    dbExecute(conn, query, param = unname(as.list(values)))
+  }
+)
 
 #' @export
 #' @param check.names If `TRUE`, the default, column names will be
