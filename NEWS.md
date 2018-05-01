@@ -1,3 +1,18 @@
+# RPostgres 1.1.0.9001 (2018-05-01)
+
+- `Id()` is reexported from DBI.
+- Support `temporary` argument in `dbRemoveTable()` (default: `FALSE`) (r-dbi/DBI#141).
+- Data frames resulting from a query always have unique non-empty column names (r-dbi/DBItest#137).
+- The `field.types` argument to `dbWriteTable()` now must be named.
+- Using `dbCreateTable()` and `dbAppendTable()` internally (r-dbi/DBI#74).
+- New argument `fail_if_missing` (default: `TRUE`) to `dbRemoveTable()` (r-dbi/DBI#197).
+- Implement `format()` method for `PqConnection` (r-dbi/DBI#163).
+- Reexporting `DBI::dbIsReadOnly()` and `DBI::dbCanConnect()`.
+- Using `current_schemas(true)` also in `dbListObjects()` and `dbListTables()`, for consistency with `dbListFields()`. Objects from the `pg_catalog` schema are still excluded.
+- `dbListFields()` doesn't list fields from tables found in the `pg_catalog` schema.
+- The `dbListFields()` method now works correctly if the `name` argument is a quoted identifier or of class `Id`, and throws an error if the table is not found (r-dbi/DBI#75).
+
+
 # RPostgres 1.1.0.9000 (2018-04-20)
 
 - Same as previous version.
