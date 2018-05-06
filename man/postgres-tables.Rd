@@ -51,8 +51,7 @@
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.}
 
-\item{value}{A data.frame to write to the database, or (for \code{dbAppendTable()})
-a named character vector of SQL types.}
+\item{value}{A data.frame to write to the database.}
 
 \item{...}{Ignored.}
 
