@@ -55,7 +55,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.1</span>
       </span>
     </div>
 
@@ -98,6 +98,34 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1-1-1-2018-05-05" class="section level1">
+<h1 class="page-header">
+<a href="#rpostgres-1-1-1-2018-05-05" class="anchor"></a>RPostgres 1.1.1 (2018-05-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Now imports DBI 1.0.0.</li>
+</ul>
+</div>
+    <div id="rpostgres-1-1-0-9001-2018-05-01" class="section level1">
+<h1 class="page-header">
+<a href="#rpostgres-1-1-0-9001-2018-05-01" class="anchor"></a>RPostgres 1.1.0.9001 (2018-05-01)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="http://www.rdocumentation.org/packages/DBI/topics/Id">Id()</a></code> is reexported from DBI.</li>
+<li>Support <code>temporary</code> argument in <code>dbRemoveTable()</code> (default: <code>FALSE</code>) (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/141'>#141</a>).</li>
+<li>Data frames resulting from a query always have unique non-empty column names (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/137'>#137</a>).</li>
+<li>The <code>field.types</code> argument to <code>dbWriteTable()</code> now must be named.</li>
+<li>Using <code>dbCreateTable()</code> and <code>dbAppendTable()</code> internally (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/74'>#74</a>).</li>
+<li>New argument <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code>dbRemoveTable()</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/197'>#197</a>).</li>
+<li>Implement <code>format()</code> method for <code>PqConnection</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/163'>#163</a>).</li>
+<li>Reexporting <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbIsReadOnly">DBI::dbIsReadOnly()</a></code> and <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbCanConnect">DBI::dbCanConnect()</a></code>.</li>
+<li>Using <code>current_schemas(true)</code> also in <code>dbListObjects()</code> and <code>dbListTables()</code>, for consistency with <code>dbListFields()</code>. Objects from the <code>pg_catalog</code> schema are still excluded.</li>
+<li>
+<code>dbListFields()</code> doesn’t list fields from tables found in the <code>pg_catalog</code> schema.</li>
+<li>The <code>dbListFields()</code> method now works correctly if the <code>name</code> argument is a quoted identifier or of class <code>Id</code>, and throws an error if the table is not found (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/75'>#75</a>).</li>
+</ul>
+</div>
     <div id="rpostgres-1-1-0-9000-2018-04-20" class="section level1">
 <h1 class="page-header">
 <a href="#rpostgres-1-1-0-9000-2018-04-20" class="anchor"></a>RPostgres 1.1.0.9000 (2018-04-20)<small> Unreleased </small>
@@ -112,9 +140,9 @@
 </h1>
 <ul>
 <li>Breaking change: <code>dbGetException()</code> is no longer reexported from DBI.</li>
-<li>Make “typname” information available after <code>dbFetch()</code> and <code>dbGetQuery()</code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code>dbColumnInfo()</code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>)(<a href='https://github.com/r-dbi/RPostgres/issues/114'>#114</a>, <a href='http://github.com/etiennebr'>@etiennebr</a>).</li>
+<li>Make “typname” information available after <code>dbFetch()</code> and <code>dbGetQuery()</code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code>dbColumnInfo()</code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>) (<a href='https://github.com/r-dbi/RPostgres/issues/114'>#114</a>, <a href='http://github.com/etiennebr'>@etiennebr</a>).</li>
 <li>Values of class <code>"integer64"</code> are now supported for <code>dbWriteTable()</code> and <code>dbBind()</code> (<a href='https://github.com/r-dbi/RPostgres/issues/178'>#178</a>).</li>
-<li>Schema support, as specified by DBI: <code>dbListObjects()</code>, <code>dbUnquoteIdentifier()</code> and <code>Id()</code>.</li>
+<li>Schema support, as specified by DBI: <code>dbListObjects()</code>, <code>dbUnquoteIdentifier()</code> and <code><a href="http://www.rdocumentation.org/packages/DBI/topics/Id">Id()</a></code>.</li>
 <li>Names in the <code>x</code> argument to <code>dbQuoteIdentifier()</code> are preserved in the output (r-lib/DBI<a href='https://github.com/r-dbi/RPostgres/issues/173'>#173</a>).</li>
 <li>All generics defined in DBI (e.g., <code>dbGetQuery()</code>) are now exported, even if the package doesn’t provide a custom implementation (<a href='https://github.com/r-dbi/RPostgres/issues/168'>#168</a>).</li>
 <li>Replace non-portable <code>timegm()</code> with private implementation.</li>
@@ -154,6 +182,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rpostgres-1-1-1-2018-05-05">1.1.1</a></li>
+        <li><a href="#rpostgres-1-1-0-9001-2018-05-01">1.1.0.9001</a></li>
         <li><a href="#rpostgres-1-1-0-9000-2018-04-20">1.1.0.9000</a></li>
         <li><a href="#rpostgres-1-1-0-2018-04-04">1.1.0</a></li>
         <li><a href="#rpostgres-1-0-4-2017-12-20">1.0-4</a></li>
