@@ -12,6 +12,7 @@ PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql
   cache(pSpec_),
   complete_(false),
   ready_(false),
+  data_ready_(false),
   nrows_(0),
   rows_affected_(0),
   group_(0),
@@ -329,6 +330,7 @@ bool PqResultImpl::bind_row() {
     PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
                         &lengths[0], &formats[0], 0) :
     PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
+  data_ready_ = false;
 
   if (!success)
     conn_stop("Failed to send query");
@@ -379,6 +381,35 @@ bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
   if (pRes_) PQclear(pRes_);
+
+  // Check user interrupts while waiting for the data to be ready
+  if (!data_ready_) {
+    int socket, ret;
+    fd_set input;
+    timeval timeout = {0, 0};
+
+    socket = PQsocket(pConn_);
+    if (socket < 0) {
+      stop("Failed to get connection socket");
+    }
+    FD_ZERO(&input);
+    FD_SET(socket, &input);
+
+    do {
+      timeout.tv_sec = 1;
+      ret = select(socket + 1, &input, NULL, NULL, &timeout);
+      if (ret == 0) {
+        checkUserInterrupt();
+      } else if(ret < 0) {
+        stop("select() on the connection failed");
+      }
+      if (!PQconsumeInput(pConn_)) {
+        stop("Failed to consume input from the server");
+      }
+    } while (PQisBusy(pConn_));
+    data_ready_ = true;
+  }
+
   pRes_ = PQgetResult(pConn_);
 
   // We're done, but we need to call PQgetResult until it returns NULL

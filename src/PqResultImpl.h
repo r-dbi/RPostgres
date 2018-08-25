@@ -37,6 +37,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   // State
   bool complete_;
   bool ready_;
+  bool data_ready_;
   int nrows_;
   int rows_affected_;
   List params_;

@@ -1,3 +1,7 @@
+# RPostgres 1.1.2 (2018-08-25)
+
+- Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries. 
+
 # RPostgres 1.1.1 (2018-05-05)
 
 - Add support for `bigint` argument to `dbConnect()`, supported values are `"integer64"`, `"integer"`, `"numeric"` and `"character"`. Large integers are returned as values of that type (r-dbi/DBItest#133).
