@@ -180,7 +180,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   params <- factor_to_string(params, warn = TRUE)
   params <- fix_posixt(params)
   params <- difftime_to_hms(params)
-  params <- fix_whole_numbers(params)
+  params <- fix_numeric(params)
   params <- prepare_for_binding(params)
   result_bind(res@ptr, params)
   invisible(res)
@@ -210,11 +210,11 @@ difftime_to_hms <- function(value) {
   value
 }
 
-fix_whole_numbers <- function(value) {
-  is_whole_number <- vlapply(value, is_whole_number_vector)
-  value[is_whole_number] <- lapply(
-    value[is_whole_number],
-    function(x) format_keep_na(x, scientific = FALSE, na.encode = FALSE)
+fix_numeric <- function(value) {
+  is_numeric <- vlapply(value, is.numeric)
+  value[is_numeric] <- lapply(
+    value[is_numeric],
+    function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE)
   )
   value
 }

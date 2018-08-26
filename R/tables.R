@@ -158,7 +158,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
     }
   )
 
-  value <- fix_whole_numbers(value)
+  value <- fix_numeric(value)
 
   value[is_object] <- lapply(value[is_object], as.character)
   value
