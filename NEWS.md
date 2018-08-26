@@ -1,3 +1,9 @@
+# RPostgres 1.1.1.9000
+
+- Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
+- Fix binding for whole numbers and `POSIXt` timestamps (#191).
+
+
 # RPostgres 1.1.1 (2018-05-05)
 
 - Add support for `bigint` argument to `dbConnect()`, supported values are `"integer64"`, `"integer"`, `"numeric"` and `"character"`. Large integers are returned as values of that type (r-dbi/DBItest#133).
