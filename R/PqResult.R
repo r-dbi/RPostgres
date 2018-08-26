@@ -178,8 +178,9 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   }
 
   params <- factor_to_string(params, warn = TRUE)
-  params <- posixlt_to_posixct(params)
+  params <- fix_posixt(params)
   params <- difftime_to_hms(params)
+  params <- fix_whole_numbers(params)
   params <- prepare_for_binding(params)
   result_bind(res@ptr, params)
   invisible(res)
@@ -194,9 +195,12 @@ factor_to_string <- function(value, warn = FALSE) {
   value
 }
 
-posixlt_to_posixct <- function(value) {
-  is_posixlt <- vlapply(value, inherits, "POSIXlt")
-  value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
+fix_posixt <- function(value) {
+  is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
+  withr::with_options(
+    list(digits.secs = 6),
+    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, usetz = T))
+  )
   value
 }
 
@@ -206,10 +210,18 @@ difftime_to_hms <- function(value) {
   value
 }
 
+fix_whole_numbers <- function(value) {
+  is_whole_number <- vlapply(value, is_whole_number_vector)
+  value[is_whole_number] <- lapply(
+    value[is_whole_number],
+    function(x) format_keep_na(x, scientific = FALSE, na.encode = FALSE)
+  )
+  value
+}
+
 prepare_for_binding <- function(value) {
   is_list <- vlapply(value, is.list)
-  value[!is_list] <- lapply(value[!is_list], as.character)
-  value[!is_list] <- lapply(value[!is_list], enc2utf8)
+  value[!is_list] <- lapply(value[!is_list], function(x) enc2utf8(as.character(x)))
   value[is_list] <- lapply(value[is_list], vcapply, function(x) {
     if (is.null(x)) NA_character_
     else if (is.raw(x)) {
