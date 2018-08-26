@@ -188,8 +188,8 @@ setMethod("dbAppendTable", signature("DBIConnection"),
       pattern = "1",
       ...
     )
-    values <- sqlRownamesToColumn(value, row.names)
-    dbExecute(conn, query, param = unname(as.list(value)))
+
+    dbExecute(conn, query, params = unname(as.list(value)))
   }
 )
 
