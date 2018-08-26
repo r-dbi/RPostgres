@@ -348,7 +348,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
 List PqResultImpl::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
-  PqDataFrame data(this, cache.names_, n_max, cache.types_, cache.oids_);
+  PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
     warning("Don't need to call dbFetch() for statements, only for queries");
@@ -426,7 +426,7 @@ bool PqResultImpl::step_done() {
 }
 
 List PqResultImpl::peek_first_row() {
-  PqDataFrame data(this, cache.names_, 1, cache.types_, cache.oids_);
+  PqDataFrame data(this, cache.names_, 1, cache.types_);
 
   if (!complete_)
     data.set_col_values();
