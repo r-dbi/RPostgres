@@ -384,29 +384,7 @@ bool PqResultImpl::step_run() {
 
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
-    int socket, ret;
-    fd_set input;
-    timeval timeout = {0, 0};
-
-    socket = PQsocket(pConn_);
-    if (socket < 0) {
-      stop("Failed to get connection socket");
-    }
-    FD_ZERO(&input);
-    FD_SET(socket, &input);
-
-    do {
-      timeout.tv_sec = 1;
-      ret = select(socket + 1, &input, NULL, NULL, &timeout);
-      if (ret == 0) {
-        checkUserInterrupt();
-      } else if(ret < 0) {
-        stop("select() on the connection failed");
-      }
-      if (!PQconsumeInput(pConn_)) {
-        stop("Failed to consume input from the server");
-      }
-    } while (PQisBusy(pConn_));
+    wait_for_data();
     data_ready_ = true;
   }
 
@@ -483,4 +461,35 @@ void PqResultImpl::add_oids(List& data) const {
 
 PGresult* PqResultImpl::get_result() {
   return pRes_;
+}
+
+// checks user interrupts while waiting for the first row of data to be ready
+// see https://www.postgresql.org/docs/current/static/libpq-async.html
+void PqResultImpl::wait_for_data() {
+  int socket, ret;
+  fd_set input;
+  timeval timeout = {0, 0};
+
+  socket = PQsocket(pConn_);
+  if (socket < 0) {
+    stop("Failed to get connection socket");
+  }
+  FD_ZERO(&input);
+  FD_SET(socket, &input);
+
+  do {
+    // wait for any traffic on the db connection socket but no longet then 1s
+    timeout.tv_sec = 1;
+    ret = select(socket + 1, &input, NULL, NULL, &timeout);
+    if (ret == 0) {
+      // timeout reached - check user interrupt
+      checkUserInterrupt();
+    } else if(ret < 0) {
+      stop("select() on the connection failed");
+    }
+    // update db connection state using data available on the socket
+    if (!PQconsumeInput(pConn_)) {
+      stop("Failed to consume input from the server");
+    }
+  } while (PQisBusy(pConn_)); // check if PQgetResult will still block
 }
