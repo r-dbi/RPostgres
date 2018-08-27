@@ -1,3 +1,8 @@
+# RPostgres 1.1.1.9001
+
+- Avoid aggressive rounding when passing numeric values to the database (#184).
+
+
 # RPostgres 1.1.1.9000
 
 - Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
