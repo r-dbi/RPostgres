@@ -6,7 +6,6 @@ Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
     person("Kirill", "M\u00fcller", role = c("aut", "cre"), email = "krlmlr+r@mailbox.org", comment = c(ORCID = "0000-0002-1416-3412")),
-    person("Mateusz", "\u017b\u00f3\u0142tak", role = c("ctb")),
     person("RStudio", role = "cph"),
     person("R Consortium", role = "fnd"),
     person("Tomoaki", "Nishiyama", role = "ctb",

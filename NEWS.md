@@ -1,6 +1,6 @@
 # RPostgres 1.1.2 (2018-08-25)
 
-- Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries. 
+- Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries (@zozlak). 
 
 # RPostgres 1.1.1 (2018-05-05)
 
