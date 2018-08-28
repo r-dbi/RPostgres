@@ -8,8 +8,8 @@
 <title>'Rcpp' Interface to 'PostgreSQL' • RPostgres</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="'Rcpp' Interface to 'PostgreSQL'">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="'Rcpp' Interface to 'PostgreSQL'">
 <meta property="og:description" content="
     Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' &lt;https://www.postgresql.org/&gt;,
     an open-source relational database.">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.1.9001</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rpostgres" class="anchor"></a>RPostgres</h1></div>
 
-<p>RPostgres is an DBI-compliant interface to the postgres database. It’s a ground-up rewrite using C++ and Rcpp. Compared to RPostgresSQL, it:</p>
+<p>RPostgres is an DBI-compliant interface to the postgres database. It’s a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:</p>
 <ul>
 <li><p>Has full support for parameterised queries via <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery">dbSendQuery()</a></code>, and <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbBind">dbBind()</a></code>.</p></li>
 <li><p>Automatically cleans up open connections and result sets, ensuring that you don’t need to worry about leaking connections or memory.</p></li>
@@ -82,54 +82,54 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install the latest RPostgres release from CRAN:</span>
-<span class="kw">install.packages</span>(<span class="st">"RPostgres"</span>)
-
-<span class="co"># Or the the development version from GitHub:</span>
-<span class="co"># install.packages("remotes")</span>
-remotes::<span class="kw">install_github</span>(<span class="st">"r-dbi/RPostgres"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Install the latest RPostgres release from CRAN:</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">install.packages</span>(<span class="st">"RPostgres"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Or the the development version from GitHub:</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co"># install.packages("remotes")</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">remotes<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"r-dbi/RPostgres"</span>)</a></code></pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
-<span class="co"># Connect to the default postgres database</span>
-con &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RPostgres::<span class="kw"><a href="reference/Postgres.html">Postgres</a></span>())
-
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(con)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbWriteTable">dbWriteTable</a></span>(con, <span class="st">"mtcars"</span>, mtcars)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(con)
-
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListFields">dbListFields</a></span>(con, <span class="st">"mtcars"</span>)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbReadTable">dbReadTable</a></span>(con, <span class="st">"mtcars"</span>)
-
-<span class="co"># You can fetch all results:</span>
-res &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbFetch">dbFetch</a></span>(res)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbClearResult">dbClearResult</a></span>(res)
-
-<span class="co"># Or a chunk at a time</span>
-res &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)
-while(!<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbHasCompleted">dbHasCompleted</a></span>(res)){
-  chunk &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbFetch">dbFetch</a></span>(res, <span class="dt">n =</span> <span class="dv">5</span>)
-  <span class="kw">print</span>(<span class="kw">nrow</span>(chunk))
-}
-<span class="co"># Clear the result</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbClearResult">dbClearResult</a></span>(res)
-
-<span class="co"># Disconnect from the database</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbDisconnect">dbDisconnect</a></span>(con)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(DBI)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Connect to the default postgres database</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgres/topics/Postgres">Postgres</a></span>())</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(con)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbWriteTable">dbWriteTable</a></span>(con, <span class="st">"mtcars"</span>, mtcars)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListTables">dbListTables</a></span>(con)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbListFields">dbListFields</a></span>(con, <span class="st">"mtcars"</span>)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbReadTable">dbReadTable</a></span>(con, <span class="st">"mtcars"</span>)</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co"># You can fetch all results:</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">res &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbFetch">dbFetch</a></span>(res)</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbClearResult">dbClearResult</a></span>(res)</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co"># Or a chunk at a time</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">res &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="cf">while</span>(<span class="op">!</span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbHasCompleted">dbHasCompleted</a></span>(res)){</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">  chunk &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbFetch">dbFetch</a></span>(res, <span class="dt">n =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">  <span class="kw">print</span>(<span class="kw">nrow</span>(chunk))</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">}</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co"># Clear the result</span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbClearResult">dbClearResult</a></span>(res)</a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co"># Disconnect from the database</span></a>
+<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbDisconnect">dbDisconnect</a></span>(con)</a></code></pre></div>
 </div>
 <div id="connecting-to-a-specific-postgres-instance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-a-specific-postgres-instance" class="anchor"></a>Connecting to a specific Postgres instance</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
-<span class="co"># Connect to a specific postgres database i.e. Heroku</span>
-con &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RPostgres::<span class="kw"><a href="reference/Postgres.html">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, 
-                 <span class="dt">host =</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span>
-                 <span class="dt">port =</span> <span class="dv">5432</span>, <span class="co"># or any other port specified by your DBA</span>
-                 <span class="dt">user =</span> <span class="st">'USERNAME'</span>,
-                 <span class="dt">password =</span> <span class="st">'PASSWORD'</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(DBI)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># Connect to a specific postgres database i.e. Heroku</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgres/topics/Postgres">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                 <span class="dt">host =</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">                 <span class="dt">port =</span> <span class="dv">5432</span>, <span class="co"># or any other port specified by your DBA</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">                 <span class="dt">user =</span> <span class="st">'USERNAME'</span>,</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">                 <span class="dt">password =</span> <span class="st">'PASSWORD'</span>)</a></code></pre></div>
 </div>
 <div id="design-notes" class="section level2">
 <h2 class="hasAnchor">
