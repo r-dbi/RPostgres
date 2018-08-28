@@ -138,15 +138,11 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vlapply(value, is.object)
-  is_posix <- vlapply(value, function(c) inherits(c, "POSIXt"))
   is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
   is_blob <- vlapply(value, function(c) is.list(c))
-  is_whole_number <- vlapply(value, is_whole_number_vector)
 
-  withr::with_options(
-    list(digits.secs = 6),
-    value[is_posix] <- lapply(value[is_posix], function(col) format_keep_na(col, usetz = T))
-  )
+  value <- fix_posixt(value)
+
   value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as.hms(col)))
   value[is_blob] <- lapply(
     value[is_blob],
@@ -162,14 +158,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
     }
   )
 
-  value[is_whole_number] <- lapply(
-    value[is_whole_number],
-    function(x) {
-      is_value <- which(!is.na(x))
-      x[is_value] <- format(x[is_value], scientific = FALSE, na.encode = FALSE)
-      x
-    }
-  )
+  value <- fix_numeric(value)
 
   value[is_object] <- lapply(value[is_object], as.character)
   value
@@ -178,7 +167,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
 format_keep_na <- function(x, ...) {
   is_na <- is.na(x)
   ret <- format(x, ...)
-  ret[is_na] <- NA
+  ret[is_na] <- NA_character_
   ret
 }
 
@@ -199,8 +188,8 @@ setMethod("dbAppendTable", signature("DBIConnection"),
       pattern = "1",
       ...
     )
-    values <- sqlRownamesToColumn(value, row.names)
-    dbExecute(conn, query, param = unname(as.list(value)))
+
+    dbExecute(conn, query, params = unname(as.list(value)))
   }
 )
 

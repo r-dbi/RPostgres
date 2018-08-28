@@ -1,6 +1,18 @@
-# RPostgres 1.1.2 (2018-08-25)
+# RPostgres 1.1.9002
 
 - Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries (@zozlak). 
+
+
+# RPostgres 1.1.1.9001
+
+- Avoid aggressive rounding when passing numeric values to the database (#184).
+
+
+# RPostgres 1.1.1.9000
+
+- Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
+- Fix binding for whole numbers and `POSIXt` timestamps (#191).
+
 
 # RPostgres 1.1.1 (2018-05-05)
 
