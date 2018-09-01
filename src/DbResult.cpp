@@ -4,14 +4,14 @@
 #include "PqResultImpl.h"
 
 
-DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
+DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts) :
   pConn_(pConn)
 {
   pConn->check_connection();
   pConn->set_current_result(this);
 
   try {
-    impl.reset(new PqResultImpl(this, pConn->conn(), sql));
+    impl.reset(new PqResultImpl(this, pConn->conn(), sql, check_interrupts));
   }
   catch (...) {
     pConn->set_current_result(NULL);
@@ -27,9 +27,9 @@ DbResult::~DbResult() {
   } catch (...) {}
 }
 
-DbResult* DbResult::create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement) {
+DbResult* DbResult::create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement, const bool check_interrupts) {
   (void)is_statement;
-  return new DbResult(con, sql);
+  return new DbResult(con, sql, check_interrupts);
 }
 
 void DbResult::bind(const List& params) {

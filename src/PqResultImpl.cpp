@@ -5,7 +5,7 @@
 #include "DbColumnStorage.h"
 #include "PqDataFrame.h"
 
-PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql) :
+PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql, const bool check_interrupts) :
   res(pRes),
   pConn_(pConn),
   pSpec_(prepare(pConn, sql)),
@@ -13,6 +13,7 @@ PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql
   complete_(false),
   ready_(false),
   data_ready_(false),
+  check_interrupts_(check_interrupts),
   nrows_(0),
   rows_affected_(0),
   group_(0),
@@ -330,7 +331,7 @@ bool PqResultImpl::bind_row() {
     PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
                         &lengths[0], &formats[0], 0) :
     PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
-  data_ready_ = false;
+  data_ready_ = !check_interrupts_;
 
   if (!success)
     conn_stop("Failed to send query");
