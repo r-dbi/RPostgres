@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Changelog" />
+
 
 
 <!-- mathjax -->
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.1.9001</span>
       </span>
     </div>
 
@@ -98,40 +101,40 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rpostgres-1-1-1-2018-05-05" class="section level1">
+    <div id="rpostgres-1-1-1-9001" class="section level1">
 <h1 class="page-header">
-<a href="#rpostgres-1-1-1-2018-05-05" class="anchor"></a>RPostgres 1.1.1 (2018-05-05)<small> Unreleased </small>
+<a href="#rpostgres-1-1-1-9001" class="anchor"></a>RPostgres 1.1.1.9001<small> Unreleased </small>
 </h1>
 <ul>
-<li>Now imports DBI 1.0.0.</li>
+<li>Avoid aggressive rounding when passing numeric values to the database (<a href='https://github.com/r-dbi/RPostgres/issues/184'>#184</a>).</li>
 </ul>
 </div>
-    <div id="rpostgres-1-1-0-9001-2018-05-01" class="section level1">
+    <div id="rpostgres-1-1-1-9000" class="section level1">
 <h1 class="page-header">
-<a href="#rpostgres-1-1-0-9001-2018-05-01" class="anchor"></a>RPostgres 1.1.0.9001 (2018-05-01)<small> Unreleased </small>
+<a href="#rpostgres-1-1-1-9000" class="anchor"></a>RPostgres 1.1.1.9000<small> Unreleased </small>
 </h1>
 <ul>
-<li>
-<code><a href="http://www.rdocumentation.org/packages/DBI/topics/Id">Id()</a></code> is reexported from DBI.</li>
-<li>Support <code>temporary</code> argument in <code>dbRemoveTable()</code> (default: <code>FALSE</code>) (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/141'>#141</a>).</li>
+<li>Fix partial argument matching in <code>dbAppendTable()</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/249'>#249</a>).</li>
+<li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href='https://github.com/r-dbi/RPostgres/issues/191'>#191</a>).</li>
+</ul>
+</div>
+    <div id="rpostgres-1-1-1-2018-05-05" class="section level1">
+<h1 class="page-header">
+<a href="#rpostgres-1-1-1-2018-05-05" class="anchor"></a>RPostgres 1.1.1 (2018-05-05)<small> 2018-05-06 </small>
+</h1>
+<ul>
+<li>Add support for <code>bigint</code> argument to <code>dbConnect()</code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/133'>#133</a>).</li>
 <li>Data frames resulting from a query always have unique non-empty column names (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/137'>#137</a>).</li>
-<li>The <code>field.types</code> argument to <code>dbWriteTable()</code> now must be named.</li>
+<li>New arguments <code>temporary</code> and <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code>dbRemoveTable()</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/141'>#141</a>, r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/197'>#197</a>).</li>
 <li>Using <code>dbCreateTable()</code> and <code>dbAppendTable()</code> internally (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/74'>#74</a>).</li>
-<li>New argument <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code>dbRemoveTable()</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/197'>#197</a>).</li>
-<li>Implement <code>format()</code> method for <code>PqConnection</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/163'>#163</a>).</li>
-<li>Reexporting <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbIsReadOnly">DBI::dbIsReadOnly()</a></code> and <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbCanConnect">DBI::dbCanConnect()</a></code>.</li>
+<li>The <code>field.types</code> argument to <code>dbWriteTable()</code> now must be named.</li>
 <li>Using <code>current_schemas(true)</code> also in <code>dbListObjects()</code> and <code>dbListTables()</code>, for consistency with <code>dbListFields()</code>. Objects from the <code>pg_catalog</code> schema are still excluded.</li>
 <li>
 <code>dbListFields()</code> doesn’t list fields from tables found in the <code>pg_catalog</code> schema.</li>
 <li>The <code>dbListFields()</code> method now works correctly if the <code>name</code> argument is a quoted identifier or of class <code>Id</code>, and throws an error if the table is not found (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/75'>#75</a>).</li>
-</ul>
-</div>
-    <div id="rpostgres-1-1-0-9000-2018-04-20" class="section level1">
-<h1 class="page-header">
-<a href="#rpostgres-1-1-0-9000-2018-04-20" class="anchor"></a>RPostgres 1.1.0.9000 (2018-04-20)<small> Unreleased </small>
-</h1>
-<ul>
-<li>Same as previous version.</li>
+<li>Implement <code>format()</code> method for <code>SqliteConnection</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/163'>#163</a>).</li>
+<li>Reexporting <code><a href="http://www.rdocumentation.org/packages/DBI/topics/Id">Id()</a></code>, <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbIsReadOnly">DBI::dbIsReadOnly()</a></code> and <code><a href="http://www.rdocumentation.org/packages/DBI/topics/dbCanConnect">DBI::dbCanConnect()</a></code>.</li>
+<li>Now imports DBI 1.0.0.</li>
 </ul>
 </div>
     <div id="rpostgres-1-1-0-2018-04-04" class="section level1">
@@ -182,9 +185,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rpostgres-1-1-1-9001">1.1.1.9001</a></li>
+        <li><a href="#rpostgres-1-1-1-9000">1.1.1.9000</a></li>
         <li><a href="#rpostgres-1-1-1-2018-05-05">1.1.1</a></li>
-        <li><a href="#rpostgres-1-1-0-9001-2018-05-01">1.1.0.9001</a></li>
-        <li><a href="#rpostgres-1-1-0-9000-2018-04-20">1.1.0.9000</a></li>
         <li><a href="#rpostgres-1-1-0-2018-04-04">1.1.0</a></li>
         <li><a href="#rpostgres-1-0-4-2017-12-20">1.0-4</a></li>
         <li><a href="#rpostgres-1-0-3-2017-12-01">1.0-3</a></li>
