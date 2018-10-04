@@ -8,7 +8,8 @@
 \usage{
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
   port = NULL, password = NULL, user = NULL, service = NULL, ...,
-  bigint = c("integer64", "integer", "numeric", "character"))
+  bigint = c("integer64", "integer", "numeric", "character"),
+  checkInterrupts = FALSE)
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
@@ -42,6 +43,10 @@ options as described at
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
 default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
+
+\item{checkInterrupts}{Should user interrupts be checked during the query execution (before
+first row of data is available)? Setting to \code{TRUE} allows interruption of queries
+running too long.}
 
 \item{conn}{Connection to disconnect.}
 }

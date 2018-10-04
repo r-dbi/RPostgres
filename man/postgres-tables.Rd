@@ -16,8 +16,8 @@
 \alias{dbListObjects,PqConnection-method}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
-\S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name, value,
-  ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
+\S4method{dbWriteTable}{PqConnection,character,data.frame}(conn, name,
+  value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, temporary = FALSE, copy = TRUE)
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
