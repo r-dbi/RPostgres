@@ -331,7 +331,7 @@ bool PqResultImpl::bind_row() {
     PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
                         &lengths[0], &formats[0], 0) :
     PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
-  data_ready_ = !check_interrupts_;
+  data_ready_ = false;
 
   if (!success)
     conn_stop("Failed to send query");
@@ -467,9 +467,11 @@ PGresult* PqResultImpl::get_result() {
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
 void PqResultImpl::wait_for_data() {
+  if (!check_interrupts_)
+    return;
+
   int socket, ret;
   fd_set input;
-  timeval timeout = {0, 0};
 
   socket = PQsocket(pConn_);
   if (socket < 0) {
@@ -480,8 +482,11 @@ void PqResultImpl::wait_for_data() {
 
   do {
     // wait for any traffic on the db connection socket but no longet then 1s
+    timeval timeout = {0, 0};
     timeout.tv_sec = 1;
-    ret = select(socket + 1, &input, NULL, NULL, &timeout);
+
+    const int nfds = socket + 1;
+    ret = select(nfds, &input, NULL, NULL, &timeout);
     if (ret == 0) {
       // timeout reached - check user interrupt
       checkUserInterrupt();

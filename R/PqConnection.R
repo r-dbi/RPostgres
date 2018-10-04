@@ -7,7 +7,7 @@ NULL
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
-  slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame", checkInterrupts = "logical")
+  slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame", check_interrupts = "logical")
 )
 
 # format()
@@ -142,7 +142,7 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
-#' @param checkInterrupts Should user interrupts be checked during the query execution (before
+#' @param check_interrupts Should user interrupts be checked during the query execution (before
 #'   first row of data is available)? Setting to `TRUE` allows interruption of queries
 #'   running too long.
 #' @param conn Connection to disconnect.
@@ -158,7 +158,7 @@ setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
            bigint = c("integer64", "integer", "numeric", "character"),
-           checkInterrupts = FALSE) {
+           check_interrupts = FALSE) {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -166,7 +166,7 @@ setMethod("dbConnect", "PqDriver",
       stop("All options should be strings", call. = FALSE)
     }
     bigint <- match.arg(bigint)
-    stopifnot(is.logical(checkInterrupts), all(!is.na(checkInterrupts)), length(checkInterrupts) == 1)
+    stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
 
     if (length(opts) == 0) {
       ptr <- connection_create(character(), character())
@@ -175,7 +175,7 @@ setMethod("dbConnect", "PqDriver",
     }
 
     con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame(),
-               checkInterrupts = checkInterrupts)
+               check_interrupts = check_interrupts)
     dbExecute(con, "SET TIMEZONE='UTC'")
     con@typnames <- dbGetQuery(con, "SELECT oid, typname FROM pg_type")
 

@@ -9,7 +9,7 @@
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
   port = NULL, password = NULL, user = NULL, service = NULL, ...,
   bigint = c("integer64", "integer", "numeric", "character"),
-  checkInterrupts = FALSE)
+  check_interrupts = FALSE)
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
@@ -44,7 +44,7 @@ options as described at
 default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 
-\item{checkInterrupts}{Should user interrupts be checked during the query execution (before
+\item{check_interrupts}{Should user interrupts be checked during the query execution (before
 first row of data is available)? Setting to \code{TRUE} allows interruption of queries
 running too long.}
 
