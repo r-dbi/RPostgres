@@ -110,7 +110,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (nrow(value) > 0) {
       value <- sqlData(conn, value, row.names = FALSE, copy = copy)
       if (!copy) {
-        sql <- sqlAppendTable(conn, name, value)
+        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
         dbExecute(conn, sql)
       } else {
         fields <- dbQuoteIdentifier(conn, names(value))
