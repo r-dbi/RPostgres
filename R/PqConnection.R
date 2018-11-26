@@ -73,7 +73,7 @@ get_data_type <- function(obj) {
   if (inherits(obj, "integer64")) return("BIGINT")
   switch(typeof(obj),
     integer = "INTEGER",
-    double = "REAL",
+    double = "DOUBLE PRECISION",
     character = "TEXT",
     logical = "BOOLEAN",
     list = "BYTEA",
