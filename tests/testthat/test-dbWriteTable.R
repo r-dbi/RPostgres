@@ -86,6 +86,40 @@ with_database_connection({
       })
     })
   })
+  
+  describe("Writing to the database with possible numeric precision issues", {
+    # reference value
+    value <- data.frame(x = -0.000064925595060641, y = -0.00006492559506064059)
+    test_that("dbWriteTable(copy = F)", {
+      with_table(con, "xy", {
+        dbWriteTable(con, name = "xy", value = value, copy = F)
+        expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
+      })
+    })
+
+    test_that("dbWriteTable(append = T, copy = F)", {
+      with_table(con, "xy", {
+        dbExecute(con, "CREATE TEMPORARY TABLE xy ( x numeric NOT NULL, y numeric NOT NULL);")
+        dbWriteTable(con, name = "xy", value = value, append = T, copy = F)
+        expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
+      })
+    })
+
+    test_that("dbWriteTable(append = T, copy = T)", {
+      with_table(con, "xy", {
+        dbExecute(con, "CREATE TEMPORARY TABLE xy ( x numeric NOT NULL, y numeric NOT NULL);")
+        dbWriteTable(con, name = "xy", value = value, append = T, copy = T)
+        expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
+      })
+    })
+
+    test_that("dbWriteTable(append = F, copy = T, field.types=NUMERIC)", {
+      with_table(con, "xy", {
+        dbWriteTable(con, name = "xy", value = value, overwrite = F, append = F, copy = T, field.types = c(x = "NUMERIC", y = "NUMERIC"))
+        expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
+      })
+    })
+  })
 })
 
 }
