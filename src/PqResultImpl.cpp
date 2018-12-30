@@ -5,6 +5,10 @@
 #include "DbColumnStorage.h"
 #include "PqDataFrame.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql, const bool check_interrupts) :
   res(pRes),
   pConn_(pConn),
