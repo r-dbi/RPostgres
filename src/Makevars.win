@@ -1,4 +1,4 @@
-PKG_CPPFLAGS= -I../windows/libpq-9.5.2/include
+PKG_CPPFLAGS= -I../windows/libpq-9.5.2/include -DSTRICT_R_HEADERS
 PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} \
 	-lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 CXX_STD=CXX11
