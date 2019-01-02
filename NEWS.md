@@ -1,5 +1,6 @@
 # RPostgres 1.1.1.9002
 
+- Windows: update libpq to 11.1.0
 - Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries (#193, @zozlak).
 
 
