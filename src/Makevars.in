@@ -1,2 +1,2 @@
-PKG_CPPFLAGS=@cflags@
+PKG_CPPFLAGS=@cflags@ -DRCPP_DEFAULT_INCLUDE_CALL=false
 PKG_LIBS=@libs@
