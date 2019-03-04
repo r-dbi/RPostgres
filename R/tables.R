@@ -175,7 +175,7 @@ format_keep_na <- function(x, ...) {
 #' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
 #' @rdname postgres-tables
 #' @export
-setMethod("dbAppendTable", c("PostgresConnection"),
+setMethod("dbAppendTable", c("PqConnection"),
   function(conn, name, value, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
