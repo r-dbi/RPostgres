@@ -5,7 +5,7 @@
 \alias{postgres-tables}
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{sqlData,PqConnection-method}
-\alias{dbAppendTable,DBIConnection-method}
+\alias{dbAppendTable,PostgresConnection-method}
 \alias{dbReadTable,PqConnection,character-method}
 \alias{dbListTables,PqConnection-method}
 \alias{dbExistsTable,PqConnection,character-method}
@@ -22,7 +22,7 @@
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{DBIConnection}(conn, name, value, ...,
+\S4method{dbAppendTable}{PostgresConnection}(conn, name, value, ...,
   row.names = NULL)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ...,
