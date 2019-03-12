@@ -9,7 +9,7 @@
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
   port = NULL, password = NULL, user = NULL, service = NULL, ...,
   bigint = c("integer64", "integer", "numeric", "character"),
-  check_interrupts = FALSE)
+  check_interrupts = FALSE, timezone = "UTC")
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
@@ -47,6 +47,9 @@ integers.}
 \item{check_interrupts}{Should user interrupts be checked during the query execution (before
 first row of data is available)? Setting to \code{TRUE} allows interruption of queries
 running too long.}
+
+\item{timezone}{Sets the timezone for the connection. The default is 'UTC'.
+If \code{NULL} or \code{NA} then no timezone is set, which defaults to localtime.}
 
 \item{conn}{Connection to disconnect.}
 }
