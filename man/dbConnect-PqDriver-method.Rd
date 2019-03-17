@@ -48,8 +48,8 @@ integers.}
 first row of data is available)? Setting to \code{TRUE} allows interruption of queries
 running too long.}
 
-\item{timezone}{Sets the timezone for the connection. The default is 'UTC'.
-If \code{NULL} or \code{NA} then no timezone is set, which defaults to localtime.}
+\item{timezone}{Sets the timezone for the connection. The default is \code{"UTC"}.
+If \code{NULL} then no timezone is set, which defaults to localtime.}
 
 \item{conn}{Connection to disconnect.}
 }
