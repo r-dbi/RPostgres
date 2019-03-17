@@ -145,6 +145,8 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param check_interrupts Should user interrupts be checked during the query execution (before
 #'   first row of data is available)? Setting to `TRUE` allows interruption of queries
 #'   running too long.
+#' @param timezone Sets the timezone for the connection. The default is 'UTC'.
+#'   If `NULL` or `NA` then no timezone is set, which defaults to localtime.
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
@@ -158,7 +160,7 @@ setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
            bigint = c("integer64", "integer", "numeric", "character"),
-           check_interrupts = FALSE) {
+           check_interrupts = FALSE, timezone = 'UTC') {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -176,7 +178,9 @@ setMethod("dbConnect", "PqDriver",
 
     con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame(),
                check_interrupts = check_interrupts)
-    dbExecute(con, "SET TIMEZONE='UTC'")
+    if (!is.null(timezone) && !is.na(timezone)) {
+      dbExecute(con, paste0("SET TIMEZONE='",timezone,"'"))
+    }
     con@typnames <- dbGetQuery(con, "SELECT oid, typname FROM pg_type")
 
     con
