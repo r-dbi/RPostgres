@@ -13,3 +13,4 @@ windows
 ^_pkgdown\.yml$
 ^docs$
 ^CRAN-RELEASE$
+^codecov\.yml$
