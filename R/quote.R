@@ -71,21 +71,25 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
-  rx <- '^(?:(?:|"((?:[^"]|"")+)"[.])(?:|"((?:[^"]|"")*)")|([^". ]+))$'
-  bad <- grep(rx, x, invert = TRUE)
-  if (length(bad) > 0) {
+  elt <- '(?:([^."]+)|"((?:[^"]|"")+)")'
+  good <- paste0('^', elt, '(?:\\.', elt, ')?$')
+  bad <- grep(good, x, invert = TRUE)
+  if(length(bad) > 0){
     stop("Can't unquote ", x[bad[[1]]], call. = FALSE)
   }
+  matches <- regmatches(x, regexec(good, x))
+  components <- lapply(matches,
+                       function (y) {
+                         m <- gsub('""', '"',
+                                   grep('.+', y, value = TRUE))
+                         rev(m[2:length(m)])
+                       })
+  table   <- lapply(components, function (y) y[1])
+  schema  <- lapply(components, function (y) y[2])
 
-  schema <- gsub(rx, "\\1", x)
-  schema <- gsub('""', '"', schema)
-  table <- gsub(rx, "\\2", x)
-  table <- gsub('""', '"', table)
-  naked_table <- gsub(rx, "\\3", x)
-
-  ret <- Map(schema, table, naked_table, f = as_table)
+  ret <- Map(schema, table, f = as_table)
   names(ret) <- names(x)
-  ret
+  return(ret)
 })
 
 as_table <- function(schema, table, naked_table = NULL) {
