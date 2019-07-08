@@ -9,7 +9,7 @@
 #include <winsock2.h>
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts) :
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
   pSpec_(prepare(pConn_, sql)),
@@ -17,7 +17,6 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql,
   complete_(false),
   ready_(false),
   data_ready_(false),
-  check_interrupts_(check_interrupts),
   nrows_(0),
   rows_affected_(0),
   group_(0),
@@ -472,7 +471,7 @@ PGresult* PqResultImpl::get_result() {
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
 void PqResultImpl::wait_for_data() {
-  if (!check_interrupts_)
+  if (!pConnPtr_->is_check_interrupts())
     return;
 
   int socket, ret;

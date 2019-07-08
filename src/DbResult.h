@@ -22,11 +22,11 @@ class DbResult : boost::noncopyable {
   boost::scoped_ptr<DbResultImpl> impl;
 
 public:
-  DbResult(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts);
+  DbResult(const DbConnectionPtr& pConn, const std::string& sql);
   ~DbResult();
 
 public:
-  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement, const bool check_interrupts);
+  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement);
 
 public:
   bool complete() const;

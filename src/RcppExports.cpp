@@ -7,14 +7,15 @@
 using namespace Rcpp;
 
 // connection_create
-XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values);
-RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP) {
+XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values, bool check_interrupts);
+RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP, SEXP check_interruptsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<std::string> >::type keys(keysSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type values(valuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_create(keys, values));
+    Rcpp::traits::input_parameter< bool >::type check_interrupts(check_interruptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_create(keys, values, check_interrupts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -256,7 +257,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 2},
+    {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 3},
     {"_RPostgres_connection_valid", (DL_FUNC) &_RPostgres_connection_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
     {"_RPostgres_connection_info", (DL_FUNC) &_RPostgres_connection_info, 1},

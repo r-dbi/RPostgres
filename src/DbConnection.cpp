@@ -4,9 +4,11 @@
 #include "DbResult.h"
 
 
-DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values) :
+DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
+                           bool check_interrupts) :
   pCurrentResult_(NULL),
-  transacting_(false)
+  transacting_(false),
+  check_interrupts_(check_interrupts)
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
@@ -183,6 +185,10 @@ List DbConnection::info() {
       _["server_version"]     = sver,
       _["pid"]                = pid
     );
+}
+
+bool DbConnection::is_check_interrupts() const {
+  return check_interrupts_;
 }
 
 SEXP DbConnection::quote_string(const String& x) {

@@ -39,7 +39,6 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   bool complete_;
   bool ready_;
   bool data_ready_;
-  bool check_interrupts_;
   int nrows_;
   int rows_affected_;
   List params_;
@@ -47,7 +46,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
   ~PqResultImpl();
 
 private:
