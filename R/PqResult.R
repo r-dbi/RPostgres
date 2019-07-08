@@ -206,7 +206,7 @@ fix_posixt <- function(value) {
 
 difftime_to_hms <- function(value) {
   is_difftime <- vlapply(value, inherits, "difftime")
-  value[is_difftime] <- lapply(value[is_difftime], hms::as.hms)
+  value[is_difftime] <- lapply(value[is_difftime], hms::as_hms)
   value
 }
 

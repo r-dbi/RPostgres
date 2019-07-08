@@ -143,7 +143,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
 
   value <- fix_posixt(value)
 
-  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as.hms(col)))
+  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
   value[is_blob] <- lapply(
     value[is_blob],
     function(col) {
