@@ -18,7 +18,7 @@ void result_release(XPtr<DbResult> res) {
 // [[Rcpp::export]]
 bool result_valid(XPtr<DbResult> res_) {
   DbResult* res = res_.get();
-  return res != NULL && res->active();
+  return res != NULL && res->is_active();
 }
 
 // [[Rcpp::export]]
