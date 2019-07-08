@@ -9,9 +9,10 @@
 #include <winsock2.h>
 #endif
 
-PqResultImpl::PqResultImpl(PGconn* pConn, const std::string& sql, const bool check_interrupts) :
-  pConn_(pConn),
-  pSpec_(prepare(pConn, sql)),
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts) :
+  pConnPtr_(pConn),
+  pConn_(pConn->conn()),
+  pSpec_(prepare(pConn_, sql)),
   cache(pSpec_),
   complete_(false),
   ready_(false),
