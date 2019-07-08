@@ -69,8 +69,4 @@ List DbResult::get_column_info() {
   return impl->get_column_info();
 }
 
-void DbResult::finish_query() {
-  pConn_->finish_query();
-}
-
 // Privates ///////////////////////////////////////////////////////////////////

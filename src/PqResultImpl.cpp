@@ -305,8 +305,9 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  if (ready_ || group_ > 0)
-    res->finish_query();
+  if (ready_ || group_ > 0) {
+    DbConnection::finish_query(pConn_);
+  }
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);

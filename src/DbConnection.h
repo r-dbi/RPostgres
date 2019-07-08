@@ -46,7 +46,7 @@ public:
   static void conn_stop(PGconn* conn, const char* msg);
 
   void cleanup_query();
-  void finish_query() const;
+  static void finish_query(PGconn* pConn);
 
 private:
   void cancel_query();
