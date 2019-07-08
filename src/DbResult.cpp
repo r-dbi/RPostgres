@@ -30,11 +30,6 @@ DbResult::~DbResult() {
   } catch (...) {}
 }
 
-DbResult* DbResult::create_and_send_query(const DbConnectionPtr& con, const std::string& sql, const bool is_statement) {
-  (void)is_statement;
-  return new DbResult(con, sql);
-}
-
 
 // Publics /////////////////////////////////////////////////////////////////////
 

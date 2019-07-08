@@ -95,7 +95,7 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
 
   rs <- new("PqResult",
     conn = conn,
-    ptr = result_create(conn@ptr, statement, FALSE),
+    ptr = result_create(conn@ptr, statement),
     sql = statement,
     bigint = conn@bigint
   )
