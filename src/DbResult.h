@@ -20,7 +20,7 @@ protected:
   boost::scoped_ptr<DbResultImpl> impl;
 
 protected:
-  DbResult(const DbConnectionPtr& pConn, const std::string& sql);
+  DbResult(const DbConnectionPtr& pConn);
 
 public:
   ~DbResult();
