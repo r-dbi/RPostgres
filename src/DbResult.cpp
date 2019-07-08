@@ -66,7 +66,12 @@ List DbResult::fetch(const int n_max) {
 }
 
 List DbResult::get_column_info() {
-  return impl->get_column_info();
+  List out = impl->get_column_info();
+
+  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -Rf_length(out[0]));
+  out.attr("class") = "data.frame";
+
+  return out;
 }
 
 // Privates ///////////////////////////////////////////////////////////////////
