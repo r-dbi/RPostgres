@@ -17,7 +17,7 @@ DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
     impl.reset(new PqResultImpl(pConn, sql));
   }
   catch (...) {
-    pConn->set_current_result(NULL);
+    pConn->reset_current_result(this);
     throw;
   }
 }
@@ -25,7 +25,7 @@ DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
 DbResult::~DbResult() {
   try {
     if (is_active()) {
-      pConn_->set_current_result(NULL);
+      pConn_->reset_current_result(this);
     }
   } catch (...) {}
 }
