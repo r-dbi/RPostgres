@@ -90,10 +90,10 @@ void DbConnection::cancel_query() {
   PQfreeCancel(cancel);
 }
 
-void DbConnection::finish_query() const {
+void DbConnection::finish_query(PGconn* pConn) {
   // Clear pending results
   PGresult* result;
-  while ((result = PQgetResult(pConn_)) != NULL) {
+  while ((result = PQgetResult(pConn)) != NULL) {
     PQclear(result);
   }
 }
@@ -235,5 +235,5 @@ void DbConnection::cleanup_query() {
   if (pCurrentResult_ != NULL && !(pCurrentResult_->complete())) {
     cancel_query();
   }
-  finish_query();
+  finish_query(pConn_);
 }
