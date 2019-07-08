@@ -10,14 +10,14 @@
 DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
   pConn_(pConn)
 {
-  pConn->check_connection();
-  pConn->set_current_result(this);
+  pConn_->check_connection();
+  pConn_->set_current_result(this);
 
   try {
-    impl.reset(new DbResultImpl(pConn, sql));
+    impl.reset(new DbResultImpl(pConn_, sql));
   }
   catch (...) {
-    pConn->reset_current_result(this);
+    pConn_->reset_current_result(this);
     throw;
   }
 }
