@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "PqResult.h"
+#include "DbResultImpl.h"
 
 
 
 // Construction ////////////////////////////////////////////////////////////////
 
 PqResult::PqResult(const DbConnectionPtr& pConn, const std::string& sql) :
-  DbResult(pConn, sql)
+  DbResult(pConn)
 {
+  impl.reset(new DbResultImpl(pConn, sql));
 }
 
 

@@ -7,19 +7,14 @@
 
 // Construction ////////////////////////////////////////////////////////////////
 
-DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql) :
+DbResult::DbResult(const DbConnectionPtr& pConn) :
   pConn_(pConn)
 {
   pConn_->check_connection();
-  pConn_->set_current_result(this);
 
-  try {
-    impl.reset(new DbResultImpl(pConn_, sql));
-  }
-  catch (...) {
-    pConn_->reset_current_result(this);
-    throw;
-  }
+  // subclass constructor can throw, the destructor will remove the
+  // current result set
+  pConn_->set_current_result(this);
 }
 
 DbResult::~DbResult() {
