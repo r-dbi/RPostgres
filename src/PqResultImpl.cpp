@@ -278,12 +278,12 @@ List PqResultImpl::get_column_info() {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  List out = Rcpp::List::create(names, types, cache.oids_, cache.known_);
-  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
-  out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type", ".oid", ".known");
-
-  return out;
+  return Rcpp::List::create(
+    _["name"] = names,
+    _["type"] = types,
+    _[".oid"] = cache.oids_,
+    _[".known"] = cache.known_
+  );
 }
 
 
