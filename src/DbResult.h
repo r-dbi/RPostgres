@@ -1,5 +1,5 @@
-#ifndef __RPOSTGRES_PQ_RESULT__
-#define __RPOSTGRES_PQ_RESULT__
+#ifndef __RSQLITE_SQLITE_RESULT__
+#define __RSQLITE_SQLITE_RESULT__
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -15,10 +15,11 @@ typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 // most recent) for each connection.
 
 class PqResultImpl;
+typedef PqResultImpl DbResultImpl;
 
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
-  boost::scoped_ptr<PqResultImpl> impl;
+  boost::scoped_ptr<DbResultImpl> impl;
 
 public:
   DbResult(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts);
@@ -29,7 +30,7 @@ public:
 
 public:
   bool complete() const;
-  bool active() const;
+  bool is_active() const;
   int n_rows_fetched();
   int n_rows_affected();
 
