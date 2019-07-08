@@ -8,7 +8,7 @@
 // most recent) for each connection.
 
 class PqResult : public DbResult {
-public:
+protected:
   PqResult(const DbConnectionPtr& pConn, const std::string& sql);
 
 public:
