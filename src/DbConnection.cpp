@@ -4,9 +4,11 @@
 #include "DbResult.h"
 
 
-DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values) :
+DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
+                           bool check_interrupts) :
   pCurrentResult_(NULL),
-  transacting_(false)
+  transacting_(false),
+  check_interrupts_(check_interrupts)
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
@@ -66,6 +68,16 @@ void DbConnection::set_current_result(const DbResult* pResult) {
 }
 
 
+void DbConnection::reset_current_result(const DbResult* pResult) {
+  // FIXME: inactive result pointer, what to do?
+  if (pResult != pCurrentResult_)
+    return;
+
+  cleanup_query();
+  pCurrentResult_ = NULL;
+}
+
+
 /**
  * Documentation for canceling queries:
  * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
@@ -90,10 +102,10 @@ void DbConnection::cancel_query() {
   PQfreeCancel(cancel);
 }
 
-void DbConnection::finish_query() const {
+void DbConnection::finish_query(PGconn* pConn) {
   // Clear pending results
   PGresult* result;
-  while ((result = PQgetResult(pConn_)) != NULL) {
+  while ((result = PQgetResult(pConn)) != NULL) {
     PQclear(result);
   }
 }
@@ -185,6 +197,10 @@ List DbConnection::info() {
     );
 }
 
+bool DbConnection::is_check_interrupts() const {
+  return check_interrupts_;
+}
+
 SEXP DbConnection::quote_string(const String& x) {
   // Returns a single CHRSXP
   check_connection();
@@ -235,5 +251,5 @@ void DbConnection::cleanup_query() {
   if (pCurrentResult_ != NULL && !(pCurrentResult_->complete())) {
     cancel_query();
   }
-  finish_query();
+  finish_query(pConn_);
 }

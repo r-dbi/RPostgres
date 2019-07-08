@@ -1,35 +1,33 @@
-#ifndef __RPOSTGRES_PQ_RESULT__
-#define __RPOSTGRES_PQ_RESULT__
+#ifndef __RDBI_DB_RESULT__
+#define __RDBI_DB_RESULT__
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include "DbResultImplDecl.h"
 
 
 class DbConnection;
 typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 // DbResult --------------------------------------------------------------------
-// There is no object analogous to DbResult in libpq: this provides a result set
-// like object for the R API. There is only ever one active result set (the
-// most recent) for each connection.
-
-class PqResultImpl;
 
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
-  boost::scoped_ptr<PqResultImpl> impl;
+
+protected:
+  boost::scoped_ptr<DbResultImpl> impl;
+
+protected:
+  DbResult(const DbConnectionPtr& pConn);
 
 public:
-  DbResult(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts);
   ~DbResult();
 
 public:
-  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement, const bool check_interrupts);
-
-public:
   bool complete() const;
-  bool active() const;
+  bool is_active() const;
   int n_rows_fetched();
   int n_rows_affected();
 
@@ -38,8 +36,8 @@ public:
 
   List get_column_info();
 
-public:
-  void finish_query();
+private:
+  void validate_params(const List& params) const;
 };
 
-#endif
+#endif // __RDBI_DB_RESULT__

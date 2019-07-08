@@ -95,7 +95,7 @@ setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statemen
 
   rs <- new("PqResult",
     conn = conn,
-    ptr = result_create(conn@ptr, statement, FALSE, conn@check_interrupts),
+    ptr = result_create(conn@ptr, statement),
     sql = statement,
     bigint = conn@bigint
   )
@@ -172,10 +172,6 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
     stop("Named parameters not supported", call. = FALSE)
   }
   if (!is.list(params)) params <- as.list(params)
-  lengths <- unique(viapply(params, length))
-  if (length(lengths) > 1) {
-    stop("All parameters must have the same length.", call. = FALSE)
-  }
 
   params <- factor_to_string(params, warn = TRUE)
   params <- fix_posixt(params)

@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "workarounds/XPtr.h"
 #include "RPostgres_types.h"
+#include "PqResult.h"
 
 
 // [[Rcpp::export]]
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool is_statement = false, bool check_interrupts = false) {
+XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql) {
   (*con)->check_connection();
-  DbResult* res = DbResult::create_and_send_query(*con, sql, is_statement, check_interrupts);
+  DbResult* res = PqResult::create_and_send_query(*con, sql);
   return XPtr<DbResult>(res, true);
 }
 
@@ -18,7 +19,7 @@ void result_release(XPtr<DbResult> res) {
 // [[Rcpp::export]]
 bool result_valid(XPtr<DbResult> res_) {
   DbResult* res = res_.get();
-  return res != NULL && res->active();
+  return res != NULL && res->is_active();
 }
 
 // [[Rcpp::export]]

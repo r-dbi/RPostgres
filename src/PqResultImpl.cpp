@@ -9,15 +9,14 @@
 #include <winsock2.h>
 #endif
 
-PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql, const bool check_interrupts) :
-  res(pRes),
-  pConn_(pConn),
-  pSpec_(prepare(pConn, sql)),
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+  pConnPtr_(pConn),
+  pConn_(pConn->conn()),
+  pSpec_(prepare(pConn_, sql)),
   cache(pSpec_),
   complete_(false),
   ready_(false),
   data_ready_(false),
-  check_interrupts_(check_interrupts),
   nrows_(0),
   rows_affected_(0),
   group_(0),
@@ -278,12 +277,12 @@ List PqResultImpl::get_column_info() {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  List out = Rcpp::List::create(names, types, cache.oids_, cache.known_);
-  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
-  out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type", ".oid", ".known");
-
-  return out;
+  return Rcpp::List::create(
+    _["name"] = names,
+    _["type"] = types,
+    _[".oid"] = cache.oids_,
+    _[".known"] = cache.known_
+  );
 }
 
 
@@ -305,8 +304,9 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  if (ready_ || group_ > 0)
-    res->finish_query();
+  if (ready_ || group_ > 0) {
+    DbConnection::finish_query(pConn_);
+  }
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);
@@ -471,7 +471,7 @@ PGresult* PqResultImpl::get_result() {
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
 void PqResultImpl::wait_for_data() {
-  if (!check_interrupts_)
+  if (!pConnPtr_->is_check_interrupts())
     return;
 
   int socket, ret;

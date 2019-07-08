@@ -1,68 +1,81 @@
 #include "pch.h"
 #include "DbResult.h"
 #include "DbConnection.h"
-#include "PqResultImpl.h"
+#include "DbResultImpl.h"
 
 
-DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts) :
+
+// Construction ////////////////////////////////////////////////////////////////
+
+DbResult::DbResult(const DbConnectionPtr& pConn) :
   pConn_(pConn)
 {
-  pConn->check_connection();
-  pConn->set_current_result(this);
+  pConn_->check_connection();
 
-  try {
-    impl.reset(new PqResultImpl(this, pConn->conn(), sql, check_interrupts));
-  }
-  catch (...) {
-    pConn->set_current_result(NULL);
-    throw;
-  }
+  // subclass constructor can throw, the destructor will remove the
+  // current result set
+  pConn_->set_current_result(this);
 }
 
 DbResult::~DbResult() {
   try {
-    if (active()) {
-      pConn_->set_current_result(NULL);
+    if (is_active()) {
+      pConn_->reset_current_result(this);
     }
   } catch (...) {}
 }
 
-DbResult* DbResult::create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement, const bool check_interrupts) {
-  (void)is_statement;
-  return new DbResult(con, sql, check_interrupts);
+
+// Publics /////////////////////////////////////////////////////////////////////
+
+bool DbResult::complete() const {
+  return (impl == NULL) || impl->complete();
 }
 
-void DbResult::bind(const List& params) {
-  return impl->bind(params);
-}
-
-bool DbResult::active() const {
+bool DbResult::is_active() const {
   return pConn_->is_current_result(this);
-}
-
-List DbResult::fetch(int n_max) {
-  if (!active())
-    stop("Inactive result set");
-
-  return impl->fetch(n_max);
-}
-
-int DbResult::n_rows_affected() {
-  return impl->n_rows_affected();
 }
 
 int DbResult::n_rows_fetched() {
   return impl->n_rows_fetched();
 }
 
-bool DbResult::complete() const {
-  return (impl == NULL) || impl->complete();
+int DbResult::n_rows_affected() {
+  return impl->n_rows_affected();
+}
+
+void DbResult::bind(const List& params) {
+  validate_params(params);
+  impl->bind(params);
+}
+
+List DbResult::fetch(const int n_max) {
+  if (!is_active())
+    stop("Inactive result set");
+
+  return impl->fetch(n_max);
 }
 
 List DbResult::get_column_info() {
-  return impl->get_column_info();
+  List out = impl->get_column_info();
+
+  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -Rf_length(out[0]));
+  out.attr("class") = "data.frame";
+
+  return out;
 }
 
-void DbResult::finish_query() {
-  pConn_->finish_query();
+// Privates ///////////////////////////////////////////////////////////////////
+
+void DbResult::validate_params(const List& params) const {
+  if (params.size() != 0) {
+    SEXP first_col = params[0];
+    int n = Rf_length(first_col);
+
+    for (int j = 1; j < params.size(); ++j) {
+      SEXP col = params[j];
+      if (Rf_length(col) != n)
+        stop("Parameter %i does not have length %d.", j + 1, n);
+    }
+  }
 }
