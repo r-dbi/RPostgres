@@ -7,7 +7,7 @@ NULL
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
-  slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame", check_interrupts = "logical")
+  slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame")
 )
 
 # format()
@@ -171,13 +171,12 @@ setMethod("dbConnect", "PqDriver",
     stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
 
     if (length(opts) == 0) {
-      ptr <- connection_create(character(), character())
+      ptr <- connection_create(character(), character(), check_interrupts)
     } else {
-      ptr <- connection_create(names(opts), as.vector(opts))
+      ptr <- connection_create(names(opts), as.vector(opts), check_interrupts)
     }
 
-    con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame(),
-               check_interrupts = check_interrupts)
+    con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
     if (!is.null(timezone)) {
       dbExecute(con, paste0("SET TIMEZONE='", timezone, "'"))
     }

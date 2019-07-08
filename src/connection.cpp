@@ -5,12 +5,13 @@
 // [[Rcpp::export]]
 XPtr<DbConnectionPtr> connection_create(
   std::vector<std::string> keys,
-  std::vector<std::string> values
+  std::vector<std::string> values,
+  bool check_interrupts
 ) {
   LOG_VERBOSE;
 
   DbConnectionPtr* pConn = new DbConnectionPtr(
-    new DbConnection(keys, values)
+    new DbConnection(keys, values, check_interrupts)
   );
 
   return XPtr<DbConnectionPtr>(pConn, true);
