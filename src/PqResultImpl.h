@@ -6,9 +6,13 @@
 #include "DbColumnDataType.h"
 #include "PqResultSource.h"
 
-class DbResult;
+class DbConnection;
+typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 class PqResultImpl : boost::noncopyable, public PqResultSource {
+  // Back pointer
+  boost::shared_ptr<DbConnection> pConnPtr_;
+
   // Wrapped pointer
   PGconn* pConn_;
   PGresult* pSpec_;
@@ -43,7 +47,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(PGconn* pConn, const std::string& sql, const bool check_interrupts);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const bool check_interrupts);
   ~PqResultImpl();
 
 private:
