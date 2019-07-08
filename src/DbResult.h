@@ -1,9 +1,11 @@
-#ifndef __RSQLITE_SQLITE_RESULT__
-#define __RSQLITE_SQLITE_RESULT__
+#ifndef __RDBI_DB_RESULT__
+#define __RDBI_DB_RESULT__
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include "DbResultImplDecl.h"
 
 
 class DbConnection;
@@ -14,19 +16,17 @@ typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 // like object for the R API. There is only ever one active result set (the
 // most recent) for each connection.
 
-class PqResultImpl;
-typedef PqResultImpl DbResultImpl;
-
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
+
+protected:
   boost::scoped_ptr<DbResultImpl> impl;
 
-public:
+protected:
   DbResult(const DbConnectionPtr& pConn, const std::string& sql);
-  ~DbResult();
 
 public:
-  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, bool is_statement);
+  ~DbResult();
 
 public:
   bool complete() const;
@@ -43,4 +43,4 @@ private:
   void validate_params(const List& params) const;
 };
 
-#endif
+#endif // __RDBI_DB_RESULT__
