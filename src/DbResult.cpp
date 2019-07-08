@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "DbResult.h"
 #include "DbConnection.h"
-#include "PqResultImpl.h"
+#include "DbResultImpl.h"
 
 
 
@@ -55,6 +55,7 @@ int DbResult::n_rows_affected() {
 }
 
 void DbResult::bind(const List& params) {
+  validate_params(params);
   impl->bind(params);
 }
 
@@ -75,3 +76,16 @@ List DbResult::get_column_info() {
 }
 
 // Privates ///////////////////////////////////////////////////////////////////
+
+void DbResult::validate_params(const List& params) const {
+  if (params.size() != 0) {
+    SEXP first_col = params[0];
+    int n = Rf_length(first_col);
+
+    for (int j = 1; j < params.size(); ++j) {
+      SEXP col = params[j];
+      if (Rf_length(col) != n)
+        stop("Parameter %i does not have length %d.", j + 1, n);
+    }
+  }
+}
