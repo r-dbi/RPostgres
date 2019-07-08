@@ -12,9 +12,6 @@ class DbConnection;
 typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 // DbResult --------------------------------------------------------------------
-// There is no object analogous to DbResult in libpq: this provides a result set
-// like object for the R API. There is only ever one active result set (the
-// most recent) for each connection.
 
 class DbResult : boost::noncopyable {
   DbConnectionPtr pConn_;
