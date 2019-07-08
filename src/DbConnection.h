@@ -29,6 +29,7 @@ public:
   PGconn* conn();
 
   void set_current_result(const DbResult* pResult);
+  void reset_current_result(const DbResult* pResult);
   bool is_current_result(const DbResult* pResult);
   bool has_query();
 

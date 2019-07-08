@@ -68,6 +68,16 @@ void DbConnection::set_current_result(const DbResult* pResult) {
 }
 
 
+void DbConnection::reset_current_result(const DbResult* pResult) {
+  // FIXME: inactive result pointer, what to do?
+  if (pResult != pCurrentResult_)
+    return;
+
+  cleanup_query();
+  pCurrentResult_ = NULL;
+}
+
+
 /**
  * Documentation for canceling queries:
  * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
