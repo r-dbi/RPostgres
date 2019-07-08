@@ -14,7 +14,7 @@ DbResult::DbResult(const DbConnectionPtr& pConn, const std::string& sql, const b
   pConn->set_current_result(this);
 
   try {
-    impl.reset(new PqResultImpl(this, pConn->conn(), sql, check_interrupts));
+    impl.reset(new PqResultImpl(pConn->conn(), sql, check_interrupts));
   }
   catch (...) {
     pConn->set_current_result(NULL);

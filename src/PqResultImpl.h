@@ -9,9 +9,6 @@
 class DbResult;
 
 class PqResultImpl : boost::noncopyable, public PqResultSource {
-  // Back pointer for query cancellation
-  DbResult* res;
-
   // Wrapped pointer
   PGconn* pConn_;
   PGresult* pSpec_;
@@ -46,7 +43,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql, const bool check_interrupts);
+  PqResultImpl(PGconn* pConn, const std::string& sql, const bool check_interrupts);
   ~PqResultImpl();
 
 private:
