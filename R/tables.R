@@ -383,7 +383,7 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
   }
 
   is_prefix <- !is.na(res$schema) & is.na(res$table)
-  tables <- Map(res$schema, res$table, f = as_table)
+  tables <- Map("", res$schema, res$table, f = as_table)
 
   ret <- data.frame(
     table = I(unname(tables)),
