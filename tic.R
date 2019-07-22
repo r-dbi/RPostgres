@@ -1,19 +1,13 @@
-add_package_checks()
+do_package_checks()
 
-if (Sys.getenv("BUILD_PKGDOWN") != "" && !ci()$is_tag()) {
-  get_stage("deploy") %>%
-    add_step(step_build_pkgdown())
+if (ci_has_env("DEV_VERSIONS")) {
+  get_stage("install") %>%
+    add_step(step_install_github(c("r-dbi/DBI", "r-dbi/DBItest", "tidyverse/hms", "tidyverse/blob")))
+}
 
-  if (Sys.getenv("id_rsa") != "") {
-    get_stage("before_deploy") %>%
-      add_step(step_setup_ssh())
+if (ci_has_env("BUILD_PKGDOWN") && !ci_is_tag()) {
+  get_stage("install") %>%
+    add_step(step_install_github("r-lib/pkgload"))
 
-    # pkgdown documentation can be built optionally. Other example criteria:
-    # - `inherits(ci(), "TravisCI")`: Only for Travis CI
-    # - `ci()$is_tag()`: Only for tags, not for branches
-    # - `Sys.getenv("BUILD_PKGDOWN") != ""`: If the env var "BUILD_PKGDOWN" is set
-    # - `Sys.getenv("TRAVIS_EVENT_TYPE") == "cron"`: Only for Travis cron jobs
-    get_stage("deploy") %>%
-      add_step(step_push_deploy(commit_paths = "docs"))
-  }
+  do_pkgdown()
 }

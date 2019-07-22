@@ -64,6 +64,8 @@ matrix:
   include:
   - os: linux
     r: devel
+    env:
+    - DEV_VERSIONS=true
   - os: linux
     r: 3.2
   - stage: full
@@ -71,8 +73,8 @@ matrix:
   - os: linux
     r: release
     env:
-    - BUILD_PKGDOWN: true
-    - R_CODECOV: true
+    - BUILD_PKGDOWN=true
+    - R_CODECOV=true
     pandoc: true
   - os: linux
     r: 3.4
