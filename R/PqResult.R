@@ -210,7 +210,7 @@ fix_numeric <- function(value) {
   is_numeric <- vlapply(value, is.numeric)
   value[is_numeric] <- lapply(
     value[is_numeric],
-    function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE)
+    function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE, trim = TRUE)
   )
   value
 }
