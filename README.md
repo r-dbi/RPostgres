@@ -74,3 +74,9 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'DATABASE_NAME',
 ## Design notes
 
 The original DBI design imagined that each package could instantiate X drivers, with each driver having Y connections and each connection having Z results. This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set. In the RPostgres package there's only one class on the C side: a connection, which optionally contains a result set. On the R side, the driver class is just a dummy class with no contents (used only for dispatch), and both the connection and result objects point to the same external pointer.
+
+---
+
+Please note that the 'RPostgres' project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
