@@ -14,3 +14,4 @@ windows
 ^docs$
 ^CRAN-RELEASE$
 ^codecov\.yml$
+^LICENSE\.md$

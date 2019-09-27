@@ -14,7 +14,7 @@ Authors@R: c(
 Description: 
     Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
     an open-source relational database.
-License: GPL-2
+License: LGPL (>= 2.1)
 URL: https://github.com/r-dbi/RPostgres
 BugReports: https://github.com/r-dbi/RPostgres/issues
 Depends: 
