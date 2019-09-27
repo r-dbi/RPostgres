@@ -27,6 +27,9 @@ install.packages("RPostgres")
 remotes::install_github("r-dbi/RPostgres")
 ```
 
+Discussions associated with DBI and related database packages take place on [R-SIG-DB](https://stat.ethz.ch/mailman/listinfo/r-sig-db). 
+The website [Databases using R](https://db.rstudio.com/) describes the tools and best practices in this ecosystem.
+
 ## Basic usage
 
 ```R
