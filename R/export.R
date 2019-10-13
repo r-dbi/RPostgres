@@ -50,9 +50,6 @@ NULL
 #' @exportMethod dbFetch
 NULL
 
-#' @exportMethod dbGetConnectArgs
-NULL
-
 #' @exportMethod dbGetInfo
 NULL
 
