@@ -33,7 +33,7 @@ Depends:
 Imports: 
     bit64,
     blob (>= 1.1.1.9002),
-    DBI (>= 1.0.0),
+    DBI (>= 1.0.0.9003),
     hms (>= 0.4.2.9005),
     methods,
     Rcpp (>= 0.11.4.2),
