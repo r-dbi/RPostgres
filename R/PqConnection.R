@@ -176,13 +176,13 @@ setMethod("dbConnect", "PqDriver",
       ptr <- connection_create(names(opts), as.vector(opts), check_interrupts)
     }
 
-    con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
+    conn <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
     if (!is.null(timezone)) {
-      dbExecute(con, paste0("SET TIMEZONE='", timezone, "'"))
+      dbExecute(conn, paste0("SET TIMEZONE='", timezone, "'"))
     }
-    con@typnames <- dbGetQuery(con, "SELECT oid, typname FROM pg_type")
+    conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type")
 
-    con
+    conn
   })
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)
