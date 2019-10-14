@@ -14,3 +14,5 @@ windows
 ^docs$
 ^CRAN-RELEASE$
 ^codecov\.yml$
+^LICENSE\.md$
+^CODE_OF_CONDUCT\.md$
