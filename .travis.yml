@@ -58,6 +58,7 @@ addons:
     - libpq-dev
     - libmagick++-dev
     - libssh2-1-dev
+    - devscripts
 
 #jobs
 matrix:
