@@ -9,7 +9,7 @@
 \S4method{dbConnect}{PqDriver}(drv, dbname = NULL, host = NULL,
   port = NULL, password = NULL, user = NULL, service = NULL, ...,
   bigint = c("integer64", "integer", "numeric", "character"),
-  check_interrupts = FALSE, timezone = "UTC")
+  check_interrupts = FALSE, timezone = NULL)
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
@@ -48,8 +48,8 @@ integers.}
 first row of data is available)? Setting to \code{TRUE} allows interruption of queries
 running too long.}
 
-\item{timezone}{Sets the timezone for the connection. The default is \code{"UTC"}.
-If \code{NULL} then no timezone is set, which defaults to localtime.}
+\item{timezone}{Sets the timezone for the connection. The default is \code{NULL}, which
+which means no timezone is set and the database timezone will be used.}
 
 \item{conn}{Connection to disconnect.}
 }
