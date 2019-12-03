@@ -1,6 +1,3 @@
-#' @include s4.R
-NULL
-
 #' Postgres driver
 #'
 #' This driver never needs to be unloaded and hence `dbUnload()` is a

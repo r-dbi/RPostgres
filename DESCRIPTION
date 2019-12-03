@@ -46,18 +46,16 @@ LinkingTo:
     plogr (>= 0.2.0),
     Rcpp
 Remotes: 
+    tidyverse/blob,
     r-dbi/DBI,
     r-dbi/DBItest,
-    tidyverse/blob,
     tidyverse/hms
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
-    postgresql-devel (rpm)
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 Collate: 
-    's4.R'
     'PqDriver.R'
     'PqConnection.R'
     'PqResult.R'
