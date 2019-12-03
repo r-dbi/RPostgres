@@ -22,7 +22,7 @@ Authors@R:
              family = "Nishiyama",
              role = "ctb",
              comment = "Code for encoding vectors into strings derived from RPostgreSQL"))
-Description:  Fully 'DBI'-compliant 'Rcpp'-backed interface
+Description: Fully 'DBI'-compliant 'Rcpp'-backed interface
     to 'PostgreSQL' <https://www.postgresql.org/>, an open-source
     relational database.
 License: GPL-3 + file LICENSE
@@ -53,7 +53,7 @@ Remotes:
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 Collate: 
     'PqDriver.R'
