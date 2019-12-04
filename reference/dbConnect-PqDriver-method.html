@@ -124,10 +124,19 @@ disconnected during the next GC with a warning.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for PqDriver</span>
-<span class='fu'>dbConnect</span>(<span class='no'>drv</span>, <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>host</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>port</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>service</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+<span class='fu'>dbConnect</span>(
+  <span class='no'>drv</span>,
+  <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>host</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>port</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>service</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
   <span class='kw'>bigint</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span>),
-  <span class='kw'>check_interrupts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>timezone</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)
+  <span class='kw'>check_interrupts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>timezone</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>
+)
 
 <span class='co'># S4 method for PqConnection</span>
 <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>, <span class='no'>...</span>)</pre>
@@ -145,7 +154,7 @@ disconnected during the next GC with a warning.</p>
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, <code>expand_dbname</code> is set to
 <code>false</code> in the call to
-<a href='https://www.postgresql.org/docs/9.6/static/libpq-connect.html'>PQconnectdbParams()</a>).</p></td>
+<a href='https://www.postgresql.org/docs/9.6/static/libpq-connect.html'><code>PQconnectdbParams()</code></a>).</p></td>
     </tr>
     <tr>
       <th>host, port</th>
