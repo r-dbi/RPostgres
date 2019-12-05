@@ -1,9 +1,9 @@
-Minor release for compatibility with DBI 1.0.0.
+Minor release for compatibility with older compilers.
 
 ## Test environments
-* local ubuntu install, R 3.4.4
-* ubuntu 14.04 (on travis-ci), R 3.4.4, devel, oldrel, 3.2
-* windows (on appveyor), R 3.4.4
+* local ubuntu install, R 3.6.1
+* ubuntu 16.04 (on travis-ci), R 3.6.1, devel, oldrel, 3.2
+* windows (on appveyor), R 3.6.1
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -14,4 +14,4 @@ Minor release for compatibility with DBI 1.0.0.
 
 ## Downstream packages
 
-Tested RGreenplum and sf, no error.
+Not checked.
