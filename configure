@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Anticonf (tm) script by Jeroen Ooms & Murat Tasan (2017)
 # This script will prefer cflags (specifically includefile dirs) and lib dirs
 # in the following order of precedence:
