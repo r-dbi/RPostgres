@@ -254,3 +254,43 @@ void DbConnection::cleanup_query() {
   }
   finish_query(pConn_);
 }
+
+List DbConnection::wait_for_notify(__time_t timeout_secs) {
+  PGnotify   *notify;
+  List out;
+  int socket = -1;
+  fd_set input;
+
+  while (TRUE) {
+    // See if there's a notification waiting, if so return it
+    if (!PQconsumeInput(pConn_)) {
+      stop("Failed to consume input from the server");
+    }
+    if ((notify = PQnotifies(pConn_)) != NULL) {
+      out = Rcpp::List::create(
+        _["channel"] = CharacterVector::create(notify->relname),
+        _["pid"] = IntegerVector::create(notify->be_pid),
+        _["payload"] = CharacterVector::create(notify->extra)
+      );
+      PQfreemem(notify);
+      return out;
+    }
+
+    if (socket != -1) {
+      // Socket open, so already been round once, give up.
+      return NULL;
+    }
+
+    // Open DB socket and wait for new data for at most (timeout_secs) seconds
+    if ((socket = PQsocket(pConn_)) < 0) {
+      stop("Failed to get connection socket");
+    }
+    FD_ZERO(&input);
+    FD_SET(socket, &input);
+    timeval timeout = {0, 0};
+    timeout.tv_sec = timeout_secs;
+    if (select(socket + 1, &input, NULL, NULL, &timeout) < 0) {
+        stop("select() on the connection failed");
+    }
+  }
+}

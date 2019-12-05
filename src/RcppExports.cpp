@@ -109,6 +109,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// connection_wait_for_notify
+List connection_wait_for_notify(DbConnection* con, __time_t timeout_secs);
+RcppExport SEXP _RPostgres_connection_wait_for_notify(SEXP conSEXP, SEXP timeout_secsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< __time_t >::type timeout_secs(timeout_secsSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_wait_for_notify(con, timeout_secs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP _RPostgres_encode_vector(SEXP xSEXP) {
@@ -264,6 +276,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
+    {"_RPostgres_connection_wait_for_notify", (DL_FUNC) &_RPostgres_connection_wait_for_notify, 2},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},

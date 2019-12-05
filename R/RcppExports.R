@@ -37,6 +37,10 @@ connection_copy_data <- function(con, sql, df) {
     invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
+connection_wait_for_notify <- function(con, timeout_secs) {
+    .Call(`_RPostgres_connection_wait_for_notify`, con, timeout_secs)
+}
+
 encode_vector <- function(x) {
     .Call(`_RPostgres_encode_vector`, x)
 }

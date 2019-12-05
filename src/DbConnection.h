@@ -52,6 +52,7 @@ public:
 
   void cleanup_query();
   static void finish_query(PGconn* pConn);
+  List wait_for_notify(__time_t timeout_secs);
 
 private:
   void cancel_query();
