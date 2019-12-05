@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.1.1
-Date: 2018-05-05
+Version: 1.1.2
+Date: 2019-12-05
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),

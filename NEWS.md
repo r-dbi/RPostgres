@@ -1,3 +1,8 @@
+# RPostgres 1.1.2
+
+- Replace `std::mem_fun_ref()` by `std::mem_fn()`.
+
+
 # RPostgres 1.1.1 (2018-05-05)
 
 - Add support for `bigint` argument to `dbConnect()`, supported values are `"integer64"`, `"integer"`, `"numeric"` and `"character"`. Large integers are returned as values of that type (r-dbi/DBItest#133).
