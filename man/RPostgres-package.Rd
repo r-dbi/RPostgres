@@ -6,8 +6,9 @@
 \alias{RPostgres-package}
 \title{RPostgres: 'Rcpp' Interface to 'PostgreSQL'}
 \description{
-Fully 'DBI'-compliant 'Rcpp'-backed interface to 'PostgreSQL' <https://www.postgresql.org/>,
-an open-source relational database.
+Fully 'DBI'-compliant 'Rcpp'-backed interface
+    to 'PostgreSQL' <https://www.postgresql.org/>, an open-source
+    relational database.
 }
 \seealso{
 Useful links:
@@ -18,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org} (0000-0002-1416-3412)
+\strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org} (\href{https://orcid.org/0000-0002-1416-3412}{ORCID})
 
 Authors:
 \itemize{

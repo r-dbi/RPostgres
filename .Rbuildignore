@@ -1,3 +1,4 @@
+^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
@@ -12,3 +13,6 @@ windows
 ^_pkgdown\.yml$
 ^docs$
 ^CRAN-RELEASE$
+^codecov\.yml$
+^LICENSE\.md$
+^CODE_OF_CONDUCT\.md$

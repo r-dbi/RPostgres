@@ -73,7 +73,7 @@ get_data_type <- function(obj) {
   if (inherits(obj, "integer64")) return("BIGINT")
   switch(typeof(obj),
     integer = "INTEGER",
-    double = "REAL",
+    double = "DOUBLE PRECISION",
     character = "TEXT",
     logical = "BOOLEAN",
     list = "BYTEA",
@@ -142,6 +142,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
+#' @param check_interrupts Should user interrupts be checked during the query execution (before
+#'   first row of data is available)? Setting to `TRUE` allows interruption of queries
+#'   running too long.
+#' @param timezone Sets the timezone for the connection. The default is `"UTC"`.
+#'   If `NULL` then no timezone is set, which defaults to localtime.
 #' @param conn Connection to disconnect.
 #' @export
 #' @examples
@@ -154,7 +159,8 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
-           bigint = c("integer64", "integer", "numeric", "character")) {
+           bigint = c("integer64", "integer", "numeric", "character"),
+           check_interrupts = FALSE, timezone = "UTC") {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -162,18 +168,21 @@ setMethod("dbConnect", "PqDriver",
       stop("All options should be strings", call. = FALSE)
     }
     bigint <- match.arg(bigint)
+    stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
 
     if (length(opts) == 0) {
-      ptr <- connection_create(character(), character())
+      ptr <- connection_create(character(), character(), check_interrupts)
     } else {
-      ptr <- connection_create(names(opts), as.vector(opts))
+      ptr <- connection_create(names(opts), as.vector(opts), check_interrupts)
     }
 
-    con <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
-    dbExecute(con, "SET TIMEZONE='UTC'")
-    con@typnames <- dbGetQuery(con, "SELECT oid, typname FROM pg_type")
+    conn <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
+    if (!is.null(timezone)) {
+      dbExecute(conn, paste0("SET TIMEZONE='", timezone, "'"))
+    }
+    conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type")
 
-    con
+    conn
   })
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)

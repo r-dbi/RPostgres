@@ -7,14 +7,15 @@
 using namespace Rcpp;
 
 // connection_create
-XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values);
-RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP) {
+XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values, bool check_interrupts);
+RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP, SEXP check_interruptsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<std::string> >::type keys(keysSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type values(valuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(connection_create(keys, values));
+    Rcpp::traits::input_parameter< bool >::type check_interrupts(check_interruptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_create(keys, values, check_interrupts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -153,15 +154,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // result_create
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool is_statement);
-RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP, SEXP is_statementSEXP) {
+XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql);
+RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<DbConnectionPtr> >::type con(conSEXP);
     Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
-    Rcpp::traits::input_parameter< bool >::type is_statement(is_statementSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_create(con, sql, is_statement));
+    rcpp_result_gen = Rcpp::wrap(result_create(con, sql));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -255,7 +255,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 2},
+    {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 3},
     {"_RPostgres_connection_valid", (DL_FUNC) &_RPostgres_connection_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
     {"_RPostgres_connection_info", (DL_FUNC) &_RPostgres_connection_info, 1},
@@ -268,7 +268,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},
     {"_RPostgres_init_logging", (DL_FUNC) &_RPostgres_init_logging, 1},
-    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 3},
+    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
     {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_valid", (DL_FUNC) &_RPostgres_result_valid, 1},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},

@@ -54,7 +54,11 @@ List DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   boost::for_each(data, names, boost::bind(&DbColumn::warn_type_conflicts, _1, _2));
 
   List out(data.begin(), data.end());
-  out.attr("names") = names;
+  StringVector names_utf8 = wrap(names);
+  for (int j = 0; j < names_utf8.size(); ++j) {
+    names_utf8[j] = Rf_mkCharCE(names_utf8[j], CE_UTF8);
+  }
+  out.attr("names") = names_utf8;
   out.attr("class") = "data.frame";
   out.attr("row.names") = IntegerVector::create(NA_INTEGER, -i);
   return out;

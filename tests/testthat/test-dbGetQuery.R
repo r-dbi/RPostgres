@@ -55,3 +55,13 @@ test_that("uuid format is recognized", {
 
   dbDisconnect(con)
 })
+
+test_that("queries with check_interrupt = TRUE work (#193)", {
+  con <- postgresDefault(check_interrupts = TRUE)
+
+  expect_equal(dbGetQuery(con, "SELECT 1")[[1]], 1)
+
+  dbDisconnect(con)
+})
+
+

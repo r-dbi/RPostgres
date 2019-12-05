@@ -40,7 +40,7 @@ SEXP DbColumnStorage::allocate(const R_xlen_t length, DATA_TYPE dt) {
 
   SEXP ret = PROTECT(Rf_allocVector(type, length));
   if (!Rf_isNull(class_)) Rf_setAttrib(ret, R_ClassSymbol, class_);
-  set_attribs_from_datatype(ret, dt);
+  ret = set_attribs_from_datatype(ret, dt);
   UNPROTECT(1);
   return ret;
 }
@@ -189,9 +189,6 @@ Rcpp::RObject DbColumnStorage::class_from_datatype(DATA_TYPE dt) {
   case DT_INT64:
     return CharacterVector::create("integer64");
 
-  case DT_BLOB:
-    return CharacterVector::create("blob");
-
   case DT_DATE:
     return CharacterVector::create("Date");
 
@@ -199,24 +196,32 @@ Rcpp::RObject DbColumnStorage::class_from_datatype(DATA_TYPE dt) {
   case DT_DATETIMETZ:
     return CharacterVector::create("POSIXct", "POSIXt");
 
-  case DT_TIME:
-    return CharacterVector::create("hms", "difftime");
-
   default:
     return R_NilValue;
   }
 }
 
-void DbColumnStorage::set_attribs_from_datatype(SEXP x, DATA_TYPE dt) {
+SEXP DbColumnStorage::set_attribs_from_datatype(SEXP x, DATA_TYPE dt) {
   switch (dt) {
+  case DT_BLOB:
+    return new_blob(x);
+
   case DT_TIME:
-    Rf_setAttrib(x, PROTECT(CharacterVector::create("units")), PROTECT(CharacterVector::create("secs")));
-    UNPROTECT(2);
-    break;
+    return new_hms(x);
 
   default:
-    ;
+    return x;
   }
+}
+
+SEXP DbColumnStorage::new_blob(SEXP x) {
+  static Function new_blob = Function("new_blob", Rcpp::Environment::namespace_env("blob"));
+  return new_blob(x);
+}
+
+SEXP DbColumnStorage::new_hms(SEXP x) {
+  static Function new_hms = Function("new_hms", Rcpp::Environment::namespace_env("hms"));
+  return new_hms(x);
 }
 
 void DbColumnStorage::fill_default_value(SEXP data, DATA_TYPE dt, R_xlen_t i) {

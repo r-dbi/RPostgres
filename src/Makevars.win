@@ -1,7 +1,9 @@
-PKG_CPPFLAGS= -I../windows/libpq-9.5.2/include
-PKG_LIBS= -L../windows/libpq-9.5.2/lib${R_ARCH} \
+VERSION = 11.1.0
+RWINLIB = ../windows/libpq-$(VERSION)
+PKG_CPPFLAGS = -I$(RWINLIB)/include -DSTRICT_R_HEADERS -DRCPP_DEFAULT_INCLUDE_CALL=false -DRCPP_USING_UTF8_ERROR_STRING -DBOOST_NO_AUTO_PTR
+PKG_LIBS = -L$(RWINLIB)/lib${R_ARCH} \
 	-lpq -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
-CXX_STD=CXX11
+CXX_STD = CXX11
 
 $(SHLIB):
 
@@ -11,4 +13,4 @@ clean:
 	rm -f $(SHLIB) $(OBJECTS)
 
 winlibs:
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)

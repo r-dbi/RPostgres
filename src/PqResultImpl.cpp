@@ -5,13 +5,18 @@
 #include "DbColumnStorage.h"
 #include "PqDataFrame.h"
 
-PqResultImpl::PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql) :
-  res(pRes),
-  pConn_(pConn),
-  pSpec_(prepare(pConn, sql)),
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+  pConnPtr_(pConn),
+  pConn_(pConn->conn()),
+  pSpec_(prepare(pConn_, sql)),
   cache(pSpec_),
   complete_(false),
   ready_(false),
+  data_ready_(false),
   nrows_(0),
   rows_affected_(0),
   group_(0),
@@ -272,12 +277,12 @@ List PqResultImpl::get_column_info() {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  List out = Rcpp::List::create(names, types, cache.oids_, cache.known_);
-  out.attr("row.names") = IntegerVector::create(NA_INTEGER, -cache.ncols_);
-  out.attr("class") = "data.frame";
-  out.attr("names") = CharacterVector::create("name", "type", ".oid", ".known");
-
-  return out;
+  return Rcpp::List::create(
+    _["name"] = names,
+    _["type"] = types,
+    _[".oid"] = cache.oids_,
+    _[".known"] = cache.known_
+  );
 }
 
 
@@ -299,8 +304,9 @@ bool PqResultImpl::bind_row() {
   if (group_ >= groups_)
     return false;
 
-  if (ready_ || group_ > 0)
-    res->finish_query();
+  if (ready_ || group_ > 0) {
+    DbConnection::finish_query(pConn_);
+  }
 
   std::vector<const char*> c_params(cache.nparams_);
   std::vector<int> formats(cache.nparams_);
@@ -329,6 +335,7 @@ bool PqResultImpl::bind_row() {
     PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
                         &lengths[0], &formats[0], 0) :
     PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
+  data_ready_ = false;
 
   if (!success)
     conn_stop("Failed to send query");
@@ -348,7 +355,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
 List PqResultImpl::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
-  PqDataFrame data(this, cache.names_, n_max, cache.types_, cache.oids_);
+  PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
     warning("Don't need to call dbFetch() for statements, only for queries");
@@ -379,6 +386,13 @@ bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
   if (pRes_) PQclear(pRes_);
+
+  // Check user interrupts while waiting for the data to be ready
+  if (!data_ready_) {
+    wait_for_data();
+    data_ready_ = true;
+  }
+
   pRes_ = PQgetResult(pConn_);
 
   // We're done, but we need to call PQgetResult until it returns NULL
@@ -426,7 +440,7 @@ bool PqResultImpl::step_done() {
 }
 
 List PqResultImpl::peek_first_row() {
-  PqDataFrame data(this, cache.names_, 1, cache.types_, cache.oids_);
+  PqDataFrame data(this, cache.names_, 1, cache.types_);
 
   if (!complete_)
     data.set_col_values();
@@ -452,4 +466,40 @@ void PqResultImpl::add_oids(List& data) const {
 
 PGresult* PqResultImpl::get_result() {
   return pRes_;
+}
+
+// checks user interrupts while waiting for the first row of data to be ready
+// see https://www.postgresql.org/docs/current/static/libpq-async.html
+void PqResultImpl::wait_for_data() {
+  if (!pConnPtr_->is_check_interrupts())
+    return;
+
+  int socket, ret;
+  fd_set input;
+
+  socket = PQsocket(pConn_);
+  if (socket < 0) {
+    stop("Failed to get connection socket");
+  }
+  FD_ZERO(&input);
+  FD_SET(socket, &input);
+
+  do {
+    // wait for any traffic on the db connection socket but no longet then 1s
+    timeval timeout = {0, 0};
+    timeout.tv_sec = 1;
+
+    const int nfds = socket + 1;
+    ret = select(nfds, &input, NULL, NULL, &timeout);
+    if (ret == 0) {
+      // timeout reached - check user interrupt
+      checkUserInterrupt();
+    } else if(ret < 0) {
+      stop("select() on the connection failed");
+    }
+    // update db connection state using data available on the socket
+    if (!PQconsumeInput(pConn_)) {
+      stop("Failed to consume input from the server");
+    }
+  } while (PQisBusy(pConn_)); // check if PQgetResult will still block
 }
