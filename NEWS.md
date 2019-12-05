@@ -1,3 +1,8 @@
+# RPostgres 1.1.3
+
+- Replace `std::mem_fn()` by `boost::mem_fn()` which works for older compilers.
+
+
 # RPostgres 1.1.2
 
 - Replace `std::mem_fun_ref()` by `std::mem_fn()`.
