@@ -6,11 +6,12 @@
 #include "DbColumnDataType.h"
 #include "PqResultSource.h"
 
-class DbResult;
+class DbConnection;
+typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
 class PqResultImpl : boost::noncopyable, public PqResultSource {
-  // Back pointer for query cancellation
-  DbResult* res;
+  // Back pointer
+  boost::shared_ptr<DbConnection> pConnPtr_;
 
   // Wrapped pointer
   PGconn* pConn_;
@@ -37,6 +38,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   // State
   bool complete_;
   bool ready_;
+  bool data_ready_;
   int nrows_;
   int rows_affected_;
   List params_;
@@ -44,7 +46,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(DbResult* pRes, PGconn* pConn, const std::string& sql);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
   ~PqResultImpl();
 
 private:
@@ -81,6 +83,9 @@ private:
 public:
   // PqResultSource
   PGresult* get_result();
+
+private:
+  void wait_for_data();
 };
 
 #endif //RPOSTGRES_PQRESULTIMPL_H

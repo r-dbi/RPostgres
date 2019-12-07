@@ -172,14 +172,11 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
     stop("Named parameters not supported", call. = FALSE)
   }
   if (!is.list(params)) params <- as.list(params)
-  lengths <- unique(viapply(params, length))
-  if (length(lengths) > 1) {
-    stop("All parameters must have the same length.", call. = FALSE)
-  }
 
   params <- factor_to_string(params, warn = TRUE)
-  params <- posixlt_to_posixct(params)
+  params <- fix_posixt(params)
   params <- difftime_to_hms(params)
+  params <- fix_numeric(params)
   params <- prepare_for_binding(params)
   result_bind(res@ptr, params)
   invisible(res)
@@ -194,22 +191,33 @@ factor_to_string <- function(value, warn = FALSE) {
   value
 }
 
-posixlt_to_posixct <- function(value) {
-  is_posixlt <- vlapply(value, inherits, "POSIXlt")
-  value[is_posixlt] <- lapply(value[is_posixlt], as.POSIXct)
+fix_posixt <- function(value) {
+  is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
+  withr::with_options(
+    list(digits.secs = 6),
+    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, usetz = T))
+  )
   value
 }
 
 difftime_to_hms <- function(value) {
   is_difftime <- vlapply(value, inherits, "difftime")
-  value[is_difftime] <- lapply(value[is_difftime], hms::as.hms)
+  value[is_difftime] <- lapply(value[is_difftime], hms::as_hms)
+  value
+}
+
+fix_numeric <- function(value) {
+  is_numeric <- vlapply(value, is.numeric)
+  value[is_numeric] <- lapply(
+    value[is_numeric],
+    function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE, trim = TRUE)
+  )
   value
 }
 
 prepare_for_binding <- function(value) {
   is_list <- vlapply(value, is.list)
-  value[!is_list] <- lapply(value[!is_list], as.character)
-  value[!is_list] <- lapply(value[!is_list], enc2utf8)
+  value[!is_list] <- lapply(value[!is_list], function(x) enc2utf8(as.character(x)))
   value[is_list] <- lapply(value[is_list], vcapply, function(x) {
     if (is.null(x)) NA_character_
     else if (is.raw(x)) {

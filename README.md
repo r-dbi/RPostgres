@@ -1,8 +1,10 @@
 # RPostgres
 
-[![Travis-CI Build Status](https://travis-ci.org/r-dbi/RPostgres.png?branch=master)](https://travis-ci.org/r-dbi/RPostgres) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-dbi/RPostgres?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/RPostgres) [![codecov](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/RPostgres)
+<!-- badges: start -->
+[![Travis-CI Build Status](https://travis-ci.org/r-dbi/RPostgres.png?branch=master)](https://travis-ci.org/r-dbi/RPostgres) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-dbi/RPostgres?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/RPostgres)  [![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/RPostgres?branch=master)
+<!-- badges: end -->
 
-RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to RPostgresSQL, it:
+RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:
 
 * Has full support for parameterised queries via `dbSendQuery()`, and `dbBind()`.
 
@@ -24,6 +26,9 @@ install.packages("RPostgres")
 # install.packages("remotes")
 remotes::install_github("r-dbi/RPostgres")
 ```
+
+Discussions associated with DBI and related database packages take place on [R-SIG-DB](https://stat.ethz.ch/mailman/listinfo/r-sig-db). 
+The website [Databases using R](https://db.rstudio.com/) describes the tools and best practices in this ecosystem.
 
 ## Basic usage
 
@@ -72,3 +77,9 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'DATABASE_NAME',
 ## Design notes
 
 The original DBI design imagined that each package could instantiate X drivers, with each driver having Y connections and each connection having Z results. This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set. In the RPostgres package there's only one class on the C side: a connection, which optionally contains a result set. On the R side, the driver class is just a dummy class with no contents (used only for dispatch), and both the connection and result objects point to the same external pointer.
+
+---
+
+Please note that the 'RPostgres' project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.

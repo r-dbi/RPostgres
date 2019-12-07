@@ -110,7 +110,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     if (nrow(value) > 0) {
       value <- sqlData(conn, value, row.names = FALSE, copy = copy)
       if (!copy) {
-        sql <- sqlAppendTable(conn, name, value)
+        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
         dbExecute(conn, sql)
       } else {
         fields <- dbQuoteIdentifier(conn, names(value))
@@ -138,16 +138,12 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
 
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vlapply(value, is.object)
-  is_posix <- vlapply(value, function(c) inherits(c, "POSIXt"))
   is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
   is_blob <- vlapply(value, function(c) is.list(c))
-  is_whole_number <- vlapply(value, is_whole_number_vector)
 
-  withr::with_options(
-    list(digits.secs = 6),
-    value[is_posix] <- lapply(value[is_posix], function(col) format_keep_na(col, usetz = T))
-  )
-  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as.hms(col)))
+  value <- fix_posixt(value)
+
+  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
   value[is_blob] <- lapply(
     value[is_blob],
     function(col) {
@@ -162,14 +158,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
     }
   )
 
-  value[is_whole_number] <- lapply(
-    value[is_whole_number],
-    function(x) {
-      is_value <- which(!is.na(x))
-      x[is_value] <- format(x[is_value], scientific = FALSE, na.encode = FALSE)
-      x
-    }
-  )
+  value <- fix_numeric(value)
 
   value[is_object] <- lapply(value[is_object], as.character)
   value
@@ -178,7 +167,7 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
 format_keep_na <- function(x, ...) {
   is_na <- is.na(x)
   ret <- format(x, ...)
-  ret[is_na] <- NA
+  ret[is_na] <- NA_character_
   ret
 }
 
@@ -186,7 +175,7 @@ format_keep_na <- function(x, ...) {
 #' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
 #' @rdname postgres-tables
 #' @export
-setMethod("dbAppendTable", signature("DBIConnection"),
+setMethod("dbAppendTable", c("PqConnection"),
   function(conn, name, value, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
@@ -199,8 +188,8 @@ setMethod("dbAppendTable", signature("DBIConnection"),
       pattern = "1",
       ...
     )
-    values <- sqlRownamesToColumn(value, row.names)
-    dbExecute(conn, query, param = unname(as.list(value)))
+
+    dbExecute(conn, query, params = unname(as.list(value)))
   }
 )
 
@@ -394,7 +383,7 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
   }
 
   is_prefix <- !is.na(res$schema) & is.na(res$table)
-  tables <- Map(res$schema, res$table, f = as_table)
+  tables <- Map("", res$schema, res$table, f = as_table)
 
   ret <- data.frame(
     table = I(unname(tables)),

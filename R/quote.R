@@ -55,10 +55,13 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) 
 #' @export
 #' @rdname quote
 setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
-  stopifnot(all(names(x@name) %in% c("schema", "table")))
+  stopifnot(all(names(x@name) %in% c("catalog", "schema", "table")))
   stopifnot(!anyDuplicated(names(x@name)))
 
   ret <- ""
+  if ("catalog" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["catalog"]]), ".")
+  }
   if ("schema" %in% names(x@name)) {
     ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["schema"]]), ".")
   }
@@ -71,25 +74,34 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) {
-  rx <- '^(?:(?:|"((?:[^"]|"")+)"[.])(?:|"((?:[^"]|"")*)")|([^". ]+))$'
+  id_rx <- '(?:"((?:[^"]|"")+)"|([^". ]+))'
+
+  rx <- paste0(
+    "^",
+    "(?:|(?:|", id_rx, "[.])",
+    id_rx, "[.])",
+    "(?:|", id_rx, ")",
+    "$"
+  )
+
   bad <- grep(rx, x, invert = TRUE)
   if (length(bad) > 0) {
     stop("Can't unquote ", x[bad[[1]]], call. = FALSE)
   }
-
-  schema <- gsub(rx, "\\1", x)
+  catalog <- gsub(rx, "\\1\\2", x)
+  catalog <- gsub('""', '"', catalog)
+  schema <- gsub(rx, "\\3\\4", x)
   schema <- gsub('""', '"', schema)
-  table <- gsub(rx, "\\2", x)
+  table <- gsub(rx, "\\5\\6", x)
   table <- gsub('""', '"', table)
-  naked_table <- gsub(rx, "\\3", x)
 
-  ret <- Map(schema, table, naked_table, f = as_table)
+  ret <- Map(catalog, schema, table, f = as_table)
   names(ret) <- names(x)
   ret
 })
 
-as_table <- function(schema, table, naked_table = NULL) {
-  args <- c(schema = schema, table = table, table = naked_table)
+as_table <- function(catalog, schema, table) {
+  args <- c(catalog = catalog, schema = schema, table = table)
   # Also omits NA args
   args <- args[!is.na(args) & args != ""]
   do.call(Id, as.list(args))

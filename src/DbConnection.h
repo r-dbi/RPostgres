@@ -16,9 +16,11 @@ class DbConnection : boost::noncopyable {
   PGconn* pConn_;
   const DbResult* pCurrentResult_;
   bool transacting_;
+  bool check_interrupts_;
 
 public:
-  DbConnection(std::vector<std::string> keys, std::vector<std::string> values);
+  DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
+    bool check_interrupts);
   virtual ~DbConnection();
 
 public:
@@ -27,6 +29,7 @@ public:
   PGconn* conn();
 
   void set_current_result(const DbResult* pResult);
+  void reset_current_result(const DbResult* pResult);
   bool is_current_result(const DbResult* pResult);
   bool has_query();
 
@@ -34,6 +37,8 @@ public:
 
   void check_connection();
   List info();
+
+  bool is_check_interrupts() const;
 
   SEXP quote_string(const String& x);
   SEXP quote_identifier(const String& x);
@@ -46,7 +51,7 @@ public:
   static void conn_stop(PGconn* conn, const char* msg);
 
   void cleanup_query();
-  void finish_query() const;
+  static void finish_query(PGconn* pConn);
 
 private:
   void cancel_query();

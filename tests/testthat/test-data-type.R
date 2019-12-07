@@ -8,5 +8,5 @@ test_that("dbDataType works on a data frame", {
   df <- data.frame(x = 1:10, y = 1:10 / 2)
   types <- dbDataType(con, df)
 
-  expect_equal(types, c(x = "INTEGER", y = "REAL"))
+  expect_equal(types, c(x = "INTEGER", y = "DOUBLE PRECISION"))
 })
