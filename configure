@@ -1,2 +1,2 @@
 #!/bin/sh
-/bin/bash configure.bash
+/bin/bash src/configure.bash
