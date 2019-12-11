@@ -190,9 +190,10 @@ List DbConnection::info() {
       _["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
       _["host"]   = host == NULL ? "" : std::string(host),
       _["port"]   = port == NULL ? "" : std::string(port),
-      _["user"]   = user == NULL ? "" : std::string(user),
-      _["protocol_version"]   = pver,
-      _["server_version"]     = sver,
+      _["username"] = user == NULL ? "" : std::string(user),
+      _["protocol.version"]   = pver,
+      _["server.version"]     = sver,
+      _["db.version"]         = sver,
       _["pid"]                = pid
     );
 }

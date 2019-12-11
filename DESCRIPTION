@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.1.1.9002
-Date: 2018-10-04
+Version: 1.1.3.9000
+Date: 2019-12-07
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -22,7 +22,7 @@ Authors@R:
              family = "Nishiyama",
              role = "ctb",
              comment = "Code for encoding vectors into strings derived from RPostgreSQL"))
-Description:  Fully 'DBI'-compliant 'Rcpp'-backed interface
+Description: Fully 'DBI'-compliant 'Rcpp'-backed interface
     to 'PostgreSQL' <https://www.postgresql.org/>, an open-source
     relational database.
 License: GPL-3 + file LICENSE
@@ -46,18 +46,16 @@ LinkingTo:
     plogr (>= 0.2.0),
     Rcpp
 Remotes: 
+    tidyverse/blob,
     r-dbi/DBI,
     r-dbi/DBItest,
-    tidyverse/blob,
     tidyverse/hms
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
-SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
-    postgresql-devel (rpm)
+RoxygenNote: 7.0.1
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 Collate: 
-    's4.R'
     'PqDriver.R'
     'PqConnection.R'
     'PqResult.R'

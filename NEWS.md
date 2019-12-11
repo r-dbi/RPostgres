@@ -1,3 +1,8 @@
+# RPostgres 1.1.3.9000
+
+- Same as previous version.
+
+
 # RPostgres 1.1.1.9002
 
 - Windows: update libpq to 11.1.0
@@ -13,6 +18,16 @@
 
 - Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
 - Fix binding for whole numbers and `POSIXt` timestamps (#191).
+
+
+# RPostgres 1.1.3
+
+- Replace `std::mem_fn()` by `boost::mem_fn()` which works for older compilers.
+
+
+# RPostgres 1.1.2
+
+- Replace `std::mem_fun_ref()` by `std::mem_fn()`.
 
 
 # RPostgres 1.1.1 (2018-05-05)
