@@ -70,7 +70,7 @@ run <- postgresHasDefault()
 library(DBI)
 if (run) con <- dbConnect(RPostgres::Postgres())
 
-x <- c("a", "b c", "d'e", "\\f")
+x <- c("a", "b c", "d'e", "\\\\f")
 if (run) dbQuoteString(con, x)
 if (run) dbQuoteIdentifier(con, x)
 if (run) dbDisconnect(con)
