@@ -43,7 +43,6 @@ setMethod("dbGetInfo", "PqDriver", function(dbObj, ...) {
   minor <- (client_version - major * 10000) %/% 100
   rev <- client_version - major * 10000 - minor * 100
 
-  version <- RSQLite::rsqliteVersion()
   list(
     driver.version = PACKAGE_VERSION,
     client.version = package_version(paste0(major, ".", minor, ".", rev))
