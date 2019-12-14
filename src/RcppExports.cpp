@@ -6,6 +6,16 @@
 
 using namespace Rcpp;
 
+// client_version
+int client_version();
+RcppExport SEXP _RPostgres_client_version() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(client_version());
+    return rcpp_result_gen;
+END_RCPP
+}
 // connection_create
 XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values, bool check_interrupts);
 RcppExport SEXP _RPostgres_connection_create(SEXP keysSEXP, SEXP valuesSEXP, SEXP check_interruptsSEXP) {
@@ -255,6 +265,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_RPostgres_client_version", (DL_FUNC) &_RPostgres_client_version, 0},
     {"_RPostgres_connection_create", (DL_FUNC) &_RPostgres_connection_create, 3},
     {"_RPostgres_connection_valid", (DL_FUNC) &_RPostgres_connection_valid, 1},
     {"_RPostgres_connection_release", (DL_FUNC) &_RPostgres_connection_release, 1},
