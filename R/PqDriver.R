@@ -36,6 +36,7 @@ setMethod("dbIsValid", "PqDriver", function(dbObj, ...) {
 # Set during installation time for the correct library
 PACKAGE_VERSION <- utils::packageVersion(utils::packageName())
 
+#' @rdname PqDriver-class
 #' @export
 setMethod("dbGetInfo", "PqDriver", function(dbObj, ...) {
   client_version <- client_version()
