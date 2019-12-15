@@ -70,7 +70,7 @@ at most one table component and at most one schema component." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@ at most one table component and at most one schema component." />
     </div>
 
     <div class="ref-description">
-    <p>If an object of class <a href='https://rdrr.io/pkg/DBI/man/Id.html'>Id</a> is used for <code>dbQuoteIdentifier()</code>, it needs
+    <p>If an object of class <a href='https://dbi.r-dbi.org/reference/Id.html'>Id</a> is used for <code>dbQuoteIdentifier()</code>, it needs
 at most one <code>table</code> component and at most one <code>schema</code> component.</p>
     </div>
 
@@ -189,16 +189,16 @@ at most one <code>table</code> component and at most one <code>schema</code> com
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b c"</span>, <span class='st'>"d'e"</span>, <span class='st'>"\\f"</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbQuoteString.html'>dbQuoteString</a></span>(<span class='no'>con</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; 'a'
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span>(<span class='no'>con</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; 'a'
 #&gt; &lt;SQL&gt; 'b c'
 #&gt; &lt;SQL&gt; 'd''e'
-#&gt; &lt;SQL&gt;  E'\\f'</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span>(<span class='no'>con</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; "a"
+#&gt; &lt;SQL&gt;  E'\\f'</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span>(<span class='no'>con</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; &lt;SQL&gt; "a"
 #&gt; &lt;SQL&gt; "b c"
 #&gt; &lt;SQL&gt; "d'e"
-#&gt; &lt;SQL&gt; "\f"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div></pre>
+#&gt; &lt;SQL&gt; "\f"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

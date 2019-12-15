@@ -75,7 +75,7 @@ uses placeholders of the form $1, $2 etc. instead of ?." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
       </span>
     </div>
 
@@ -179,7 +179,7 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
     <tr>
       <th>conn</th>
       <td><p>a <a href='PqConnection-class.html'>PqConnection</a> object, produced by
-<code><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>DBI::dbConnect()</a></code></p></td>
+<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>DBI::dbConnect()</a></code></p></td>
     </tr>
     <tr>
       <th>name</th>
@@ -219,7 +219,7 @@ in the DBMS. Its default is <code>FALSE</code>.</p></td>
       <th>field.types</th>
       <td><p>character vector of named SQL field types where
 the names are the names of new table's columns. If missing, types inferred
-with <code><a href='https://rdrr.io/pkg/DBI/man/dbDataType.html'>DBI::dbDataType()</a></code>).</p></td>
+with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbDataType()</a></code>).</p></td>
     </tr>
     <tr>
       <th>temporary</th>
@@ -249,7 +249,7 @@ table doesn't exist.</p></td>
     <tr>
       <th>prefix</th>
       <td><p>A fully qualified path in the database's namespace, or <code>NULL</code>.
-This argument will be processed with <code><a href='https://rdrr.io/pkg/DBI/man/dbUnquoteIdentifier.html'>dbUnquoteIdentifier()</a></code>.
+This argument will be processed with <code><a href='https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html'>dbUnquoteIdentifier()</a></code>.
 If given the method will return all objects accessible through this prefix.</p></td>
     </tr>
     </table>
@@ -260,9 +260,9 @@ If given the method will return all objects accessible through this prefix.</p><
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>, <span class='no'>mtcars</span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt;     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>, <span class='no'>mtcars</span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt;     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #&gt; 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #&gt; 2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
 #&gt; 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -295,12 +295,12 @@ If given the method will return all objects accessible through this prefix.</p><
 #&gt; 30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
 #&gt; 31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 #&gt; 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</div><div class='input'>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [1] "mtcars"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbExistsTable.html'>dbExistsTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [1] "mtcars"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># A zero row data frame just creates a table definition.</span>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>, <span class='no'>mtcars</span>[<span class='fl'>0</span>, ], <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>)</div><div class='output co'>#&gt;  [1] mpg  cyl  disp hp   drat wt   qsec vs   am   gear carb
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>, <span class='no'>mtcars</span>[<span class='fl'>0</span>, ], <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>)</div><div class='output co'>#&gt;  [1] mpg  cyl  disp hp   drat wt   qsec vs   am   gear carb
 #&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div></pre>
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

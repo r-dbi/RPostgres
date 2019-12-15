@@ -72,7 +72,7 @@ fetches and clears for you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@ currently ignored).</p></td>
     <tr>
       <th>res</th>
       <td><p>Code a <a href='PqResult-class.html'>PqResult</a> produced by
-<code><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>DBI::dbSendQuery()</a></code>.</p></td>
+<code><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>DBI::dbSendQuery()</a></code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -188,25 +188,25 @@ default name.</p>
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>db</span>, <span class='st'>"usarrests"</span>, <span class='kw pkg'>datasets</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>db</span>, <span class='st'>"usarrests"</span>, <span class='kw pkg'>datasets</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Run query to get results as dataframe</span>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbGetQuery.html'>dbGetQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT * FROM usarrests LIMIT 3"</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT * FROM usarrests LIMIT 3"</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
 #&gt; 1   13.2     236       58 21.2
 #&gt; 2   10.0     263       48 44.5
 #&gt; 3    8.1     294       80 31.0</div><div class='input'>
 <span class='co'># Send query to pull requests in batches</span>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT * FROM usarrests"</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbFetch.html'>dbFetch</a></span>(<span class='no'>res</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT * FROM usarrests"</span>)
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span>(<span class='no'>res</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
 #&gt; 1   13.2     236       58 21.2
-#&gt; 2   10.0     263       48 44.5</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbFetch.html'>dbFetch</a></span>(<span class='no'>res</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
+#&gt; 2   10.0     263       48 44.5</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span>(<span class='no'>res</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;   Murder Assault UrbanPop Rape
 #&gt; 1    8.1     294       80 31.0
-#&gt; 2    8.8     190       50 19.5</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbHasCompleted.html'>dbHasCompleted</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
+#&gt; 2    8.8     190       50 19.5</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbHasCompleted.html'>dbHasCompleted</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbClearResult.html'>dbClearResult</a></span>(<span class='no'>res</span>)
 
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbRemoveTable.html'>dbRemoveTable</a></span>(<span class='no'>db</span>, <span class='st'>"usarrests"</span>)
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable</a></span>(<span class='no'>db</span>, <span class='st'>"usarrests"</span>)
 
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>db</span>)</div></pre>
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>db</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

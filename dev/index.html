@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 
 <p>RPostgres is an DBI-compliant interface to the postgres database. It’s a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:</p>
 <ul>
-<li><p>Has full support for parameterised queries via <code><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html">dbSendQuery()</a></code>, and <code><a href="https://rdrr.io/pkg/DBI/man/dbBind.html">dbBind()</a></code>.</p></li>
+<li><p>Has full support for parameterised queries via <code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery()</a></code>, and <code><a href="https://dbi.r-dbi.org/reference/dbBind.html">dbBind()</a></code>.</p></li>
 <li><p>Automatically cleans up open connections and result sets, ensuring that you don’t need to worry about leaking connections or memory.</p></li>
 <li><p>Is a little faster, saving ~5 ms per query. (For reference, it takes around 5ms to retrive a 1000 x 25 result set from a local database, so this is decent speed up for smaller queries.)</p></li>
 <li><p>A simplified build process that relies on system libpq.</p></li>
@@ -100,38 +100,38 @@
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Connect to the default postgres database</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>())</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>())</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbListTables.html">dbListTables</a></span>(con)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"mtcars"</span>, mtcars)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbListTables.html">dbListTables</a></span>(con)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span>(con)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"mtcars"</span>, mtcars)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span>(con)</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbListFields.html">dbListFields</a></span>(con, <span class="st">"mtcars"</span>)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbReadTable.html">dbReadTable</a></span>(con, <span class="st">"mtcars"</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields</a></span>(con, <span class="st">"mtcars"</span>)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span>(con, <span class="st">"mtcars"</span>)</a>
 <a class="sourceLine" id="cb2-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co"># You can fetch all results:</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbFetch.html">dbFetch</a></span>(res)</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbClearResult.html">dbClearResult</a></span>(res)</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">res &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span>(res)</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span>(res)</a>
 <a class="sourceLine" id="cb2-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co"># Or a chunk at a time</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="cf">while</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbHasCompleted.html">dbHasCompleted</a></span>(res)){</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">  chunk &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbFetch.html">dbFetch</a></span>(res, <span class="dt">n =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">res &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span>(con, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="cf">while</span>(<span class="op">!</span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbHasCompleted.html">dbHasCompleted</a></span>(res)){</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">  chunk &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span>(res, <span class="dt">n =</span> <span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb2-21" data-line-number="21">  <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(chunk))</a>
 <a class="sourceLine" id="cb2-22" data-line-number="22">}</a>
 <a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co"># Clear the result</span></a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbClearResult.html">dbClearResult</a></span>(res)</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span>(res)</a>
 <a class="sourceLine" id="cb2-25" data-line-number="25"></a>
 <a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co"># Disconnect from the database</span></a>
-<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html">dbDisconnect</a></span>(con)</a></code></pre></div>
+<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span>(con)</a></code></pre></div>
 </div>
 <div id="connecting-to-a-specific-postgres-instance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-a-specific-postgres-instance" class="anchor"></a>Connecting to a specific Postgres instance</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># Connect to a specific postgres database i.e. Heroku</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, </a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">                 <span class="dt">host =</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">                 <span class="dt">port =</span> <span class="dv">5432</span>, <span class="co"># or any other port specified by your DBA</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">                 <span class="dt">user =</span> <span class="st">'USERNAME'</span>,</a>
