@@ -16,7 +16,6 @@ PKG_CSW_NAME="postgresql_dev"
 PKG_BREW_NAME="libpq"
 PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
-PKG_LIBS_STATIC="-lpq -lssl -lcrypto -lldap"
 
 # pkg-config values (if available)
 if [ $(command -v pkg-config) ]; then
