@@ -40,6 +40,9 @@ fortran: false
 #stages: test, full
 stages:
 - name: test
+  if: branch != docs
+- name: docs
+  if: branch = docs OR branch = master
 - name: full
   if: branch = master
 
@@ -67,12 +70,13 @@ matrix:
     env:
     - DEV_VERSIONS=true
   - r: 3.2
+  - stage: docs
+    r: release
+    env:
+    - BUILD_PKGDOWN=true
   - stage: full
     os: osx
     latex: false
-  - r: release
-    env:
-    - BUILD_PKGDOWN=true
   - r: 3.5
   - r: 3.4
   - r: 3.3
