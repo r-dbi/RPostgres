@@ -81,5 +81,5 @@ The original DBI design imagined that each package could instantiate X drivers, 
 ---
 
 Please note that the 'RPostgres' project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+[Contributor Code of Conduct](https://rpostgres.r-dbi.org/code_of_conduct).
 By contributing to this project, you agree to abide by its terms.
