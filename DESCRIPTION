@@ -33,24 +33,19 @@ Depends:
     R (>= 3.1.0)
 Imports: 
     bit64,
-    blob (>= 1.1.1.9002),
-    DBI (>= 1.0.0.9003),
-    hms (>= 0.4.2.9005),
+    blob (>= 1.2.0),
+    DBI (>= 1.1.0),
+    hms (>= 0.5.0),
     methods,
     Rcpp (>= 0.11.4.2),
     withr
 Suggests: 
-    DBItest,
+    DBItest (>= 1.7.0),
     testthat
 LinkingTo: 
     BH,
     plogr (>= 0.2.0),
     Rcpp
-Remotes: 
-    r-dbi/DBI,
-    r-dbi/DBItest,
-    tidyverse/blob,
-    tidyverse/hms
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
