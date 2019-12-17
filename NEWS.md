@@ -1,11 +1,35 @@
-# RPostgres 1.1.4
+# RPostgres 1.2.0
 
-- Implement `dbGetInfo()` for the driver object.
-- Windows: update libpq to 11.1.0
-- `dbConect()` gains `check_interrupts` argument that allows interrupting execution safely while waiting for query results to be ready (#193, @zozlak).
+## Communication with the database
+
+- Breaking: Translate floating-point values to `DOUBLE PRECISION` by default (#194).
 - Avoid aggressive rounding when passing numeric values to the database (#184).
+- Avoid adding extra spaces for numerics (#216).
+- Column names and error messages are UTF-8 encoded (#172).
+
+## New features
+
+- Add `timezone` argument to `dbConnect()` (#187, @trafficonese).
+- Implement `dbGetInfo()` for the driver and the connection object.
+- `dbConnect()` gains `check_interrupts` argument that allows interrupting execution safely while waiting for query results to be ready (#193, @zozlak).
+- `dbUnquoteIdentifier()` also handles unquoted identifiers of the form `table` or `schema.table`, for compatibility with dbplyr. In addition, a `catalog` component is supported for quoting and unquoting with `Id()`.
+- Windows: update libpq to 11.1.0.
+- Fulfill CII badge requirements (#227, @TSchiefer).
+
+## Bug fixes
+
+- Hide unused symbols in shared library (#230, @troels).
 - Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
 - Fix binding for whole numbers and `POSIXt` timestamps (#191).
+
+## Internal
+
+- Add tests for `dbUnquoteIdentifier()` (#220, @baileych).
+- Improved tests for numerical precision (#203, @harvey131).
+- Fix test: change from `REAL` to `DOUBLE PRECISION` (#204, @harvey131).
+- Implement `dbAppendTable()` for own connection class, don't hijack base class implementation (r-dbi/RMariaDB#119).
+- Avoid including the call in errors.
+- Align `DbResult` and other classes with RSQLite and RMariaDB.
 
 
 # RPostgres 1.1.3
