@@ -1,3 +1,8 @@
+# RPostgres 1.1.4
+
+- Same as previous version.
+
+
 # RPostgres 1.1.3.9001
 
 - Implement `dbGetInfo()` for the driver object.
