@@ -1,4 +1,4 @@
-Minor release for compatibility with older compilers.
+Minor release.
 
 ## Test environments
 * local ubuntu install, R 3.6.1
@@ -11,7 +11,3 @@ Minor release for compatibility with older compilers.
 0 errors | 0 warnings | 1 note
 
 * We link libpq (and libcrypto) statically on Windows, hence the size.
-
-## Downstream packages
-
-Not checked.
