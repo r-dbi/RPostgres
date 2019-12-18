@@ -13,17 +13,20 @@
 - Implement `dbGetInfo()` for the driver and the connection object.
 - `dbConnect()` gains `check_interrupts` argument that allows interrupting execution safely while waiting for query results to be ready (#193, @zozlak).
 - `dbUnquoteIdentifier()` also handles unquoted identifiers of the form `table` or `schema.table`, for compatibility with dbplyr. In addition, a `catalog` component is supported for quoting and unquoting with `Id()`.
+- `dbQuoteLiteral()` available for `"character"` (#209).
 - Windows: update libpq to 11.1.0.
 - Fulfill CII badge requirements (#227, @TSchiefer).
 
 ## Bug fixes
 
 - Hide unused symbols in shared library (#230, @troels).
+- `dbWriteTable(copy = FALSE)`, `sqlData()` and `dbAppendTable()` now work for character columns (#209).
 - Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
 - Fix binding for whole numbers and `POSIXt` timestamps (#191).
 
 ## Internal
 
+- `sqlAppendTable()` now uses `dbQuoteLiteral()` (#209).
 - Add tests for `dbUnquoteIdentifier()` (#220, @baileych).
 - Improved tests for numerical precision (#203, @harvey131).
 - Fix test: change from `REAL` to `DOUBLE PRECISION` (#204, @harvey131).
