@@ -72,7 +72,7 @@ fetches and clears for you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ default name.</p>
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rpostgres.r-dbi.org/reference/Postgres.html'>Postgres</a></span>())
 <span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>db</span>, <span class='st'>"usarrests"</span>, <span class='kw pkg'>datasets</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Run query to get results as dataframe</span>

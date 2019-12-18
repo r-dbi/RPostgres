@@ -72,7 +72,7 @@ disconnected during the next GC with a warning." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -210,7 +210,7 @@ If <code>NULL</code> then no timezone is set, which defaults to localtime.</p></
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()) {
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
 <span class='co'># Pass more arguments as necessary to dbConnect()</span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rpostgres.r-dbi.org/reference/Postgres.html'>Postgres</a></span>())
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
 }</div></pre>
   </div>
