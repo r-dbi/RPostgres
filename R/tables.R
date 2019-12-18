@@ -132,11 +132,40 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @param ... Ignored.
 #' @rdname postgres-tables
-setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ..., copy = FALSE) {
   if (is.null(row.names)) row.names <- FALSE
   value <- sqlRownamesToColumn(value, row.names)
 
-  value[] <- lapply(value, function(x) dbQuoteLiteral(con, x))
+  if (copy) {
+    # C code takes care of atomic vectors, just need to coerce objects
+    is_object <- vlapply(value, is.object)
+    is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
+    is_blob <- vlapply(value, function(c) is.list(c))
+
+    value <- fix_posixt(value)
+
+    value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
+    value[is_blob] <- lapply(
+      value[is_blob],
+      function(col) {
+        vapply(
+          col,
+          function(x) {
+            if (is.null(x)) NA_character_
+            else paste0("\\x", paste(format(x), collapse = ""))
+          },
+          character(1)
+        )
+      }
+    )
+
+    value <- fix_numeric(value)
+
+    value[is_object] <- lapply(value[is_object], as.character)
+  } else {
+    value[] <- lapply(value, dbQuoteLiteral, conn = con)
+  }
+
   value
 })
 

@@ -26,7 +26,7 @@
 
 ## Internal
 
-- `sqlAppendTable()` now uses `dbQuoteLiteral()` (#209).
+- `sqlData(copy = FALSE)` now uses `dbQuoteLiteral()` (#209).
 - Add tests for `dbUnquoteIdentifier()` (#220, @baileych).
 - Improved tests for numerical precision (#203, @harvey131).
 - Fix test: change from `REAL` to `DOUBLE PRECISION` (#204, @harvey131).
