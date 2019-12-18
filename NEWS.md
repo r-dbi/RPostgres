@@ -6,6 +6,7 @@
 - Avoid aggressive rounding when passing numeric values to the database (#184).
 - Avoid adding extra spaces for numerics (#216).
 - Column names and error messages are UTF-8 encoded (#172).
+- `dbWriteTable(copy = FALSE)`, `sqlData()` and `dbAppendTable()` now work for character columns (#209), which are always converted to UTF-8.
 
 ## New features
 
@@ -20,7 +21,6 @@
 ## Bug fixes
 
 - Hide unused symbols in shared library (#230, @troels).
-- `dbWriteTable(copy = FALSE)`, `sqlData()` and `dbAppendTable()` now work for character columns (#209).
 - Fix partial argument matching in `dbAppendTable()` (r-dbi/DBI#249).
 - Fix binding for whole numbers and `POSIXt` timestamps (#191).
 

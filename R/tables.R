@@ -140,7 +140,8 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
     # C code takes care of atomic vectors, just need to coerce objects
     is_object <- vlapply(value, is.object)
     is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
-    is_blob <- vlapply(value, function(c) is.list(c))
+    is_blob <- vlapply(value, is.list)
+    is_character <- vlapply(value, is.character)
 
     value <- fix_posixt(value)
 
@@ -162,6 +163,8 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
     value <- fix_numeric(value)
 
     value[is_object] <- lapply(value[is_object], as.character)
+
+    value[is_character] <- lapply(value[is_character], enc2utf8)
   } else {
     value[] <- lapply(value, dbQuoteLiteral, conn = con)
   }
