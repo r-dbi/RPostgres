@@ -213,11 +213,16 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' # For running the examples on systems without PostgreSQL connection:
 #' if (postgresHasDefault()) {
 #'   library(DBI)
-#'   db <- dbConnect(RPostgres::Postgres())
-#'   dbSendStatement(db, "LISTEN channel")
-#'   # In another connection:-
-#'   #     dbSendStatement(db2, "NOTIFY channel, 'hello'")
-#'   n <- RPostgres::postgresWaitForNotify(db)
+#'   # DB1 listens for messages on the grapevine
+#'   db1 <- dbConnect(RPostgres::Postgres())
+#'   dbExecute(db1, "LISTEN grapevine")
+#'
+#'   # DB2 sends one (NB: Normally part of another process)
+#'   db2 <- dbConnect(RPostgres::Postgres())
+#'   dbExecute(db2, "NOTIFY grapevine, 'psst'")
+#'
+#'   # DB1 waits for the message to come
+#'   n <- RPostgres::postgresWaitForNotify(db1)
 #'   if (!is.null(n)) writeLines(c("Got a message:-", n$payload))
 #' }
 postgresWaitForNotify <- function (conn, timeout = 1) {
