@@ -44,8 +44,14 @@ setMethod("dbGetInfo", "PqDriver", function(dbObj, ...) {
   minor <- (client_version - major * 10000) %/% 100
   rev <- client_version - major * 10000 - minor * 100
 
+  if (major >= 10) {
+    client_version <- package_version(paste0(major, ".", rev))
+  } else {
+    client_version <- package_version(paste0(major, ".", minor, ".", rev))
+  }
+
   list(
     driver.version = PACKAGE_VERSION,
-    client.version = package_version(paste0(major, ".", minor, ".", rev))
+    client.version = client_version
   )
 })
