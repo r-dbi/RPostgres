@@ -1,4 +1,5 @@
-do_package_checks(error_on = if (getRversion() >= "3.4") "note" else "warning")
+# binary too large for package:
+do_package_checks(error_on = "warning")
 
 if (ci_has_env("DEV_VERSIONS")) {
   get_stage("install") %>%
