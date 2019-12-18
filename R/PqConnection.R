@@ -217,10 +217,10 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #'   dbSendStatement(db, "LISTEN channel")
 #'   # In another connection:-
 #'   #     dbSendStatement(db2, "NOTIFY channel, 'hello'")
-#'   n <- RPostgres::pqWaitForNotify(db)
+#'   n <- RPostgres::postgresWaitForNotify(db)
 #'   if (!is.null(n)) writeLines(c("Got a message:-", n$payload))
 #' }
-pqWaitForNotify <- function (conn, timeout = 1) {
+postgresWaitForNotify <- function (conn, timeout = 1) {
   out <- connection_wait_for_notify(conn@ptr, timeout)
   if ('pid' %in% names(out)) out else NULL
 }
