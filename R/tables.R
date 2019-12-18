@@ -108,11 +108,14 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      value <- sqlData(conn, value, row.names = FALSE, copy = copy)
       if (!copy) {
+        value <- sqlData(conn, value, row.names = FALSE)
+
         sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
         dbExecute(conn, sql)
       } else {
+        value <- sql_data_copy(value, row.names = FALSE)
+
         fields <- dbQuoteIdentifier(conn, names(value))
         sql <- paste0(
           "COPY ", dbQuoteIdentifier(conn, name),
@@ -132,45 +135,46 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @param ... Ignored.
 #' @rdname postgres-tables
-setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ..., copy = FALSE) {
+setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...) {
   if (is.null(row.names)) row.names <- FALSE
   value <- sqlRownamesToColumn(value, row.names)
 
-  if (copy) {
-    # C code takes care of atomic vectors, just need to coerce objects
-    is_object <- vlapply(value, is.object)
-    is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
-    is_blob <- vlapply(value, is.list)
-    is_character <- vlapply(value, is.character)
-
-    value <- fix_posixt(value)
-
-    value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
-    value[is_blob] <- lapply(
-      value[is_blob],
-      function(col) {
-        vapply(
-          col,
-          function(x) {
-            if (is.null(x)) NA_character_
-            else paste0("\\x", paste(format(x), collapse = ""))
-          },
-          character(1)
-        )
-      }
-    )
-
-    value <- fix_numeric(value)
-
-    value[is_object] <- lapply(value[is_object], as.character)
-
-    value[is_character] <- lapply(value[is_character], enc2utf8)
-  } else {
-    value[] <- lapply(value, dbQuoteLiteral, conn = con)
-  }
+  value[] <- lapply(value, dbQuoteLiteral, conn = con)
 
   value
 })
+
+sql_data_copy <- function(value, row.names = FALSE) {
+  # C code takes care of atomic vectors, just need to coerce objects
+  is_object <- vlapply(value, is.object)
+  is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
+  is_blob <- vlapply(value, is.list)
+  is_character <- vlapply(value, is.character)
+
+  value <- fix_posixt(value)
+
+  value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
+  value[is_blob] <- lapply(
+    value[is_blob],
+    function(col) {
+      vapply(
+        col,
+        function(x) {
+          if (is.null(x)) NA_character_
+          else paste0("\\x", paste(format(x), collapse = ""))
+        },
+        character(1)
+      )
+    }
+  )
+
+  value <- fix_numeric(value)
+
+  value[is_object] <- lapply(value[is_object], as.character)
+
+  value[is_character] <- lapply(value[is_character], enc2utf8)
+  value
+}
 
 format_keep_na <- function(x, ...) {
   is_na <- is.na(x)
