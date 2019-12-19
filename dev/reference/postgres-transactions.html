@@ -70,7 +70,7 @@ end the transaction by either committing or rolling back the changes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0.9000</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ end the transaction by either committing or rolling back the changes.</p>
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgres/man/Postgres.html'>Postgres</a></span>())
+<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='https://rpostgres.r-dbi.org/reference/Postgres.html'>Postgres</a></span>())
 <span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"USarrests"</span>, <span class='kw pkg'>datasets</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='no'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span>)</div><div class='output co'>#&gt;   count
 #&gt; 1    50</div><div class='input'>

@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0.9000</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Connect to the default postgres database</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>())</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rpostgres.r-dbi.org/reference/Postgres.html">Postgres</a></span>())</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span>(con)</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(con, <span class="st">"mtcars"</span>, mtcars)</a>
@@ -131,7 +131,7 @@
 <a href="#connecting-to-a-specific-postgres-instance" class="anchor"></a>Connecting to a specific Postgres instance</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DBI)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># Connect to a specific postgres database i.e. Heroku</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/RPostgres/man/Postgres.html">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(RPostgres<span class="op">::</span><span class="kw"><a href="https://rpostgres.r-dbi.org/reference/Postgres.html">Postgres</a></span>(),<span class="dt">dbname =</span> <span class="st">'DATABASE_NAME'</span>, </a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">                 <span class="dt">host =</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">                 <span class="dt">port =</span> <span class="dv">5432</span>, <span class="co"># or any other port specified by your DBA</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">                 <span class="dt">user =</span> <span class="st">'USERNAME'</span>,</a>
@@ -142,7 +142,7 @@
 <a href="#design-notes" class="anchor"></a>Design notes</h2>
 <p>The original DBI design imagined that each package could instantiate X drivers, with each driver having Y connections and each connection having Z results. This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set. In the RPostgres package there’s only one class on the C side: a connection, which optionally contains a result set. On the R side, the driver class is just a dummy class with no contents (used only for dispatch), and both the connection and result objects point to the same external pointer.</p>
 <hr>
-<p>Please note that the ‘RPostgres’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the ‘RPostgres’ project is released with a <a href="https://rpostgres.r-dbi.org/code_of_conduct">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
@@ -167,7 +167,7 @@
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
 </ul>
 </div>
 <div class="community">

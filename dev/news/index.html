@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.3.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0.9000</span>
       </span>
     </div>
 
@@ -110,47 +110,69 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rpostgres-1-1-3-9001" class="section level1">
+    <div id="rpostgres-1-2-0-9000" class="section level1">
 <h1 class="page-header">
-<a href="#rpostgres-1-1-3-9001" class="anchor"></a>RPostgres 1.1.3.9001<small> Unreleased </small>
+<a href="#rpostgres-1-2-0-9000" class="anchor"></a>RPostgres 1.2.0.9000<small> Unreleased </small>
 </h1>
 <ul>
-<li>Implement <code>dbGetInfo()</code> for the driver object.</li>
+<li>Internal changes only.</li>
 </ul>
 </div>
-    <div id="rpostgres-1-1-3-9000" class="section level1">
+    <div id="rpostgres-1-2-0" class="section level1">
 <h1 class="page-header">
-<a href="#rpostgres-1-1-3-9000" class="anchor"></a>RPostgres 1.1.3.9000<small> Unreleased </small>
+<a href="#rpostgres-1-2-0" class="anchor"></a>RPostgres 1.2.0<small> 2019-12-18 </small>
 </h1>
+<div id="communication-with-the-database" class="section level2">
+<h2 class="hasAnchor">
+<a href="#communication-with-the-database" class="anchor"></a>Communication with the database</h2>
 <ul>
-<li>Same as previous version.</li>
-</ul>
-</div>
-    <div id="rpostgres-1-1-1-9002" class="section level1">
-<h1 class="page-header">
-<a href="#rpostgres-1-1-1-9002" class="anchor"></a>RPostgres 1.1.1.9002<small> Unreleased </small>
-</h1>
-<ul>
-<li>Windows: update libpq to 11.1.0</li>
-<li>Add user interrupt check while waiting for query results to be ready. Allows safe interruption of long-running queries (<a href='https://github.com/r-dbi/RPostgres/issues/193'>#193</a>, <a href='https://github.com/zozlak'>@zozlak</a>).</li>
-</ul>
-</div>
-    <div id="rpostgres-1-1-1-9001" class="section level1">
-<h1 class="page-header">
-<a href="#rpostgres-1-1-1-9001" class="anchor"></a>RPostgres 1.1.1.9001<small> Unreleased </small>
-</h1>
-<ul>
+<li>Breaking: Translate floating-point values to <code>DOUBLE PRECISION</code> by default (<a href='https://github.com/r-dbi/RPostgres/issues/194'>#194</a>).</li>
 <li>Avoid aggressive rounding when passing numeric values to the database (<a href='https://github.com/r-dbi/RPostgres/issues/184'>#184</a>).</li>
+<li>Avoid adding extra spaces for numerics (<a href='https://github.com/r-dbi/RPostgres/issues/216'>#216</a>).</li>
+<li>Column names and error messages are UTF-8 encoded (<a href='https://github.com/r-dbi/RPostgres/issues/172'>#172</a>).</li>
+<li>
+<code>dbWriteTable(copy = FALSE)</code>, <code>sqlData()</code> and <code>dbAppendTable()</code> now work for character columns (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>), which are always converted to UTF-8.</li>
 </ul>
 </div>
-    <div id="rpostgres-1-1-1-9000" class="section level1">
-<h1 class="page-header">
-<a href="#rpostgres-1-1-1-9000" class="anchor"></a>RPostgres 1.1.1.9000<small> Unreleased </small>
-</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
+<li>Add <code>timezone</code> argument to <code>dbConnect()</code> (<a href='https://github.com/r-dbi/RPostgres/issues/187'>#187</a>, <a href='https://github.com/trafficonese'>@trafficonese</a>).</li>
+<li>Implement <code>dbGetInfo()</code> for the driver and the connection object.</li>
+<li>
+<code>dbConnect()</code> gains <code>check_interrupts</code> argument that allows interrupting execution safely while waiting for query results to be ready (<a href='https://github.com/r-dbi/RPostgres/issues/193'>#193</a>, <a href='https://github.com/zozlak'>@zozlak</a>).</li>
+<li>
+<code>dbUnquoteIdentifier()</code> also handles unquoted identifiers of the form <code>table</code> or <code>schema.table</code>, for compatibility with dbplyr. In addition, a <code>catalog</code> component is supported for quoting and unquoting with <code><a href="https://dbi.r-dbi.org/reference/Id.html">Id()</a></code>.</li>
+<li>
+<code><a href="../reference/quote.html">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<li>Windows: update libpq to 11.1.0.</li>
+<li>Fulfill CII badge requirements (<a href='https://github.com/r-dbi/RPostgres/issues/227'>#227</a>, <a href='https://github.com/TSchiefer'>@TSchiefer</a>).</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Hide unused symbols in shared library (<a href='https://github.com/r-dbi/RPostgres/issues/230'>#230</a>, <a href='https://github.com/troels'>@troels</a>).</li>
 <li>Fix partial argument matching in <code>dbAppendTable()</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/249'>#249</a>).</li>
 <li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href='https://github.com/r-dbi/RPostgres/issues/191'>#191</a>).</li>
 </ul>
+</div>
+<div id="internal" class="section level2">
+<h2 class="hasAnchor">
+<a href="#internal" class="anchor"></a>Internal</h2>
+<ul>
+<li>
+<code>sqlData(copy = FALSE)</code> now uses <code><a href="../reference/quote.html">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<li>Add tests for <code>dbUnquoteIdentifier()</code> (<a href='https://github.com/r-dbi/RPostgres/issues/220'>#220</a>, <a href='https://github.com/baileych'>@baileych</a>).</li>
+<li>Improved tests for numerical precision (<a href='https://github.com/r-dbi/RPostgres/issues/203'>#203</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>
+<li>Fix test: change from <code>REAL</code> to <code>DOUBLE PRECISION</code> (<a href='https://github.com/r-dbi/RPostgres/issues/204'>#204</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>
+<li>Implement <code>dbAppendTable()</code> for own connection class, don’t hijack base class implementation (r-dbi/RMariaDB<a href='https://github.com/r-dbi/RPostgres/issues/119'>#119</a>).</li>
+<li>Avoid including the call in errors.</li>
+<li>Align <code>DbResult</code> and other classes with RSQLite and RMariaDB.</li>
+</ul>
+</div>
 </div>
     <div id="rpostgres-1-1-3" class="section level1">
 <h1 class="page-header">
@@ -235,11 +257,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rpostgres-1-1-3-9001">1.1.3.9001</a></li>
-        <li><a href="#rpostgres-1-1-3-9000">1.1.3.9000</a></li>
-        <li><a href="#rpostgres-1-1-1-9002">1.1.1.9002</a></li>
-        <li><a href="#rpostgres-1-1-1-9001">1.1.1.9001</a></li>
-        <li><a href="#rpostgres-1-1-1-9000">1.1.1.9000</a></li>
+        <li><a href="#rpostgres-1-2-0-9000">1.2.0.9000</a></li>
+        <li><a href="#rpostgres-1-2-0">1.2.0</a></li>
         <li><a href="#rpostgres-1-1-3">1.1.3</a></li>
         <li><a href="#rpostgres-1-1-2">1.1.2</a></li>
         <li><a href="#rpostgres-1-1-1-2018-05-05">1.1.1</a></li>
