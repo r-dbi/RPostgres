@@ -3,6 +3,9 @@
 #include "encode.h"
 #include "DbResult.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
 
 DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
                            bool check_interrupts) :
@@ -255,7 +258,7 @@ void DbConnection::cleanup_query() {
   finish_query(pConn_);
 }
 
-List DbConnection::wait_for_notify(__time_t timeout_secs) {
+List DbConnection::wait_for_notify(int timeout_secs) {
   PGnotify   *notify;
   List out;
   int socket = -1;
@@ -278,7 +281,7 @@ List DbConnection::wait_for_notify(__time_t timeout_secs) {
 
     if (socket != -1) {
       // Socket open, so already been round once, give up.
-      return NULL;
+      return R_NilValue;
     }
 
     // Open DB socket and wait for new data for at most (timeout_secs) seconds

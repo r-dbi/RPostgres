@@ -120,13 +120,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // connection_wait_for_notify
-List connection_wait_for_notify(DbConnection* con, __time_t timeout_secs);
+List connection_wait_for_notify(DbConnection* con, int timeout_secs);
 RcppExport SEXP _RPostgres_connection_wait_for_notify(SEXP conSEXP, SEXP timeout_secsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
-    Rcpp::traits::input_parameter< __time_t >::type timeout_secs(timeout_secsSEXP);
+    Rcpp::traits::input_parameter< int >::type timeout_secs(timeout_secsSEXP);
     rcpp_result_gen = Rcpp::wrap(connection_wait_for_notify(con, timeout_secs));
     return rcpp_result_gen;
 END_RCPP

@@ -100,7 +100,7 @@ void connection_copy_data(DbConnection* con, std::string sql, List df) {
 }
 
 // [[Rcpp::export]]
-List connection_wait_for_notify(DbConnection* con, __time_t timeout_secs) {
+List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
   return con->wait_for_notify(timeout_secs);
 }
 
