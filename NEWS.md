@@ -1,3 +1,8 @@
+# RPostgres 1.2.0.9000
+
+- Internal changes only.
+
+
 # RPostgres 1.2.0
 
 ## Communication with the database
