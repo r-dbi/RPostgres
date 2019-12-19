@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.1.2
-Date: 2018-10-04
+Version: 1.2.0.9000
+Date: 2019-12-19
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -22,40 +22,37 @@ Authors@R:
              family = "Nishiyama",
              role = "ctb",
              comment = "Code for encoding vectors into strings derived from RPostgreSQL"))
-Description: Fully 'DBI'-compliant 'Rcpp'-backed interface
-    to 'PostgreSQL' <https://www.postgresql.org/>, an open-source
-    relational database.
-License: GPL-3 + file LICENSE
-URL: https://github.com/r-dbi/RPostgres
+Description: Fully 'DBI'-compliant 'Rcpp'-backed interface to
+    'PostgreSQL' <https://www.postgresql.org/>, an open-source relational
+    database.
+License: GPL-3
+URL: https://rpostgres.r-dbi.org,
+    https://github.com/r-dbi/RPostgres
 BugReports: https://github.com/r-dbi/RPostgres/issues
 Depends: 
     R (>= 3.1.0)
 Imports: 
     bit64,
-    blob (>= 1.1.1.9002),
-    DBI (>= 1.0.0.9003),
-    hms (>= 0.4.2.9005),
+    blob (>= 1.2.0),
+    DBI (>= 1.1.0),
+    hms (>= 0.5.0),
     methods,
     Rcpp (>= 0.11.4.2),
     withr
 Suggests: 
     callr,
-    DBItest,
+    DBItest (>= 1.7.0),
     testthat
 LinkingTo: 
     BH,
     plogr (>= 0.2.0),
     Rcpp
-Remotes: 
-    tidyverse/blob,
-    r-dbi/DBI,
-    r-dbi/DBItest,
-    tidyverse/hms
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.1
-SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
+RoxygenNote: 7.0.2
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
+    postgresql-devel (rpm)
 Collate: 
     'PqDriver.R'
     'PqConnection.R'

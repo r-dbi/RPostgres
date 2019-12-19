@@ -49,7 +49,7 @@ List DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   finalize_cols();
 
   types_.clear();
-  std::transform(data.begin(), data.end(), std::back_inserter(types_), std::mem_fn(&DbColumn::get_type));
+  std::transform(data.begin(), data.end(), std::back_inserter(types_), boost::mem_fn(&DbColumn::get_type));
 
   boost::for_each(data, names, boost::bind(&DbColumn::warn_type_conflicts, _1, _2));
 

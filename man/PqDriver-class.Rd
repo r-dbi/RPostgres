@@ -4,9 +4,12 @@
 \name{PqDriver-class}
 \alias{PqDriver-class}
 \alias{dbUnloadDriver,PqDriver-method}
+\alias{dbGetInfo,PqDriver-method}
 \title{PqDriver and methods.}
 \usage{
 \S4method{dbUnloadDriver}{PqDriver}(drv, ...)
+
+\S4method{dbGetInfo}{PqDriver}(dbObj, ...)
 }
 \description{
 PqDriver and methods.

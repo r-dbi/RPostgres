@@ -196,3 +196,9 @@ quote_blob <- function(x) {
   )
   SQL(blob_data, names = names(x))
 }
+
+#' @export
+#' @rdname quote
+setMethod("dbQuoteLiteral", c("PqConnection", "character"), function(conn, x, ...) {
+  dbQuoteString(conn, x)
+})

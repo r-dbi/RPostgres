@@ -6,13 +6,14 @@
 \alias{RPostgres-package}
 \title{RPostgres: 'Rcpp' Interface to 'PostgreSQL'}
 \description{
-Fully 'DBI'-compliant 'Rcpp'-backed interface
-    to 'PostgreSQL' <https://www.postgresql.org/>, an open-source
-    relational database.
+Fully 'DBI'-compliant 'Rcpp'-backed interface to
+    'PostgreSQL' <https://www.postgresql.org/>, an open-source relational
+    database.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://rpostgres.r-dbi.org}
   \item \url{https://github.com/r-dbi/RPostgres}
   \item Report bugs at \url{https://github.com/r-dbi/RPostgres/issues}
 }

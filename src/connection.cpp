@@ -3,6 +3,11 @@
 
 
 // [[Rcpp::export]]
+int client_version() {
+  return PQlibVersion();
+}
+
+// [[Rcpp::export]]
 XPtr<DbConnectionPtr> connection_create(
   std::vector<std::string> keys,
   std::vector<std::string> values,

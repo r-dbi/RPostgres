@@ -6,6 +6,7 @@
 before_install: R -q -e 'install.packages(c("remotes", "curl")); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages(); tic::before_install()'
 install: R -q -e 'tic::install()'
 after_install: R -q -e 'tic::after_install()'
+
 before_script:
 - R -q -e 'tic::before_script()'
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo rm -rf /usr/local/var/postgres; fi
@@ -31,15 +32,17 @@ after_script: R -q -e 'tic::after_script()'
 # Header
 language: r
 sudo: false
-dist: trusty
+dist: xenial
 cache: packages
 latex: false
 fortran: false
-pandoc: false
 
 #stages: test, full
 stages:
 - name: test
+  if: branch != docs
+- name: docs
+  if: branch = docs OR branch = master
 - name: full
   if: branch = master
 
@@ -63,27 +66,23 @@ addons:
 #jobs
 matrix:
   include:
-  - os: linux
-    r: devel
+  - r: devel
     env:
     - DEV_VERSIONS=true
-  - os: linux
-    r: 3.2
-  - stage: full
-    os: osx
-  - os: linux
+  - r: 3.2
+  - stage: docs
     r: release
     env:
     - BUILD_PKGDOWN=true
-    - R_CODECOV=true
-    pandoc: true
-  - os: linux
-    r: 3.4
-  - os: linux
-    r: 3.3
-  - os: linux
-    env:
+  - stage: full
+    os: osx
+    latex: false
+  - r: 3.5
+  - r: 3.4
+  - r: 3.3
+  - env:
     - PGUSER: bogus
+  fast_finish: true
 
 #notifications
 notifications:
@@ -96,4 +95,3 @@ notifications:
 #services
 services:
 - postgresql
-
