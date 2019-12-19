@@ -212,18 +212,32 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #' @examples
 #' # For running the examples on systems without PostgreSQL connection:
 #' if (postgresHasDefault()) {
-#'   library(DBI)
-#'   # DB1 listens for messages on the grapevine
-#'   db1 <- dbConnect(RPostgres::Postgres())
-#'   dbExecute(db1, "LISTEN grapevine")
-#'
-#'   # DB2 sends one (NB: Normally part of another process)
-#'   db2 <- dbConnect(RPostgres::Postgres())
-#'   dbExecute(db2, "NOTIFY grapevine, 'psst'")
-#'
-#'   # DB1 waits for the message to come
-#'   n <- RPostgres::postgresWaitForNotify(db1)
-#'   if (!is.null(n)) writeLines(c("Got a message:-", n$payload))
+#'     library(DBI)
+#'     library(callr)
+#' 
+#'     # listen for messages on the grapevine
+#'     db_listen <- dbConnect(RPostgres::Postgres())
+#'     dbExecute(db_listen, "LISTEN grapevine")
+#' 
+#'     # Start another process, which sends a message after a delay
+#'     rp <- r_bg(function () {
+#'         library(DBI)
+#'         Sys.sleep(0.3)
+#'         db_notify <- dbConnect(RPostgres::Postgres())
+#'         dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
+#'         dbDisconnect(db_notify)
+#'     })
+#' 
+#'     # Sleep until we get the message
+#'     n <- NULL
+#'     while (is.null(n)) {
+#'         n <- RPostgres::postgresWaitForNotify(db_listen, 60)
+#'     }
+#'     stopifnot(n$payload == 'psst')
+#' 
+#'     # Tidy up
+#'     rp$wait()
+#'     dbDisconnect(db_listen)
 #' }
 postgresWaitForNotify <- function (conn, timeout = 1) {
   out <- connection_wait_for_notify(conn@ptr, timeout)

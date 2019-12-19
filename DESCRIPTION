@@ -39,6 +39,7 @@ Imports:
     Rcpp (>= 0.11.4.2),
     withr
 Suggests: 
+    callr,
     DBItest,
     testthat
 LinkingTo: 
