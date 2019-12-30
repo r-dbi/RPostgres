@@ -1,4 +1,4 @@
-do_package_checks()
+do_package_checks(error_on = "note")
 
 if (ci_has_env("DEV_VERSIONS")) {
   get_stage("install") %>%

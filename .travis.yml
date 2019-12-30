@@ -51,6 +51,7 @@ env:
   global:
   - _R_CHECK_FORCE_SUGGESTS_=false
   - _R_CHECK_SYSTEM_CLOCK_=false
+  - _R_SHLIB_STRIP_=true
   - MAKEFLAGS="-j 2"
 
 #addons
