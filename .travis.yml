@@ -62,6 +62,7 @@ addons:
     - libmagick++-dev
     - libssh2-1-dev
     - devscripts
+    - binutils
 
 #jobs
 matrix:

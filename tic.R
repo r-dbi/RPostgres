@@ -1,5 +1,4 @@
-# binary too large for package:
-do_package_checks(error_on = "warning")
+do_package_checks()
 
 if (ci_has_env("DEV_VERSIONS")) {
   get_stage("install") %>%
