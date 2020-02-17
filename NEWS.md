@@ -1,7 +1,6 @@
 # RPostgres 1.2.0.9000
 
-- Internal changes only.
-
+- Windows: update libpq to 12.2.0.
 
 # RPostgres 1.2.0
 
