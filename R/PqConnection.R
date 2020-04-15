@@ -112,14 +112,20 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 
 # other
 
-#' Connect to a PostgreSQL database.
+#' Connect to a PostgreSQL database
 #'
-#' Manually disconnecting a connection is not necessary with RPostgres, but
-#' still recommended;
+#' @description
+#' `DBI::dbConnect()` establishes a connection to a database.
+#' Set `drv = RPostgres::Postgres()` to connect to a SQL database
+#' using the \pkg{RPostgres} package.
+#'
+#' Manually disconnecting a connection is not necessary with \pkg{RPostgres},
+#' but still recommended;
 #' if you delete the object containing the connection, it will be automatically
 #' disconnected during the next GC with a warning.
 #'
-#' @param drv `RPostgres::Postgres()`
+#' @param drv Should be set to [RPostgres::Postgres()]
+#'   to use the \pkg{RPostgres} package.
 #' @param dbname Database name. If `NULL`, defaults to the user name.
 #'   Note that this argument can only contain the database name, it will not
 #'   be parsed as a connection string (internally, `expand_dbname` is set to
@@ -149,12 +155,13 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'   If `NULL` then no timezone is set, which defaults to localtime.
 #' @param conn Connection to disconnect.
 #' @export
+#' @rdname Postgres
 #' @examples
 #' if (postgresHasDefault()) {
-#' library(DBI)
-#' # Pass more arguments as necessary to dbConnect()
-#' con <- dbConnect(RPostgres::Postgres())
-#' dbDisconnect(con)
+#'   library(DBI)
+#'   # Pass more arguments as necessary to dbConnect()
+#'   con <- dbConnect(RPostgres::Postgres())
+#'   dbDisconnect(con)
 #' }
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
@@ -187,7 +194,7 @@ setMethod("dbConnect", "PqDriver",
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)
 #' @export
-#' @rdname dbConnect-PqDriver-method
+#' @rdname Postgres
 setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
   connection_release(conn@ptr)
   invisible(TRUE)
