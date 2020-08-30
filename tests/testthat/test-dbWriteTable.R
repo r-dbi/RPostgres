@@ -124,7 +124,7 @@ with_database_connection({
       with_table(con, "iris", {
         tmp <- tempfile()
         iris2 <- transform(iris, Species = as.character(Species))
-        write.csv(iris2, tmp)
+        write.csv(iris2, tmp, row.names = FALSE)
         dbWriteTable(con, "iris", tmp, temporary = TRUE)
         expect_equal(dbReadTable(con, "iris"), iris2)
       })
