@@ -121,11 +121,12 @@ with_database_connection({
     })
 
     test_that("Writing CSV to the database", {
-      with_table(con, "iris")
-      tmp <- tempfile()
-      write.csv(iris, tmp)
-      dbWriteTable(con, "iris", tmp, temporary = TRUE)
-      expect_equal(dbReadTable(con, "iris"), iris)
+      with_table(con, "iris", {
+        tmp <- tempfile()
+        write.csv(iris, tmp)
+        dbWriteTable(con, "iris", tmp, temporary = TRUE)
+        expect_equal(dbReadTable(con, "iris"), iris)
+      })
     })
   })
 })
