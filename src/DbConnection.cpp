@@ -163,6 +163,9 @@ void DbConnection::copy_data(std::string sql, List df) {
 void DbConnection::copy_csv(std::string sql, std::string file) {
   LOG_DEBUG << sql;
 
+  if (file.size() == 0)
+    return;
+
   PGresult* pInit = PQexec(pConn_, sql.c_str());
   if (PQresultStatus(pInit) != PGRES_COPY_IN) {
     PQclear(pInit);
@@ -175,7 +178,7 @@ void DbConnection::copy_csv(std::string sql, std::string file) {
   std::string buffer;
   buffer.reserve(buffer_size);
 
-  std::ifstream fs(file);
+  std::ifstream fs(file.c_str(), std::ios::in);
   if (!fs.is_open()) {
     stop("Can not open file '%s'.", file);
   }
