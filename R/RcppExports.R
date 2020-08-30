@@ -41,6 +41,10 @@ connection_copy_data <- function(con, sql, df) {
     invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
+connection_copy_file <- function(con, sql, file) {
+    invisible(.Call(`_RPostgres_connection_copy_file`, con, sql, file))
+}
+
 encode_vector <- function(x) {
     .Call(`_RPostgres_encode_vector`, x)
 }

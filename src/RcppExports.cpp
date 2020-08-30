@@ -119,6 +119,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// connection_copy_file
+void connection_copy_file(DbConnection* con, std::string sql, std::string file);
+RcppExport SEXP _RPostgres_connection_copy_file(SEXP conSEXP, SEXP sqlSEXP, SEXP fileSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
+    connection_copy_file(con, sql, file);
+    return R_NilValue;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP _RPostgres_encode_vector(SEXP xSEXP) {
@@ -275,6 +287,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
+    {"_RPostgres_connection_copy_file", (DL_FUNC) &_RPostgres_connection_copy_file, 3},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},

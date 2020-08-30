@@ -86,7 +86,7 @@ with_database_connection({
       })
     })
   })
-  
+
   describe("Writing to the database with possible numeric precision issues", {
     # reference value
     value <- data.frame(x = -0.000064925595060641, y = -0.00006492559506064059)
@@ -118,6 +118,14 @@ with_database_connection({
         dbWriteTable(con, name = "xy", value = value, overwrite = F, append = F, copy = T, field.types = c(x = "NUMERIC", y = "NUMERIC"))
         expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
       })
+    })
+
+    test_that("Writing CSV to the database", {
+      with_table(con, "iris")
+      tmp <- tempfile()
+      write.csv(iris, tmp)
+      dbWriteTable(con, "iris", tmp, temporary = TRUE)
+      expect_equal(dbReadTable(con, "iris"), iris)
     })
   })
 })

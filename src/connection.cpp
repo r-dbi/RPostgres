@@ -99,6 +99,12 @@ void connection_copy_data(DbConnection* con, std::string sql, List df) {
   return con->copy_data(sql, df);
 }
 
+// [[Rcpp::export]]
+void connection_copy_file(DbConnection* con, std::string sql, std::string file) {
+  return con->copy_csv(sql, file);
+}
+
+
 
 // as() override
 
