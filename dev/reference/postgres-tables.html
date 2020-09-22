@@ -123,58 +123,58 @@ uses placeholders of the form $1, $2 etc. instead of ?." />
     </div>
 
     <div class="ref-description">
-    <p><code>dbWriteTable()</code> executes several SQL statements that
+    <p><code><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable()</a></code> executes several SQL statements that
 create/overwrite a table and fill it with values.
 <span class="pkg">RPostgres</span> does not use parameterised queries to insert rows because
 benchmarks revealed that this was considerably slower than using a single
 SQL string.</p>
-<p><code>dbAppendTable()</code> is overridden because <span class="pkg">RPostgres</span>
+<p><code><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable()</a></code> is overridden because <span class="pkg">RPostgres</span>
 uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <code>?</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for PqConnection,character,data.frame</span>
-<span class='fu'>dbWriteTable</span>(
-  <span class='no'>conn</span>,
-  <span class='no'>name</span>,
-  <span class='no'>value</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>field.types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(
+  <span class='kw'>conn</span>,
+  <span class='kw'>name</span>,
+  <span class='kw'>value</span>,
+  <span class='kw'>...</span>,
+  row.names = <span class='fl'>FALSE</span>,
+  overwrite = <span class='fl'>FALSE</span>,
+  append = <span class='fl'>FALSE</span>,
+  field.types = <span class='kw'>NULL</span>,
+  temporary = <span class='fl'>FALSE</span>,
+  copy = <span class='fl'>TRUE</span>
 )
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>sqlData</span>(<span class='no'>con</span>, <span class='no'>value</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/sqlData.html'>sqlData</a></span>(<span class='kw'>con</span>, <span class='kw'>value</span>, row.names = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>dbAppendTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>value</span>, <span class='no'>...</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>value</span>, <span class='kw'>...</span>, row.names = <span class='kw'>NULL</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
-<span class='fu'>dbReadTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>, <span class='kw'>check.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>, check.names = <span class='fl'>TRUE</span>, row.names = <span class='fl'>FALSE</span>)
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>dbListTables</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
-<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection,Id</span>
-<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
-<span class='fu'>dbRemoveTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fail_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>, temporary = <span class='fl'>FALSE</span>, fail_if_missing = <span class='fl'>TRUE</span>)
 
 <span class='co'># S4 method for PqConnection,character</span>
-<span class='fu'>dbListFields</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListFields.html'>dbListFields</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection,Id</span>
-<span class='fu'>dbListFields</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListFields.html'>dbListFields</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>dbListObjects</span>(<span class='no'>conn</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListObjects.html'>dbListObjects</a></span>(<span class='kw'>conn</span>, prefix = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -246,7 +246,7 @@ converted to valid R identifiers.</p></td>
     </tr>
     <tr>
       <th>fail_if_missing</th>
-      <td><p>If <code>FALSE</code>, <code>dbRemoveTable()</code> succeeds if the
+      <td><p>If <code>FALSE</code>, <code><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable()</a></code> succeeds if the
 table doesn't exist.</p></td>
     </tr>
     <tr>
@@ -260,12 +260,14 @@ If given the method will return all objects accessible through this prefix.</p><
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># For running the examples on systems without PostgreSQL connection:</span>
-<span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
+<span class='kw'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span>())
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>, <span class='no'>mtcars</span>, <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt;     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://r-dbi.github.io/DBI'>DBI</a></span>)
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='kw'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw'>RPostgres</span>::<span class='fu'><a href='Postgres.html'>Postgres</a></span>())
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='kw'>con</span>)
+</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='kw'>con</span>, <span class='st'>"mtcars"</span>, <span class='kw'>mtcars</span>, temporary = <span class='fl'>TRUE</span>)
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='kw'>con</span>, <span class='st'>"mtcars"</span>)
+</div><div class='output co'>#&gt;     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #&gt; 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #&gt; 2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
 #&gt; 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -298,12 +300,16 @@ If given the method will return all objects accessible through this prefix.</p><
 #&gt; 30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
 #&gt; 31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 #&gt; 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</div><div class='input'>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [1] "mtcars"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='kw'>con</span>)
+</div><div class='output co'>#&gt; [1] "mtcars"</div><div class='input'><span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='kw'>con</span>, <span class='st'>"mtcars"</span>)
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># A zero row data frame just creates a table definition.</span>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>, <span class='no'>mtcars</span>[<span class='fl'>0</span>, ], <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>con</span>, <span class='st'>"mtcars2"</span>)</div><div class='output co'>#&gt;  [1] mpg  cyl  disp hp   drat wt   qsec vs   am   gear carb
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='kw'>con</span>, <span class='st'>"mtcars2"</span>, <span class='kw'>mtcars</span>[<span class='fl'>0</span>, ], temporary = <span class='fl'>TRUE</span>)
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='kw'>con</span>, <span class='st'>"mtcars2"</span>)
+</div><div class='output co'>#&gt;  [1] mpg  cyl  disp hp   drat wt   qsec vs   am   gear carb
 #&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='kw'>if</span> (<span class='no'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)</div></pre>
+<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>con</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -319,7 +325,7 @@ If given the method will return all objects accessible through this prefix.</p><
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

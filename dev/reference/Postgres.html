@@ -135,29 +135,29 @@ disconnected during the next GC with a warning.</p>
     <pre class="usage"><span class='fu'>Postgres</span>()
 
 <span class='co'># S4 method for PqDriver</span>
-<span class='fu'>dbConnect</span>(
-  <span class='no'>drv</span>,
-  <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>host</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>port</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>bigint</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span>),
-  <span class='kw'>check_interrupts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>timezone</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(
+  <span class='kw'>drv</span>,
+  dbname = <span class='kw'>NULL</span>,
+  host = <span class='kw'>NULL</span>,
+  port = <span class='kw'>NULL</span>,
+  password = <span class='kw'>NULL</span>,
+  user = <span class='kw'>NULL</span>,
+  service = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>,
+  bigint = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span>),
+  check_interrupts = <span class='fl'>FALSE</span>,
+  timezone = <span class='st'>"UTC"</span>
 )
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>drv</th>
-      <td><p>Should be set to <code>RPostgres::Postgres()</code>
+      <td><p>Should be set to <code>Postgres()</code>
 to use the <span class="pkg">RPostgres</span> package.</p></td>
     </tr>
     <tr>
@@ -219,12 +219,13 @@ If <code>NULL</code> then no timezone is set, which defaults to localtime.</p></
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()) {
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DBI</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()) {
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://r-dbi.github.io/DBI'>DBI</a></span>)
   <span class='co'># Pass more arguments as necessary to dbConnect()</span>
-  <span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RPostgres</span><span class='kw ns'>::</span><span class='fu'>Postgres</span>())
-  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>con</span>)
-}</div></pre>
+  <span class='kw'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw'>RPostgres</span>::<span class='fu'>Postgres</span>())
+  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>con</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -240,7 +241,7 @@ If <code>NULL</code> then no timezone is set, which defaults to localtime.</p></
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

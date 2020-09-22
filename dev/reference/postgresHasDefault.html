@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Check if default database is available. — postgresHasDefault" />
 <meta property="og:description" content="RPostgres examples and tests connect to a default database via
-dbConnect(RPostgres::Postgres()). This function checks if that
+dbConnect(Postgres()). This function checks if that
 database is available, and if not, displays an informative message.
 postgresDefault() works similarly but returns a connection on success and
 throws a testthat skip condition on failure, making it suitable for use in
@@ -123,33 +123,34 @@ tests." />
 
     <div class="ref-description">
     <p>RPostgres examples and tests connect to a default database via
-<code>dbConnect(</code><code><a href='Postgres.html'>RPostgres::Postgres()</a></code><code>)</code>. This function checks if that
+<code>dbConnect(</code><code><a href='Postgres.html'>Postgres()</a></code><code>)</code>. This function checks if that
 database is available, and if not, displays an informative message.</p>
 <p><code>postgresDefault()</code> works similarly but returns a connection on success and
 throws a testthat skip condition on failure, making it suitable for use in
 tests.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>postgresHasDefault</span>(<span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>postgresHasDefault</span>(<span class='kw'>...</span>)
 
-<span class='fu'>postgresDefault</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>postgresDefault</span>(<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed on to <code>dbConnect()</code></p></td>
+      <td><p>Additional arguments passed on to <code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect()</a></code></p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>postgresHasDefault</span>()) {
-  <span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>postgresDefault</span>()
-  <span class='fu'>dbListTables</span>(<span class='no'>db</span>)
-  <span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'>postgresHasDefault</span>()) {
+  <span class='kw'>db</span> <span class='op'>&lt;-</span> <span class='fu'>postgresDefault</span>()
+  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='kw'>db</span>)
+  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>db</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -165,7 +166,7 @@ tests.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
