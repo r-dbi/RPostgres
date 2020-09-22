@@ -25,7 +25,7 @@ Postgres()
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
 \arguments{
-\item{drv}{Should be set to \code{\link[RPostgres:Postgres]{RPostgres::Postgres()}}
+\item{drv}{Should be set to \code{\link[=Postgres]{Postgres()}}
 to use the \pkg{RPostgres} package.}
 
 \item{dbname}{Database name. If \code{NULL}, defaults to the user name.
@@ -53,7 +53,7 @@ options as described at
 \url{http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
-default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
+default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 
 \item{check_interrupts}{Should user interrupts be checked during the query execution (before
