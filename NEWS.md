@@ -1,3 +1,8 @@
+# RPostgres 1.2.1.9000 (2020-09-28)
+
+- Internal changes only.
+
+
 # RPostgres 1.2.1 (2020-09-28)
 
 - Internal changes only.
