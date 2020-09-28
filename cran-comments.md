@@ -1,13 +1,15 @@
-Minor release.
+RPostgres 1.2.1
 
-## Test environments
-* local ubuntu install, R 3.6.1
-* ubuntu 16.04 (on travis-ci), R 3.6.1, devel, oldrel, 3.2
-* windows (on appveyor), R 3.6.1
-* win-builder (devel and release)
+## Cran Repository Policy
+
+- [x] Reviewed CRP last edited 2020-07-11.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+- [x] Checked locally, R 4.0.2
+- [x] Checked on CI system, R 4.0.2
+- [x] Checked on win-builder, R devel
 
-* We link libpq (and libcrypto) statically on Windows, hence the size.
+## Current CRAN check results
+
+- [x] Checked on 2020-09-28, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html . We link libpq (and libcrypto) statically on Windows, hence the size.
