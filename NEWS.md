@@ -1,5 +1,9 @@
 # RPostgres 1.2.0.9000
 
+- Gains new `Redshift` driver for connecting to Redshift databases.  
+  Redshift databases behave almost identically to Postgres so this
+  driver allows downstream packages to distinguish between the two.
+
 - Windows: update libpq to 12.2.0.
 
 # RPostgres 1.2.0

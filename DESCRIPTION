@@ -58,6 +58,7 @@ Collate:
     'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
+    'Redshift.R'
     'default.R'
     'export.R'
     'names.R'
