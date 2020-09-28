@@ -5,3 +5,4 @@ src/*.d
 src/*.h.gch
 /clion-test.R
 windows/*
+CRAN-RELEASE
