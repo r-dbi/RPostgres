@@ -132,25 +132,25 @@ if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Postgres</span>()
+    <pre class="usage"><span class='fu'>Postgres</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqDriver</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(
-  <span class='kw'>drv</span>,
-  dbname = <span class='kw'>NULL</span>,
-  host = <span class='kw'>NULL</span>,
-  port = <span class='kw'>NULL</span>,
-  password = <span class='kw'>NULL</span>,
-  user = <span class='kw'>NULL</span>,
-  service = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>,
-  bigint = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span>),
-  check_interrupts = <span class='fl'>FALSE</span>,
-  timezone = <span class='st'>"UTC"</span>
-)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span>
+  <span class='va'>drv</span>,
+  dbname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  host <span class='op'>=</span> <span class='cn'>NULL</span>,
+  port <span class='op'>=</span> <span class='cn'>NULL</span>,
+  password <span class='op'>=</span> <span class='cn'>NULL</span>,
+  user <span class='op'>=</span> <span class='cn'>NULL</span>,
+  service <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>,
+  bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>,
+  check_interrupts <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  timezone <span class='op'>=</span> <span class='st'>"UTC"</span>
+<span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -219,12 +219,12 @@ If <code>NULL</code> then no timezone is set, which defaults to localtime.</p></
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()) {
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://r-dbi.github.io/DBI'>DBI</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-dbi.github.io/DBI'>DBI</a></span><span class='op'>)</span>
   <span class='co'># Pass more arguments as necessary to dbConnect()</span>
-  <span class='kw'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw'>RPostgres</span>::<span class='fu'>Postgres</span>())
-  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>con</span>)
-}
+  <span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'>Postgres</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

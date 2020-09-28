@@ -122,22 +122,22 @@ provides an extension point for future methods and downstream packages." />
 provides an extension point for future methods and downstream packages.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Redshift</span>()
+    <pre class="usage"><span class='fu'>Redshift</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># S4 method for RedshiftDriver</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(
-  <span class='kw'>drv</span>,
-  dbname = <span class='kw'>NULL</span>,
-  host = <span class='kw'>NULL</span>,
-  port = <span class='kw'>NULL</span>,
-  password = <span class='kw'>NULL</span>,
-  user = <span class='kw'>NULL</span>,
-  service = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>,
-  bigint = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span>),
-  check_interrupts = <span class='fl'>FALSE</span>,
-  timezone = <span class='st'>"UTC"</span>
-)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span>
+  <span class='va'>drv</span>,
+  dbname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  host <span class='op'>=</span> <span class='cn'>NULL</span>,
+  port <span class='op'>=</span> <span class='cn'>NULL</span>,
+  password <span class='op'>=</span> <span class='cn'>NULL</span>,
+  user <span class='op'>=</span> <span class='cn'>NULL</span>,
+  service <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>,
+  bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>,
+  check_interrupts <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  timezone <span class='op'>=</span> <span class='st'>"UTC"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

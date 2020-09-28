@@ -123,13 +123,13 @@ end the transaction by either committing or rolling back the changes.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbBegin</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbBegin</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbCommit</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbCommit</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbRollback</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbRollback</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,26 +151,26 @@ end the transaction by either committing or rolling back the changes.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># For running the examples on systems without PostgreSQL connection:</span>
-<span class='kw'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span>()
+<span class='va'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://r-dbi.github.io/DBI'>DBI</a></span>)
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='kw'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw'>RPostgres</span>::<span class='fu'><a href='Postgres.html'>Postgres</a></span>())
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='kw'>con</span>, <span class='st'>"USarrests"</span>, <span class='kw'>datasets</span>::<span class='kw'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, temporary = <span class='fl'>TRUE</span>)
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='kw'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-dbi.github.io/DBI'>DBI</a></span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"USarrests"</span>, <span class='fu'>datasets</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/datasets/USArrests.html'>USArrests</a></span>, temporary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   count
 #&gt; 1    50</div><div class='input'>
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbBegin</a></span>(<span class='kw'>con</span>)
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span>(<span class='kw'>con</span>, <span class='st'>'DELETE from "USarrests" WHERE "Murder" &gt; 1'</span>)
-</div><div class='output co'>#&gt; [1] 49</div><div class='input'><span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='kw'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbBegin</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>'DELETE from "USarrests" WHERE "Murder" &gt; 1'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 49</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   count
-#&gt; 1     1</div><div class='input'><span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbRollback</a></span>(<span class='kw'>con</span>)
+#&gt; 1     1</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbRollback</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
 
 <span class='co'># Rolling back changes leads to original count</span>
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='kw'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>'SELECT count(*) from "USarrests"'</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   count
 #&gt; 1    50</div><div class='input'>
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable</a></span>(<span class='kw'>con</span>, <span class='st'>"USarrests"</span>)
-<span class='co'>if</span> (<span class='kw'>run</span>) <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>con</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"USarrests"</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

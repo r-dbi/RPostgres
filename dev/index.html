@@ -89,59 +89,56 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># Install the latest RPostgres release from CRAN:</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"RPostgres"</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"RPostgres"</span><span class="op">)</span>
 
 <span class="co"># Or the the development version from GitHub:</span>
 <span class="co"># install.packages("remotes")</span>
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"r-dbi/RPostgres"</span>)
-</pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"r-dbi/RPostgres"</span><span class="op">)</span></pre></div>
 <p>Discussions associated with DBI and related database packages take place on <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-db">R-SIG-DB</a>. The website <a href="https://db.rstudio.com/">Databases using R</a> describes the tools and best practices in this ecosystem.</p>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://r-dbi.github.io/DBI">DBI</a></span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to the default postgres database</span>
-<span class="kw">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(<span class="kw">RPostgres</span>::<span class="fu"><a href="reference/Postgres.html">Postgres</a></span>())
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span>(<span class="kw">con</span>)
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(<span class="kw">con</span>, <span class="st">"mtcars"</span>, <span class="kw">mtcars</span>)
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span>(<span class="kw">con</span>)
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"mtcars"</span>, <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span>
 
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields</a></span>(<span class="kw">con</span>, <span class="st">"mtcars"</span>)
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span>(<span class="kw">con</span>, <span class="st">"mtcars"</span>)
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"mtcars"</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"mtcars"</span><span class="op">)</span>
 
 <span class="co"># You can fetch all results:</span>
-<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span>(<span class="kw">con</span>, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span>(<span class="kw">res</span>)
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span>(<span class="kw">res</span>)
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
 
 <span class="co"># Or a chunk at a time</span>
-<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span>(<span class="kw">con</span>, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span>)
-<span class="co">while</span>(<span class="op">!</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbHasCompleted.html">dbHasCompleted</a></span>(<span class="kw">res</span>)){
-  <span class="kw">chunk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span>(<span class="kw">res</span>, n = <span class="fl">5</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">chunk</span>))
-}
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM mtcars WHERE cyl = 4"</span><span class="op">)</span>
+<span class="kw">while</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbHasCompleted.html">dbHasCompleted</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">chunk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span><span class="op">(</span><span class="va">res</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
 <span class="co"># Clear the result</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span>(<span class="kw">res</span>)
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
 
 <span class="co"># Disconnect from the database</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span>(<span class="kw">con</span>)
-</pre></div>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></pre></div>
 </div>
 <div id="connecting-to-a-specific-postgres-instance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-a-specific-postgres-instance" class="anchor"></a>Connecting to a specific Postgres instance</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://r-dbi.github.io/DBI">DBI</a></span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to a specific postgres database i.e. Heroku</span>
-<span class="kw">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(<span class="kw">RPostgres</span>::<span class="fu"><a href="reference/Postgres.html">Postgres</a></span>(),dbname = <span class="st">'DATABASE_NAME'</span>, 
-                 host = <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span>
-                 port = <span class="fl">5432</span>, <span class="co"># or any other port specified by your DBA</span>
-                 user = <span class="st">'USERNAME'</span>,
-                 password = <span class="st">'PASSWORD'</span>)
-</pre></div>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span>,dbname <span class="op">=</span> <span class="st">'DATABASE_NAME'</span>, 
+                 host <span class="op">=</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span>
+                 port <span class="op">=</span> <span class="fl">5432</span>, <span class="co"># or any other port specified by your DBA</span>
+                 user <span class="op">=</span> <span class="st">'USERNAME'</span>,
+                 password <span class="op">=</span> <span class="st">'PASSWORD'</span><span class="op">)</span></pre></div>
 </div>
 <div id="design-notes" class="section level2">
 <h2 class="hasAnchor">
