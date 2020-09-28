@@ -1,3 +1,8 @@
+# RPostgres 1.2.1 (2020-09-28)
+
+- Internal changes only.
+
+
 # RPostgres 1.2.0.9001 (2020-09-28)
 
 - Gains new `Redshift` driver for connecting to Redshift databases.  
