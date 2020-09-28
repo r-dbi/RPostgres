@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9000</span>
       </span>
     </div>
 
@@ -114,14 +114,39 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1-2-1-9000-2020-09-28" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.1.9000">
+<a href="#rpostgres-1-2-1-9000-2020-09-28" class="anchor"></a>RPostgres 1.2.1.9000 (2020-09-28)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Internal changes only.</li>
+</ul>
+</div>
+    <div id="rpostgres-1-2-1-2020-09-28" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.1">
+<a href="#rpostgres-1-2-1-2020-09-28" class="anchor"></a>RPostgres 1.2.1 (2020-09-28)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Internal changes only.</li>
+</ul>
+</div>
+    <div id="rpostgres-1-2-0-9001-2020-09-28" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.0.9001">
+<a href="#rpostgres-1-2-0-9001-2020-09-28" class="anchor"></a>RPostgres 1.2.0.9001 (2020-09-28)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Gains new <code>Redshift</code> driver for connecting to Redshift databases.<br>
+Redshift databases behave almost identically to Postgres so this driver allows downstream packages to distinguish between the two (<a href='https://github.com/r-dbi/RPostgres/issues/258'>#258</a>).</li>
+<li>Datetime values are now passed to the database using an unambiguous time zone format (<a href='https://github.com/r-dbi/RPostgres/issues/255'>#255</a>, <a href='https://github.com/imlijunda'>@imlijunda</a>).</li>
+<li>Document <code><a href="../reference/Postgres.html">Postgres()</a></code> together with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/242'>#242</a>).</li>
+</ul>
+</div>
     <div id="rpostgres-1-2-0-9000" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.0.9000">
 <a href="#rpostgres-1-2-0-9000" class="anchor"></a>RPostgres 1.2.0.9000<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>Gains new <code>Redshift</code> driver for connecting to Redshift databases.<br>
-Redshift databases behave almost identically to Postgres so this driver allows downstream packages to distinguish between the two.</p></li>
-<li><p>Windows: update libpq to 12.2.0.</p></li>
+<li>Windows: update libpq to 12.2.0.</li>
 </ul>
 </div>
     <div id="rpostgres-1-2-0" class="section level1">
