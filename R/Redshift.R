@@ -4,9 +4,6 @@
 #' provides an extension point for future methods and downstream packages.
 #'
 #' @export
-#' @useDynLib RPostgres, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-#' @import methods DBI
 Redshift <- function() {
   new("RedshiftDriver")
 }
@@ -17,9 +14,7 @@ setClass("RedshiftDriver", contains = "PqDriver")
 
 #' @export
 #' @rdname Redshift
-setClass("RedshiftConnection",
-  contains = "PqConnection",
-)
+setClass("RedshiftConnection", contains = "PqConnection")
 
 #' @export
 #' @rdname Redshift
