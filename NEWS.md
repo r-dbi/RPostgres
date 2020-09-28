@@ -1,19 +1,10 @@
 # RPostgres 1.2.1 (2020-09-28)
 
-- Internal changes only.
-
-
-# RPostgres 1.2.0.9001 (2020-09-28)
-
 - Gains new `Redshift` driver for connecting to Redshift databases.  
   Redshift databases behave almost identically to Postgres so this
   driver allows downstream packages to distinguish between the two (#258).
 - Datetime values are now passed to the database using an unambiguous time zone format (#255, @imlijunda).
 - Document `Postgres()` together with `dbConnect()` (#242).
-
-
-# RPostgres 1.2.0.9000
-
 - Windows: update libpq to 12.2.0.
 
 # RPostgres 1.2.0
