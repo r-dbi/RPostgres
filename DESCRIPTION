@@ -42,11 +42,14 @@ Imports:
 Suggests: 
     callr,
     DBItest (>= 1.7.0),
+    knitr,
     testthat
 LinkingTo: 
     BH,
     plogr (>= 0.2.0),
     Rcpp
+VignetteBuilder:
+    knitr
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
