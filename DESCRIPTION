@@ -43,6 +43,7 @@ Suggests:
     callr,
     DBItest (>= 1.7.0),
     knitr,
+    rmarkdown,
     testthat
 LinkingTo: 
     BH,
