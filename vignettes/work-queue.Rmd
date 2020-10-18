@@ -10,7 +10,11 @@ vignette: >
 
 ```{r, echo = FALSE}
 library(DBI)
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = RPostgres::postgresHasDefault()
+)
 con <- NULL
 rp <- NULL
 rs <- NULL
@@ -28,6 +32,8 @@ like [RabbitMQ](https://www.rabbitmq.com/).
 In this example, our work will be generating square roots. We'll keep track of the results in a table:
 
 ```{r}
+library(DBI)
+
 con <- dbConnect(RPostgres::Postgres())
 
 dbExecute(con, "DROP TABLE IF EXISTS sqroot_vignette_example;")
