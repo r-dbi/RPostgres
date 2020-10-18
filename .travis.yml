@@ -55,7 +55,7 @@ env:
 
 #addons
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
   apt:
     packages:
     - libpq-dev
