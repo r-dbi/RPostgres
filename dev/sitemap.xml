@@ -37,9 +37,15 @@
     <loc>https://rpostgres.r-dbi.org/reference/postgresHasDefault.html</loc>
   </url>
   <url>
+    <loc>https://rpostgres.r-dbi.org/reference/postgresWaitForNotify.html</loc>
+  </url>
+  <url>
     <loc>https://rpostgres.r-dbi.org/reference/quote.html</loc>
   </url>
   <url>
     <loc>https://rpostgres.r-dbi.org/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://rpostgres.r-dbi.org/articles/work-queue.html</loc>
   </url>
 </urlset>
