@@ -40,12 +40,17 @@ Imports:
     Rcpp (>= 0.11.4.2),
     withr
 Suggests: 
+    callr,
     DBItest (>= 1.7.0),
+    knitr,
+    rmarkdown,
     testthat
 LinkingTo: 
     BH,
     plogr (>= 0.2.0),
     Rcpp
+VignetteBuilder:
+    knitr
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
