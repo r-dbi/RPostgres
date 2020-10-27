@@ -162,7 +162,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) 
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
-  ret <- paste0(as.character(x), "::time")
+  ret <- paste0("'", as.character(hms::as_hms(x), "'"), "::time")
   ret[is.na(x)] <- "NULL"
   SQL(ret, names = names(ret))
 })
