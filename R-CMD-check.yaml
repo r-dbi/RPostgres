@@ -53,6 +53,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - uses: ankane/setup-mariadb@v1
+        with:
+          mariadb-version: 10.5
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
