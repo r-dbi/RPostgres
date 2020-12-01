@@ -57,6 +57,10 @@ jobs:
         with:
           mariadb-version: 10.5
 
+      - name: Set database to UTF-8
+        run: |
+          mysql -e "ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
