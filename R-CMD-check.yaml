@@ -94,8 +94,20 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo systemctl start mysql.service
+
+      - name: Start MySQL (Linux)
+        if: runner.os == 'Linux'
+        run: |
           mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;" -uroot
+
+      - name: Start MySQL (Linux)
+        if: runner.os == 'Linux'
+        run: |
           mysql -e "CREATE USER '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot || true
+
+      - name: Start MySQL (Linux)
+        if: runner.os == 'Linux'
+        run: |
           mysql -e "GRANT ALL PRIVILEGES ON test.* TO '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot
 
       - name: Check
