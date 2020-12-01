@@ -90,6 +90,14 @@ jobs:
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
+      - name: Start MySQL (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo systemctl start mysql.service
+          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;" -uroot
+          mysql -e "CREATE USER '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot || true
+          mysql -e "GRANT ALL PRIVILEGES ON test.* TO '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot
+
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
