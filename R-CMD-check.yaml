@@ -98,17 +98,17 @@ jobs:
       - name: Start MySQL (Linux)
         if: runner.os == 'Linux'
         run: |
-          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;" -uroot
+          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;" -uroot -proot
 
       - name: Start MySQL (Linux)
         if: runner.os == 'Linux'
         run: |
-          mysql -e "CREATE USER '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot || true
+          mysql -e "CREATE USER '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot -proot
 
       - name: Start MySQL (Linux)
         if: runner.os == 'Linux'
         run: |
-          mysql -e "GRANT ALL PRIVILEGES ON test.* TO '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot
+          mysql -e "GRANT ALL PRIVILEGES ON test.* TO '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot -proot
 
       - name: Check
         env:
