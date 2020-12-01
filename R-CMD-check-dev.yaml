@@ -38,6 +38,14 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - uses: ankane/setup-mariadb@v1
+        with:
+          mariadb-version: 10.5
+
+      - name: Set database to UTF-8
+        run: |
+          mysql -e "ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
+
       - name: "Prepare timestamp for cache"
         if: runner.os != 'Windows'
         id: date
@@ -80,19 +88,6 @@ jobs:
           if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
-
-      - name: Start MySQL (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo systemctl start mysql.service
-
-      - name: Create MySQL Database
-        if: runner.os == 'Linux'
-        run: |
-          set -x
-          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;" -uroot -proot
-          mysql -e "CREATE USER '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot -proot
-          mysql -e "GRANT ALL PRIVILEGES ON test.* TO '"${USER}"'@'localhost'; FLUSH PRIVILEGES;" -uroot -proot
 
       - name: Check
         env:
