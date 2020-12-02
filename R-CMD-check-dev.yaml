@@ -42,11 +42,16 @@ jobs:
         with:
           mariadb-version: 10.5
 
-      - name: Set database to UTF-8
+      - name: Create database, set it to UTF-8
         run: |
-          mysql -e "ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
+          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
 
-      - name: "Prepare timestamp for cache"
+      - name: Install remotes
+        run: |
+          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+        shell: Rscript {0}
+
+      - name: Prepare cache keys
         if: runner.os != 'Windows'
         id: date
         run: echo "::set-output name=date::$(date -Ihours)"
@@ -58,11 +63,6 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ matrix.config.os }}-r-dev-${{ matrix.config.r }}-${{steps.date.outputs.date}}
           restore-keys: ${{ matrix.config.os }}-r-dev-${{ matrix.config.r }}-
-
-      - name: Install remotes
-        run: |
-          install.packages("remotes")
-        shell: Rscript {0}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
