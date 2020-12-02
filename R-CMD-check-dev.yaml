@@ -46,10 +46,13 @@ jobs:
         run: |
           mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
 
-      - name: Add symlink to expected socket location
+      - name: Show expected socket location
         if: runner.os == 'Linux'
         run: |
-          sudo ln -s /tmp/mysql.sock /var/run/mysqld/mysqld.sock
+          set -x
+          sudo ls -l /var/run/mysqld/mysqld.sock
+          groups
+          ls -l /var/run/mysqld/mysqld.sock
 
       - name: Install remotes
         run: |
