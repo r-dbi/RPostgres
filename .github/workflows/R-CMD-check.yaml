@@ -111,6 +111,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           createdb ${USERNAME}
+        shell: bash
       # End custom: after install
 
       - name: Check
