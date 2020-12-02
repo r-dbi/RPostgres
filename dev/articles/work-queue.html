@@ -39,12 +39,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -80,7 +74,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="work-queue_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Implementing a Work Queue using RPostgres</h1>
@@ -94,23 +88,25 @@
 
     
     
+<pre><code>## Could not initialise default postgres database. If postgres is running
+## check that the environment variables PGHOST, PGPORT, 
+## PGUSER, PGPASSWORD, and PGDATABASE, are defined and
+## point to your database.</code></pre>
 <p>Imagine you have an R process that is relatively intensive, based on user input.</p>
 <p>To keep things as fast as possible, you may want to use several servers to all process incoming requests for square roots. However, to do this you need to co-ordinate between all of your servers (or workers). How do you decide which server works on what? What if one server dies mid-way? To decide this, we need a work queue, also known as a job queue or task queue. This document will show show you how to build a work queue system using R and PostgreSQL that would ordinarily require an external tool, like <a href="https://www.rabbitmq.com/">RabbitMQ</a>.</p>
 <p>In this example, our work will be generating square roots. We’ll keep track of the results in a table:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"DROP TABLE IF EXISTS sqroot_vignette_example;"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span>
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"
     CREATE TABLE sqroot_vignette_example (
         in_val INTEGER PRIMARY KEY,
         out_val DOUBLE PRECISION NULL
     )
-"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></pre></div>
+"</span><span class="op">)</span></code></pre></div>
 <p>When a client wants a square root value, it can insert a new row into a table, filling <code>in_val</code>. We’ll then have a bunch of workers that will calculate the results for the client, and fill in <code>out_val</code>.</p>
 <p>To manage these workers, we will combine 2 PostgreSQL concepts:</p>
 <div id="listen-notify" class="section level2">
@@ -118,42 +114,40 @@
 <a href="#listen-notify" class="anchor"></a>LISTEN / NOTIFY</h2>
 <p>The Postgres <code>LISTEN</code> and <code>NOTIFY</code> commands allow you to send and receive messages between clients connected to a PostgreSQL database. This is known as a publish/subscribe architecture.</p>
 <p>We tell Postgres that we are interested in receiving messages using <code>LISTEN</code>. For example:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"LISTEN grapevine"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"LISTEN grapevine"</span><span class="op">)</span></code></pre></div>
 <p>…in this case, “grapevine” is arbitary, we don’t need to create channels ahead of time. To make sure we have something to receive, we can start a separate R process using <a href="https://CRAN.R-project.org/package=callr">callr</a>. Ordinarily this would be part of another R script, maybe on another computer. This will wait a bit, and use <code>NOTIFY</code> to send a message, then finish:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">callr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/callr/man/r_bg.html">r_bg</a></span><span class="op">(</span><span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">callr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/callr/man/r_bg.html">r_bg</a></span><span class="op">(</span><span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.3</span><span class="op">)</span>
     <span class="va">db_notify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">db_notify</span>, <span class="st">"NOTIFY grapevine, 'psst'"</span><span class="op">)</span>
     <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">db_notify</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></pre></div>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>Finally, we should wait for any incoming messages. To do this, use <code>postgresWaitForNotify</code>. The payload will contain the message from the other R process:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co"># Sleep until we get the message</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sleep until we get the message</span>
 <span class="va">n</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
 <span class="kw">while</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="va">n</span><span class="op">$</span><span class="va">payload</span>
-<span class="co">#&gt; [1] "psst"</span></pre></div>
+<span class="va">n</span><span class="op">$</span><span class="va">payload</span></code></pre></div>
 </div>
 <div id="skip-locked" class="section level2">
 <h2 class="hasAnchor">
 <a href="#skip-locked" class="anchor"></a>SKIP LOCKED</h2>
 <p>We can use LISTEN/NOTIFY to inform all workers that there is something to be done, but how do we decide which worker actually does the work? This is done using <code>SKIP LOCKED</code>.</p>
 <p>We notify all workers that the input <code>99</code> is ready for processing. After receiving this, they all do the following:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"
     SELECT in_val
       FROM sqroot_vignette_example
      WHERE in_val = $1
        FOR UPDATE
       SKIP LOCKED
-"</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span><span class="op">)</span></pre></div>
+"</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>One lucky worker will get a row back, but thanks to <code>FOR UPDATE</code>, the row is now locked. For any other worker, as the row is now locked, they will skip over it (<code>SKIP LOCKED</code>) and find something else to do. If there are no other jobs available, then nothing will be returned.</p>
 <p>Using SKIP LOCKED is discussed in more detail <a href="https://www.2ndquadrant.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/">in this article</a>.</p>
 </div>
@@ -161,8 +155,8 @@
 <h2 class="hasAnchor">
 <a href="#implementing-our-worker" class="anchor"></a>Implementing our worker</h2>
 <p>Now we can put the concepts together. The following implements our worker as a function (again, this would be running as a script on several servers):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
     <span class="va">db_worker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/base/on.exit.html">on.exit</a></span><span class="op">(</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">db_worker</span><span class="op">)</span><span class="op">)</span>
@@ -223,7 +217,7 @@
             <span class="fu"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Failed to sqroot:"</span>, <span class="va">e</span><span class="op">$</span><span class="va">message</span><span class="op">)</span><span class="op">)</span>
         <span class="op">}</span><span class="op">)</span>
     <span class="op">}</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>The worker connects to the database, starts listening and loops indefinitely.</p>
 <ul>
 <li>First, we wait for new notifications.</li>
@@ -232,15 +226,15 @@
 <li>Try to grab the row for the new item, if we win, and only one worker will, then fill in the square root.</li>
 </ul>
 <p>Let’s use callr again to start 2 workers:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">stdout_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">stdout_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">stdout_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">callr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/callr/man/r_bg.html">r_bg</a></span><span class="op">(</span><span class="va">worker</span>, stdout <span class="op">=</span> <span class="va">stdout_1</span>, stderr <span class="op">=</span> <span class="va">stdout_1</span><span class="op">)</span>
 <span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">callr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/callr/man/r_bg.html">r_bg</a></span><span class="op">(</span><span class="va">worker</span>, stdout <span class="op">=</span> <span class="va">stdout_2</span>, stderr <span class="op">=</span> <span class="va">stdout_2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>  <span class="co"># Give workers a chance to set themselves up</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>  <span class="co"># Give workers a chance to set themselves up</span></code></pre></div>
 <p>Now our client can add some values to our table and notify the workers that there’s something to do:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">add_sqroot</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">in_val</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"
@@ -252,43 +246,27 @@
 <span class="op">}</span>
 
 <span class="fu">add_sqroot</span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span>
 <span class="fu">add_sqroot</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span>
-<span class="fu">add_sqroot</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></pre></div>
+<span class="fu">add_sqroot</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></code></pre></div>
 <p>…after a wait, the answers should have been populated by the workers for us:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM sqroot_vignette_example ORDER BY in_val"</span><span class="op">)</span>
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span>
-<span class="co">#&gt;   in_val  out_val</span>
-<span class="co">#&gt; 1      7 2.645751</span>
-<span class="co">#&gt; 2      8 2.828427</span>
-<span class="co">#&gt; 3      9 3.000000</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span> ; <span class="va">rs</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></pre></div>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span> ; <span class="va">rs</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></code></pre></div>
 <p>Finally, we can use <code>NOTIFY</code> to stop all the workers:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"NOTIFY sqroot_shutdown, ''"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"NOTIFY sqroot_shutdown, ''"</span><span class="op">)</span></code></pre></div>
 <p>And see what messages were printed as they run:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="co"># We can't control which worker will process the first entry,</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># We can't control which worker will process the first entry,</span>
 <span class="co"># so we sort the results so the vignette output stays the same.</span>
 <span class="va">outputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">stdout_1</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">stdout_2</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; Not sqroot-ing as another worker got there first</span>
-<span class="co">#&gt; Sqroot-ing 8 ... </span>
-<span class="co">#&gt; Not sqroot-ing as another worker got there first</span>
-<span class="co">#&gt; Shutting down.</span>
-<span class="fu"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; Sqroot-ing 7 ... </span>
-<span class="co">#&gt; Not sqroot-ing as another worker got there first</span>
-<span class="co">#&gt; Sqroot-ing 9 ... </span>
-<span class="co">#&gt; Shutting down.</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p>Notice that the work has been shared between the 2 workers. If these 2 weren’t enough, we could happily add more to keep the system going.</p>
 </div>
   </div>
@@ -308,7 +286,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

@@ -80,12 +80,6 @@ at most one table component and at most one schema component." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -205,20 +199,17 @@ at most one <code>table</code> component and at most one <code>schema</code> com
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># For running the examples on systems without PostgreSQL connection:</span>
 <span class='va'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='message'>Could not initialise default postgres database. If postgres is running</span>
+#&gt; <span class='message'>check that the environment variables PGHOST, PGPORT, </span>
+#&gt; <span class='message'>PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
+#&gt; <span class='message'>point to your database.</span></div><div class='input'>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-dbi.github.io/DBI'>DBI</a></span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b c"</span>, <span class='st'>"d'e"</span>, <span class='st'>"\\f"</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;SQL&gt; 'a'
-#&gt; &lt;SQL&gt; 'b c'
-#&gt; &lt;SQL&gt; 'd''e'
-#&gt; &lt;SQL&gt;  E'\\f'</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;SQL&gt; "a"
-#&gt; &lt;SQL&gt; "b c"
-#&gt; &lt;SQL&gt; "d'e"
-#&gt; &lt;SQL&gt; "\f"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>x</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -235,7 +226,7 @@ at most one <code>table</code> component and at most one <code>schema</code> com
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

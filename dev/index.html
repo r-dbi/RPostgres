@@ -41,12 +41,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -99,20 +93,20 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># Install the latest RPostgres release from CRAN:</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Install the latest RPostgres release from CRAN:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"RPostgres"</span><span class="op">)</span>
 
 <span class="co"># Or the the development version from GitHub:</span>
 <span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"r-dbi/RPostgres"</span><span class="op">)</span></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"r-dbi/RPostgres"</span><span class="op">)</span></code></pre></div>
 <p>Discussions associated with DBI and related database packages take place on <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-db">R-SIG-DB</a>. The website <a href="https://db.rstudio.com/">Databases using R</a> describes the tools and best practices in this ecosystem.</p>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to the default postgres database</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
@@ -138,19 +132,19 @@
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html">dbClearResult</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
 
 <span class="co"># Disconnect from the database</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="connecting-to-a-specific-postgres-instance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-a-specific-postgres-instance" class="anchor"></a>Connecting to a specific Postgres instance</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to a specific postgres database i.e. Heroku</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span>,dbname <span class="op">=</span> <span class="st">'DATABASE_NAME'</span>, 
                  host <span class="op">=</span> <span class="st">'HOST'</span>, <span class="co"># i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'</span>
                  port <span class="op">=</span> <span class="fl">5432</span>, <span class="co"># or any other port specified by your DBA</span>
                  user <span class="op">=</span> <span class="st">'USERNAME'</span>,
-                 password <span class="op">=</span> <span class="st">'PASSWORD'</span><span class="op">)</span></pre></div>
+                 password <span class="op">=</span> <span class="st">'PASSWORD'</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="design-notes" class="section level2">
 <h2 class="hasAnchor">
@@ -209,9 +203,9 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/r-dbi/RPostgres"><img src="https://travis-ci.org/r-dbi/RPostgres.png?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/r-dbi/RPostgres"><img src="https://ci.appveyor.com/api/projects/status/github/r-dbi/RPostgres?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://github.com/r-dbi/RPostgres/actions"><img src="https://github.com/r-dbi/RPostgres/workflows/rcc/badge.svg" alt="rcc"></a></li>
 <li><a href="https://codecov.io/gh/r-dbi/RPostgres?branch=master"><img src="https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.R-project.org/package=RPostgres"><img src="https://www.r-pkg.org/badges/version/RPostgres" alt="CRAN status"></a></li>
 </ul>
 </div>
 </div>
@@ -223,7 +217,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
