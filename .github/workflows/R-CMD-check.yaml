@@ -103,8 +103,14 @@ jobs:
           postgres-version: 13
 
       - name: Create database
+        if: runner.os != 'Windows'
         run: |
           createdb ${USER}
+
+      - name: Create database
+        if: runner.os == 'Windows'
+        run: |
+          createdb ${USERNAME}
       # End custom: after install
 
       - name: Check
