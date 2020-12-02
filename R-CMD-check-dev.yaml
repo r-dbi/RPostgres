@@ -46,6 +46,11 @@ jobs:
         run: |
           mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
 
+      - name: Add symlink to expected socket location
+        if: runner.os == 'Linux'
+        run: |
+          sudo ln -s /tmp/mysql.sock /var/run/mysqld/mysqld.sock
+
       - name: Install remotes
         run: |
           if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
