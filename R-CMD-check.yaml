@@ -57,9 +57,9 @@ jobs:
         with:
           mariadb-version: 10.5
 
-      - name: Set database to UTF-8
+      - name: Create database, set it to UTF-8
         run: |
-          mysql -e "ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
+          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
 
       - name: Query dependencies
         run: |
