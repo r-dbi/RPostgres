@@ -53,6 +53,17 @@ jobs:
           remotes::install_cran("covr")
         shell: Rscript {0}
 
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      # Begin custom: after install
+      # End custom: after install
+
       - name: Test coverage
         run: covr::codecov()
         shell: Rscript {0}

@@ -38,7 +38,12 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
-      - name: "Prepare timestamp for cache"
+      - name: Install remotes
+        run: |
+          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+        shell: Rscript {0}
+
+      - name: Prepare cache keys
         if: runner.os != 'Windows'
         id: date
         run: echo "::set-output name=date::$(date -Ihours)"
@@ -50,11 +55,6 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ matrix.config.os }}-r-dev-${{ matrix.config.r }}-${{steps.date.outputs.date}}
           restore-keys: ${{ matrix.config.os }}-r-dev-${{ matrix.config.r }}-
-
-      - name: Install remotes
-        run: |
-          install.packages("remotes")
-        shell: Rscript {0}
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -80,6 +80,9 @@ jobs:
           if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
+
+      # Begin custom: after install
+      # End custom: after install
 
       - name: Check
         env:

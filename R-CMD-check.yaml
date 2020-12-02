@@ -53,9 +53,14 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
-      - name: Query dependencies
+      - name: Install remotes
         run: |
-          install.packages('remotes')
+          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+        shell: Rscript {0}
+
+      - name: Prepare cache keys
+        if: runner.os != 'Windows'
+        run: |
           saveRDS(remotes::dev_package_deps(dependencies = TRUE, type = .Platform$pkgType), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -89,6 +94,9 @@ jobs:
           if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
+
+      # Begin custom: after install
+      # End custom: after install
 
       - name: Check
         env:
