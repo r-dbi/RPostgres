@@ -53,6 +53,7 @@ jobs:
           sudo ls -l /var/run/mysqld/mysqld.sock
           groups
           ls -l /var/run/mysqld/mysqld.sock
+          mysql --protocol socket -e "SELECT 1"
 
       - name: Install remotes
         run: |
