@@ -41,6 +41,7 @@ Imports:
     withr
 Suggests: 
     callr,
+    covr,
     DBItest (>= 1.7.0),
     knitr,
     rmarkdown,
