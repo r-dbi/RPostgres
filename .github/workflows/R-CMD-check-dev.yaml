@@ -90,8 +90,6 @@ jobs:
 
       - name: Create database
         run: |
-          set -x
-          createuser ${USER}
           createdb ${USER}
       # End custom: after install
 
