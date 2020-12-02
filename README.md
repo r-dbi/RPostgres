@@ -1,7 +1,9 @@
 # RPostgres
 
 <!-- badges: start -->
-[![Travis-CI Build Status](https://travis-ci.org/r-dbi/RPostgres.png?branch=master)](https://travis-ci.org/r-dbi/RPostgres) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-dbi/RPostgres?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/RPostgres)  [![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/RPostgres?branch=master)
+[![rcc](https://github.com/r-dbi/RPostgres/workflows/rcc/badge.svg)](https://github.com/r-dbi/RPostgres/actions)
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/RPostgres?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/RPostgres)](https://CRAN.R-project.org/package=RPostgres)
 <!-- badges: end -->
 
 RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:
