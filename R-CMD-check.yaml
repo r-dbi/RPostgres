@@ -104,8 +104,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Test with location reporter
+        if: runner.os == 'Windows'
         run: |
-          testthat::test_local(reporter = "location")
+          R.home("bin")
+          dir(R.home("bin"))
+          dir(file.path(R.home("bin"), ".."))
+          dir(file.path(R.home("bin"), "../i386"))
+          path <- file.path(R.home("bin"), "../i386/Rscript")
+          system2(path, c("-e", 'testthat::test_local(reporter = "location")'))
         shell: Rscript {0}
 
       - name: Check
