@@ -53,14 +53,6 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
-      - uses: ankane/setup-mariadb@v1
-        with:
-          mariadb-version: 10.5
-
-      - name: Create database, set it to UTF-8
-        run: |
-          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
-
       - name: Install remotes
         run: |
           if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
@@ -102,6 +94,18 @@ jobs:
           if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
+
+      # Custom: after install
+      # Must happen after installing system dependencies,
+      # https://github.com/ankane/setup-mariadb/issues/2
+      - uses: ankane/setup-mariadb@v1
+        with:
+          mariadb-version: 10.5
+
+      - name: Create database, set it to UTF-8
+        run: |
+          mysql -e "CREATE DATABASE IF NOT EXISTS test; ALTER DATABASE test CHARACTER SET 'utf8'; FLUSH PRIVILEGES;"
+      # End custom: after install
 
       - name: Show R.home
         if: runner.os == 'Windows'
