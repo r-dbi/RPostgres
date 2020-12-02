@@ -6,3 +6,4 @@ src/*.h.gch
 /clion-test.R
 windows/*
 CRAN-RELEASE
+tests/testthat/testthat-problems.rds
