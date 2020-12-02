@@ -103,15 +103,20 @@ jobs:
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
-      - name: Test with location reporter
+      - name: Show R.home
         if: runner.os == 'Windows'
         run: |
           R.home("bin")
           dir(R.home("bin"))
           dir(file.path(R.home("bin"), ".."))
           dir(file.path(R.home("bin"), "../i386"))
+        shell: Rscript {0}
+
+      - name: Test with location reporter
+        if: runner.os == 'Windows'
+        run: |
           path <- file.path(R.home("bin"), "../i386/Rscript")
-          system2(path, c("-e", 'testthat::test_local(reporter = "location")'))
+          system2(path, c("-e", "testthat::test_local(reporter='location')"))
         shell: Rscript {0}
 
       - name: Check
