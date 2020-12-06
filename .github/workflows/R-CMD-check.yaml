@@ -14,7 +14,7 @@ on:
       - main
       - master
   schedule:
-    - cron:  '0 8 * * *'
+    - cron:  '20 2 * * *'
 
 name: rcc
 
@@ -44,6 +44,11 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: Check rate limits
+        run: |
+          curl -s --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/rate_limit
+        shell: bash
+
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@v1
@@ -55,7 +60,8 @@ jobs:
 
       - name: Install remotes
         run: |
-          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
+          install.packages("https://github.com/krlmlr/remotes/archive/f-rate-limit-gh.tar.gz", repos = NULL)
         shell: Rscript {0}
 
       - name: Prepare cache keys
@@ -83,6 +89,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
+          install.packages("https://github.com/krlmlr/remotes/archive/f-rate-limit-gh.tar.gz", repos = NULL)
           remotes::install_deps(dependencies = TRUE, type = .Platform$pkgType)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
@@ -90,8 +98,8 @@ jobs:
       - name: Session info
         run: |
           options(width = 100)
+          if (!requireNamespace("sessioninfo", quietly = TRUE)) install.packages("sessioninfo")
           pkgs <- installed.packages()[, "Package"]
-          if (!("sessioninfo" %in% pkgs)) install.packages("sessioninfo")
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
@@ -138,3 +146,9 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Check rate limits
+        if: always()
+        run: |
+          curl -s --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/rate_limit
+        shell: bash
