@@ -41,9 +41,10 @@ jobs:
         run: |
           set -x
           cd remote/${{ steps.remote_repo.outputs.slug }}
-          git subtree pull -m "Merge from actions-subtree" --prefix=.github/workflows ../../.. ${{ steps.remote_repo.outputs.slug }} || (git rm -rf .github/workflows/.github && git add .github/workflows)
-          git rm -rf --ignore-unmatch .github/workflows/.github
-          git commit --amend --no-edit || true
+          git subtree pull -m "Merge from actions-subtree" --prefix=.github/workflows ../../.. ${{ steps.remote_repo.outputs.slug }} || (git rm -rf .github/workflows/.github && git add .github/workflows && git commit --no-edit)
+          if git rm -rf .github/workflows/.github; then
+            git commit --amend --no-edit
+          fi
           git push
 
       - name: Share private deploy key with remote repository
