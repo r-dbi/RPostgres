@@ -41,7 +41,15 @@ jobs:
         run: |
           set -x
           cd remote/${{ steps.remote_repo.outputs.slug }}
-          git subtree pull -m "Merge from actions-subtree" --prefix=.github/workflows ../../.. ${{ steps.remote_repo.outputs.slug }}
-          git rm -rf .github/workflows/.github
+          git subtree pull -m "Merge from actions-subtree" --prefix=.github/workflows ../../.. ${{ steps.remote_repo.outputs.slug }} || (git rm -rf .github/workflows/.github && git add .github/workflows)
+          git rm -rf --ignore-unmatch .github/workflows/.github
           git commit --amend --no-edit || true
           git push
+
+      - name: Share private deploy key with remote repository
+        uses: gliech/create-github-secret-action@v1
+        with:
+          location: ${{ steps.remote_repo.outputs.slug }}
+          name: ACTIONS_SUBTREE_KEY_DEPLOY
+          value: ${{ secrets.KEY_DEPLOY }}
+          pa_token: ${{ secrets.TOKEN_KEYS }}
