@@ -162,7 +162,10 @@ setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) 
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
-  ret <- paste0(as.character(x), "::time")
+  # https://github.com/tidyverse/hms/issues/84
+  mode(x) <- "double"
+
+  ret <- paste0("'", as.character(hms::as_hms(x)), "'::interval")
   ret[is.na(x)] <- "NULL"
   SQL(ret, names = names(ret))
 })
