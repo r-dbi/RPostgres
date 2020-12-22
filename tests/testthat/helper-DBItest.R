@@ -11,5 +11,13 @@ DBItest::make_context(
     timestamp_cast = function(x) paste0("timestamp '", x, "'"),
     is_null_check = function(x) paste0("(", x, "::text IS NULL)"),
     blob_cast = function(x) paste0("(", x, "::bytea)")
+  ),
+  default_skip = c(
+    if (packageVersion("DBItest") < "1.7.0.9002") "compliance",
+
+    if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
+    if (.Platform$r_arch == "i386") "roundtrip_timestamp",
+
+    NULL
   )
 )

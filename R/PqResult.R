@@ -195,7 +195,7 @@ fix_posixt <- function(value) {
   is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
   withr::with_options(
     list(digits.secs = 6),
-    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, usetz = T))
+    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, format = "%Y-%m-%dT%H:%M:%OS%z"))
   )
   value
 }

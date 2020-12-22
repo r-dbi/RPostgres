@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.2.0.9000
-Date: 2019-12-19
+Version: 1.2.1.9000
+Date: 2020-09-28
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -40,16 +40,22 @@ Imports:
     Rcpp (>= 0.11.4.2),
     withr
 Suggests: 
+    callr,
+    covr,
     DBItest (>= 1.7.0),
+    knitr,
+    rmarkdown,
     testthat
 LinkingTo: 
     BH,
     plogr (>= 0.2.0),
     Rcpp
+VignetteBuilder:
+    knitr
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
     postgresql-devel (rpm)
 Collate: 
@@ -58,6 +64,7 @@ Collate:
     'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
+    'Redshift.R'
     'default.R'
     'export.R'
     'names.R'
