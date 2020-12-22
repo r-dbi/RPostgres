@@ -107,12 +107,6 @@ as_table <- function(catalog, schema, table) {
   do.call(Id, as.list(args))
 }
 
-# locally for now, requires DBI > 0.7
-#' @rdname quote
-setGeneric("dbQuoteLiteral",
-  def = function(conn, x, ...) standardGeneric("dbQuoteLiteral")
-)
-
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "logical"), function(conn, x, ...) {
@@ -172,9 +166,6 @@ setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...
 setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
   quote_blob(x)
 })
-
-# Workaround, remove when blob > 1.1.0 is on CRAN
-setOldClass("blob")
 
 #' @export
 #' @rdname quote
