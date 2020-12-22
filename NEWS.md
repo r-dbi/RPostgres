@@ -1,3 +1,10 @@
+# RPostgres 1.2.1.9001 (2020-12-22)
+
+- `dbQuoteLiteral()` now quotes difftime values as interval (#270).
+- Switch to GitHub Actions (#268, thanks @ankane).
+- New `postgresWaitForNotify()` adds `LISTEN/NOTIFY` support (#237, @lentinj).
+
+
 # RPostgres 1.2.1.9000 (2020-09-28)
 
 - Internal changes only.
