@@ -124,7 +124,10 @@ with_database_connection({
   describe("Inf values", {
     test_that("Inf values come back correctly", {
       with_table(con, "xy", {
-        data <- data.frame(column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3))
+        data <- data.frame(
+          column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3),
+          stringsAsFactors = FALSE
+        )
         dbWriteTable(con, "xy", data, row.names = FALSE)
 
         data_out <- dbReadTable(con, "xy")
