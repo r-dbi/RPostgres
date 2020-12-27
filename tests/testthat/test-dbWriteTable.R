@@ -86,7 +86,7 @@ with_database_connection({
       })
     })
   })
-  
+
   describe("Writing to the database with possible numeric precision issues", {
     # reference value
     value <- data.frame(x = -0.000064925595060641, y = -0.00006492559506064059)
@@ -117,6 +117,18 @@ with_database_connection({
       with_table(con, "xy", {
         dbWriteTable(con, name = "xy", value = value, overwrite = F, append = F, copy = T, field.types = c(x = "NUMERIC", y = "NUMERIC"))
         expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
+      })
+    })
+  })
+
+  describe("Inf values", {
+    test_that("Inf values come back correctly", {
+      with_table(con, "xy", {
+        data <- data.frame(column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3))
+        dbWriteTable(con, "xy", data, row.names = FALSE)
+
+        data_out <- dbReadTable(con, "xy")
+        expect_equal(data, data_out)
       })
     })
   })
