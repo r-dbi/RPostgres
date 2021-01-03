@@ -152,6 +152,7 @@ double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
   date.tm_sec = static_cast<int>(sec);
   LOG_VERBOSE << date.tm_sec;
 
+  int utcoffset = 0;
   if (*val == '+' || *val == '-') {
     int tz_hours = 0, tz_minutes = 0, sign = 0;
     sign = (*val++ == '+' ? +1 : -1);
