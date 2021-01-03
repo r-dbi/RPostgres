@@ -126,7 +126,7 @@
 </h1>
 <ul>
 <li>
-<code><a href="../reference/quote.html">dbQuoteLiteral()</a></code> now quotes difftime values as interval (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> now quotes difftime values as interval (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
 <li>Switch to GitHub Actions (<a href='https://github.com/r-dbi/RPostgres/issues/268'>#268</a>, thanks <a href='https://github.com/ankane'>@ankane</a>).</li>
 <li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href='https://github.com/r-dbi/RPostgres/issues/237'>#237</a>, <a href='https://github.com/lentinj'>@lentinj</a>).</li>
 </ul>
@@ -178,7 +178,7 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <li>
 <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html">dbUnquoteIdentifier()</a></code> also handles unquoted identifiers of the form <code>table</code> or <code>schema.table</code>, for compatibility with dbplyr. In addition, a <code>catalog</code> component is supported for quoting and unquoting with <code><a href="https://dbi.r-dbi.org/reference/Id.html">Id()</a></code>.</li>
 <li>
-<code><a href="../reference/quote.html">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
 <li>Windows: update libpq to 11.1.0.</li>
 <li>Fulfill CII badge requirements (<a href='https://github.com/r-dbi/RPostgres/issues/227'>#227</a>, <a href='https://github.com/TSchiefer'>@TSchiefer</a>).</li>
 </ul>
@@ -197,7 +197,7 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#internal" class="anchor"></a>Internal</h2>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/sqlData.html">sqlData(copy = FALSE)</a></code> now uses <code><a href="../reference/quote.html">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/sqlData.html">sqlData(copy = FALSE)</a></code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
 <li>Add tests for <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html">dbUnquoteIdentifier()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/220'>#220</a>, <a href='https://github.com/baileych'>@baileych</a>).</li>
 <li>Improved tests for numerical precision (<a href='https://github.com/r-dbi/RPostgres/issues/203'>#203</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>
 <li>Fix test: change from <code>REAL</code> to <code>DOUBLE PRECISION</code> (<a href='https://github.com/r-dbi/RPostgres/issues/204'>#204</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>

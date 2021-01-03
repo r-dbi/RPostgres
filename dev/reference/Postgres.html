@@ -152,7 +152,8 @@ disconnected during the next GC with a warning.</p>
   <span class='va'>...</span>,
   bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer64"</span>, <span class='st'>"integer"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>,
   check_interrupts <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  timezone <span class='op'>=</span> <span class='st'>"UTC"</span>
+  timezone <span class='op'>=</span> <span class='st'>"UTC"</span>,
+  timezone_out <span class='op'>=</span> <span class='va'>timezone</span>
 <span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
@@ -215,7 +216,14 @@ running too long.</p></td>
     <tr>
       <th>timezone</th>
       <td><p>Sets the timezone for the connection. The default is <code>"UTC"</code>.
-If <code>NULL</code> then no timezone is set, which defaults to localtime.</p></td>
+If <code>NULL</code> then no timezone is set, which defaults to the server's time zone.</p></td>
+    </tr>
+    <tr>
+      <th>timezone_out</th>
+      <td><p>The time zone returned to R, defaults to <code>timezone</code>.
+If you want to display datetime values in the local timezone,
+set to <code><a href='https://rdrr.io/r/base/timezones.html'>Sys.timezone()</a></code> or <code>""</code>.
+This setting does not change the time values returned, only their display.</p></td>
     </tr>
     <tr>
       <th>conn</th>
