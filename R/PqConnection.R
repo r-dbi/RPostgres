@@ -7,7 +7,12 @@ NULL
 #' @export
 setClass("PqConnection",
   contains = "DBIConnection",
-  slots = list(ptr = "externalptr", bigint = "character", typnames = "data.frame")
+  slots = list(
+    ptr = "externalptr",
+    bigint = "character",
+    timezone = "character",
+    typnames = "data.frame"
+  )
 )
 
 # format()
@@ -176,6 +181,7 @@ setMethod("dbConnect", "PqDriver",
     }
     bigint <- match.arg(bigint)
     stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
+    stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
 
     if (length(opts) == 0) {
       ptr <- connection_create(character(), character(), check_interrupts)
@@ -183,12 +189,38 @@ setMethod("dbConnect", "PqDriver",
       ptr <- connection_create(names(opts), as.vector(opts), check_interrupts)
     }
 
-    conn <- new("PqConnection", ptr = ptr, bigint = bigint, typnames = data.frame())
+    # timezone is set later
+    conn <- new("PqConnection",
+      ptr = ptr, bigint = bigint, timezone = character(), typnames = data.frame()
+    )
+    on.exit(dbDisconnect(conn))
+
     if (!is.null(timezone)) {
-      dbExecute(conn, paste0("SET TIMEZONE='", timezone, "'"))
+      # Side effect: check if time zone valid
+      dbExecute(conn, paste0("SET TIMEZONE = '", timezone, "'"))
+    } else {
+      timezone <- dbGetQuery(conn, "SHOW timezone")[[1]]
     }
+
+    # Check if this is a valid time zone in R:
+    tryCatch(
+      lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone),
+      error = function(e) {
+        warning(
+          "Invalid time zone '", timezone, "', ",
+          "falling back to local time.\n",
+          "Set the `timezone` argument to a valid time zone.\n",
+          conditionMessage(e),
+          call. = FALSE
+        )
+        timezone <- ""
+      }
+    )
+
+    conn@timezone <- timezone
     conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type")
 
+    on.exit(NULL)
     conn
   })
 

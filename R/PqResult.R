@@ -150,8 +150,18 @@ finalize_types <- function(ret, conn) {
     ret[is_unknown] <- Map(set_class, ret[is_unknown], typname_classes)
   }
 
+  is_without_tz <- which(attr(ret, "without_tz"))
+  if (length(is_without_tz) > 0) {
+    ret[is_without_tz] <- lapply(ret[is_without_tz], function(x) {
+      x <- lubridate::with_tz(x, "UTC")
+      lubridate::force_tz(x, conn@timezone)
+    })
+  }
+
   attr(ret, "oids") <- NULL
   attr(ret, "known") <- NULL
+  attr(ret, "without_tz") <- NULL
+
   ret
 }
 
