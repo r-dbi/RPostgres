@@ -462,6 +462,14 @@ void PqResultImpl::bind() {
 void PqResultImpl::add_oids(List& data) const {
   data.attr("oids") = cache.oids_;
   data.attr("known") = cache.known_;
+
+  LogicalVector is_without_tz = LogicalVector(cache.types_.size());
+  for (size_t i = 0; i < cache.types_.size(); ++i) {
+    bool set = (cache.types_[i] == DT_DATETIME);
+    LOG_VERBOSE << "is_without_tz[" << i << "]: " << set;
+    is_without_tz[i] = set;
+  }
+  data.attr("without_tz") = is_without_tz;
 }
 
 PGresult* PqResultImpl::get_result() {

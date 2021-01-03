@@ -89,12 +89,12 @@ double PqColumnDataSource::fetch_date() const {
 
 double PqColumnDataSource::fetch_datetime_local() const {
   LOG_VERBOSE;
-  return convert_datetime(get_result_value(), true);
+  return convert_datetime(get_result_value());
 }
 
 double PqColumnDataSource::fetch_datetime() const {
   LOG_VERBOSE;
-  return convert_datetime(get_result_value(), false);
+  return convert_datetime(get_result_value());
 }
 
 double PqColumnDataSource::fetch_time() const {
@@ -110,50 +110,72 @@ double PqColumnDataSource::fetch_time() const {
   return static_cast<double>(hour * 3600 + min * 60) + sec;
 }
 
-double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
-  char* end;
+double PqColumnDataSource::convert_datetime(const char* val) {
   struct tm date;
   date.tm_isdst = -1;
-  date.tm_year = *val - 0x30;
+  date.tm_year = *val++ - 0x30;
   date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30);
+  date.tm_year += (*val++ - 0x30);
   date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30);
+  date.tm_year += (*val++ - 0x30);
   date.tm_year *= 10;
-  date.tm_year += (*(++val) - 0x30) - 1900;
+  date.tm_year += (*val++ - 0x30) - 1900;
   LOG_VERBOSE << date.tm_year;
 
   val++;
-  date.tm_mon = (*(++val) - 0x30) * 10;
-  date.tm_mon += (*(++val) - 0x30) - 1;
+  date.tm_mon = (*val++ - 0x30) * 10;
+  date.tm_mon += (*val++ - 0x30) - 1;
   LOG_VERBOSE << date.tm_mon;
 
   val++;
-  date.tm_mday = (*(++val) - 0x30) * 10;
-  date.tm_mday += (*(++val) - 0x30);
+  date.tm_mday = (*val++ - 0x30) * 10;
+  date.tm_mday += (*val++ - 0x30);
   LOG_VERBOSE << date.tm_mday;
 
   val++;
-  date.tm_hour = (*(++val) - 0x30) * 10;
-  date.tm_hour += (*(++val) - 0x30);
+  date.tm_hour = (*val++ - 0x30) * 10;
+  date.tm_hour += (*val++ - 0x30);
   LOG_VERBOSE << date.tm_hour;
 
   val++;
-  date.tm_min = (*(++val) - 0x30) * 10;
-  date.tm_min += (*(++val) - 0x30);
+  date.tm_min = (*val++ - 0x30) * 10;
+  date.tm_min += (*val++ - 0x30);
   LOG_VERBOSE << date.tm_min;
 
   val++;
-  double sec = strtod(++val, &end);
+  char* end;
+  double sec = strtod(val, &end);
+  val = end;
   LOG_VERBOSE << sec;
 
   date.tm_sec = static_cast<int>(sec);
   LOG_VERBOSE << date.tm_sec;
 
-  time_t time = use_local ? mktime(&date) : tm_to_time_t(date);
+  int utcoffset = 0;
+  if (*val == '+' || *val == '-') {
+    int tz_hours = 0, tz_minutes = 0, sign = 0;
+    sign = (*val++ == '+' ? +1 : -1);
+    LOG_VERBOSE << sign;
+
+    tz_hours = (*val++ - 0x30) * 10;
+    tz_hours += (*val++ - 0x30);
+    LOG_VERBOSE << tz_hours;
+
+    if (*val == ':') {
+      ++val;
+      tz_minutes = (*val++ - 0x30) * 10;
+      tz_minutes += (*val++ - 0x30);
+      LOG_VERBOSE << tz_minutes;
+    }
+
+    utcoffset = sign * (tz_hours * 3600 + tz_minutes * 60);
+    LOG_VERBOSE << utcoffset;
+  }
+
+  time_t time = tm_to_time_t(date);
   LOG_VERBOSE << time;
 
-  double ret = static_cast<double>(time) + (sec - date.tm_sec);
+  double ret = static_cast<double>(time) + (sec - date.tm_sec) - utcoffset;
   LOG_VERBOSE << ret;
 
   return ret;

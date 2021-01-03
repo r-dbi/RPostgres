@@ -8,7 +8,6 @@
 \alias{dbQuoteIdentifier,PqConnection,SQL-method}
 \alias{dbQuoteIdentifier,PqConnection,Id-method}
 \alias{dbUnquoteIdentifier,PqConnection,SQL-method}
-\alias{dbQuoteLiteral}
 \alias{dbQuoteLiteral,PqConnection,logical-method}
 \alias{dbQuoteLiteral,PqConnection,integer-method}
 \alias{dbQuoteLiteral,PqConnection,numeric-method}
@@ -32,8 +31,6 @@
 \S4method{dbQuoteIdentifier}{PqConnection,Id}(conn, x, ...)
 
 \S4method{dbUnquoteIdentifier}{PqConnection,SQL}(conn, x, ...)
-
-dbQuoteLiteral(conn, x, ...)
 
 \S4method{dbQuoteLiteral}{PqConnection,logical}(conn, x, ...)
 
