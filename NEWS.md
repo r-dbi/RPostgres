@@ -1,3 +1,10 @@
+# RPostgres 1.2.1.9002 (2021-01-03)
+
+- `dbConnect()` gains `timezone_out` argument (#222).
+- `DATETIME` values (=without time zone) and `DATETIMETZ` values (=with time zone) are returned correctly (#190, #205, #229), also if they start before 1970 (#221).
+- Now imports the lubridate package.
+
+
 # RPostgres 1.2.1.9001 (2020-12-22)
 
 - `dbQuoteLiteral()` now quotes difftime values as interval (#270).
