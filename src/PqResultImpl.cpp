@@ -9,7 +9,7 @@
 #include <winsock2.h>
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const int utcoffset) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
   pSpec_(prepare(pConn_, sql)),
@@ -21,7 +21,8 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
   rows_affected_(0),
   group_(0),
   groups_(0),
-  pRes_(NULL)
+  pRes_(NULL),
+  utcoffset_(utcoffset)
 {
 
   LOG_DEBUG << sql;
@@ -355,7 +356,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
 List PqResultImpl::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
-  PqDataFrame data(this, cache.names_, n_max, cache.types_);
+  PqDataFrame data(this, cache.names_, n_max, cache.types_, utcoffset_);
 
   if (complete_ && data.get_ncols() == 0) {
     warning("Don't need to call dbFetch() for statements, only for queries");
@@ -440,7 +441,7 @@ bool PqResultImpl::step_done() {
 }
 
 List PqResultImpl::peek_first_row() {
-  PqDataFrame data(this, cache.names_, 1, cache.types_);
+  PqDataFrame data(this, cache.names_, 1, cache.types_, utcoffset_);
 
   if (!complete_)
     data.set_col_values();

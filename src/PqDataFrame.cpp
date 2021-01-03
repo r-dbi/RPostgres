@@ -6,8 +6,9 @@
 PqDataFrame::PqDataFrame(PqResultSource* result_source,
                          const std::vector<std::string>& names,
                          const int n_max_,
-                         const std::vector<DATA_TYPE>& types) :
-  DbDataFrame(new PqColumnDataSourceFactory(result_source, types), names, n_max_, types)
+                         const std::vector<DATA_TYPE>& types,
+                         const int utcoffset) :
+  DbDataFrame(new PqColumnDataSourceFactory(result_source, types, utcoffset), names, n_max_, types)
 {
 }
 

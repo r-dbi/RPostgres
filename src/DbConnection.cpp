@@ -8,10 +8,11 @@
 #endif
 
 DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
-                           bool check_interrupts) :
+                           bool check_interrupts, const int utcoffset) :
   pCurrentResult_(NULL),
   transacting_(false),
-  check_interrupts_(check_interrupts)
+  check_interrupts_(check_interrupts),
+  utcoffset_(utcoffset)
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);

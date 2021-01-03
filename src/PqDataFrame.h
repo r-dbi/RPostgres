@@ -10,7 +10,8 @@ public:
   PqDataFrame(PqResultSource* result_source,
               const std::vector<std::string>& names,
               const int n_max_,
-              const std::vector<DATA_TYPE>& types);
+              const std::vector<DATA_TYPE>& types,
+              const int utcoffset);
   ~PqDataFrame();
 };
 

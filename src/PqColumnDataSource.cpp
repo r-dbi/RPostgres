@@ -4,10 +4,14 @@
 #include "PqResultSource.h"
 #include "PqUtils.h"
 
-PqColumnDataSource::PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j) :
+PqColumnDataSource::PqColumnDataSource(PqResultSource* result_source_,
+                                       const DATA_TYPE dt_,
+                                       const int j,
+                                       const int utcoffset_) :
   DbColumnDataSource(j),
   result_source(result_source_),
-  dt(dt_)
+  dt(dt_),
+  utcoffset(utcoffset_)
 {
 }
 
@@ -89,12 +93,12 @@ double PqColumnDataSource::fetch_date() const {
 
 double PqColumnDataSource::fetch_datetime_local() const {
   LOG_VERBOSE;
-  return convert_datetime(get_result_value(), true);
+  return convert_datetime(get_result_value(), utcoffset);
 }
 
 double PqColumnDataSource::fetch_datetime() const {
   LOG_VERBOSE;
-  return convert_datetime(get_result_value(), false);
+  return convert_datetime(get_result_value(), utcoffset);
 }
 
 double PqColumnDataSource::fetch_time() const {
@@ -110,8 +114,7 @@ double PqColumnDataSource::fetch_time() const {
   return static_cast<double>(hour * 3600 + min * 60) + sec;
 }
 
-double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
-  char* end;
+double PqColumnDataSource::convert_datetime(const char* val, int utcoffset) {
   struct tm date;
   date.tm_isdst = -1;
   date.tm_year = *val - 0x30;

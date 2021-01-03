@@ -45,8 +45,11 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   int group_, groups_;
   PGresult* pRes_;
 
+  // Constant
+  const int utcoffset_;
+
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, const int utcoffset);
   ~PqResultImpl();
 
 private:

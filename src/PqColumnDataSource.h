@@ -9,9 +9,10 @@ class PqColumnDataSourceFactory;
 class PqColumnDataSource : public DbColumnDataSource {
   PqResultSource* result_source;
   const DATA_TYPE dt;
+  const int utcoffset;
 
 public:
-  PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j);
+  PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j, const int utcoffset);
   virtual ~PqColumnDataSource();
 
 public:
@@ -32,7 +33,7 @@ public:
   virtual double fetch_time() const;
 
 private:
-  static double convert_datetime(const char* val, bool use_local);
+  static double convert_datetime(const char* val, int utcoffset);
   PGresult* get_result() const;
   const char* get_result_value() const;
 };

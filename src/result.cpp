@@ -7,7 +7,7 @@
 // [[Rcpp::export]]
 XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql) {
   (*con)->check_connection();
-  DbResult* res = PqResult::create_and_send_query(*con, sql);
+  DbResult* res = PqResult::create_and_send_query(*con, sql, (*con)->get_utcoffset());
   return XPtr<DbResult>(res, true);
 }
 

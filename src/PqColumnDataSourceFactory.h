@@ -9,9 +9,12 @@ class PqResultSource;
 class PqColumnDataSourceFactory : public DbColumnDataSourceFactory {
   PqResultSource* result_source;
   const std::vector<DATA_TYPE> types;
+  const int utcoffset;
 
 public:
-  PqColumnDataSourceFactory(PqResultSource* result_source_, const std::vector<DATA_TYPE>& types_);
+  PqColumnDataSourceFactory(PqResultSource* result_source_,
+                            const std::vector<DATA_TYPE>& types_,
+                            const int utcoffset_);
   virtual ~PqColumnDataSourceFactory();
 
 public:

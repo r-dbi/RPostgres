@@ -17,10 +17,11 @@ class DbConnection : boost::noncopyable {
   const DbResult* pCurrentResult_;
   bool transacting_;
   bool check_interrupts_;
+  const int utcoffset_;
 
 public:
   DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
-    bool check_interrupts);
+    bool check_interrupts, const int utcoffset);
   virtual ~DbConnection();
 
 public:
