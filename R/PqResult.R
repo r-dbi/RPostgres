@@ -158,6 +158,11 @@ finalize_types <- function(ret, conn) {
     })
   }
 
+  is_datetime <- which(vapply(ret, inherits, "POSIXt", FUN.VALUE = logical(1)))
+  if (length(is_datetime) > 0) {
+    ret[is_datetime] <- lapply(ret[is_datetime], lubridate::with_tz, conn@timezone_out)
+  }
+
   attr(ret, "oids") <- NULL
   attr(ret, "known") <- NULL
   attr(ret, "without_tz") <- NULL

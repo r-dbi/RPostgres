@@ -11,6 +11,7 @@ setClass("PqConnection",
     ptr = "externalptr",
     bigint = "character",
     timezone = "character",
+    timezone_out = "character",
     typnames = "data.frame"
   )
 )
@@ -157,7 +158,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'   first row of data is available)? Setting to `TRUE` allows interruption of queries
 #'   running too long.
 #' @param timezone Sets the timezone for the connection. The default is `"UTC"`.
-#'   If `NULL` then no timezone is set, which defaults to localtime.
+#'   If `NULL` then no timezone is set, which defaults to the server's time zone.
+#' @param timezone_out The time zone returned to R, defaults to `timezone`.
+#'   If you want to display datetime values in the local timezone,
+#'   set to [Sys.timezone()] or `""`.
+#'   This setting does not change the time values returned, only their display.
 #' @param conn Connection to disconnect.
 #' @export
 #' @rdname Postgres
@@ -172,7 +177,7 @@ setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
            bigint = c("integer64", "integer", "numeric", "character"),
-           check_interrupts = FALSE, timezone = "UTC") {
+           check_interrupts = FALSE, timezone = "UTC", timezone_out = timezone) {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -203,26 +208,36 @@ setMethod("dbConnect", "PqDriver",
     }
 
     # Check if this is a valid time zone in R:
-    tryCatch(
-      lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone),
-      error = function(e) {
-        warning(
-          "Invalid time zone '", timezone, "', ",
-          "falling back to local time.\n",
-          "Set the `timezone` argument to a valid time zone.\n",
-          conditionMessage(e),
-          call. = FALSE
-        )
-        timezone <- ""
-      }
-    )
+    timezone <- check_tz(timezone)
+    timezone_out <- check_tz(timezone_out)
 
     conn@timezone <- timezone
+    conn@timezone_out <- timezone_out
     conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type")
 
     on.exit(NULL)
     conn
   })
+
+check_tz <- function(timezone) {
+  arg_name <- deparse(substitute(timezone))
+
+  tryCatch(
+    lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone),
+    error = function(e) {
+      warning(
+        "Invalid time zone '", timezone, "', ",
+        "falling back to local time.\n",
+        "Set the `", arg_name, "` argument to a valid time zone.\n",
+        conditionMessage(e),
+        call. = FALSE
+      )
+      timezone <- ""
+    }
+  )
+
+  timezone
+}
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)
 #' @export

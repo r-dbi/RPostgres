@@ -19,7 +19,8 @@ Postgres()
   ...,
   bigint = c("integer64", "integer", "numeric", "character"),
   check_interrupts = FALSE,
-  timezone = "UTC"
+  timezone = "UTC",
+  timezone_out = timezone
 )
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
@@ -61,7 +62,12 @@ first row of data is available)? Setting to \code{TRUE} allows interruption of q
 running too long.}
 
 \item{timezone}{Sets the timezone for the connection. The default is \code{"UTC"}.
-If \code{NULL} then no timezone is set, which defaults to localtime.}
+If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
+
+\item{timezone_out}{The time zone returned to R, defaults to \code{timezone}.
+If you want to display datetime values in the local timezone,
+set to \code{\link[=Sys.timezone]{Sys.timezone()}} or \code{""}.
+This setting does not change the time values returned, only their display.}
 
 \item{conn}{Connection to disconnect.}
 }
