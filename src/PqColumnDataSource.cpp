@@ -111,7 +111,6 @@ double PqColumnDataSource::fetch_time() const {
 }
 
 double PqColumnDataSource::convert_datetime(const char* val, bool use_local) {
-  char* end;
   struct tm date;
   date.tm_isdst = -1;
   date.tm_year = *val++ - 0x30;
