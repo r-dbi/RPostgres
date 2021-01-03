@@ -83,9 +83,9 @@ void encode_in_buffer(RObject x, int i, std::string& buffer) {
         } else if (ISNAN(value)) {
           buffer.append("NaN");
         } else if (value > 0) {
-          buffer.append("Infinity");
+          buffer.append("+inf");
         } else {
-          buffer.append("-Infinity");
+          buffer.append("-inf");
         }
       } else {
         char buf[15 + 1 + 1 + 4 + 1]; // minus + decimal + exponent + \0
