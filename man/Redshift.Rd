@@ -70,7 +70,7 @@ first row of data is available)? Setting to \code{TRUE} allows interruption of q
 running too long.}
 
 \item{timezone}{Sets the timezone for the connection. The default is \code{"UTC"}.
-If \code{NULL} then no timezone is set, which defaults to localtime.}
+If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
 }
 \description{
 Redshift currently uses all the same method as Postgres, but allows
