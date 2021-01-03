@@ -124,3 +124,12 @@ test_that("timezone is passed on to the connection (#229)", {
   res <- dbGetQuery(con, query)
   expect_equal(res, expected)
 })
+
+test_that("warning if time zone not interpretable", {
+  skip_on_cran()
+
+  expect_warning(con <- postgresDefault(timezone = "+01:00"))
+  dbDisconnect(con)
+  expect_warning(con <- postgresDefault(timezone_out = "+01:00"))
+  dbDisconnect(con)
+})
