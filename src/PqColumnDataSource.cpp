@@ -28,13 +28,13 @@ bool PqColumnDataSource::is_null() const {
 }
 
 int PqColumnDataSource::fetch_bool() const {
-  LOG_VERBOSE;
+  LOG_VERBOSE << get_result_value();
   return (strcmp(get_result_value(), "t") == 0);
 }
 
 
 int PqColumnDataSource::fetch_int() const {
-  LOG_VERBOSE;
+  LOG_VERBOSE << get_result_value();
   return atoi(get_result_value());
 }
 
@@ -44,12 +44,34 @@ int64_t PqColumnDataSource::fetch_int64() const {
 }
 
 double PqColumnDataSource::fetch_real() const {
-  LOG_VERBOSE;
-  return atof(get_result_value());
+  LOG_VERBOSE << get_result_value();
+
+  const char* value = get_result_value();
+
+  if (value[0] != '-' && value[0] != 'I' && value[0] != 'N') {
+    LOG_VERBOSE;
+    return atof(get_result_value());
+  }
+  else if (strcmp(value, "Infinity") == 0) {
+    LOG_VERBOSE;
+    return INFINITY;
+  }
+  else if (strcmp(value, "-Infinity") == 0) {
+    LOG_VERBOSE;
+    return -INFINITY;
+  }
+  else if (strcmp(value, "NaN") == 0) {
+    LOG_VERBOSE;
+    return NAN;
+  }
+  else {
+    LOG_VERBOSE;
+    return NA_REAL;
+  }
 }
 
 SEXP PqColumnDataSource::fetch_string() const {
-  LOG_VERBOSE;
+  LOG_VERBOSE << get_result_value();
   return Rf_mkCharCE(get_result_value(), CE_UTF8);
 }
 

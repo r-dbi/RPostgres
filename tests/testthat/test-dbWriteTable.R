@@ -123,9 +123,11 @@ with_database_connection({
 
   describe("Inf values", {
     test_that("Inf values come back correctly", {
-      res <- dbGetQuery(con, "SELECT '-inf'::float8 AS a, '+inf'::float8 AS b")
+      res <- dbGetQuery(con, "SELECT '-inf'::float8 AS a, '+inf'::float8 AS b, 'NaN'::float8 AS c")
       expect_equal(res$a, -Inf)
       expect_equal(res$b, Inf)
+      expect_true(is.nan(res$c))
+      expect_false(is.na(res$c))
     })
 
     test_that("Inf values are roundtripped correctly", {
