@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9002</span>
       </span>
     </div>
 
@@ -120,6 +120,18 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1219002-2021-01-03" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.1.9002">
+<a href="#rpostgres-1219002-2021-01-03" class="anchor"></a>RPostgres 1.2.1.9002 (2021-01-03)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains <code>timezone_out</code> argument (<a href='https://github.com/r-dbi/RPostgres/issues/222'>#222</a>).</li>
+<li>
+<code>DATETIME</code> values (=without time zone) and <code>DATETIMETZ</code> values (=with time zone) are returned correctly (<a href='https://github.com/r-dbi/RPostgres/issues/190'>#190</a>, <a href='https://github.com/r-dbi/RPostgres/issues/205'>#205</a>, <a href='https://github.com/r-dbi/RPostgres/issues/229'>#229</a>), also if they start before 1970 (<a href='https://github.com/r-dbi/RPostgres/issues/221'>#221</a>).</li>
+<li>Now imports the lubridate package.</li>
+</ul>
+</div>
     <div id="rpostgres-1219001-2020-12-22" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.1.9001">
 <a href="#rpostgres-1219001-2020-12-22" class="anchor"></a>RPostgres 1.2.1.9001 (2020-12-22)<small> Unreleased </small>
