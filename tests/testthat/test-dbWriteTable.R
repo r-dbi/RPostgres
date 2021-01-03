@@ -123,6 +123,12 @@ with_database_connection({
 
   describe("Inf values", {
     test_that("Inf values come back correctly", {
+      res <- dbGetQuery(con, "SELECT '-inf' AS a, '+inf' AS b")
+      expect_equal(res$a, -Inf)
+      expect_equal(res$b, Inf)
+    })
+
+    test_that("Inf values are roundtripped correctly", {
       with_table(con, "xy", {
         data <- data.frame(
           column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3),
