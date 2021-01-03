@@ -204,7 +204,7 @@ setMethod("dbConnect", "PqDriver",
 
     if (!is.null(timezone)) {
       # Side effect: check if time zone valid
-      dbExecute(conn, paste0("SET TIMEZONE = '", timezone, "'"))
+      dbExecute(conn, paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)))
     } else {
       timezone <- dbGetQuery(conn, "SHOW timezone")[[1]]
     }
