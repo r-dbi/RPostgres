@@ -155,15 +155,21 @@ double PqColumnDataSource::convert_datetime(const char* val) {
   if (*val == '+' || *val == '-') {
     int tz_hours = 0, tz_minutes = 0, sign = 0;
     sign = (*val++ == '+' ? +1 : -1);
+    LOG_VERBOSE << sign;
+
     tz_hours = (*val++ - 0x30) * 10;
     tz_hours += (*val++ - 0x30);
+    LOG_VERBOSE << tz_hours;
 
     if (*val == ':') {
+      ++val;
       tz_minutes = (*val++ - 0x30) * 10;
       tz_minutes += (*val++ - 0x30);
+      LOG_VERBOSE << tz_minutes;
     }
 
     utcoffset = sign * (tz_hours * 3600 + tz_minutes * 60);
+    LOG_VERBOSE << utcoffset;
   }
 
   time_t time = tm_to_time_t(date);

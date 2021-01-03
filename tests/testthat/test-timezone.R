@@ -1,7 +1,19 @@
 test_that("timestamp without time zone is returned correctly for TZ set (#190)", {
   withr::local_timezone("America/Chicago")
 
-  query <- "SELECT '2018-01-01 12:30:00'::TIMESTAMP"
+  query <- "SELECT '2018-01-01 12:30:00'::TIMESTAMP AS a, '2018-01-01 12:30:00'::TIMESTAMPTZ AS b"
+
+  db <- postgresDefault(timezone = NULL)
+  res <- dbGetQuery(db, query)
+  expect_equal(res[[1]], res[[2]])
+  dbDisconnect(db)
+
+  db <- postgresDefault(timezone = "UTC")
+  expect_equal(
+    dbGetQuery(db, query)[[1]],
+    as.POSIXct("2018-01-01 12:30:00", tz = "UTC")
+  )
+  dbDisconnect(db)
 
   db <- postgresDefault(timezone = "America/Chicago")
   expect_equal(
@@ -46,6 +58,32 @@ test_that("timestamp with time zone is returned correctly (#205)", {
 
   res <- dbGetQuery(con, "SELECT * FROM junk")
   expect_equal(res[[1]], as.POSIXct("2020-05-04", tz = "America/Chicago"))
+})
+
+test_that("timestamp with time zone is returned correctly for time zones", {
+  con <- postgresDefault(timezone = "Europe/Zurich", timezone_out = "UTC")
+  on.exit(dbDisconnect(con))
+
+  query <- "SELECT '1970-01-01 12:00:00+00:00'::TIMESTAMPTZ AS ts"
+  res <- dbGetQuery(con, query)
+  expect_equal(res[[1]], as.POSIXct("1970-01-01 12:00:00", tz = "UTC"))
+})
+
+test_that("timestamp with time zone is returned correctly for half-hour time zones", {
+  con <- postgresDefault(timezone = "Asia/Calcutta", timezone_out = "UTC")
+  on.exit(dbDisconnect(con))
+
+  query <- "SELECT '1970-01-01 12:00:00+00:00'::TIMESTAMPTZ AS ts"
+  res <- dbGetQuery(con, query)
+  expect_equal(res[[1]], as.POSIXct("1970-01-01 12:00:00", tz = "UTC"))
+})
+
+test_that("timestamp without time zone is returned correctly (#221)", {
+  con <- postgresDefault()
+  on.exit(dbDisconnect(con))
+
+  out <- dbGetQuery(con, "SELECT CAST('1960-01-01 12:00:00' AS timestamp) AS before_epoch")
+  expect_equal(as.Date(out[[1]]), as.Date("1960-01-01"))
 })
 
 test_that("timestamp without time zone is returned correctly (#221)", {

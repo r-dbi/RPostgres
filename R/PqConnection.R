@@ -186,7 +186,9 @@ setMethod("dbConnect", "PqDriver",
     }
     bigint <- match.arg(bigint)
     stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
-    stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
+    if (!is.null(timezone)) {
+      stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
+    }
 
     if (length(opts) == 0) {
       ptr <- connection_create(character(), character(), check_interrupts)
