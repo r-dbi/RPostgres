@@ -48,17 +48,13 @@ double PqColumnDataSource::fetch_real() const {
 
   const char* value = get_result_value();
 
-  if (value[0] != '-' && value[0] != 'I' && value[0] != 'N') {
+  if (strcmp(value, "-Infinity") == 0) {
     LOG_VERBOSE;
-    return atof(value);
+    return -INFINITY;
   }
   else if (strcmp(value, "Infinity") == 0) {
     LOG_VERBOSE;
     return INFINITY;
-  }
-  else if (strcmp(value, "-Infinity") == 0) {
-    LOG_VERBOSE;
-    return -INFINITY;
   }
   else if (strcmp(value, "NaN") == 0) {
     LOG_VERBOSE;
@@ -66,7 +62,7 @@ double PqColumnDataSource::fetch_real() const {
   }
   else {
     LOG_VERBOSE;
-    return NA_REAL;
+    return atof(value);
   }
 }
 
