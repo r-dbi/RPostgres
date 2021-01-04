@@ -153,6 +153,7 @@ finalize_types <- function(ret, conn) {
 
   attr(ret, "oids") <- NULL
   attr(ret, "known") <- NULL
+  ret
 }
 
 fix_timezone <- function(ret, conn) {
