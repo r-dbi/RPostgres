@@ -86,14 +86,6 @@ test_that("timestamp without time zone is returned correctly (#221)", {
   expect_equal(as.Date(out[[1]]), as.Date("1960-01-01"))
 })
 
-test_that("timestamp without time zone is returned correctly (#221)", {
-  con <- postgresDefault()
-  on.exit(dbDisconnect(con))
-
-  out <- dbGetQuery(con, "SELECT CAST('1960-01-01 12:00:00' AS timestamp) AS before_epoch")
-  expect_equal(as.Date(out[[1]]), as.Date("1960-01-01"))
-})
-
 test_that("timezone is passed on to the connection (#229)", {
   my_tz <- "US/Alaska"
 
