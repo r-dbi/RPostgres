@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("timestamp without time zone is returned correctly for TZ set (#190)", {
   withr::local_timezone("America/Chicago")
 
@@ -101,16 +103,18 @@ test_that("timezone is passed on to the connection (#229)", {
     con, "example", example, temporary = TRUE,
     overwrite = TRUE, append = FALSE
   )
+  res <- dbReadTable(con, "example")
+  expect_equal(res, example)
 
   query <- '
-    SELECT date("ts") AS "dte", MIN("val") AS "min", MAX("val") AS "max"
-    FROM "example"
-    GROUP BY "dte"
-    ORDER BY "dte"'
+    SELECT date(ts) AS dte, MIN(val) AS min_val, MAX(val) AS max_val
+    FROM example
+    GROUP BY dte
+    ORDER BY dte'
   expected <- data.frame(
     dte = as.Date("2019-04-30") + 0:2,
-    min = 0:2 * 24,
-    max = 0:2 * 24 + 23
+    min_val = 0:2 * 24,
+    max_val = 0:2 * 24 + 23
   )
 
   res <- dbGetQuery(con, query)
