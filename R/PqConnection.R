@@ -177,7 +177,7 @@ setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
            bigint = c("integer64", "integer", "numeric", "character"),
-           check_interrupts = FALSE, timezone = "UTC", timezone_out = timezone) {
+           check_interrupts = FALSE, timezone = "UTC", timezone_out = NULL) {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -188,6 +188,9 @@ setMethod("dbConnect", "PqDriver",
     stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
     if (!is.null(timezone)) {
       stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
+    }
+    if (!is.null(timezone_out)) {
+      stopifnot(is.character(timezone_out), all(!is.na(timezone_out)), length(timezone_out) == 1)
     }
 
     if (length(opts) == 0) {
@@ -211,7 +214,12 @@ setMethod("dbConnect", "PqDriver",
 
     # Check if this is a valid time zone in R:
     timezone <- check_tz(timezone)
-    timezone_out <- check_tz(timezone_out)
+
+    if (is.null(timezone_out)) {
+      timezone_out <- timezone
+    } else {
+      timezone_out <- check_tz(timezone_out)
+    }
 
     conn@timezone <- timezone
     conn@timezone_out <- timezone_out

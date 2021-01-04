@@ -20,7 +20,7 @@ Postgres()
   bigint = c("integer64", "integer", "numeric", "character"),
   check_interrupts = FALSE,
   timezone = "UTC",
-  timezone_out = timezone
+  timezone_out = NULL
 )
 
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
