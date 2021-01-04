@@ -100,7 +100,8 @@ if [ $R_CONFIG_ERROR ]; then
 fi
 
 # Write to Makevars
-sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in > src/Makevars.new
+echo "# Generated from Makevars.in, do not edit by hand" > src/Makevars.new
+sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in >> src/Makevars.new
 if [ ! -f src/Makevars ] || (which diff > /dev/null && ! diff -q src/Makevars src/Makevars.new); then
   cp -f src/Makevars.new src/Makevars
 fi

@@ -15,8 +15,8 @@ DBItest::make_context(
   default_skip = c(
     if (packageVersion("DBItest") < "1.7.0.9002") "compliance",
 
-    if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
-    if (.Platform$r_arch == "i386") "roundtrip_timestamp",
+    if (packageVersion("DBItest") < "1.7.0.9010") "append_roundtrip_timestamp",
+    if (packageVersion("DBItest") < "1.7.0.9010") "roundtrip_timestamp",
 
     NULL
   )

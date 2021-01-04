@@ -150,8 +150,23 @@ finalize_types <- function(ret, conn) {
     ret[is_unknown] <- Map(set_class, ret[is_unknown], typname_classes)
   }
 
+  is_without_tz <- which(attr(ret, "without_tz"))
+  if (length(is_without_tz) > 0) {
+    ret[is_without_tz] <- lapply(ret[is_without_tz], function(x) {
+      x <- lubridate::with_tz(x, "UTC")
+      lubridate::force_tz(x, conn@timezone)
+    })
+  }
+
+  is_datetime <- which(vapply(ret, inherits, "POSIXt", FUN.VALUE = logical(1)))
+  if (length(is_datetime) > 0) {
+    ret[is_datetime] <- lapply(ret[is_datetime], lubridate::with_tz, conn@timezone_out)
+  }
+
   attr(ret, "oids") <- NULL
   attr(ret, "known") <- NULL
+  attr(ret, "without_tz") <- NULL
+
   ret
 }
 

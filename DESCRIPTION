@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.2.1.9001
-Date: 2020-12-22
+Version: 1.2.1.9002
+Date: 2021-01-03
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -36,6 +36,7 @@ Imports:
     blob (>= 1.2.0),
     DBI (>= 1.1.0),
     hms (>= 0.5.0),
+    lubridate,
     methods,
     Rcpp (>= 0.11.4.2),
     withr
