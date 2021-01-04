@@ -121,6 +121,7 @@ setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
   ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
   ret <- convert_bigint(ret, res@bigint)
   ret <- finalize_types(ret, res@conn)
+  ret <- fix_timezone(ret, res@conn)
   set_tidy_names(ret)
 })
 
@@ -150,6 +151,11 @@ finalize_types <- function(ret, conn) {
     ret[is_unknown] <- Map(set_class, ret[is_unknown], typname_classes)
   }
 
+  attr(ret, "oids") <- NULL
+  attr(ret, "known") <- NULL
+}
+
+fix_timezone <- function(ret, conn) {
   is_without_tz <- which(attr(ret, "without_tz"))
   if (length(is_without_tz) > 0) {
     ret[is_without_tz] <- lapply(ret[is_without_tz], function(x) {
@@ -163,8 +169,6 @@ finalize_types <- function(ret, conn) {
     ret[is_datetime] <- lapply(ret[is_datetime], lubridate::with_tz, conn@timezone_out)
   }
 
-  attr(ret, "oids") <- NULL
-  attr(ret, "known") <- NULL
   attr(ret, "without_tz") <- NULL
 
   ret
