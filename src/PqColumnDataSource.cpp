@@ -50,7 +50,7 @@ double PqColumnDataSource::fetch_real() const {
 
   if (value[0] != '-' && value[0] != 'I' && value[0] != 'N') {
     LOG_VERBOSE;
-    return atof(get_result_value());
+    return atof(value);
   }
   else if (strcmp(value, "Infinity") == 0) {
     LOG_VERBOSE;
