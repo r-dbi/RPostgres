@@ -1,27 +1,19 @@
 # RPostgres 1.3.0 (2021-01-05)
 
-- `configure` uses a shell script and no longer forwards to `src/configure.bash` (#265).
-- `dbConnect()` defaults to `timezone_out = NULL`, this means to use `timezone`.
-- `Inf`, `-Inf` and `NaN` values are returned correctly on Windows (#267).
-
-
-# RPostgres 1.2.1.9002 (2021-01-03)
-
-- `dbConnect()` gains `timezone_out` argument (#222).
-- `DATETIME` values (=without time zone) and `DATETIMETZ` values (=with time zone) are returned correctly (#190, #205, #229), also if they start before 1970 (#221).
-- Now imports the lubridate package.
-
-
-# RPostgres 1.2.1.9001 (2020-12-22)
-
-- `dbQuoteLiteral()` now quotes difftime values as interval (#270).
-- Switch to GitHub Actions (#268, thanks @ankane).
+- `dbConnect()` gains `timezone_out` argument, the default `NULL` means to use `timezone` (#222).
+- `dbQuoteLiteral()` now quotes difftime values as `interval` (#270).
 - New `postgresWaitForNotify()` adds `LISTEN/NOTIFY` support (#237, @lentinj).
 
+## Bug fixes
 
-# RPostgres 1.2.1.9000 (2020-09-28)
+- `Inf`, `-Inf` and `NaN` values are returned correctly on Windows (#267).
+- `DATETIME` values (=without time zone) and `DATETIMETZ` values (=with time zone) are returned correctly (#190, #205, #229), also if they start before 1970 (#221).
 
-- Internal changes only.
+## Internal
+
+- `configure` uses a shell script and no longer forwards to `src/configure.bash` (#265).
+- Switch to GitHub Actions (#268, thanks @ankane).
+- Now imports the lubridate package.
 
 
 # RPostgres 1.2.1 (2020-09-28)
