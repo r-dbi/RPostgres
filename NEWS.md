@@ -1,3 +1,10 @@
+# RPostgres 1.3.0 (2021-01-05)
+
+- `configure` uses a shell script and no longer forwards to `src/configure.bash` (#265).
+- `dbConnect()` defaults to `timezone_out = NULL`, this means to use `timezone`.
+- `Inf`, `-Inf` and `NaN` values are returned correctly on Windows (#267).
+
+
 # RPostgres 1.2.1.9002 (2021-01-03)
 
 - `dbConnect()` gains `timezone_out` argument (#222).
