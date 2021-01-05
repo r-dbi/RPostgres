@@ -123,6 +123,8 @@ with_database_connection({
 
   describe("Inf values", {
     test_that("Inf values come back correctly", {
+      skip_on_cran()
+
       res <- dbGetQuery(con, "SELECT '-inf'::float8 AS a, '+inf'::float8 AS b, 'NaN'::float8 AS c, NULL::float8 AS d")
       expect_equal(res$a, -Inf)
       expect_equal(res$b, Inf)
