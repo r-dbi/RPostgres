@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9002</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.2.9000</span>
       </span>
     </div>
 
@@ -120,6 +120,32 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1229000-2021-01-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.2.9000">
+<a href="#rpostgres-1229000-2021-01-05" class="anchor"></a>RPostgres 1.2.2.9000 (2021-01-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href='https://github.com/r-dbi/RPostgres/issues/265'>#265</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
+<li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
+</ul>
+</div>
+    <div id="rpostgres-122-2021-01-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.2">
+<a href="#rpostgres-122-2021-01-05" class="anchor"></a>RPostgres 1.2.2 (2021-01-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href='https://github.com/r-dbi/RPostgres/issues/265'>#265</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
+<li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
+</ul>
+</div>
     <div id="rpostgres-1219002-2021-01-03" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.1.9002">
 <a href="#rpostgres-1219002-2021-01-03" class="anchor"></a>RPostgres 1.2.1.9002 (2021-01-03)<small> Unreleased </small>
