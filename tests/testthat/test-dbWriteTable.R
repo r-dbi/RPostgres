@@ -134,6 +134,8 @@ with_database_connection({
     })
 
     test_that("Inf values are roundtripped correctly", {
+      skip_on_cran()
+
       with_table(con, "xy", {
         data <- data.frame(
           column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3),
