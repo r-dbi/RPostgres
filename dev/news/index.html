@@ -139,43 +139,31 @@
 </h1>
 <ul>
 <li>
-<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href='https://github.com/r-dbi/RPostgres/issues/265'>#265</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains <code>timezone_out</code> argument, the default <code>NULL</code> means to use <code>timezone</code> (<a href='https://github.com/r-dbi/RPostgres/issues/222'>#222</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
-<li>
-<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
+<li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href='https://github.com/r-dbi/RPostgres/issues/237'>#237</a>, <a href='https://github.com/lentinj'>@lentinj</a>).</li>
 </ul>
-</div>
-    <div id="rpostgres-1219002-2021-01-03" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.1.9002">
-<a href="#rpostgres-1219002-2021-01-03" class="anchor"></a>RPostgres 1.2.1.9002 (2021-01-03)<small> Unreleased </small>
-</h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains <code>timezone_out</code> argument (<a href='https://github.com/r-dbi/RPostgres/issues/222'>#222</a>).</li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
 <li>
 <code>DATETIME</code> values (=without time zone) and <code>DATETIMETZ</code> values (=with time zone) are returned correctly (<a href='https://github.com/r-dbi/RPostgres/issues/190'>#190</a>, <a href='https://github.com/r-dbi/RPostgres/issues/205'>#205</a>, <a href='https://github.com/r-dbi/RPostgres/issues/229'>#229</a>), also if they start before 1970 (<a href='https://github.com/r-dbi/RPostgres/issues/221'>#221</a>).</li>
+</ul>
+</div>
+<div id="internal" class="section level2">
+<h2 class="hasAnchor">
+<a href="#internal" class="anchor"></a>Internal</h2>
+<ul>
+<li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href='https://github.com/r-dbi/RPostgres/issues/265'>#265</a>).</li>
+<li>Switch to GitHub Actions (<a href='https://github.com/r-dbi/RPostgres/issues/268'>#268</a>, thanks <a href='https://github.com/ankane'>@ankane</a>).</li>
 <li>Now imports the lubridate package.</li>
 </ul>
 </div>
-    <div id="rpostgres-1219001-2020-12-22" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.1.9001">
-<a href="#rpostgres-1219001-2020-12-22" class="anchor"></a>RPostgres 1.2.1.9001 (2020-12-22)<small> Unreleased </small>
-</h1>
-<ul>
-<li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> now quotes difftime values as interval (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
-<li>Switch to GitHub Actions (<a href='https://github.com/r-dbi/RPostgres/issues/268'>#268</a>, thanks <a href='https://github.com/ankane'>@ankane</a>).</li>
-<li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href='https://github.com/r-dbi/RPostgres/issues/237'>#237</a>, <a href='https://github.com/lentinj'>@lentinj</a>).</li>
-</ul>
-</div>
-    <div id="rpostgres-1219000-2020-09-28" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.1.9000">
-<a href="#rpostgres-1219000-2020-09-28" class="anchor"></a>RPostgres 1.2.1.9000 (2020-09-28)<small> Unreleased </small>
-</h1>
-<ul>
-<li>Internal changes only.</li>
-</ul>
 </div>
     <div id="rpostgres-121-2020-09-28" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.1">
@@ -221,18 +209,18 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <li>Fulfill CII badge requirements (<a href='https://github.com/r-dbi/RPostgres/issues/227'>#227</a>, <a href='https://github.com/TSchiefer'>@TSchiefer</a>).</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Hide unused symbols in shared library (<a href='https://github.com/r-dbi/RPostgres/issues/230'>#230</a>, <a href='https://github.com/troels'>@troels</a>).</li>
 <li>Fix partial argument matching in <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html">dbAppendTable()</a></code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/249'>#249</a>).</li>
 <li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href='https://github.com/r-dbi/RPostgres/issues/191'>#191</a>).</li>
 </ul>
 </div>
-<div id="internal" class="section level2">
+<div id="internal-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#internal" class="anchor"></a>Internal</h2>
+<a href="#internal-1" class="anchor"></a>Internal</h2>
 <ul>
 <li>
 <code><a href="https://dbi.r-dbi.org/reference/sqlData.html">sqlData(copy = FALSE)</a></code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
