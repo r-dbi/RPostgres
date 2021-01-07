@@ -22,7 +22,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}${{ matrix.config.os-version }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }}) ${{ matrix.config.desc }}
+    name: ${{ matrix.config.os }}${{ matrix.config.os-version }} (${{ matrix.config.r }}) ${{ matrix.config.desc }}
 
     # Begin custom: services
     # End custom: services
