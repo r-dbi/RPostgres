@@ -20,7 +20,7 @@ name: rcc
 
 jobs:
   R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}${{ matrix.config.os-version }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }}) ${{ matrix.config.desc }}
 
@@ -31,30 +31,32 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release', rspm: "https://packagemanager.rstudio.com/all/latest" }
-          - {os: windows-latest, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/all/latest" }
-          - {os: ubuntu-16.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest", http-user-agent: "R/4.0.0 (ubuntu-16.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
-          - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: macOS-latest,               os-nick: all,    r: 'release'}
+          - {os: windows-latest,             os-nick: all,    r: 'release'}
+          - {os: windows-latest,             os-nick: all,    r: 'oldrel'}
+          - {os: ubuntu-, os-version: 20.04, os-nick: focal,  r: 'release'}
+          - {os: ubuntu-, os-version: 18.04, os-nick: bionic, r: 'release'}
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: 'release'}
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: 'devel', http-user-agent: "R/4.0.0 (ubuntu-16.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: 'oldrel'}
 
           # Begin custom: R 3.5
-          - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: '3.5'}
           # End custom: R 3.5
 
           # Begin custom: R 3.4
-          - {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: '3.4'}
           # End custom: R 3.4
 
           # Begin custom: R 3.3
-          - {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-, os-version: 16.04, os-nick: xenial, r: '3.3'}
           # End custom: R 3.3
 
           # Begin custom: matrix elements
           # End custom: matrix elements
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
+      RSPM: "https://packagemanager.rstudio.com/cran/__linux__/${{matrix.config.os-nick}}/latest"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       # prevent rgl issues because no X11 display is available
       RGL_USE_NULL: true
@@ -103,7 +105,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "${{matrix.config.os-version}}"))')
 
       # Begin custom: before install
       # End custom: before install
