@@ -15,7 +15,7 @@ PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
 
 # pkg-config values (if available)
-if [ `command -v mysql_config` ]; then
+if [ `command -v pkg-config` ]; then
   PKGCONFIG_CFLAGS=$(pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME})
   PKGCONFIG_LIBS=$(pkg-config --libs --silence-errors ${PKG_CONFIG_NAME})
   PKGCONFIG_MODVERSION=$(pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME})
@@ -52,10 +52,14 @@ elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
   PKG_LIBS=${PKGCONFIG_LIBS}
 elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
   echo "Found pg_config includedir and libdir ($PG_VERSION)!"
-  if [[ "$PG_VERSION" == "PostgreSQL 8"* ]]; then
-    echo "This version of libpq is too old! We need at least 9.0!"
-    exit 1
-  fi
+
+  case "$PG_VERSION" in
+    "PostgreSQL 8"*)
+      echo "This version of libpq is too old! We need at least 9.0!"
+      exit 1
+      ;;
+  esac
+
   PKG_CFLAGS="-I${PG_INC_DIR}"
   PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [ `uname` = "Darwin" ]; then
