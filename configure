@@ -30,7 +30,7 @@ if [ `command -v pkg-config` ]; then
         unset PKGCONFIG_LIBS
       ;;
     esac
-    if [ -z "$PKGCONFIG_CFLAGS" ]]; then
+    if [ -z "$PKGCONFIG_CFLAGS" ]; then
       unset PKGCONFIG_LIBS
     fi
   fi
