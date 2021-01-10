@@ -86,10 +86,10 @@ echo "Using PKG_CFLAGS=$PKG_CFLAGS"
 echo "Using PKG_LIBS=$PKG_LIBS"
 
 # Test configuration
-echo "#include $PKG_TEST_HEADER" | ${CC} ${CPPFLAGS} ${PKG_CFLAGS} ${CFLAGS} -E -xc - >/dev/null 2>&1 || R_CONFIG_ERROR=1;
+echo "#include $PKG_TEST_HEADER" | ${CC} ${CPPFLAGS} ${PKG_CFLAGS} ${CFLAGS} -E -xc - >/dev/null 2> configure.log
 
 # Customize the error
-if [ $R_CONFIG_ERROR ]; then
+if [ $? -ne 0 ]; then
   echo "------------------------- ANTICONF ERROR ---------------------------"
   echo "Configuration failed because $PKG_CONFIG_NAME was not found. Try installing:"
   echo " * deb: $PKG_DEB_NAME (Debian, Ubuntu, etc)"
