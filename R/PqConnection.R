@@ -242,7 +242,7 @@ check_tz <- function(timezone) {
         conditionMessage(e),
         call. = FALSE
       )
-      timezone <- ""
+      timezone <<- ""
     }
   )
 
