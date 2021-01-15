@@ -125,7 +125,9 @@ test_that("warning if time zone not interpretable", {
   skip_on_cran()
 
   expect_warning(con <- postgresDefault(timezone = "+01:00"))
+  expect_equal(con@timezone, "")
   dbDisconnect(con)
   expect_warning(con <- postgresDefault(timezone_out = "+01:00"))
+  expect_equal(con@timezone_out, "")
   dbDisconnect(con)
 })
