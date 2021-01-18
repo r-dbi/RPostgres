@@ -191,17 +191,19 @@ setMethod("dbAppendTable", c("PqConnection"),
   function(conn, name, value, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
-    query <- sqlAppendTableTemplate(
-      con = conn,
-      table = name,
-      values = value,
-      row.names = row.names,
-      prefix = "$",
-      pattern = "1",
-      ...
-    )
+    row.names <- FALSE
 
-    dbExecute(conn, query, params = unname(as.list(value)))
+    value <- sqlRownamesToColumn(value, row.names)
+
+    value <- sql_data_copy(value, row.names = FALSE)
+
+    fields <- dbQuoteIdentifier(conn, names(value))
+    sql <- paste0(
+      "COPY ", dbQuoteIdentifier(conn, name),
+      " (", paste(fields, collapse = ", "), ")",
+      " FROM STDIN"
+    )
+    connection_copy_data(conn@ptr, sql, value)
   }
 )
 
