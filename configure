@@ -22,7 +22,7 @@ if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pkg-config` ]; then
   PKGCONFIG_LIBS=`pkg-config --libs --silence-errors ${PKG_CONFIG_NAME}`
   PKGCONFIG_MODVERSION=`pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME}`
 
-  # MacOS seems to ship a broken libpq.pc file
+  # Workaround for broken libpq.pc files on some systems
   if [ `uname` = "Darwin" ]; then
     case "$PKGCONFIG_CFLAGS" in
       *"Internal.sdk"*)
