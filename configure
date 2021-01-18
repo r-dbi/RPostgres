@@ -17,7 +17,7 @@ PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
 
 # pkg-config values (if available)
-if [ `command -v pkg-config` ]; then
+if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pkg-config` ]; then
   PKGCONFIG_CFLAGS=`pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME}`
   PKGCONFIG_LIBS=`pkg-config --libs --silence-errors ${PKG_CONFIG_NAME}`
   PKGCONFIG_MODVERSION=`pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME}`
@@ -37,7 +37,7 @@ if [ `command -v pkg-config` ]; then
 fi
 
 # pg_config values (if available)
-if [ `command -v pg_config` ]; then
+if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pg_config` ]; then
   PG_INC_DIR=`pg_config --includedir`
   PG_LIB_DIR=`pg_config --libdir`
   PG_VERSION=`pg_config --version`
@@ -66,10 +66,10 @@ elif [ "$PG_INC_DIR" ] || [ "$PG_LIB_DIR" ]; then
   PKG_LIBS="-L${PG_LIB_DIR} ${PKG_LIBS}"
 elif [ `uname` = "Darwin" ]; then
   brew --version 2>/dev/null
-  if [ $? -eq 0 ]; then
+  if [ $? -eq 0 ] && [ -z "$FORCE_AUTOBREW" ]; then
     BREWDIR=`brew --prefix`
-  PKG_CFLAGS="-I$BREWDIR/opt/$PKG_BREW_NAME/include"
-  PKG_LIBS="-L$BREWDIR/opt/$PKG_BREW_NAME/lib $PKG_LIBS"
+    PKG_CFLAGS="-I$BREWDIR/opt/$PKG_BREW_NAME/include"
+    PKG_LIBS="-L$BREWDIR/opt/$PKG_BREW_NAME/lib $PKG_LIBS"
   else
     curl -sfL "https://autobrew.github.io/scripts/libpq" > autobrew
     . ./autobrew
