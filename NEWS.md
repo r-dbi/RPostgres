@@ -1,3 +1,12 @@
+# RPostgres 1.3.1.9000 (2021-01-19)
+
+- Fix behavior with invalid time zone (#284, @ateucher).
+- `FORCE_AUTOBREW` environment variable enforces use of `autobrew` in `./configure` (#283, @jeroen).
+- Tweaks in `./configure` (#283, @jeroen).
+- Fix `configure` on macOS (#282, @jeroen).
+- Fix `configure` script, remove `$()` not reliably detected by `checkbashisms`.
+
+
 # RPostgres 1.3.1 (2021-01-19)
 
 - Fix behavior with invalid time zone (#284, @ateucher).
