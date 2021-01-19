@@ -44,6 +44,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -71,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -120,9 +122,35 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-131-2021-01-19" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.1">
+<a href="#rpostgres-131-2021-01-19" class="anchor"></a>RPostgres 1.3.1 (2021-01-19)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Fix behavior with invalid time zone (<a href='https://github.com/r-dbi/RPostgres/issues/284'>#284</a>, <a href='https://github.com/ateucher'>@ateucher</a>).</li>
+<li>
+<code>FORCE_AUTOBREW</code> environment variable enforces use of <code>autobrew</code> in <code>./configure</code> (<a href='https://github.com/r-dbi/RPostgres/issues/283'>#283</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
+<li>Tweaks in <code>./configure</code> (<a href='https://github.com/r-dbi/RPostgres/issues/283'>#283</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
+<li>Fix <code>configure</code> on macOS (<a href='https://github.com/r-dbi/RPostgres/issues/282'>#282</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
+<li>Fix <code>configure</code> script, remove <code>$()</code> not reliably detected by <code>checkbashisms</code>.</li>
+</ul>
+</div>
+    <div id="rpostgres-1309000-2021-01-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.0.9000">
+<a href="#rpostgres-1309000-2021-01-05" class="anchor"></a>RPostgres 1.3.0.9000 (2021-01-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href='https://github.com/r-dbi/RPostgres/issues/265'>#265</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
+<li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
+</ul>
+</div>
     <div id="rpostgres-130-2021-01-05" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.0">
-<a href="#rpostgres-130-2021-01-05" class="anchor"></a>RPostgres 1.3.0 (2021-01-05)<small> Unreleased </small>
+<a href="#rpostgres-130-2021-01-05" class="anchor"></a>RPostgres 1.3.0 (2021-01-05)<small> 2021-01-07 </small>
 </h1>
 <ul>
 <li>
