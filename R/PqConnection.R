@@ -233,7 +233,11 @@ check_tz <- function(timezone) {
   arg_name <- deparse(substitute(timezone))
 
   tryCatch(
-    lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone),
+    {
+      # Side effect: check if time zone is valid
+      lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone)
+      timezone
+    },
     error = function(e) {
       warning(
         "Invalid time zone '", timezone, "', ",
@@ -242,11 +246,9 @@ check_tz <- function(timezone) {
         conditionMessage(e),
         call. = FALSE
       )
-      timezone <<- ""
+      ""
     }
   )
-
-  timezone
 }
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)
