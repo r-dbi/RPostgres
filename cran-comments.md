@@ -1,4 +1,4 @@
-RPostgres 1.3.0
+RPostgres 1.3.1
 
 ## Cran Repository Policy
 
@@ -12,5 +12,6 @@ RPostgres 1.3.0
 
 ## Current CRAN check results
 
-- [x] Checked on 2021-01-05, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
-- [x] NOTE: r-devel-windows-ix86+x86_64, r-release-macos-x86_64, r-release-windows-ix86+x86_64, r-oldrel-macos-x86_64, r-oldrel-windows-ix86+x86_64: built library large
+- [x] Checked on 2021-01-19, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
+- [x] NOTE: r-devel-windows-ix86+x86_64, r-release-windows-ix86+x86_64, r-oldrel-windows-ix86+x86_64: Large binaries
+- [x] ERROR: r-patched-solaris-x86, r-oldrel-macos-x86_64: Made attempts to fix
