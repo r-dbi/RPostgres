@@ -204,6 +204,8 @@ setMethod("dbAppendTable", c("PqConnection"),
       " FROM STDIN"
     )
     connection_copy_data(conn@ptr, sql, value)
+
+    nrow(value)
   }
 )
 
