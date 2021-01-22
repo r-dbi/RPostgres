@@ -193,7 +193,7 @@ setMethod("dbAppendTable", c("PqConnection"),
 
     row.names <- FALSE
 
-    value = factor_to_string(value)
+    value = factor_to_string(value, warn = TRUE)
 
     value <- sqlRownamesToColumn(value, row.names)
 
