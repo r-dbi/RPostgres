@@ -193,10 +193,7 @@ setMethod("dbAppendTable", c("PqConnection"),
 
     row.names <- FALSE
 
-    is_factor = vlapply(value, is.factor)
-    if (any(is_factor)) {
-      warning("Factors converted to character", call. = FALSE)
-    }
+    value = factor_to_string(value)
 
     value <- sqlRownamesToColumn(value, row.names)
 
