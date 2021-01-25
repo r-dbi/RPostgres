@@ -108,22 +108,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      if (!copy) {
-        value <- sqlData(conn, value, row.names = FALSE)
-
-        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-        dbExecute(conn, sql)
-      } else {
-        value <- sql_data_copy(value, row.names = FALSE)
-
-        fields <- dbQuoteIdentifier(conn, names(value))
-        sql <- paste0(
-          "COPY ", dbQuoteIdentifier(conn, name),
-          " (", paste(fields, collapse = ", "), ")",
-          " FROM STDIN"
-        )
-        connection_copy_data(conn@ptr, sql, value)
-      }
+      dbAppendTable(conn, name, value, copy, warn = FALSE)
     }
 
     invisible(TRUE)
@@ -188,24 +173,31 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, ..., row.names = NULL) {
+  function(conn, name, value, copy = TRUE, warn = TRUE, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
     row.names <- FALSE
 
-    value = factor_to_string(value, warn = TRUE)
+    value = factor_to_string(value, warn = warn)
 
     value <- sqlRownamesToColumn(value, row.names)
 
-    value <- sql_data_copy(value, row.names = FALSE)
+    if (!copy) {
+      value <- sqlData(conn, value, row.names = FALSE)
 
-    fields <- dbQuoteIdentifier(conn, names(value))
-    sql <- paste0(
-      "COPY ", dbQuoteIdentifier(conn, name),
-      " (", paste(fields, collapse = ", "), ")",
-      " FROM STDIN"
-    )
-    connection_copy_data(conn@ptr, sql, value)
+      sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+      dbExecute(conn, sql)
+    } else {
+      value <- sql_data_copy(value, row.names = FALSE)
+
+      fields <- dbQuoteIdentifier(conn, names(value))
+      sql <- paste0(
+        "COPY ", dbQuoteIdentifier(conn, name),
+        " (", paste(fields, collapse = ", "), ")",
+        " FROM STDIN"
+      )
+      connection_copy_data(conn@ptr, sql, value)
+    }
 
     nrow(value)
   }
