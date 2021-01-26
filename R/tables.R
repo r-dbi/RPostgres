@@ -24,6 +24,7 @@
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
 #'   all postgres servers (e.g. Amazon's redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
+#' @param warn If `TRUE`, warns user when converting from factor to string.
 #'
 #' @examples
 #' # For running the examples on systems without PostgreSQL connection:

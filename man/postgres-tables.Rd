@@ -30,7 +30,15 @@
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{PqConnection}(conn, name, value, ..., row.names = NULL)
+\S4method{dbAppendTable}{PqConnection}(
+  conn,
+  name,
+  value,
+  copy = TRUE,
+  warn = TRUE,
+  ...,
+  row.names = NULL
+)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ..., check.names = TRUE, row.names = FALSE)
 
@@ -89,6 +97,8 @@ all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
 a single SQL string. This is slower, but always supported.}
 
 \item{con}{A database connection.}
+
+\item{warn}{If \code{TRUE}, warns user when converting from factor to string.}
 
 \item{check.names}{If \code{TRUE}, the default, column names will be
 converted to valid R identifiers.}
