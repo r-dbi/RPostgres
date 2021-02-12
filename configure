@@ -16,6 +16,11 @@ PKG_BREW_NAME="libpq"
 PKG_TEST_HEADER="<libpq-fe.h>"
 PKG_LIBS="-lpq"
 
+# Workaround for old libpq without ssl on CRAN servers
+if [ -d "/Volumes/Builds/packages" ] || [ -d "/Volumes/SSD-Data/Builds" ]; then
+FORCE_AUTOBREW=1
+fi
+
 # pkg-config values (if available)
 if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pkg-config` ]; then
   PKGCONFIG_CFLAGS=`pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME}`
