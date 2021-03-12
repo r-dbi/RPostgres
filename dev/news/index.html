@@ -57,9 +57,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -128,7 +134,7 @@
 </h1>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> now issues <code>SET datestyle to iso, mdy</code> to avoid translation errors for datetime values with databases configured differently (<a href='https://github.com/r-dbi/RPostgres/issues/287'>#287</a>, <a href='https://github.com/baderstine'>@baderstine</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> now issues <code>SET datestyle to iso, mdy</code> to avoid translation errors for datetime values with databases configured differently (<a href='https://github.com/r-dbi/RPostgres/issues/287'>#287</a>, <a href='https://github.com/baderstine'>@baderstine</a>).</li>
 </ul>
 </div>
     <div id="rpostgres-1319000-2021-01-19" class="section level1">
@@ -155,7 +161,7 @@
 <a href="#internal" class="anchor"></a>Internal</h2>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
 <li>
 <code>FORCE_AUTOBREW</code> environment variable enforces use of <code>autobrew</code> in <code>configure</code> (<a href='https://github.com/r-dbi/RPostgres/issues/283'>#283</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
 <li>Fix <code>configure</code> on macOS, small tweaks (<a href='https://github.com/r-dbi/RPostgres/issues/282'>#282</a>, <a href='https://github.com/r-dbi/RPostgres/issues/283'>#283</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
@@ -171,9 +177,9 @@
 </h1>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains <code>timezone_out</code> argument, the default <code>NULL</code> means to use <code>timezone</code> (<a href='https://github.com/r-dbi/RPostgres/issues/222'>#222</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>timezone_out</code> argument, the default <code>NULL</code> means to use <code>timezone</code> (<a href='https://github.com/r-dbi/RPostgres/issues/222'>#222</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
 <li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href='https://github.com/r-dbi/RPostgres/issues/237'>#237</a>, <a href='https://github.com/lentinj'>@lentinj</a>).</li>
 </ul>
 <div id="bug-fixes-1" class="section level2">
@@ -205,7 +211,7 @@
 <li>Gains new <code>Redshift</code> driver for connecting to Redshift databases.<br>
 Redshift databases behave almost identically to Postgres so this driver allows downstream packages to distinguish between the two (<a href='https://github.com/r-dbi/RPostgres/issues/258'>#258</a>).</li>
 <li>Datetime values are now passed to the database using an unambiguous time zone format (<a href='https://github.com/r-dbi/RPostgres/issues/255'>#255</a>, <a href='https://github.com/imlijunda'>@imlijunda</a>).</li>
-<li>Document <code><a href="../reference/Postgres.html">Postgres()</a></code> together with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/242'>#242</a>).</li>
+<li>Document <code><a href="../reference/Postgres.html">Postgres()</a></code> together with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/242'>#242</a>).</li>
 <li>Windows: update libpq to 12.2.0.</li>
 </ul>
 </div>
@@ -222,21 +228,21 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <li>Avoid adding extra spaces for numerics (<a href='https://github.com/r-dbi/RPostgres/issues/216'>#216</a>).</li>
 <li>Column names and error messages are UTF-8 encoded (<a href='https://github.com/r-dbi/RPostgres/issues/172'>#172</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable(copy = FALSE)</a></code>, <code><a href="https://dbi.r-dbi.org/reference/sqlData.html">sqlData()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html">dbAppendTable()</a></code> now work for character columns (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>), which are always converted to UTF-8.</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable(copy = FALSE)</a></code>, <code><a href="https://dbi.r-dbi.org/reference/sqlData.html" class="external-link">sqlData()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> now work for character columns (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>), which are always converted to UTF-8.</li>
 </ul>
 </div>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
-<li>Add <code>timezone</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/187'>#187</a>, <a href='https://github.com/trafficonese'>@trafficonese</a>).</li>
-<li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbGetInfo.html">dbGetInfo()</a></code> for the driver and the connection object.</li>
+<li>Add <code>timezone</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/187'>#187</a>, <a href='https://github.com/trafficonese'>@trafficonese</a>).</li>
+<li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbGetInfo.html" class="external-link">dbGetInfo()</a></code> for the driver and the connection object.</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains <code>check_interrupts</code> argument that allows interrupting execution safely while waiting for query results to be ready (<a href='https://github.com/r-dbi/RPostgres/issues/193'>#193</a>, <a href='https://github.com/zozlak'>@zozlak</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>check_interrupts</code> argument that allows interrupting execution safely while waiting for query results to be ready (<a href='https://github.com/r-dbi/RPostgres/issues/193'>#193</a>, <a href='https://github.com/zozlak'>@zozlak</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html">dbUnquoteIdentifier()</a></code> also handles unquoted identifiers of the form <code>table</code> or <code>schema.table</code>, for compatibility with dbplyr. In addition, a <code>catalog</code> component is supported for quoting and unquoting with <code><a href="https://dbi.r-dbi.org/reference/Id.html">Id()</a></code>.</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> also handles unquoted identifiers of the form <code>table</code> or <code>schema.table</code>, for compatibility with dbplyr. In addition, a <code>catalog</code> component is supported for quoting and unquoting with <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>.</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
 <li>Windows: update libpq to 11.1.0.</li>
 <li>Fulfill CII badge requirements (<a href='https://github.com/r-dbi/RPostgres/issues/227'>#227</a>, <a href='https://github.com/TSchiefer'>@TSchiefer</a>).</li>
 </ul>
@@ -246,7 +252,7 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Hide unused symbols in shared library (<a href='https://github.com/r-dbi/RPostgres/issues/230'>#230</a>, <a href='https://github.com/troels'>@troels</a>).</li>
-<li>Fix partial argument matching in <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html">dbAppendTable()</a></code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/249'>#249</a>).</li>
+<li>Fix partial argument matching in <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/249'>#249</a>).</li>
 <li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href='https://github.com/r-dbi/RPostgres/issues/191'>#191</a>).</li>
 </ul>
 </div>
@@ -255,11 +261,11 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#internal-2" class="anchor"></a>Internal</h2>
 <ul>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/sqlData.html">sqlData(copy = FALSE)</a></code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
-<li>Add tests for <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html">dbUnquoteIdentifier()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/220'>#220</a>, <a href='https://github.com/baileych'>@baileych</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/sqlData.html" class="external-link">sqlData(copy = FALSE)</a></code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/209'>#209</a>).</li>
+<li>Add tests for <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/220'>#220</a>, <a href='https://github.com/baileych'>@baileych</a>).</li>
 <li>Improved tests for numerical precision (<a href='https://github.com/r-dbi/RPostgres/issues/203'>#203</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>
 <li>Fix test: change from <code>REAL</code> to <code>DOUBLE PRECISION</code> (<a href='https://github.com/r-dbi/RPostgres/issues/204'>#204</a>, <a href='https://github.com/harvey131'>@harvey131</a>).</li>
-<li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html">dbAppendTable()</a></code> for own connection class, don’t hijack base class implementation (r-dbi/RMariaDB<a href='https://github.com/r-dbi/RPostgres/issues/119'>#119</a>).</li>
+<li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> for own connection class, don’t hijack base class implementation (r-dbi/RMariaDB<a href='https://github.com/r-dbi/RPostgres/issues/119'>#119</a>).</li>
 <li>Avoid including the call in errors.</li>
 <li>Align <code>DbResult</code> and other classes with RSQLite and RMariaDB.</li>
 </ul>
@@ -286,17 +292,17 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#rpostgres-111-2018-05-05" class="anchor"></a>RPostgres 1.1.1 (2018-05-05)<small> 2018-05-06 </small>
 </h1>
 <ul>
-<li>Add support for <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/133'>#133</a>).</li>
+<li>Add support for <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/133'>#133</a>).</li>
 <li>Data frames resulting from a query always have unique non-empty column names (r-dbi/DBItest<a href='https://github.com/r-dbi/RPostgres/issues/137'>#137</a>).</li>
-<li>New arguments <code>temporary</code> and <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html">dbRemoveTable()</a></code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/141'>#141</a>, r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/197'>#197</a>).</li>
-<li>Using <code><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html">dbCreateTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html">dbAppendTable()</a></code> internally (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/74'>#74</a>).</li>
-<li>The <code>field.types</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable()</a></code> now must be named.</li>
-<li>Using <code>current_schemas(true)</code> also in <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html">dbListObjects()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables()</a></code>, for consistency with <code><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields()</a></code>. Objects from the <code>pg_catalog</code> schema are still excluded.</li>
+<li>New arguments <code>temporary</code> and <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/141'>#141</a>, r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/197'>#197</a>).</li>
+<li>Using <code><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">dbCreateTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> internally (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/74'>#74</a>).</li>
+<li>The <code>field.types</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> now must be named.</li>
+<li>Using <code>current_schemas(true)</code> also in <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables()</a></code>, for consistency with <code><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields()</a></code>. Objects from the <code>pg_catalog</code> schema are still excluded.</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields()</a></code> doesn’t list fields from tables found in the <code>pg_catalog</code> schema.</li>
-<li>The <code><a href="https://dbi.r-dbi.org/reference/dbListFields.html">dbListFields()</a></code> method now works correctly if the <code>name</code> argument is a quoted identifier or of class <code>Id</code>, and throws an error if the table is not found (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/75'>#75</a>).</li>
-<li>Implement <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> method for <code>SqliteConnection</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/163'>#163</a>).</li>
-<li>Reexporting <code><a href="https://dbi.r-dbi.org/reference/Id.html">Id()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbIsReadOnly.html">DBI::dbIsReadOnly()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbCanConnect.html">DBI::dbCanConnect()</a></code>.</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields()</a></code> doesn’t list fields from tables found in the <code>pg_catalog</code> schema.</li>
+<li>The <code><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields()</a></code> method now works correctly if the <code>name</code> argument is a quoted identifier or of class <code>Id</code>, and throws an error if the table is not found (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/75'>#75</a>).</li>
+<li>Implement <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> method for <code>SqliteConnection</code> (r-dbi/DBI<a href='https://github.com/r-dbi/RPostgres/issues/163'>#163</a>).</li>
+<li>Reexporting <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbIsReadOnly.html" class="external-link">DBI::dbIsReadOnly()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbCanConnect.html" class="external-link">DBI::dbCanConnect()</a></code>.</li>
 <li>Now imports DBI 1.0.0.</li>
 </ul>
 </div>
@@ -305,12 +311,12 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#rpostgres-110-2018-04-04" class="anchor"></a>RPostgres 1.1.0 (2018-04-04)<small> 2018-04-06 </small>
 </h1>
 <ul>
-<li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbGetException.html">dbGetException()</a></code> is no longer reexported from DBI.</li>
-<li>Make “typname” information available after <code><a href="https://dbi.r-dbi.org/reference/dbFetch.html">dbFetch()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code><a href="https://dbi.r-dbi.org/reference/dbColumnInfo.html">dbColumnInfo()</a></code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>) (<a href='https://github.com/r-dbi/RPostgres/issues/114'>#114</a>, <a href='https://github.com/etiennebr'>@etiennebr</a>).</li>
-<li>Values of class <code>"integer64"</code> are now supported for <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbBind.html">dbBind()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/178'>#178</a>).</li>
-<li>Schema support, as specified by DBI: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html">dbListObjects()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html">dbUnquoteIdentifier()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/Id.html">Id()</a></code>.</li>
-<li>Names in the <code>x</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html">dbQuoteIdentifier()</a></code> are preserved in the output (r-lib/DBI<a href='https://github.com/r-dbi/RPostgres/issues/173'>#173</a>).</li>
-<li>All generics defined in DBI (e.g., <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code>) are now exported, even if the package doesn’t provide a custom implementation (<a href='https://github.com/r-dbi/RPostgres/issues/168'>#168</a>).</li>
+<li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbGetException.html" class="external-link">dbGetException()</a></code> is no longer reexported from DBI.</li>
+<li>Make “typname” information available after <code><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code><a href="https://dbi.r-dbi.org/reference/dbColumnInfo.html" class="external-link">dbColumnInfo()</a></code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>) (<a href='https://github.com/r-dbi/RPostgres/issues/114'>#114</a>, <a href='https://github.com/etiennebr'>@etiennebr</a>).</li>
+<li>Values of class <code>"integer64"</code> are now supported for <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/178'>#178</a>).</li>
+<li>Schema support, as specified by DBI: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>.</li>
+<li>Names in the <code>x</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> are preserved in the output (r-lib/DBI<a href='https://github.com/r-dbi/RPostgres/issues/173'>#173</a>).</li>
+<li>All generics defined in DBI (e.g., <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>) are now exported, even if the package doesn’t provide a custom implementation (<a href='https://github.com/r-dbi/RPostgres/issues/168'>#168</a>).</li>
 <li>Replace non-portable <code>timegm()</code> with private implementation.</li>
 <li>Correct reference to RPostgreSQL package (<a href='https://github.com/r-dbi/RPostgres/issues/165'>#165</a>, <a href='https://github.com/ClaytonJY'>@ClaytonJY</a>).</li>
 </ul>
@@ -337,7 +343,7 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <li>Test almost all test cases of the DBI specification.</li>
 <li>Fully support parametrized queries.</li>
 <li>Spec-compliant transactions.</li>
-<li>64-bit integers are now supported through the <code>bit64</code> package. This also means that numeric literals (as in <code>SELECT 1</code>) are returned as 64-bit integers. The <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> allows overriding the data type on a per-connection basis.</li>
+<li>64-bit integers are now supported through the <code>bit64</code> package. This also means that numeric literals (as in <code>SELECT 1</code>) are returned as 64-bit integers. The <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> allows overriding the data type on a per-connection basis.</li>
 <li>Correct handling of DATETIME and TIME columns.</li>
 <li>New default <code>row.names = FALSE</code>.</li>
 </ul>
@@ -355,11 +361,11 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Jeroen Ooms, <a href='http://krlmlr.info'>Kirill Müller</a>, <a href='https://www.r-consortium.org'>R Consortium</a>.</p>
+  <p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Jeroen Ooms, <a href="http://krlmlr.info" class="external-link">Kirill Müller</a>, <a href="https://www.r-consortium.org" class="external-link">R Consortium</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -367,6 +373,8 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 
   
 
+
+  
 
   </body>
 </html>
