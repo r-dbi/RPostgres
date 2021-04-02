@@ -1,7 +1,7 @@
 #' Redshift driver/connection
 #'
-#' Redshift currently uses all the same method as Postgres, but allows
-#' provides an extension point for future methods and downstream packages.
+#' Redshift currently uses all the same methods as Postgres, but provides an
+#' extension point for future methods and downstream packages.
 #'
 #' @inheritParams Postgres
 #' @export
