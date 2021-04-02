@@ -62,6 +62,7 @@ SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
+    'PqGenerics.R'
     'PqResult.R'
     'RPostgres-pkg.R'
     'RcppExports.R'
