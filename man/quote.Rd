@@ -55,9 +55,10 @@
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}
 
-\item{x}{A character to escaped}
+\item{x}{A character vector to be quoted.}
 
-\item{...}{Other arguments needed for compatibility with generic}
+\item{...}{Other arguments needed for compatibility with generic (currently
+ignored).}
 }
 \description{
 If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs

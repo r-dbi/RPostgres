@@ -85,7 +85,7 @@ with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).}
 
 \item{copy}{If \code{TRUE}, serializes the data frame to a single string
 and uses \verb{COPY name FROM stdin}. This is fast, but not supported by
-all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
+all postgres servers (e.g. Amazon's Redshift). If \code{FALSE}, generates
 a single SQL string. This is slower, but always supported.}
 
 \item{con}{A database connection.}
