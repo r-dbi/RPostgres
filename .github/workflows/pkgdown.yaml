@@ -20,6 +20,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
+    if: (github.event_name != 'schedule') || (github.event_name == 'schedule' && github.repository_owner == 'r-dbi')
     runs-on: ubuntu-18.04
 
     # Begin custom: services

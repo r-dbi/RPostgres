@@ -11,6 +11,7 @@ name: rcc dev
 
 jobs:
   matrix:
+    if: (github.event_name != 'schedule') || (github.event_name == 'schedule' && github.repository_owner == 'r-dbi')
     runs-on: ubuntu-18.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
