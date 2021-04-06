@@ -503,7 +503,8 @@ void PqResultImpl::wait_for_data() {
       // timeout reached - check user interrupt
       checkUserInterrupt();
     } else if(ret < 0) {
-      stop("select() on the connection failed");
+      stop("select() on the connection socket %d (FD_SETSIZE %d) failed with error code %d",
+           socket, FD_SETSIZE, ret);
     }
     // update db connection state using data available on the socket
     if (!PQconsumeInput(pConn_)) {
