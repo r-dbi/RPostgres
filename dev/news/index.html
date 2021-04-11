@@ -327,8 +327,8 @@ Redshift databases behave almost identically to Postgres so this driver allows d
 <a href="#rpostgres-10-4-2017-12-20" class="anchor"></a>RPostgres 1.0-4 (2017-12-20)<small> 2017-12-20 </small>
 </h1>
 <ul>
-<li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon RedShift (<a href='https://github.com/r-dbi/RPostgres/issues/159'>#159</a>, <a href='https://github.com/mmuurr'>@mmuurr</a>).</li>
-<li>Fix installation on MacOS.</li>
+<li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/159'>#159</a>, <a href='https://github.com/mmuurr'>@mmuurr</a>).</li>
+<li>Fix installation on macOS.</li>
 <li>Check libpq version in configure script (need at least 9.0).</li>
 <li>Fix UBSAN warning: reference binding to null pointer (<a href='https://github.com/r-dbi/RPostgres/issues/156'>#156</a>).</li>
 <li>Fix rchk warning: PROTECT internal temporary SEXP objects (<a href='https://github.com/r-dbi/RPostgres/issues/157'>#157</a>).</li>
