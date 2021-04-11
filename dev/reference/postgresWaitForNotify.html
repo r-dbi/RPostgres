@@ -168,14 +168,14 @@ responses on each channel.</p>
     <pre class="examples"><div class='input'><span class='co'># For running the examples on systems without PostgreSQL connection:</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-lib/callr#readme'>callr</a></span><span class='op'>)</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://callr.r-lib.org'>callr</a></span><span class='op'>)</span>
 
     <span class='co'># listen for messages on the grapevine</span>
     <span class='va'>db_listen</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>db_listen</span>, <span class='st'>"LISTEN grapevine"</span><span class='op'>)</span>
 
     <span class='co'># Start another process, which sends a message after a delay</span>
-    <span class='va'>rp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/callr/man/r_bg.html'>r_bg</a></span><span class='op'>(</span><span class='kw'>function</span> <span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>rp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://callr.r-lib.org/reference/r_bg.html'>r_bg</a></span><span class='op'>(</span><span class='kw'>function</span> <span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span>
         <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span>
         <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span><span class='op'>(</span><span class='fl'>0.3</span><span class='op'>)</span>
         <span class='va'>db_notify</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
