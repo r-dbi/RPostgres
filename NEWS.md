@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.7 (2021-04-12)
+
+- Same as previous version.
+
+
 # RPostgres 1.3.6.9000 (2021-04-12)
 
 - Remove BH dependency by inlining the header files (#300).
