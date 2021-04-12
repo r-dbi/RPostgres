@@ -10,16 +10,7 @@
 
 - Remove BH dependency by inlining the header files (#300).
 - Use Autobrew if libpq is older than version 12 (#294, @jeroen).
-
-
-# RPostgres 1.3.1.9001 (2021-01-24)
-
 - `dbConnect()` now issues `SET datestyle to iso, mdy` to avoid translation errors for datetime values with databases configured differently (#287, @baderstine).
-
-
-# RPostgres 1.3.1.9000 (2021-01-19)
-
-Internal changes only.
 
 
 # RPostgres 1.3.1 (2021-01-19)
@@ -58,7 +49,7 @@ Internal changes only.
 
 # RPostgres 1.2.1 (2020-09-28)
 
-- Gains new `Redshift` driver for connecting to Redshift databases.  
+- Gains new `Redshift` driver for connecting to Redshift databases.
   Redshift databases behave almost identically to Postgres so this
   driver allows downstream packages to distinguish between the two (#258).
 - Datetime values are now passed to the database using an unambiguous time zone format (#255, @imlijunda).
