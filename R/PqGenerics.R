@@ -40,16 +40,23 @@ setMethod("pqListTables", "PqConnection", function(conn) {
     "SELECT cl.relname AS name FROM pg_class AS cl ",
     "JOIN pg_namespace AS n ON cl.relnamespace = n.oid ",
     "WHERE (n.nspname = ANY (current_schemas(true))) ",
-    "AND (n.nspname <> 'pg_catalog') "
+    "AND (n.nspname <> 'pg_catalog') ",
+    # Return only objects (relations) which the current user may access
+    # https://www.postgresql.org/docs/current/functions-info.html
+    "AND (pg_has_role(cl.relowner, 'USAGE'::text) ",
+      "OR has_table_privilege(cl.oid, 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER'::text) ",
+      "OR has_any_column_privilege(cl.oid, 'SELECT, INSERT, UPDATE, REFERENCES'::text) ",
+    ") "
   )
 
+  # which kind of objects should be returned?
   if (major_server_version >= 10) {
     # relkind = 'p' and relispartition only supported from v10 onwards
     query <- paste0(
       query,
       # r = ordinary table, v = view, m = materialized view, f = foreign table, p = partitioned table
       "AND (cl.relkind IN ('r', 'v', 'm', 'f', 'p')) ",
-      "AND NOT cl.relispartition "
+      "AND NOT cl.relispartition " # do not return partitions
     )
   } else {
     query <- paste0(
