@@ -7,6 +7,9 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#define SOCKERR WSAGetLastError()
+#else
+#define SOCKERR errno
 #endif
 
 PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
@@ -484,18 +487,18 @@ void PqResultImpl::wait_for_data() {
 
   int socket, ret;
   fd_set input;
+  FD_ZERO(&input);
 
   socket = PQsocket(pConn_);
   if (socket < 0) {
     stop("Failed to get connection socket");
   }
-  FD_ZERO(&input);
-  FD_SET(socket, &input);
 
   do {
-    // wait for any traffic on the db connection socket but no longet then 1s
+    // wait for any traffic on the db connection socket but no longer then 1s
     timeval timeout = {0, 0};
     timeout.tv_sec = 1;
+    FD_SET(socket, &input);
 
     const int nfds = socket + 1;
     ret = select(nfds, &input, NULL, NULL, &timeout);
@@ -503,8 +506,7 @@ void PqResultImpl::wait_for_data() {
       // timeout reached - check user interrupt
       checkUserInterrupt();
     } else if(ret < 0) {
-      stop("select() on the connection socket %d (FD_SETSIZE %d) failed with error code %d",
-           socket, FD_SETSIZE, ret);
+      stop("select() failed with error code %d", SOCKERR);
     }
     // update db connection state using data available on the socket
     if (!PQconsumeInput(pConn_)) {
