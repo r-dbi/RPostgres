@@ -90,3 +90,88 @@ list_tables_sql <- function(conn, where_schema = NULL) {
   query
 }
 
+#' List remote objects
+#'
+#' Returns the names of remote objects accessible through this connection as a
+#' data frame.
+#' This includes foreign and partitioned tables, (materialized) views, as well
+#' as temporary tables.
+#' Compared to [dbListTables()], this method also enumerates tables and views
+#' in schemas, and returns fully qualified identifiers to access these objects.
+#' This allows exploration of all database objects available to the current
+#' user, including those that can only be accessed by giving the full namespace.
+#'
+#' @inheritParams postgres-tables
+#'
+#' @family PqConnection generics
+#'
+#' @examples
+#' # For running the examples on systems without PostgreSQL connection:
+#' run <- postgresHasDefault()
+#'
+#' library(DBI)
+#' if (run) con <- dbConnect(RPostgres::Postgres())
+#' if (run) dbListObjects(con)
+#'
+#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' if (run) dbListObjects(con)
+#'
+#' if (run) dbDisconnect(con)
+#'
+#' @export
+setGeneric("pqListObjects",
+           def = function(conn, prefix = NULL, ...) standardGeneric("pqListObjects"),
+           valueClass = "data.frame"
+)
+
+#' @rdname pqListObjects
+#' @export
+setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
+  query <- NULL
+  if (is.null(prefix)) {
+    query <- list_tables_sql(conn = conn)
+    query <- paste0(
+      "SELECT NULL AS schema, relname AS table FROM ( \n",
+      query,
+      ") as table_query \n",
+      "UNION ALL \n",
+      "SELECT schema_name AS schema, NULL AS table \n",
+      "FROM INFORMATION_SCHEMA.schemata;"
+    )
+  } else {
+    unquoted <- dbUnquoteIdentifier(conn, prefix)
+    is_prefix <- vlapply(unquoted, function(x) { "schema" %in% names(x@name) && !("table" %in% names(x@name)) })
+    schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
+    if (length(schemas) > 0) { # else query is NULL
+      schema_strings <- dbQuoteString(conn, schemas)
+      where_schema <-
+        paste0(
+          "AND n.nspname IN (",
+          paste(schema_strings, collapse = ", "),
+          ")"
+        )
+      query <- list_tables_sql(conn = conn, where_schema = where_schema)
+      query <- paste0(
+        "SELECT nspname AS schema, relname AS table FROM ( \n",
+        query,
+        ") as table_query"
+      )
+    }
+  }
+
+  if (is.null(query)) {
+    res <- data.frame(schema = character(), table = character(), stringsAsFactors = FALSE)
+  } else {
+    res <- dbGetQuery(conn, query)
+  }
+
+  is_prefix <- !is.na(res$schema) & is.na(res$table)
+  tables <- Map("", res$schema, res$table, f = as_table)
+
+  ret <- data.frame(
+    table = I(unname(tables)),
+    is_prefix = is_prefix,
+    stringsAsFactors = FALSE
+  )
+  ret
+})
