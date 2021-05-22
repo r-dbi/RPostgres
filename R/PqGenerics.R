@@ -33,12 +33,12 @@ setGeneric("pqListTables",
 #' @rdname pqListTables
 #' @export
 setMethod("pqListTables", "PqConnection", function(conn) {
-  query <- list_tables_sql(conn = conn)
+  query <- list_tables_sql(conn = conn, order_by = "cl.relkind, cl.relname")
 
   dbGetQuery(conn, query)[["relname"]]
 })
 
-list_tables_sql <- function(conn, where_schema = NULL) {
+list_tables_sql <- function(conn, where_schema = NULL, order_by = NULL) {
   major_server_version <- dbGetInfo(conn)$db.version %/% 10000
 
   query <- paste0(
@@ -82,10 +82,7 @@ list_tables_sql <- function(conn, where_schema = NULL) {
     query <- paste0(query, where_schema)
   }
 
-  query <- paste0(
-    query,
-    "ORDER BY cl.relkind, cl.relname"
-  )
+  if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
   query
 }
@@ -129,7 +126,7 @@ setGeneric("pqListObjects",
 setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
   if (is.null(prefix)) {
-    query <- list_tables_sql(conn = conn)
+    query <- list_tables_sql(conn = conn, order_by = "cl.relkind, cl.relname")
     query <- paste0(
       "SELECT NULL AS schema, relname AS table FROM ( \n",
       query,
@@ -150,7 +147,12 @@ setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
           paste(schema_strings, collapse = ", "),
           ")"
         )
-      query <- list_tables_sql(conn = conn, where_schema = where_schema)
+      query <-
+        list_tables_sql(
+          conn = conn,
+          where_schema = where_schema,
+          order_by = "cl.relkind, cl.relname"
+        )
       query <- paste0(
         "SELECT nspname AS schema, relname AS table FROM ( \n",
         query,
