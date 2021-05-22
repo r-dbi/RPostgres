@@ -17,10 +17,10 @@
 #'
 #' library(DBI)
 #' if (run) con <- dbConnect(RPostgres::Postgres())
-#' if (run) dbListTables(con)
+#' if (run) pqListTables(con)
 #'
 #' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-#' if (run) dbListTables(con)
+#' if (run) pqListTables(con)
 #'
 #' if (run) dbDisconnect(con)
 #'
@@ -111,10 +111,10 @@ list_tables_sql <- function(conn, where_schema = NULL) {
 #'
 #' library(DBI)
 #' if (run) con <- dbConnect(RPostgres::Postgres())
-#' if (run) dbListObjects(con)
+#' if (run) pqListObjects(con)
 #'
 #' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-#' if (run) dbListObjects(con)
+#' if (run) pqListObjects(con)
 #'
 #' if (run) dbDisconnect(con)
 #'
