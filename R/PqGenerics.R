@@ -38,7 +38,7 @@ setMethod("pqListTables", "PqConnection", function(conn) {
   dbGetQuery(conn, query)[["relname"]]
 })
 
-list_tables_sql <- function(conn, where_schema = NULL, order_by = NULL) {
+list_tables_sql <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
   major_server_version <- dbGetInfo(conn)$db.version %/% 10000
 
   query <- paste0(
@@ -82,9 +82,76 @@ list_tables_sql <- function(conn, where_schema = NULL, order_by = NULL) {
     query <- paste0(query, where_schema)
   }
 
+  if (!is.null(where_table)) query <- paste0(query, where_table)
+
   if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
   query
+}
+#' Does a table exist?
+#'
+#' Returns if a table or (materialized) view given by name exists in the
+#' database.
+#'
+#' @inheritParams postgres-tables
+#'
+#' @family PqConnection generics
+#'
+#' @examples
+#' # For running the examples on systems without PostgreSQL connection:
+#' run <- postgresHasDefault()
+#'
+#' library(DBI)
+#' if (run) con <- dbConnect(RPostgres::Postgres())
+#' if (run) pqExistsTable(con, "mtcars")
+#'
+#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' if (run) pqExistsTable(con, "mtcars")
+#'
+#' if (run) dbDisconnect(con)
+#'
+#' @export
+setGeneric("pqExistsTable",
+           def = function(conn, name, ...) standardGeneric("pqExistsTable"),
+           valueClass = "logical"
+)
+
+#' @rdname pqExistsTable
+#' @export
+setMethod("pqExistsTable", c("PqConnection", "character"), function(conn, name, ...) {
+  stopifnot(length(name) == 1L)
+  # use (Un)QuoteIdentifier roundtrip instead of Id(table = name)
+  # so that quoted names (possibly incl. schema) can be passed to `name` e.g.
+  # name = dbQuoteIdentifier(conn, Id(schema = "sname", table = "tname"))
+  name <- dbQuoteIdentifier(conn, name)
+  id <- dbUnquoteIdentifier(conn, name)[[1]]
+  pq_exists_table(conn, id)
+})
+
+#' @export
+#' @rdname postgres-tables
+setMethod("pqExistsTable", c("PqConnection", "Id"), function(conn, name, ...) {
+  pq_exists_table(conn, id = name)
+})
+
+pq_exists_table <- function(conn, id) {
+  name <- id@name
+  stopifnot("table" %in% names(name))
+  table_name <- dbQuoteString(conn, name[["table"]])
+  where_table <- paste0("AND cl.relname = ", table_name, "\n")
+
+  if ("schema" %in% names(name)) {
+    schema_name <- dbQuoteString(conn, name[["schema"]])
+    where_schema <- paste0("AND n.nspname = ", schema_name, "\n")
+  } else {
+    where_schema <- NULL
+  }
+  query <- paste0(
+    "SELECT EXISTS ( \n",
+    list_tables_sql(conn, where_schema = where_schema, where_table = where_table),
+    ")"
+  )
+  dbGetQuery(conn, query)[[1]]
 }
 
 #' List remote objects
