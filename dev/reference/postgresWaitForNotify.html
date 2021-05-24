@@ -59,8 +59,6 @@ responses on each channel." />
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -139,7 +137,7 @@ responses on each channel." />
 responses on each channel.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>postgresWaitForNotify</span><span class='op'>(</span><span class='va'>conn</span>, timeout <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>postgresWaitForNotify</span><span class='op'>(</span><span class='va'>conn</span>, timeout <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,39 +163,40 @@ responses on each channel.</p>
 </dl><p>If no notifications are available, return NULL</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># For running the examples on systems without PostgreSQL connection:</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://callr.r-lib.org'>callr</a></span><span class='op'>)</span>
-
-    <span class='co'># listen for messages on the grapevine</span>
-    <span class='va'>db_listen</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>db_listen</span>, <span class='st'>"LISTEN grapevine"</span><span class='op'>)</span>
-
-    <span class='co'># Start another process, which sends a message after a delay</span>
-    <span class='va'>rp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://callr.r-lib.org/reference/r_bg.html'>r_bg</a></span><span class='op'>(</span><span class='kw'>function</span> <span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span>
-        <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span>
-        <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span><span class='op'>(</span><span class='fl'>0.3</span><span class='op'>)</span>
-        <span class='va'>db_notify</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-        <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>db_notify</span>, <span class='st'>"NOTIFY grapevine, 'psst'"</span><span class='op'>)</span>
-        <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>db_notify</span><span class='op'>)</span>
-    <span class='op'>}</span><span class='op'>)</span>
-
-    <span class='co'># Sleep until we get the message</span>
-    <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span>
-    <span class='kw'>while</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-        <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'>postgresWaitForNotify</span><span class='op'>(</span><span class='va'>db_listen</span>, <span class='fl'>60</span><span class='op'>)</span>
-    <span class='op'>}</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>$</span><span class='va'>payload</span> <span class='op'>==</span> <span class='st'>'psst'</span><span class='op'>)</span>
-
-    <span class='co'># Tidy up</span>
-    <span class='va'>rp</span><span class='op'>$</span><span class='fu'>wait</span><span class='op'>(</span><span class='op'>)</span>
-    <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>db_listen</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Could not initialise default postgres database. If postgres is running</span>
-#&gt; <span class='message'>check that the environment variables PGHOST, PGPORT, </span>
-#&gt; <span class='message'>PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
-#&gt; <span class='message'>point to your database.</span></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># For running the examples on systems without PostgreSQL connection:</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://callr.r-lib.org'>callr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># listen for messages on the grapevine</span></span>
+<span class='r-in'>    <span class='va'>db_listen</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>db_listen</span>, <span class='st'>"LISTEN grapevine"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># Start another process, which sends a message after a delay</span></span>
+<span class='r-in'>    <span class='va'>rp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://callr.r-lib.org/reference/r_bg.html'>r_bg</a></span><span class='op'>(</span><span class='kw'>function</span> <span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>        <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span><span class='op'>(</span><span class='fl'>0.3</span><span class='op'>)</span></span>
+<span class='r-in'>        <span class='va'>db_notify</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExecute.html'>dbExecute</a></span><span class='op'>(</span><span class='va'>db_notify</span>, <span class='st'>"NOTIFY grapevine, 'psst'"</span><span class='op'>)</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>db_notify</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># Sleep until we get the message</span></span>
+<span class='r-in'>    <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span></span>
+<span class='r-in'>    <span class='kw'>while</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>        <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'>postgresWaitForNotify</span><span class='op'>(</span><span class='va'>db_listen</span>, <span class='fl'>60</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>$</span><span class='va'>payload</span> <span class='op'>==</span> <span class='st'>'psst'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># Tidy up</span></span>
+<span class='r-in'>    <span class='va'>rp</span><span class='op'>$</span><span class='fu'>wait</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>db_listen</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Could not initialise default postgres database. If postgres is running</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> check that the environment variables PGHOST, PGPORT, </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> point to your database.</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -113,7 +113,7 @@
 <p>To manage these workers, we will combine 2 PostgreSQL concepts:</p>
 <div id="listen-notify" class="section level2">
 <h2 class="hasAnchor">
-<a href="#listen-notify" class="anchor"></a>LISTEN / NOTIFY</h2>
+<a href="#listen-notify" class="anchor" aria-hidden="true"></a>LISTEN / NOTIFY</h2>
 <p>The Postgres <code>LISTEN</code> and <code>NOTIFY</code> commands allow you to send and receive messages between clients connected to a PostgreSQL database. This is known as a publish/subscribe architecture.</p>
 <p>We tell Postgres that we are interested in receiving messages using <code>LISTEN</code>. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -139,7 +139,7 @@
 </div>
 <div id="skip-locked" class="section level2">
 <h2 class="hasAnchor">
-<a href="#skip-locked" class="anchor"></a>SKIP LOCKED</h2>
+<a href="#skip-locked" class="anchor" aria-hidden="true"></a>SKIP LOCKED</h2>
 <p>We can use LISTEN/NOTIFY to inform all workers that there is something to be done, but how do we decide which worker actually does the work? This is done using <code>SKIP LOCKED</code>.</p>
 <p>We notify all workers that the input <code>99</code> is ready for processing. After receiving this, they all do the following:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -155,7 +155,7 @@
 </div>
 <div id="implementing-our-worker" class="section level2">
 <h2 class="hasAnchor">
-<a href="#implementing-our-worker" class="anchor"></a>Implementing our worker</h2>
+<a href="#implementing-our-worker" class="anchor" aria-hidden="true"></a>Implementing our worker</h2>
 <p>Now we can put the concepts together. The following implements our worker as a function (again, this would be running as a script on several servers):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
