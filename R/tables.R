@@ -7,7 +7,7 @@
 #' SQL string.
 #'
 #' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
+#'   [DBI::dbConnect()].
 #' @param name a character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.

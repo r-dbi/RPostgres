@@ -12,7 +12,7 @@
 #' @family PqConnection generics
 #'
 #' @examples
-#' # For running the examples on systems without PostgreSQL connection:
+#' # Examples only run on systems with a PostgreSQL connection:
 #' run <- postgresHasDefault()
 #'
 #' library(DBI)
@@ -42,6 +42,7 @@ list_tables_sql <- function(conn, where_schema = NULL, where_table = NULL, order
   major_server_version <- dbGetInfo(conn)$db.version %/% 10000
 
   query <- paste0(
+    # pg_class vs. information_schema: https://stackoverflow.com/a/24089729
     # pg_class docs: https://www.postgresql.org/docs/current/catalog-pg-class.html
     "SELECT n.nspname, cl.relname \n",
     "FROM pg_class AS cl \n",
@@ -88,17 +89,18 @@ list_tables_sql <- function(conn, where_schema = NULL, where_table = NULL, order
 
   query
 }
-#' Does a table exist?
+
+#' Does a table exist (for the current user)?
 #'
-#' Returns if a table or (materialized) view given by name exists in the
-#' database.
+#' Returns whether a table or (materialized) view given by `name` is accessible
+#' through this connection.
 #'
 #' @inheritParams postgres-tables
 #'
 #' @family PqConnection generics
 #'
 #' @examples
-#' # For running the examples on systems without PostgreSQL connection:
+#' # Examples only run on systems with a PostgreSQL connection:
 #' run <- postgresHasDefault()
 #'
 #' library(DBI)
@@ -170,7 +172,7 @@ pq_exists_table <- function(conn, id) {
 #' @family PqConnection generics
 #'
 #' @examples
-#' # For running the examples on systems without PostgreSQL connection:
+#' # Examples only run on systems with a PostgreSQL connection:
 #' run <- postgresHasDefault()
 #'
 #' library(DBI)
@@ -191,6 +193,7 @@ setGeneric("pqListObjects",
 #' @rdname pqListObjects
 #' @export
 setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
+  # TODO write (better) error message when schema/prefix is not available
   query <- NULL
   if (is.null(prefix)) {
     query <- list_tables_sql(conn = conn, order_by = "cl.relkind, cl.relname")
