@@ -244,3 +244,68 @@ setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
   )
   ret
 })
+
+#' List field names of a remote table
+#'
+#' @inheritParams postgres-tables
+#'
+#' @family PqConnection generics
+#'
+#' @seealso [dbColumnInfo()] to get the type of the fields.
+#'
+#' @examples
+#' # Examples only run on systems with a PostgreSQL connection:
+#' run <- postgresHasDefault()
+#'
+#' library(DBI)
+#' if (run) con <- dbConnect(RPostgres::Postgres())
+#'
+#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' if (run) pqListFields(con, "mtcars")
+#'
+#' if (run) dbDisconnect(con)
+#'
+#' @export
+setGeneric("pqListFields",
+           def = function(conn, name, ...) standardGeneric("pqListFields"),
+           valueClass = "character"
+)
+
+#' @export
+setMethod("pqListFields", signature("DBIConnection", "character"),
+          function(conn, name, ...) {
+            quoted <- dbQuoteIdentifier(conn, name)
+            id <- dbUnquoteIdentifier(conn, quoted)[[1]]
+            pq_list_fields(conn, id)
+          }
+)
+
+#' @rdname pqListFields
+#' @export
+setMethod("pqListFields", signature("DBIConnection", "Id"),
+          function(conn, name, ...) {
+            pq_list_fields(conn, id = name)
+          }
+)
+
+pq_list_fields <- function(conn, id) {
+  if (pq_exists_table(conn, id)) {
+    # we know from pq_exists_table() that at least id@name["table"] exists
+    tname_str <- na.omit(id@name[c("schema", "table")])
+    tname_qstr <- dbQuoteString(conn, paste(tname_str, collapse = "."))
+    # https://dba.stackexchange.com/a/75124
+    # https://dba.stackexchange.com/a/22420
+    query <-
+      paste0(
+        "SELECT attname \n",
+        "FROM   pg_attribute \n",
+        "WHERE  attrelid = ", tname_qstr, "::regclass \n",
+        "  AND  attnum > 0 \n",
+        "  AND  NOT attisdropped \n",
+        "ORDER  BY attnum;"
+      )
+    dbGetQuery(conn, query)[[1]]
+  } else {
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+  }
+}
