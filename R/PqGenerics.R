@@ -32,7 +32,7 @@ setGeneric("pqListTables",
 
 #' @rdname pqListTables
 #' @export
-setMethod("pqListTables", "PqConnection", function(conn) {
+setMethod("pqListTables", "PqConnection", function(conn, ...) {
   query <-
     list_tables_sql(
       conn = conn,
