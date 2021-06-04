@@ -204,14 +204,18 @@ setMethod("pqListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
   # TODO write (better) error message when schema/prefix is not available
   query <- NULL
   if (is.null(prefix)) {
-    query <- list_tables_sql(conn = conn, order_by = "cl.relkind, cl.relname")
     query <- paste0(
       "SELECT NULL AS schema, relname AS table FROM ( \n",
-      query,
+      list_tables_sql(
+        conn = conn,
+        where_schema = "current",
+        order_by = "cl.relkind, cl.relname"
+      ),
       ") as table_query \n",
       "UNION ALL \n",
-      "SELECT schema_name AS schema, NULL AS table \n",
-      "FROM INFORMATION_SCHEMA.schemata;"
+      "SELECT DISTINCT nspname AS schema, NULL AS table FROM ( \n",
+      list_tables_sql(conn = conn),
+      ") as schema_query;"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
