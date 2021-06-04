@@ -33,7 +33,12 @@ setGeneric("pqListTables",
 #' @rdname pqListTables
 #' @export
 setMethod("pqListTables", "PqConnection", function(conn) {
-  query <- list_tables_sql(conn = conn, order_by = "cl.relkind, cl.relname")
+  query <-
+    list_tables_sql(
+      conn = conn,
+      where_schema = "current",
+      order_by = "cl.relkind, cl.relname"
+    )
 
   dbGetQuery(conn, query)[["relname"]]
 })
@@ -72,15 +77,18 @@ list_tables_sql <- function(conn, where_schema = NULL, where_table = NULL, order
     )
   }
 
-  if (is.null(where_schema)) {
-    # all schemas in the search path without implicitly-searched system schemas
-    # such as pg_catalog
-    query <- paste0(
-      query,
-      "AND (n.nspname = ANY (current_schemas(false))) \n"
-    )
-  } else {
-    query <- paste0(query, where_schema)
+  if (!is.null(where_schema)) {
+    if (identical(where_schema, "current")) {
+      # `current_schemas(true)` (not `false`) necessary to get temporary tables
+      query <- paste0(
+        query,
+        "AND (n.nspname = ANY(current_schemas(true))) \n",
+        "AND (n.nspname <> 'pg_catalog') \n"
+      )
+    } else {
+      query <- paste0(query, where_schema)
+
+    }
   }
 
   if (!is.null(where_table)) query <- paste0(query, where_table)
@@ -146,7 +154,7 @@ pq_exists_table <- function(conn, id) {
     schema_name <- dbQuoteString(conn, name[["schema"]])
     where_schema <- paste0("AND n.nspname = ", schema_name, "\n")
   } else {
-    where_schema <- NULL
+    where_schema <- "current"
   }
   query <- paste0(
     "SELECT EXISTS ( \n",
