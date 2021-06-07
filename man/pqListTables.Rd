@@ -7,7 +7,7 @@
 \usage{
 pqListTables(conn, ...)
 
-\S4method{pqListTables}{PqConnection}(conn)
+\S4method{pqListTables}{PqConnection}(conn, ...)
 }
 \arguments{
 \item{conn}{a \linkS4class{PqConnection} object, produced by

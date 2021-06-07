@@ -2,10 +2,13 @@
 % Please edit documentation in R/PqGenerics.R
 \name{pqListFields}
 \alias{pqListFields}
+\alias{pqListFields,DBIConnection,character-method}
 \alias{pqListFields,DBIConnection,Id-method}
 \title{List field names of a remote table}
 \usage{
 pqListFields(conn, name, ...)
+
+\S4method{pqListFields}{DBIConnection,character}(conn, name, ...)
 
 \S4method{pqListFields}{DBIConnection,Id}(conn, name, ...)
 }

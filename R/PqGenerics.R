@@ -286,6 +286,7 @@ setGeneric("pqListFields",
            valueClass = "character"
 )
 
+#' @rdname pqListFields
 #' @export
 setMethod("pqListFields", signature("DBIConnection", "character"),
           function(conn, name, ...) {
