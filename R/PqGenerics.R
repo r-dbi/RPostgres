@@ -306,7 +306,7 @@ setMethod("pqListFields", signature("DBIConnection", "Id"),
 pq_list_fields <- function(conn, id) {
   if (pq_exists_table(conn, id)) {
     # we know from pq_exists_table() that at least id@name["table"] exists
-    tname_str <- na.omit(id@name[c("schema", "table")])
+    tname_str <- stats::na.omit(id@name[c("schema", "table")])
     tname_qstr <- dbQuoteString(conn, paste(tname_str, collapse = "."))
     # https://dba.stackexchange.com/a/75124
     # https://dba.stackexchange.com/a/22420
