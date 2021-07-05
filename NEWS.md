@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.3 (2021-07-05)
+
+- Same as previous version.
+
+
 # RPostgres 1.3.2.9001 (2021-07-05)
 
 - Fix `dbConnect(check_interrupts = TRUE)` on Windows (#244, @zozlak).
