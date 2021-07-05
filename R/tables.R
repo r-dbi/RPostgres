@@ -24,6 +24,7 @@
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
 #'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
+#' @param warn If `TRUE`, warns user when converting from factor to string.
 #'
 #' @examples
 #' # For running the examples on systems without PostgreSQL connection:
@@ -108,22 +109,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      if (!copy) {
-        value <- sqlData(conn, value, row.names = FALSE)
-
-        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-        dbExecute(conn, sql)
-      } else {
-        value <- sql_data_copy(value, row.names = FALSE)
-
-        fields <- dbQuoteIdentifier(conn, names(value))
-        sql <- paste0(
-          "COPY ", dbQuoteIdentifier(conn, name),
-          " (", paste(fields, collapse = ", "), ")",
-          " FROM STDIN"
-        )
-        connection_copy_data(conn@ptr, sql, value)
-      }
+      dbAppendTable(conn, name, value, copy, warn = FALSE)
     }
 
     invisible(TRUE)
@@ -188,20 +174,33 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, ..., row.names = NULL) {
+  function(conn, name, value, copy = TRUE, warn = TRUE, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
 
-    query <- sqlAppendTableTemplate(
-      con = conn,
-      table = name,
-      values = value,
-      row.names = row.names,
-      prefix = "$",
-      pattern = "1",
-      ...
-    )
+    row.names <- FALSE
 
-    dbExecute(conn, query, params = unname(as.list(value)))
+    value = factor_to_string(value, warn = warn)
+
+    value <- sqlRownamesToColumn(value, row.names)
+
+    if (!copy) {
+      value <- sqlData(conn, value, row.names = FALSE)
+
+      sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+      dbExecute(conn, sql)
+    } else {
+      value <- sql_data_copy(value, row.names = FALSE)
+
+      fields <- dbQuoteIdentifier(conn, names(value))
+      sql <- paste0(
+        "COPY ", dbQuoteIdentifier(conn, name),
+        " (", paste(fields, collapse = ", "), ")",
+        " FROM STDIN"
+      )
+      connection_copy_data(conn@ptr, sql, value)
+    }
+
+    nrow(value)
   }
 )
 
