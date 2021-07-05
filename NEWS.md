@@ -1,9 +1,14 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.2.9001 (2021-07-05)
+
+- Fix `dbConnect(check_interrupts = TRUE)` on Windows (#244, @zozlak).
+- Windows: update to libpq 13.2.0 and add UCRT support (#309, @jeroen).
+
+
 # RPostgres 1.3.2.9000 (2021-04-12)
 
-- Remove BH dependency by inlining the header files (#300).
-- Use Autobrew if libpq is older than version 12 (#294, @jeroen).
+Same as previous version.
 
 
 # RPostgres 1.3.2 (2021-04-12)
