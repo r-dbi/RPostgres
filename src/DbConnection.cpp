@@ -83,7 +83,7 @@ void DbConnection::reset_current_result(const DbResult* pResult) {
 
 /**
  * Documentation for canceling queries:
- * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
+ * https://www.postgresql.org/docs/current/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
   check_connection();

@@ -4,7 +4,7 @@
 #include <windows.h>
 #endif
 
-// From http://www.postgresql.org/docs/9.4/static/libpq-connect.html:
+// From https://www.postgresql.org/docs/current/libpq-connect.html:
 // On Windows, there is a way to improve performance if a single database
 // connection is repeatedly started and shutdown. Internally, libpq calls
 // WSAStartup() and WSACleanup() for connection startup and shutdown,

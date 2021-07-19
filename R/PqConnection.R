@@ -136,21 +136,21 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'   Note that this argument can only contain the database name, it will not
 #'   be parsed as a connection string (internally, `expand_dbname` is set to
 #'   `false` in the call to
-#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).
+#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/current/libpq-connect.html)).
 #' @param user,password User name and password. If `NULL`, will be
 #'   retrieved from `PGUSER` and `PGPASSWORD` envvars, or from the
 #'   appropriate line in `~/.pgpass`. See
-#'   <http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html> for
+#'   <https://www.postgresql.org/docs/current/libpq-pgpass.html> for
 #'   more details.
 #' @param host,port Host and port. If `NULL`, will be retrieved from
 #'   `PGHOST` and `PGPORT` env vars.
 #' @param service Name of service to connect as.  If `NULL`, will be
 #'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-#'   file and used.  See <http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html>
+#'   file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html>
 #'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
-#'   <http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
+#'   <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
