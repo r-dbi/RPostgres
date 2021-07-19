@@ -113,7 +113,7 @@ void encode_in_buffer(RObject x, int i, std::string& buffer) {
 
 
 // Escape postgresql special characters
-// http://www.postgresql.org/docs/9.4/static/sql-copy.html#AEN71914
+// https://www.postgresql.org/docs/current/sql-copy.html
 void escape_in_buffer(const char* string, std::string& buffer) {
   size_t len = strlen(string);
 
