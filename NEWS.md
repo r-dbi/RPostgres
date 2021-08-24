@@ -7,18 +7,8 @@
 
 # RPostgres 1.3.3 (2021-07-05)
 
-- Same as previous version.
-
-
-# RPostgres 1.3.2.9001 (2021-07-05)
-
 - Fix `dbConnect(check_interrupts = TRUE)` on Windows (#244, @zozlak).
 - Windows: update to libpq 13.2.0 and add UCRT support (#309, @jeroen).
-
-
-# RPostgres 1.3.2.9000 (2021-04-12)
-
-Same as previous version.
 
 
 # RPostgres 1.3.2 (2021-04-12)
