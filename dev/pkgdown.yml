@@ -1,9 +1,9 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: ce9781a15c7ea07df9fb17a11295ba4abec0b54b
+pkgdown_sha: 705ff7c650bb1c7d46d35e72f27ad093689e2f29
 articles:
   work-queue: work-queue.html
-last_built: 2021-08-24T02:46Z
+last_built: 2021-09-06T08:47Z
 urls:
   reference: https://rpostgres.r-dbi.org/reference
   article: https://rpostgres.r-dbi.org/articles
