@@ -13,10 +13,9 @@ DBItest::make_context(
     blob_cast = function(x) paste0("(", x, "::bytea)")
   ),
   default_skip = c(
-    if (packageVersion("DBItest") < "1.7.0.9002") "compliance",
-
-    if (packageVersion("DBItest") < "1.7.0.9010") "append_roundtrip_timestamp",
-    if (packageVersion("DBItest") < "1.7.0.9010") "roundtrip_timestamp",
+    # Not implemented correctly for i386
+    if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
+    if (.Platform$r_arch == "i386") "roundtrip_timestamp",
 
     NULL
   )
