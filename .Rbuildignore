@@ -19,3 +19,6 @@ windows
 ^tests/testthat/testthat-problems\.rds$
 ^.*\.log$
 ^\.vscode$
+^\.deps$
+^autobrew$
+^cleanup$
