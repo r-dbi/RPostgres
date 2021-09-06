@@ -18,3 +18,4 @@ windows
 ^CODE_OF_CONDUCT\.md$
 ^tests/testthat/testthat-problems\.rds$
 ^.*\.log$
+^\.vscode$

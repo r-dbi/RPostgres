@@ -22,7 +22,7 @@
 #'   with [DBI::dbDataType()]).
 #' @param copy If `TRUE`, serializes the data frame to a single string
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
-#'   all postgres servers (e.g. Amazon's redshift). If `FALSE`, generates
+#'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
 #'
 #' @examples

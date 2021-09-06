@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: 'Rcpp' Interface to 'PostgreSQL'
-Version: 1.3.1.9001
-Date: 2021-01-24
+Version: 1.3.3.9000
+Date: 2021-07-05
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
@@ -48,7 +48,6 @@ Suggests:
     rmarkdown,
     testthat
 LinkingTo: 
-    BH,
     plogr (>= 0.2.0),
     Rcpp
 VignetteBuilder:

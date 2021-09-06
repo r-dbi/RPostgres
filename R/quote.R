@@ -7,8 +7,9 @@ NULL
 #' at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
-#' @param x A character to escaped
-#' @param ... Other arguments needed for compatibility with generic
+#' @param x A character vector to be quoted.
+#' @param ... Other arguments needed for compatibility with generic (currently
+#'   ignored).
 #' @examples
 #' # For running the examples on systems without PostgreSQL connection:
 #' run <- postgresHasDefault()

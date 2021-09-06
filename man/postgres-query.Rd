@@ -22,15 +22,15 @@
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{\link[=dbConnect]{dbConnect()}}.}
 
-\item{statement}{An SQL string to execute}
+\item{statement}{An SQL string to execute.}
 
 \item{params}{A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the
 correct type is imputed by PostgreSQL. If this fails, you can manually
 cast the parameter with e.g. \code{"$1::bigint"}.}
 
-\item{...}{Another arguments needed for compatibility with generic (
-currently ignored).}
+\item{...}{Other arguments needed for compatibility with generic (currently
+ignored).}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
