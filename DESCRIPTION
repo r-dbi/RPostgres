@@ -43,7 +43,7 @@ Imports:
 Suggests: 
     callr,
     covr,
-    DBItest (>= 1.7.0),
+    DBItest (>= 1.7.1),
     knitr,
     rmarkdown,
     testthat
