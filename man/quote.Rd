@@ -65,14 +65,13 @@ If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs
 at most one \code{table} component and at most one \code{schema} component.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) con <- dbConnect(RPostgres::Postgres())
+con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")
-if (run) dbQuoteString(con, x)
-if (run) dbQuoteIdentifier(con, x)
-if (run) dbDisconnect(con)
+dbQuoteString(con, x)
+dbQuoteIdentifier(con, x)
+dbDisconnect(con)
+\dontshow{\}) # examplesIf}
 }

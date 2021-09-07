@@ -25,24 +25,21 @@
 #'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
 #'
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) con <- dbConnect(RPostgres::Postgres())
-#' if (run) dbListTables(con)
-#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-#' if (run) dbReadTable(con, "mtcars")
+#' con <- dbConnect(RPostgres::Postgres())
+#' dbListTables(con)
+#' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' dbReadTable(con, "mtcars")
 #'
-#' if (run) dbListTables(con)
-#' if (run) dbExistsTable(con, "mtcars")
+#' dbListTables(con)
+#' dbExistsTable(con, "mtcars")
 #'
 #' # A zero row data frame just creates a table definition.
-#' if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-#' if (run) dbReadTable(con, "mtcars2")
+#' dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+#' dbReadTable(con, "mtcars2")
 #'
-#' if (run) dbDisconnect(con)
+#' dbDisconnect(con)
 #' @name postgres-tables
 NULL
 

@@ -24,7 +24,9 @@ tests.
 \examples{
 if (postgresHasDefault()) {
   db <- postgresDefault()
-  dbListTables(db)
+  print(dbListTables(db))
   dbDisconnect(db)
+} else {
+  message("No database connection.")
 }
 }

@@ -111,21 +111,20 @@ SQL string.
 uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) con <- dbConnect(RPostgres::Postgres())
-if (run) dbListTables(con)
-if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-if (run) dbReadTable(con, "mtcars")
+con <- dbConnect(RPostgres::Postgres())
+dbListTables(con)
+dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+dbReadTable(con, "mtcars")
 
-if (run) dbListTables(con)
-if (run) dbExistsTable(con, "mtcars")
+dbListTables(con)
+dbExistsTable(con, "mtcars")
 
 # A zero row data frame just creates a table definition.
-if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-if (run) dbReadTable(con, "mtcars2")
+dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+dbReadTable(con, "mtcars2")
 
-if (run) dbDisconnect(con)
+dbDisconnect(con)
+\dontshow{\}) # examplesIf}
 }
