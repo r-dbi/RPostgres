@@ -88,9 +88,10 @@
 </colgroup>
 <tbody><tr>
 <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor">
-<a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-connecting-and-disconnecting" class="hasAnchor">
+<a href="#section-connecting-and-disconnecting" class="anchor"></a>Connecting and disconnecting</h2>
           <p class="section-desc"></p>
+<p>Connecting to and disconnecting from a database.</p>
         </th>
       </tr></tbody>
 <tbody>
@@ -102,22 +103,20 @@
       </tr>
 <tr>
 <td>
-          <p><code><a href="RPostgres-package.html">RPostgres-package</a></code> </p>
-        </td>
-        <td><p>RPostgres: 'Rcpp' Interface to 'PostgreSQL'</p></td>
-      </tr>
-<tr>
-<td>
           <p><code><a href="Redshift.html">Redshift()</a></code> <code><a href="Redshift.html">dbConnect(<i>&lt;RedshiftDriver&gt;</i>)</a></code> </p>
         </td>
         <td><p>Redshift driver/connection</p></td>
       </tr>
-<tr>
-<td>
-          <p><code><a href="postgres-query.html">dbSendQuery(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-query.html">dbFetch(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbBind(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbHasCompleted(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbClearResult(<i>&lt;PqResult&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Execute a SQL statement on a database connection</p></td>
-      </tr>
+</tbody>
+<tbody><tr>
+<th colspan="2">
+          <h2 id="section-tables" class="hasAnchor">
+<a href="#section-tables" class="anchor"></a>Tables</h2>
+          <p class="section-desc"></p>
+<p>Reading and writing entire tables.</p>
+        </th>
+      </tr></tbody>
+<tbody>
 <tr>
 <td>
           <p><code><a href="postgres-tables.html">dbWriteTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>,<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="postgres-tables.html">sqlData(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbAppendTable(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbReadTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListTables(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbExistsTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbExistsTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;Id&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbRemoveTable(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListFields(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListFields(<i>&lt;PqConnection&gt;</i>,<i>&lt;Id&gt;</i>)</a></code> <code><a href="postgres-tables.html">dbListObjects(<i>&lt;PqConnection&gt;</i>)</a></code> </p>
@@ -126,9 +125,53 @@
       </tr>
 <tr>
 <td>
+          <p><code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;Id&gt;</i>)</a></code> <code><a href="quote.html">dbUnquoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;logical&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;integer&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;factor&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;Date&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;POSIXt&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;difftime&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;list&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;blob&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Quote postgres strings, identifiers, and literals</p></td>
+      </tr>
+</tbody>
+<tbody><tr>
+<th colspan="2">
+          <h2 id="section-queries-and-statements" class="hasAnchor">
+<a href="#section-queries-and-statements" class="anchor"></a>Queries and statements</h2>
+          <p class="section-desc"></p>
+<p>Sending queries and executing statements.</p>
+        </th>
+      </tr></tbody>
+<tbody><tr>
+<td>
+          <p><code><a href="postgres-query.html">dbSendQuery(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="postgres-query.html">dbFetch(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbBind(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbHasCompleted(<i>&lt;PqResult&gt;</i>)</a></code> <code><a href="postgres-query.html">dbClearResult(<i>&lt;PqResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Execute a SQL statement on a database connection</p></td>
+      </tr></tbody>
+<tbody><tr>
+<th colspan="2">
+          <h2 id="section-transactions" class="hasAnchor">
+<a href="#section-transactions" class="anchor"></a>Transactions</h2>
+          <p class="section-desc"></p>
+<p>Ensuring multiple statements are executed together, or not at all.</p>
+        </th>
+      </tr></tbody>
+<tbody><tr>
+<td>
           <p><code><a href="postgres-transactions.html">dbBegin(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-transactions.html">dbCommit(<i>&lt;PqConnection&gt;</i>)</a></code> <code><a href="postgres-transactions.html">dbRollback(<i>&lt;PqConnection&gt;</i>)</a></code> </p>
         </td>
         <td><p>Transaction management.</p></td>
+      </tr></tbody>
+<tbody><tr>
+<th colspan="2">
+          <h2 id="section-misellaneous" class="hasAnchor">
+<a href="#section-misellaneous" class="anchor"></a>Misellaneous</h2>
+          <p class="section-desc"></p>
+<p>Functions specific to Postgres</p>
+        </th>
+      </tr></tbody>
+<tbody>
+<tr>
+<td>
+          <p><code><a href="RPostgres-package.html">RPostgres-package</a></code> </p>
+        </td>
+        <td><p>RPostgres: 'Rcpp' Interface to 'PostgreSQL'</p></td>
       </tr>
 <tr>
 <td>
@@ -141,12 +184,6 @@
           <p><code><a href="postgresWaitForNotify.html">postgresWaitForNotify()</a></code> </p>
         </td>
         <td><p>Wait for and return any notifications that return within timeout</p></td>
-      </tr>
-<tr>
-<td>
-          <p><code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteString(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;Id&gt;</i>)</a></code> <code><a href="quote.html">dbUnquoteIdentifier(<i>&lt;PqConnection&gt;</i>,<i>&lt;SQL&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;logical&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;integer&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;factor&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;Date&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;POSIXt&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;difftime&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;list&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;blob&gt;</i>)</a></code> <code><a href="quote.html">dbQuoteLiteral(<i>&lt;PqConnection&gt;</i>,<i>&lt;character&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Quote postgres strings, identifiers, and literals</p></td>
       </tr>
 </tbody>
 </table>
