@@ -105,22 +105,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      if (!copy) {
-        value <- sqlData(conn, value, row.names = FALSE)
-
-        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-        dbExecute(conn, sql)
-      } else {
-        value <- sql_data_copy(value, row.names = FALSE)
-
-        fields <- dbQuoteIdentifier(conn, names(value))
-        sql <- paste0(
-          "COPY ", dbQuoteIdentifier(conn, name),
-          " (", paste(fields, collapse = ", "), ")",
-          " FROM STDIN"
-        )
-        connection_copy_data(conn@ptr, sql, value)
-      }
+      db_append_table(conn, name, value, copy, warn = FALSE)
     }
 
     invisible(TRUE)
@@ -185,22 +170,34 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, ..., row.names = NULL) {
+  function(conn, name, value, copy = TRUE, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
-
-    query <- sqlAppendTableTemplate(
-      con = conn,
-      table = name,
-      values = value,
-      row.names = row.names,
-      prefix = "$",
-      pattern = "1",
-      ...
-    )
-
-    dbExecute(conn, query, params = unname(as.list(value)))
+    db_append_table(conn, name, value, copy = copy, warn = TRUE)
   }
 )
+
+db_append_table <- function(conn, name, value, copy, warn) {
+  value <- factor_to_string(value, warn = warn)
+
+  if (copy) {
+    value <- sql_data_copy(value, row.names = FALSE)
+
+    fields <- dbQuoteIdentifier(conn, names(value))
+    sql <- paste0(
+      "COPY ", dbQuoteIdentifier(conn, name),
+      " (", paste(fields, collapse = ", "), ")",
+      " FROM STDIN"
+    )
+    connection_copy_data(conn@ptr, sql, value)
+  } else {
+    value <- sqlData(conn, value, row.names = FALSE)
+
+    sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+    dbExecute(conn, sql)
+  }
+
+  nrow(value)
+}
 
 #' @export
 #' @param check.names If `TRUE`, the default, column names will be

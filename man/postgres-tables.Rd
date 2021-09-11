@@ -30,7 +30,7 @@
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{PqConnection}(conn, name, value, ..., row.names = NULL)
+\S4method{dbAppendTable}{PqConnection}(conn, name, value, copy = TRUE, ..., row.names = NULL)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ..., check.names = TRUE, row.names = FALSE)
 
