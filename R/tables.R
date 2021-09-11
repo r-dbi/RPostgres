@@ -177,7 +177,7 @@ setMethod("dbAppendTable", c("PqConnection"),
 )
 
 db_append_table <- function(conn, name, value, copy, warn) {
-  value = factor_to_string(value, warn = warn)
+  value <- factor_to_string(value, warn = warn)
 
   if (copy) {
     value <- sql_data_copy(value, row.names = FALSE)
