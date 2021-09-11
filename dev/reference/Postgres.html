@@ -181,7 +181,7 @@ to use the <span class="pkg">RPostgres</span> package.</p></td>
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, <code>expand_dbname</code> is set to
 <code>false</code> in the call to
-<a href='https://www.postgresql.org/docs/9.6/static/libpq-connect.html'><code>PQconnectdbParams()</code></a>).</p></td>
+<a href='https://www.postgresql.org/docs/current/libpq-connect.html'><code>PQconnectdbParams()</code></a>).</p></td>
     </tr>
     <tr>
       <th>host, port</th>
@@ -193,21 +193,21 @@ be parsed as a connection string (internally, <code>expand_dbname</code> is set 
       <td><p>User name and password. If <code>NULL</code>, will be
 retrieved from <code>PGUSER</code> and <code>PGPASSWORD</code> envvars, or from the
 appropriate line in <code>~/.pgpass</code>. See
-<a href='http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html'>http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html</a> for
+<a href='https://www.postgresql.org/docs/current/libpq-pgpass.html'>https://www.postgresql.org/docs/current/libpq-pgpass.html</a> for
 more details.</p></td>
     </tr>
     <tr>
       <th>service</th>
       <td><p>Name of service to connect as.  If <code>NULL</code>, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-file and used.  See <a href='http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html'>http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html</a>
+file and used.  See <a href='https://www.postgresql.org/docs/current/libpq-pgservice.html'>https://www.postgresql.org/docs/current/libpq-pgservice.html</a>
 for details on this file and syntax.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Other name-value pairs that describe additional connection
 options as described at
-<a href='http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS'>http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></td>
+<a href='https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS'>https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></td>
     </tr>
     <tr>
       <th>bigint</th>

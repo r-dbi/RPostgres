@@ -164,7 +164,7 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/sqlData.html'>sqlData</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>value</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, copy <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>...</span>, check.names <span class='op'>=</span> <span class='cn'>TRUE</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
