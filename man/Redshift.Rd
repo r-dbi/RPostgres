@@ -32,7 +32,7 @@ to use the \pkg{RPostgres} package.}
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, \code{expand_dbname} is set to
 \code{false} in the call to
-\href{https://www.postgresql.org/docs/9.6/static/libpq-connect.html}{\code{PQconnectdbParams()}}).}
+\href{https://www.postgresql.org/docs/current/libpq-connect.html}{\code{PQconnectdbParams()}}).}
 
 \item{host}{Host and port. If \code{NULL}, will be retrieved from
 \code{PGHOST} and \code{PGPORT} env vars.}
@@ -43,23 +43,23 @@ be parsed as a connection string (internally, \code{expand_dbname} is set to
 \item{password}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
 appropriate line in \verb{~/.pgpass}. See
-\url{http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html} for
+\url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for
 more details.}
 
 \item{user}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
 appropriate line in \verb{~/.pgpass}. See
-\url{http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html} for
+\url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for
 more details.}
 
 \item{service}{Name of service to connect as.  If \code{NULL}, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-file and used.  See \url{http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html}
+file and used.  See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html}
 for details on this file and syntax.}
 
 \item{...}{Other name-value pairs that describe additional connection
 options as described at
-\url{http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
+\url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
 default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
