@@ -24,7 +24,6 @@
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
 #'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
-#' @param warn If `TRUE`, warns user when converting from factor to string.
 #'
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
@@ -106,7 +105,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      dbAppendTable(conn, name, value, copy, warn = FALSE)
+      db_append_table(conn, name, value, copy, warn = FALSE)
     }
 
     invisible(TRUE)
@@ -171,35 +170,34 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, copy = TRUE, warn = TRUE, ..., row.names = NULL) {
+  function(conn, name, value, copy = TRUE, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
-
-    row.names <- FALSE
-
-    value = factor_to_string(value, warn = warn)
-
-    value <- sqlRownamesToColumn(value, row.names)
-
-    if (!copy) {
-      value <- sqlData(conn, value, row.names = FALSE)
-
-      sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-      dbExecute(conn, sql)
-    } else {
-      value <- sql_data_copy(value, row.names = FALSE)
-
-      fields <- dbQuoteIdentifier(conn, names(value))
-      sql <- paste0(
-        "COPY ", dbQuoteIdentifier(conn, name),
-        " (", paste(fields, collapse = ", "), ")",
-        " FROM STDIN"
-      )
-      connection_copy_data(conn@ptr, sql, value)
-    }
-
-    nrow(value)
+    db_append_table(conn, name, value, copy = copy, warn = TRUE)
   }
 )
+
+db_append_table <- function(conn, name, value, copy, warn) {
+  value = factor_to_string(value, warn = warn)
+
+  if (copy) {
+    value <- sql_data_copy(value, row.names = FALSE)
+
+    fields <- dbQuoteIdentifier(conn, names(value))
+    sql <- paste0(
+      "COPY ", dbQuoteIdentifier(conn, name),
+      " (", paste(fields, collapse = ", "), ")",
+      " FROM STDIN"
+    )
+    connection_copy_data(conn@ptr, sql, value)
+  } else {
+    value <- sqlData(conn, value, row.names = FALSE)
+
+    sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+    dbExecute(conn, sql)
+  }
+
+  nrow(value)
+}
 
 #' @export
 #' @param check.names If `TRUE`, the default, column names will be
