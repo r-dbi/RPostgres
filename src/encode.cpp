@@ -88,8 +88,8 @@ void encode_in_buffer(RObject x, int i, std::string& buffer) {
           buffer.append("-Infinity");
         }
       } else {
-        char buf[15 + 1 + 1 + 4 + 1]; // minus + decimal + exponent + \0
-        snprintf(buf, 22, "%.15g", value);
+        char buf[17 + 1 + 1 + 4 + 1]; // minus + decimal + exponent + \0
+        snprintf(buf, sizeof(buf), "%.17g", value);
         buffer.append(buf);
       }
       break;
