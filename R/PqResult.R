@@ -57,34 +57,31 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' fetches and clears for you.
 #'
 #' @param conn A [PqConnection-class] created by [dbConnect()].
-#' @param statement An SQL string to execute
+#' @param statement An SQL string to execute.
 #' @param params A list of query parameters to be substituted into
 #'   a parameterised query. Query parameters are sent as strings, and the
 #'   correct type is imputed by PostgreSQL. If this fails, you can manually
 #'   cast the parameter with e.g. `"$1::bigint"`.
-#' @param ... Another arguments needed for compatibility with generic (
-#'   currently ignored).
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @param ... Other arguments needed for compatibility with generic (currently
+#'   ignored).
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) db <- dbConnect(RPostgres::Postgres())
-#' if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+#' db <- dbConnect(RPostgres::Postgres())
+#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
-#' if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+#' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 #'
 #' # Send query to pull requests in batches
-#' if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbHasCompleted(res)
-#' if (run) dbClearResult(res)
+#' res <- dbSendQuery(db, "SELECT * FROM usarrests")
+#' dbFetch(res, n = 2)
+#' dbFetch(res, n = 2)
+#' dbHasCompleted(res)
+#' dbClearResult(res)
 #'
-#' if (run) dbRemoveTable(db, "usarrests")
+#' dbRemoveTable(db, "usarrests")
 #'
-#' if (run) dbDisconnect(db)
+#' dbDisconnect(db)
 #' @name postgres-query
 NULL
 

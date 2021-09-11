@@ -27,22 +27,21 @@ A boolean, indicating success or failure.
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) con <- dbConnect(RPostgres::Postgres())
-if (run) dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
-if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+con <- dbConnect(RPostgres::Postgres())
+dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
+dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 
-if (run) dbBegin(con)
-if (run) dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
-if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
-if (run) dbRollback(con)
+dbBegin(con)
+dbExecute(con, 'DELETE from "USarrests" WHERE "Murder" > 1')
+dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+dbRollback(con)
 
 # Rolling back changes leads to original count
-if (run) dbGetQuery(con, 'SELECT count(*) from "USarrests"')
+dbGetQuery(con, 'SELECT count(*) from "USarrests"')
 
-if (run) dbRemoveTable(con, "USarrests")
-if (run) dbDisconnect(con)
+dbRemoveTable(con, "USarrests")
+dbDisconnect(con)
+\dontshow{\}) # examplesIf}
 }

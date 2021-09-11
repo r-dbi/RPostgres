@@ -55,3 +55,20 @@ test_that("error if passing unkown parameters", {
   skip_on_cran()
   expect_error(dbConnect(Postgres(), fruit = "apple"), 'invalid connection option "fruit"')
 })
+
+test_that("NOTICEs are captured as messages", {
+  skip_on_cran()
+
+  con <- postgresDefault()
+  on.exit(dbDisconnect(con))
+
+  expect_message(
+    DBI::dbExecute(con, "
+    DO language plpgsql $$
+      BEGIN
+        RAISE NOTICE 'hello, world!';
+      END
+    $$;"),
+    "hello, world"
+  )
+})

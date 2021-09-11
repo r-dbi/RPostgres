@@ -22,15 +22,15 @@
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{\link[=dbConnect]{dbConnect()}}.}
 
-\item{statement}{An SQL string to execute}
+\item{statement}{An SQL string to execute.}
 
 \item{params}{A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the
 correct type is imputed by PostgreSQL. If this fails, you can manually
 cast the parameter with e.g. \code{"$1::bigint"}.}
 
-\item{...}{Another arguments needed for compatibility with generic (
-currently ignored).}
+\item{...}{Other arguments needed for compatibility with generic (currently
+ignored).}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
@@ -55,24 +55,23 @@ results (and they'll fit in memory) use \code{dbGetQuery()} which sends,
 fetches and clears for you.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) db <- dbConnect(RPostgres::Postgres())
-if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+db <- dbConnect(RPostgres::Postgres())
+dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 
 # Run query to get results as dataframe
-if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 
 # Send query to pull requests in batches
-if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
-if (run) dbFetch(res, n = 2)
-if (run) dbFetch(res, n = 2)
-if (run) dbHasCompleted(res)
-if (run) dbClearResult(res)
+res <- dbSendQuery(db, "SELECT * FROM usarrests")
+dbFetch(res, n = 2)
+dbFetch(res, n = 2)
+dbHasCompleted(res)
+dbClearResult(res)
 
-if (run) dbRemoveTable(db, "usarrests")
+dbRemoveTable(db, "usarrests")
 
-if (run) dbDisconnect(db)
+dbDisconnect(db)
+\dontshow{\}) # examplesIf}
 }

@@ -166,13 +166,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @rdname Postgres
-#' @examples
-#' if (postgresHasDefault()) {
-#'   library(DBI)
-#'   # Pass more arguments as necessary to dbConnect()
-#'   con <- dbConnect(RPostgres::Postgres())
-#'   dbDisconnect(con)
-#' }
+#' @examplesIf postgresHasDefault()
+#' library(DBI)
+#' # Pass more arguments as necessary to dbConnect()
+#' con <- dbConnect(RPostgres::Postgres())
+#' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
@@ -205,6 +203,9 @@ setMethod("dbConnect", "PqDriver",
     )
     on.exit(dbDisconnect(conn))
 
+    # set datestyle workaround - https://github.com/r-dbi/RPostgres/issues/287
+    dbExecute(conn, "SET datestyle to iso, mdy")
+
     if (!is.null(timezone)) {
       # Side effect: check if time zone valid
       dbExecute(conn, paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)))
@@ -233,7 +234,11 @@ check_tz <- function(timezone) {
   arg_name <- deparse(substitute(timezone))
 
   tryCatch(
-    lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone),
+    {
+      # Side effect: check if time zone is valid
+      lubridate::force_tz(as.POSIXct("2021-03-01 10:40"), timezone)
+      timezone
+    },
     error = function(e) {
       warning(
         "Invalid time zone '", timezone, "', ",
@@ -242,11 +247,9 @@ check_tz <- function(timezone) {
         conditionMessage(e),
         call. = FALSE
       )
-      timezone <- ""
+      ""
     }
   )
-
-  timezone
 }
 
 # dbDisconnect() (after dbConnect() to maintain order in documentation)
@@ -273,36 +276,33 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #'   \item{payload}{Content of notification}
 #' }
 #' If no notifications are available, return NULL
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' if (postgresHasDefault()) {
+#' @examplesIf postgresHasDefault()
+#' library(DBI)
+#' library(callr)
+#'
+#' # listen for messages on the grapevine
+#' db_listen <- dbConnect(RPostgres::Postgres())
+#' dbExecute(db_listen, "LISTEN grapevine")
+#'
+#' # Start another process, which sends a message after a delay
+#' rp <- r_bg(function () {
 #'     library(DBI)
-#'     library(callr)
+#'     Sys.sleep(0.3)
+#'     db_notify <- dbConnect(RPostgres::Postgres())
+#'     dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
+#'     dbDisconnect(db_notify)
+#' })
 #'
-#'     # listen for messages on the grapevine
-#'     db_listen <- dbConnect(RPostgres::Postgres())
-#'     dbExecute(db_listen, "LISTEN grapevine")
-#'
-#'     # Start another process, which sends a message after a delay
-#'     rp <- r_bg(function () {
-#'         library(DBI)
-#'         Sys.sleep(0.3)
-#'         db_notify <- dbConnect(RPostgres::Postgres())
-#'         dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
-#'         dbDisconnect(db_notify)
-#'     })
-#'
-#'     # Sleep until we get the message
-#'     n <- NULL
-#'     while (is.null(n)) {
-#'         n <- RPostgres::postgresWaitForNotify(db_listen, 60)
-#'     }
-#'     stopifnot(n$payload == 'psst')
-#'
-#'     # Tidy up
-#'     rp$wait()
-#'     dbDisconnect(db_listen)
+#' # Sleep until we get the message
+#' n <- NULL
+#' while (is.null(n)) {
+#'     n <- RPostgres::postgresWaitForNotify(db_listen, 60)
 #' }
+#' stopifnot(n$payload == 'psst')
+#'
+#' # Tidy up
+#' rp$wait()
+#' dbDisconnect(db_listen)
 postgresWaitForNotify <- function (conn, timeout = 1) {
   out <- connection_wait_for_notify(conn@ptr, timeout)
   if ('pid' %in% names(out)) out else NULL

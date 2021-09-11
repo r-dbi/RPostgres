@@ -69,7 +69,7 @@ con <- dbConnect(RPostgres::Postgres())
 dbExecute(con, "LISTEN grapevine")
 ```
 
-...in this case, "grapevine" is arbitary, we don't need to create channels ahead of time.
+...in this case, "grapevine" is arbitrary, we don't need to create channels ahead of time.
 To make sure we have something to receive, we can start a separate R process using [callr](https://CRAN.R-project.org/package=callr).
 Ordinarily this would be part of another R script, maybe on another computer.
 This will wait a bit, and use ``NOTIFY`` to send a message, then finish:

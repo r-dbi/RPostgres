@@ -32,6 +32,8 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
   }
 
   PQsetClientEncoding(pConn_, "UTF-8");
+
+  PQsetNoticeProcessor(pConn_, &process_notice, this);
 }
 
 DbConnection::~DbConnection() {
@@ -296,4 +298,9 @@ List DbConnection::wait_for_notify(int timeout_secs) {
         stop("select() on the connection failed");
     }
   }
+}
+
+void DbConnection::process_notice(void* /*This*/, const char* message) {
+  Rcpp::CharacterVector msg(message);
+  Rcpp::message(msg);
 }

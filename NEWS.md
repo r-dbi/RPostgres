@@ -1,8 +1,37 @@
-# RPostgres 1.3.0.9000 (2021-01-05)
+<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-- `configure` uses a shell script and no longer forwards to `src/configure.bash` (#265).
-- `dbConnect()` defaults to `timezone_out = NULL`, this means to use `timezone`.
+# RPostgres 1.3.3.9000 (2021-07-05)
+
+- Same as previous version.
+
+
+# RPostgres 1.3.3 (2021-07-05)
+
+- Fix `dbConnect(check_interrupts = TRUE)` on Windows (#244, @zozlak).
+- Windows: update to libpq 13.2.0 and add UCRT support (#309, @jeroen).
+
+
+# RPostgres 1.3.2 (2021-04-12)
+
+- Remove BH dependency by inlining the header files (#300).
+- Use Autobrew if libpq is older than version 12 (#294, @jeroen).
+- `dbConnect()` now issues `SET datestyle to iso, mdy` to avoid translation errors for datetime values with databases configured differently (#287, @baderstine).
+
+
+# RPostgres 1.3.1 (2021-01-19)
+
+## Bug fixes
+
 - `Inf`, `-Inf` and `NaN` values are returned correctly on Windows (#267).
+- Fix behavior with invalid time zone (#284, @ateucher).
+
+## Internal
+
+- `dbConnect()` defaults to `timezone_out = NULL`, this means to use `timezone`.
+- `FORCE_AUTOBREW` environment variable enforces use of `autobrew` in `configure` (#283, @jeroen).
+- Fix `configure` on macOS, small tweaks (#282, #283, @jeroen).
+- Fix `configure` script, remove `$()` not reliably detected by `checkbashisms`.
+- `configure` uses a shell script and no longer forwards to `src/configure.bash` (#265).
 
 
 # RPostgres 1.3.0 (2021-01-05)
@@ -25,7 +54,7 @@
 
 # RPostgres 1.2.1 (2020-09-28)
 
-- Gains new `Redshift` driver for connecting to Redshift databases.  
+- Gains new `Redshift` driver for connecting to Redshift databases.
   Redshift databases behave almost identically to Postgres so this
   driver allows downstream packages to distinguish between the two (#258).
 - Datetime values are now passed to the database using an unambiguous time zone format (#255, @imlijunda).
@@ -108,8 +137,8 @@
 
 # RPostgres 1.0-4 (2017-12-20)
 
-- Only call `PQcancel()` if the query hasn't completed, fixes transactions on Amazon RedShift (#159, @mmuurr).
-- Fix installation on MacOS.
+- Only call `PQcancel()` if the query hasn't completed, fixes transactions on Amazon Redshift (#159, @mmuurr).
+- Fix installation on macOS.
 - Check libpq version in configure script (need at least 9.0).
 - Fix UBSAN warning: reference binding to null pointer (#156).
 - Fix rchk warning: PROTECT internal temporary SEXP objects (#157).

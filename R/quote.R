@@ -7,19 +7,17 @@ NULL
 #' at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
-#' @param x A character to escaped
-#' @param ... Other arguments needed for compatibility with generic
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @param x A character vector to be quoted.
+#' @param ... Other arguments needed for compatibility with generic (currently
+#'   ignored).
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) con <- dbConnect(RPostgres::Postgres())
+#' con <- dbConnect(RPostgres::Postgres())
 #'
 #' x <- c("a", "b c", "d'e", "\\f")
-#' if (run) dbQuoteString(con, x)
-#' if (run) dbQuoteIdentifier(con, x)
-#' if (run) dbDisconnect(con)
+#' dbQuoteString(con, x)
+#' dbQuoteIdentifier(con, x)
+#' dbDisconnect(con)
 #' @name quote
 NULL
 
