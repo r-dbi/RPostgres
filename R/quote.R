@@ -25,8 +25,13 @@ NULL
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
   if (length(x) == 0) return(SQL(character()))
-  res <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
-  res
+  if (is(conn, "RedshiftConnection")) {
+    out <- paste0("'", gsub("(['\\\\])", "\\1\\1", enc2utf8(x)), "'")
+    out[is.na(x)] <- "NULL"
+  } else {
+    out <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
+  }
+  out
 })
 
 #' @export
