@@ -24,6 +24,8 @@
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
 #'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
+#'   The default maps to `TRUE` on connections established via [Postgres()]
+#'   and to `FALSE` on connections established via [Redshift()].
 #'
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
@@ -47,7 +49,7 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
-           field.types = NULL, temporary = FALSE, copy = TRUE) {
+           field.types = NULL, temporary = FALSE, copy = NULL) {
 
     if (is.null(row.names)) row.names <- FALSE
     if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
@@ -181,7 +183,7 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, copy = TRUE, ..., row.names = NULL) {
+  function(conn, name, value, copy = NULL, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
     stopifnot(is.data.frame(value))
     db_append_table(conn, name, value, copy = copy, warn = TRUE)
@@ -190,6 +192,10 @@ setMethod("dbAppendTable", c("PqConnection"),
 
 db_append_table <- function(conn, name, value, copy, warn) {
   value <- factor_to_string(value, warn = warn)
+
+  if (is.null(copy)) {
+    copy <- !is(conn, "RedshiftConnection")
+  }
 
   if (copy) {
     value <- sql_data_copy(value, row.names = FALSE)
