@@ -72,6 +72,12 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       stopc("Cannot specify `field.types` with `append = TRUE`")
     }
 
+    need_transaction <- !connection_is_transacting(conn)
+    if (need_transaction) {
+      dbBegin(conn)
+      on.exit(dbRollback(conn))
+    }
+
     found <- dbExistsTable(conn, name)
     if (found && !overwrite && !append) {
       stop("Table ", name, " exists in database, and both overwrite and",
@@ -106,6 +112,11 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 
     if (nrow(value) > 0) {
       db_append_table(conn, name, value, copy, warn = FALSE)
+    }
+
+    if (need_transaction) {
+      dbCommit(conn)
+      on.exit(NULL)
     }
 
     invisible(TRUE)
