@@ -282,6 +282,8 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       dbQuoteString(conn, id[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
+  } else if (is(conn, "RedshiftConnection")) {
+    query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
   } else {
     # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
