@@ -157,14 +157,14 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
   append <span class='op'>=</span> <span class='cn'>FALSE</span>,
   field.types <span class='op'>=</span> <span class='cn'>NULL</span>,
   temporary <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  copy <span class='op'>=</span> <span class='cn'>TRUE</span>
+  copy <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/sqlData.html'>sqlData</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>value</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, copy <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, copy <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>...</span>, check.names <span class='op'>=</span> <span class='cn'>TRUE</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
@@ -247,7 +247,9 @@ with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbData
       <td><p>If <code>TRUE</code>, serializes the data frame to a single string
 and uses <code>COPY name FROM stdin</code>. This is fast, but not supported by
 all postgres servers (e.g. Amazon's Redshift). If <code>FALSE</code>, generates
-a single SQL string. This is slower, but always supported.</p></td>
+a single SQL string. This is slower, but always supported.
+The default maps to <code>TRUE</code> on connections established via <code><a href='Postgres.html'>Postgres()</a></code>
+and to <code>FALSE</code> on connections established via <code><a href='Redshift.html'>Redshift()</a></code>.</p></td>
     </tr>
     <tr>
       <th>con</th>
