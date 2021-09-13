@@ -72,7 +72,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       stopc("Cannot specify `field.types` with `append = TRUE`")
     }
 
-    need_transaction <- !connection_is_transacting(conn)
+    need_transaction <- !connection_is_transacting(conn@ptr)
     if (need_transaction) {
       dbBegin(conn)
       on.exit(dbRollback(conn))
