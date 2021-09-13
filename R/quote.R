@@ -146,7 +146,7 @@ setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) {
-  ret <- paste0("'", as.character(x), "'::timestamp")
+  ret <- paste0("'", as.character(lubridate::with_tz(x, conn@timezone)), "'::timestamp")
   ret[is.na(x)] <- "NULL"
   SQL(ret, names = names(ret))
 })
