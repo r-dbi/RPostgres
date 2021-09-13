@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
       </span>
     </div>
 
@@ -128,6 +128,28 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1339001-2021-09-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9001">
+<a href="#rpostgres-1339001-2021-09-13" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9001 (2021-09-13)<small> Unreleased </small></h1>
+<ul><li>
+<code><a href="https://dbi.r-dbi.org/reference/dbExistsTable.html" class="external-link">dbExistsTable()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> now work for Redshift, with the limitation that only the topmost tables on the search path are returned (<a href='https://github.com/r-dbi/RPostgres/issues/215'>#215</a>, <a href='https://github.com/r-dbi/RPostgres/issues/326'>#326</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> default to <code>copy = NULL</code>, this translates to <code>TRUE</code> for <code><a href="../reference/Postgres.html">Postgres()</a></code> and <code>FALSE</code> for <code><a href="../reference/Redshift.html">Redshift()</a></code> connections (<a href='https://github.com/r-dbi/RPostgres/issues/329'>#329</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> quotes values only once for Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/328'>#328</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteString.html" class="external-link">dbQuoteString()</a></code> uses custom quoting routine for Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/327'>#327</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone (<a href='https://github.com/r-dbi/RPostgres/issues/325'>#325</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> uses a transaction (<a href='https://github.com/r-dbi/RPostgres/issues/307'>#307</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> gains <code>copy</code> argument, <code>TRUE</code> by default. If set, data is imported via <code>COPY name FROM STDIN</code> (<a href='https://github.com/r-dbi/RPostgres/issues/241'>#241</a>, <a href='https://github.com/hugheylab'>@hugheylab</a>).</li>
+<li>Order help topics on pkgdown site.</li>
+<li>Use <code>@examplesIf</code> in method documentation.</li>
+<li>Skip timestamp tests on i386 (<a href='https://github.com/r-dbi/RPostgres/issues/318'>#318</a>).</li>
+<li>Postgres <code>NOTICE</code> messages are now forwarded as proper R messages and can be captured and suppressed (<a href='https://github.com/r-dbi/RPostgres/issues/208'>#208</a>).</li>
+</ul></div>
     <div id="rpostgres-1339000-2021-07-05" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.3.9000">
 <a href="#rpostgres-1339000-2021-07-05" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9000 (2021-07-05)<small> Unreleased </small></h1>
