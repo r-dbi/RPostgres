@@ -276,14 +276,17 @@ exists_table <- function(conn, id) {
 }
 
 find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
+  is_redshift <- is(conn, "RedshiftConnection")
+
   if ("schema" %in% names(id)) {
     query <- paste0(
       "(SELECT 1 AS nr, ",
       dbQuoteString(conn, id[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
-  } else if (is(conn, "RedshiftConnection")) {
+  } else if (is_redshift) {
     query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
+    only_first <- FALSE
   } else {
     # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
