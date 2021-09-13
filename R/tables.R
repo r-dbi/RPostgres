@@ -172,6 +172,7 @@ format_keep_na <- function(x, ...) {
 setMethod("dbAppendTable", c("PqConnection"),
   function(conn, name, value, copy = TRUE, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
+    stopifnot(is.data.frame(value))
     db_append_table(conn, name, value, copy = copy, warn = TRUE)
   }
 )
