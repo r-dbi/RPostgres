@@ -384,11 +384,11 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
       in_current_schema <- "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')"
     }
     query <- paste0(
-      "SELECT NULL::varchar(max) AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "SELECT NULL::varchar AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
       "WHERE ",
       in_current_schema, "\n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, NULL::varchar(max) AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, NULL::varchar AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
