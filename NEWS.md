@@ -1,5 +1,20 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.3.9001 (2021-09-13)
+
+- `dbExistsTable()`, `dbListTables()` and `dbListObjects()` now work for Redshift, with the limitation that only the topmost tables on the search path are returned (#215, #326).
+- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329). 
+- `dbAppendTable()` quotes values only once for Redshift (#328).
+- `dbQuoteString()` uses custom quoting routine for Redshift (#327).
+- `dbQuoteLiteral()` converts timestamp values to input time zone (#325).
+- `dbWriteTable()` uses a transaction (#307).
+- `dbAppendTable()` gains `copy` argument, `TRUE` by default. If set, data is imported via `COPY name FROM STDIN` (#241, @hugheylab).
+- Order help topics on pkgdown site.
+- Use `@examplesIf` in method documentation.
+- Skip timestamp tests on i386 (#318).
+- Postgres `NOTICE` messages are now forwarded as proper R messages and can be captured and suppressed (#208).
+
+
 # RPostgres 1.3.3.9000 (2021-07-05)
 
 - Same as previous version.
