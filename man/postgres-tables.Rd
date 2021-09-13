@@ -25,12 +25,12 @@
   append = FALSE,
   field.types = NULL,
   temporary = FALSE,
-  copy = TRUE
+  copy = NULL
 )
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{PqConnection}(conn, name, value, copy = TRUE, ..., row.names = NULL)
+\S4method{dbAppendTable}{PqConnection}(conn, name, value, copy = NULL, ..., row.names = NULL)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ..., check.names = TRUE, row.names = FALSE)
 
@@ -86,7 +86,9 @@ with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).}
 \item{copy}{If \code{TRUE}, serializes the data frame to a single string
 and uses \verb{COPY name FROM stdin}. This is fast, but not supported by
 all postgres servers (e.g. Amazon's Redshift). If \code{FALSE}, generates
-a single SQL string. This is slower, but always supported.}
+a single SQL string. This is slower, but always supported.
+The default maps to \code{TRUE} on connections established via \code{\link[=Postgres]{Postgres()}}
+and to \code{FALSE} on connections established via \code{\link[=Redshift]{Redshift()}}.}
 
 \item{con}{A database connection.}
 
