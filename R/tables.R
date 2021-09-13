@@ -378,12 +378,17 @@ list_fields <- function(conn, id) {
 setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
   if (is.null(prefix)) {
+    if (is(conn, "RedshiftConnection")) {
+      in_current_schema <- "table_schema = current_schema()"
+    } else {
+      in_current_schema <- "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')"
+    }
     query <- paste0(
-      "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "SELECT NULL::varchar(max) AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
       "WHERE ",
-      "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
+      in_current_schema, "\n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, NULL::varchar(max) AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
