@@ -280,12 +280,17 @@ exists_table <- function(conn, id) {
 }
 
 find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
+  is_redshift <- is(conn, "RedshiftConnection")
+
   if ("schema" %in% names(id)) {
     query <- paste0(
       "(SELECT 1 AS nr, ",
       dbQuoteString(conn, id[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
+  } else if (is_redshift) {
+    query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
+    only_first <- FALSE
   } else {
     # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
@@ -377,12 +382,17 @@ list_fields <- function(conn, id) {
 setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
   if (is.null(prefix)) {
+    if (is(conn, "RedshiftConnection")) {
+      in_current_schema <- "table_schema = current_schema()"
+    } else {
+      in_current_schema <- "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')"
+    }
     query <- paste0(
-      "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "SELECT NULL::varchar AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
       "WHERE ",
-      "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
+      in_current_schema, "\n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, NULL::varchar AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
