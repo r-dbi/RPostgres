@@ -186,7 +186,7 @@ type_lookup <- function(x, conn) {
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
   if (!is.null(names(params))) {
-    stop("Named parameters not supported", call. = FALSE)
+    stopc("`params` must not be named.")
   }
   if (!is.list(params)) params <- as.list(params)
 
