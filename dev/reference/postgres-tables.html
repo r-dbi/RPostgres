@@ -202,7 +202,9 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
       <th>name</th>
       <td><p>a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
-just any valid bare table name.</p></td>
+just any valid bare table name.
+Alternatively, pass a name quoted with <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier()</a></code>,
+an <code><a href='https://dbi.r-dbi.org/reference/Id.html'>Id()</a></code> object, or a string escaped with <code><a href='https://dbi.r-dbi.org/reference/SQL.html'>SQL()</a></code>.</p></td>
     </tr>
     <tr>
       <th>value</th>
@@ -235,8 +237,9 @@ in the DBMS. Its default is <code>FALSE</code>.</p></td>
     <tr>
       <th>field.types</th>
       <td><p>character vector of named SQL field types where
-the names are the names of new table's columns. If missing, types inferred
-with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbDataType()</a></code>).</p></td>
+the names are the names of new table's columns.
+If missing, types are inferred with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbDataType()</a></code>).
+The types can only be specified with <code>append = FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>temporary</th>
@@ -273,6 +276,16 @@ If given the method will return all objects accessible through this prefix.</p><
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="schemas-catalogs-tablespaces"><a class="anchor" href="#schemas-catalogs-tablespaces"></a>Schemas, catalogs, tablespaces</h2>
+
+    
+
+<p>Pass an identifier created with <code><a href='https://dbi.r-dbi.org/reference/Id.html'>Id()</a></code> as the <code>name</code> argument
+to specify the schema or catalog, e.g.
+<code>name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")</code> .
+To specify the tablespace, use
+<code>dbExecute(conn, "SET default_tablespace TO my_tablespace")</code>
+before creating the table.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span> <span class='co'># postgresHasDefault()</span></span>
