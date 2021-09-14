@@ -5,6 +5,9 @@ DBItest::make_context(
   NULL,
   name = "RPostgres",
   tweaks = DBItest::tweaks(
+    # Redshift:
+    # omit_blob_tests = TRUE,
+
     placeholder_pattern = "$1",
     date_cast = function(x) paste0("date '", x, "'"),
     time_cast = function(x) paste0("time '", x, "'"),
@@ -16,6 +19,13 @@ DBItest::make_context(
     # Not implemented correctly for i386
     if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
     if (.Platform$r_arch == "i386") "roundtrip_timestamp",
+
+    # Redshift:
+    # "exists_table_temporary",
+    # "remove_table_temporary",
+    # "remove_table_temporary_arg",
+    # "list_objects_temporary",
+    # "list_fields_temporary",
 
     NULL
   )

@@ -191,7 +191,7 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
   if (!is.list(params)) params <- as.list(params)
 
   params <- factor_to_string(params, warn = TRUE)
-  params <- fix_posixt(params)
+  params <- fix_posixt(params, res@conn@timezone)
   params <- difftime_to_hms(params)
   params <- fix_numeric(params)
   params <- prepare_for_binding(params)
@@ -208,11 +208,14 @@ factor_to_string <- function(value, warn = FALSE) {
   value
 }
 
-fix_posixt <- function(value) {
+fix_posixt <- function(value, tz) {
   is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
   withr::with_options(
     list(digits.secs = 6),
-    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, format = "%Y-%m-%dT%H:%M:%OS%z"))
+    value[is_posixt] <- lapply(value[is_posixt], function(col) {
+      tz_col <- lubridate::with_tz(col, tz)
+      format_keep_na(tz_col, format = "%Y-%m-%dT%H:%M:%OS%z")
+    })
   )
   value
 }

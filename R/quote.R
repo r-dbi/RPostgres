@@ -29,9 +29,9 @@ setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...
     out <- paste0("'", gsub("(['\\\\])", "\\1\\1", enc2utf8(x)), "'")
     out[is.na(x)] <- "NULL"
   } else {
-    out <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
+    out <- connection_quote_string(conn@ptr, enc2utf8(x))
   }
-  out
+  SQL(out)
 })
 
 #' @export
