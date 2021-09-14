@@ -139,14 +139,14 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
   value
 })
 
-sql_data_copy <- function(value, row.names = FALSE) {
+sql_data_copy <- function(value, conn, row.names = FALSE) {
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vlapply(value, is.object)
   is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
   is_blob <- vlapply(value, is.list)
   is_character <- vlapply(value, is.character)
 
-  value <- fix_posixt(value)
+  value <- fix_posixt(value, conn@timezone)
 
   value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
   value[is_blob] <- lapply(
@@ -198,7 +198,7 @@ db_append_table <- function(conn, name, value, copy, warn) {
   }
 
   if (copy) {
-    value <- sql_data_copy(value, row.names = FALSE)
+    value <- sql_data_copy(value, conn, row.names = FALSE)
 
     fields <- dbQuoteIdentifier(conn, names(value))
     sql <- paste0(
