@@ -54,7 +54,9 @@
 
 \item{name}{a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
-just any valid bare table name.}
+just any valid bare table name.
+Alternatively, pass a name quoted with \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}},
+an \code{\link[=Id]{Id()}} object, or a string escaped with \code{\link[=SQL]{SQL()}}.}
 
 \item{value}{A data.frame to write to the database.}
 
@@ -78,8 +80,9 @@ or not. Its default is \code{FALSE}.}
 in the DBMS. Its default is \code{FALSE}.}
 
 \item{field.types}{character vector of named SQL field types where
-the names are the names of new table's columns. If missing, types inferred
-with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).}
+the names are the names of new table's columns.
+If missing, types are inferred with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).
+The types can only be specified with \code{append = FALSE}.}
 
 \item{temporary}{If \code{TRUE}, only temporary tables are considered.}
 
@@ -112,6 +115,16 @@ SQL string.
 \code{\link[=dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres}
 uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
 }
+\section{Schemas, catalogs, tablespaces}{
+
+Pass an identifier created with \code{\link[=Id]{Id()}} as the \code{name} argument
+to specify the schema or catalog, e.g.
+\code{name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")} .
+To specify the tablespace, use
+\code{dbExecute(conn, "SET default_tablespace TO my_tablespace")}
+before creating the table.
+}
+
 \examples{
 \dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)

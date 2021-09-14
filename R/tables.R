@@ -6,11 +6,21 @@
 #' benchmarks revealed that this was considerably slower than using a single
 #' SQL string.
 #'
+#' @section Schemas, catalogs, tablespaces:
+#' Pass an identifier created with [Id()] as the `name` argument
+#' to specify the schema or catalog, e.g.
+#' `name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")` .
+#' To specify the tablespace, use
+#' `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
+#' before creating the table.
+#'
 #' @param conn a [PqConnection-class] object, produced by
 #'   [DBI::dbConnect()]
 #' @param name a character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
+#'   Alternatively, pass a name quoted with [dbQuoteIdentifier()],
+#'   an [Id()] object, or a string escaped with [SQL()].
 #' @param value A data.frame to write to the database.
 #' @inheritParams DBI::sqlCreateTable
 #' @param overwrite a logical specifying whether to overwrite an existing table
@@ -18,8 +28,9 @@
 #' @param append a logical specifying whether to append to an existing table
 #'   in the DBMS. Its default is `FALSE`.
 #' @param field.types character vector of named SQL field types where
-#'   the names are the names of new table's columns. If missing, types inferred
-#'   with [DBI::dbDataType()]).
+#'   the names are the names of new table's columns.
+#'   If missing, types are inferred with [DBI::dbDataType()]).
+#'   The types can only be specified with `append = FALSE`.
 #' @param copy If `TRUE`, serializes the data frame to a single string
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
 #'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
