@@ -35,7 +35,7 @@ Imports:
     bit64,
     blob (>= 1.2.0),
     DBI (>= 1.1.0),
-    hms (>= 0.5.0),
+    hms (>= 1.0.0),
     lubridate,
     methods,
     Rcpp (>= 1.0.7),
