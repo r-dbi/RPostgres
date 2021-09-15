@@ -209,6 +209,11 @@ SEXP DbColumnStorage::set_attribs_from_datatype(SEXP x, DATA_TYPE dt) {
   case DT_TIME:
     return new_hms(x);
 
+  case DT_DATETIME: {
+      Rcpp::RObject ro = Rcpp::RObject(x);
+      ro.attr("tzone") = "UTC";
+      return ro;
+    }
   default:
     return x;
   }
