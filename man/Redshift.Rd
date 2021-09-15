@@ -73,6 +73,7 @@ running too long.}
 If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
 }
 \description{
-Redshift currently uses all the same methods as Postgres, but provides an
-extension point for future methods and downstream packages.
+Use \code{Redshift()} instead of \code{Postgres()} to connect to an AWS Redshift cluster.
+All methods in \pkg{RPostgres} and downstream packages can be called on such connections.
+Some have different behavior for Redshift connections, to ensure better interoperability.
 }
