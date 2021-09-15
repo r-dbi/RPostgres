@@ -26,6 +26,8 @@ public:
   ~DbResult();
 
 public:
+  void close();
+
   bool complete() const;
   bool is_active() const;
   int n_rows_fetched();
