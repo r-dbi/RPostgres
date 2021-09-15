@@ -1,7 +1,8 @@
 #' Redshift driver/connection
 #'
-#' Redshift currently uses all the same methods as Postgres, but provides an
-#' extension point for future methods and downstream packages.
+#' Use `Redshift()` instead of `Postgres()` to connect to an AWS Redshift cluster.
+#' All methods in \pkg{RPostgres} and downstream packages can be called on such connections.
+#' Some have different behavior for Redshift connections, to ensure better interoperability.
 #'
 #' @inheritParams Postgres
 #' @export
