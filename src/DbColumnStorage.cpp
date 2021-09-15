@@ -281,11 +281,21 @@ void DbColumnStorage::copy_value(SEXP x, DATA_TYPE dt, const int tgt, const int 
     case DT_INT64:
       switch (TYPEOF(data)) {
       case INTSXP:
-        INTEGER64(x)[tgt] = INTEGER(data)[src];
+        if (INTEGER(data)[src] == NA_INTEGER) {
+          INTEGER64(x)[tgt] = NA_INTEGER64;
+        }
+        else {
+          INTEGER64(x)[tgt] = INTEGER(data)[src];
+        }
         break;
 
       case REALSXP:
-        INTEGER64(x)[tgt] = INTEGER64(data)[src];
+        if (R_IsNA(INTEGER64(data)[src])) {
+          INTEGER64(x)[tgt] = NA_INTEGER64;
+        }
+        else {
+          INTEGER64(x)[tgt] = INTEGER64(data)[src];
+        }
         break;
       }
       break;
@@ -293,7 +303,12 @@ void DbColumnStorage::copy_value(SEXP x, DATA_TYPE dt, const int tgt, const int 
     case DT_REAL:
       switch (TYPEOF(data)) {
       case INTSXP:
-        REAL(x)[tgt] = INTEGER(data)[src];
+        if (INTEGER(data)[src] == NA_INTEGER) {
+          REAL(x)[tgt] = NA_REAL;
+        }
+        else {
+          REAL(x)[tgt] = INTEGER(data)[src];
+        }
         break;
 
       case REALSXP:
