@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "PqResultImpl.h"
+#include "PqResultPrep.h"
 #include "DbConnection.h"
 #include "DbResult.h"
 #include "DbColumnStorage.h"
@@ -12,7 +12,7 @@
 #define SOCKERR errno
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+PqResultPrep::PqResultPrep(const DbConnectionPtr& pConn, const std::string& sql) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
   pSpec_(prepare(pConn_, sql)),
@@ -40,7 +40,7 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
   }
 }
 
-PqResultImpl::~PqResultImpl() {
+PqResultPrep::~PqResultPrep() {
   try {
     if (pSpec_) PQclear(pSpec_);
   } catch (...) {}
@@ -51,7 +51,7 @@ PqResultImpl::~PqResultImpl() {
 
 // Cache ///////////////////////////////////////////////////////////////////////
 
-PqResultImpl::_cache::_cache(PGresult* spec) :
+PqResultPrep::_cache::_cache(PGresult* spec) :
   names_(get_column_names(spec)),
   oids_(get_column_oids(spec)),
   types_(get_column_types(oids_, names_)),
@@ -64,7 +64,7 @@ PqResultImpl::_cache::_cache(PGresult* spec) :
 }
 
 
-std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) {
+std::vector<std::string> PqResultPrep::_cache::get_column_names(PGresult* spec) {
   std::vector<std::string> names;
   int ncols_ = PQnfields(spec);
   names.reserve(ncols_);
@@ -76,7 +76,7 @@ std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) 
   return names;
 }
 
-DATA_TYPE PqResultImpl::_cache::get_column_type_from_oid(const Oid type) {
+DATA_TYPE PqResultPrep::_cache::get_column_type_from_oid(const Oid type) {
   // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
   switch (type) {
   case 20: // BIGINT
@@ -139,7 +139,7 @@ DATA_TYPE PqResultImpl::_cache::get_column_type_from_oid(const Oid type) {
   }
 }
 
-std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec) {
+std::vector<Oid> PqResultPrep::_cache::get_column_oids(PGresult* spec) {
   std::vector<Oid> oids;
   int ncols_ = PQnfields(spec);
   oids.reserve(ncols_);
@@ -150,7 +150,7 @@ std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec) {
   return oids;
 }
 
-std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(const std::vector<Oid>& oids, const std::vector<std::string>& names) {
+std::vector<DATA_TYPE> PqResultPrep::_cache::get_column_types(const std::vector<Oid>& oids, const std::vector<std::string>& names) {
   std::vector<DATA_TYPE> types;
   size_t ncols_ = oids.size();
   types.reserve(ncols_);
@@ -170,7 +170,7 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(const std::vector<
   return types;
 }
 
-std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>& oids) {
+std::vector<bool> PqResultPrep::_cache::get_column_known(const std::vector<Oid>& oids) {
   std::vector<bool> known;
   size_t ncols_ = oids.size();
   known.reserve(ncols_);
@@ -185,7 +185,7 @@ std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>&
   return known;
 }
 
-PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
+PGresult* PqResultPrep::prepare(PGconn* conn, const std::string& sql) {
   // Prepare query
   PGresult* prep = PQprepare(conn, "", sql.c_str(), 0, NULL);
   if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
@@ -204,7 +204,7 @@ PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   return spec;
 }
 
-void PqResultImpl::init(bool params_have_rows) {
+void PqResultPrep::init(bool params_have_rows) {
   ready_ = true;
   nrows_ = 0;
   complete_ = !params_have_rows;
@@ -214,21 +214,21 @@ void PqResultImpl::init(bool params_have_rows) {
 
 // Publics /////////////////////////////////////////////////////////////////////
 
-bool PqResultImpl::complete() const {
+bool PqResultPrep::complete() const {
   return complete_;
 }
 
-int PqResultImpl::n_rows_fetched() {
+int PqResultPrep::n_rows_fetched() {
   return nrows_;
 }
 
-int PqResultImpl::n_rows_affected() {
+int PqResultPrep::n_rows_affected() {
   if (!ready_) return NA_INTEGER;
   if (cache.ncols_ > 0) return 0;
   return rows_affected_;
 }
 
-void PqResultImpl::bind(const List& params) {
+void PqResultPrep::bind(const List& params) {
   if (params.size() != cache.nparams_) {
     stop("Query requires %i params; %i supplied.",
          cache.nparams_, params.size());
@@ -255,7 +255,7 @@ void PqResultImpl::bind(const List& params) {
   after_bind(has_params);
 }
 
-List PqResultImpl::fetch(const int n_max) {
+List PqResultPrep::fetch(const int n_max) {
   if (!ready_)
     stop("Query needs to be bound before fetching");
 
@@ -270,7 +270,7 @@ List PqResultImpl::fetch(const int n_max) {
   return out;
 }
 
-List PqResultImpl::get_column_info() {
+List PqResultPrep::get_column_info() {
   peek_first_row();
 
   CharacterVector names(cache.names_.begin(), cache.names_.end());
@@ -297,11 +297,11 @@ List PqResultImpl::get_column_info() {
 
 // Privates ////////////////////////////////////////////////////////////////////
 
-void PqResultImpl::set_params(const List& params) {
+void PqResultPrep::set_params(const List& params) {
   params_ = params;
 }
 
-bool PqResultImpl::bind_row() {
+bool PqResultPrep::bind_row() {
   LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
 
   if (group_ >= groups_)
@@ -349,13 +349,13 @@ bool PqResultImpl::bind_row() {
   return true;
 }
 
-void PqResultImpl::after_bind(bool params_have_rows) {
+void PqResultPrep::after_bind(bool params_have_rows) {
   init(params_have_rows);
   if (params_have_rows)
     step();
 }
 
-List PqResultImpl::fetch_rows(const int n_max, int& n) {
+List PqResultPrep::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
@@ -380,12 +380,12 @@ List PqResultImpl::fetch_rows(const int n_max, int& n) {
   return ret;
 }
 
-void PqResultImpl::step() {
+void PqResultPrep::step() {
   while (step_run())
     ;
 }
 
-bool PqResultImpl::step_run() {
+bool PqResultPrep::step_run() {
   LOG_VERBOSE;
 
   if (pRes_) PQclear(pRes_);
@@ -428,7 +428,7 @@ bool PqResultImpl::step_run() {
   }
 }
 
-bool PqResultImpl::step_done() {
+bool PqResultPrep::step_done() {
   char* tuples = PQcmdTuples(pRes_);
   rows_affected_ += atoi(tuples);
 
@@ -442,7 +442,7 @@ bool PqResultImpl::step_done() {
   return more_params;
 }
 
-List PqResultImpl::peek_first_row() {
+List PqResultPrep::peek_first_row() {
   PqDataFrame data(this, cache.names_, 1, cache.types_);
 
   if (!complete_)
@@ -454,15 +454,15 @@ List PqResultImpl::peek_first_row() {
   return ret;
 }
 
-void PqResultImpl::conn_stop(const char* msg) const {
+void PqResultPrep::conn_stop(const char* msg) const {
   DbConnection::conn_stop(pConn_, msg);
 }
 
-void PqResultImpl::bind() {
+void PqResultPrep::bind() {
   bind(List());
 }
 
-void PqResultImpl::add_oids(List& data) const {
+void PqResultPrep::add_oids(List& data) const {
   data.attr("oids") = cache.oids_;
   data.attr("known") = cache.known_;
 
@@ -475,13 +475,13 @@ void PqResultImpl::add_oids(List& data) const {
   data.attr("without_tz") = is_without_tz;
 }
 
-PGresult* PqResultImpl::get_result() {
+PGresult* PqResultPrep::get_result() {
   return pRes_;
 }
 
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
-void PqResultImpl::wait_for_data() {
+void PqResultPrep::wait_for_data() {
   if (!pConnPtr_->is_check_interrupts())
     return;
 

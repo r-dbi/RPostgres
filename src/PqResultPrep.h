@@ -9,7 +9,7 @@
 class DbConnection;
 typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
-class PqResultImpl : boost::noncopyable, public PqResultSource {
+class PqResultPrep : boost::noncopyable, public PqResultSource {
   // Back pointer
   boost::shared_ptr<DbConnection> pConnPtr_;
 
@@ -46,8 +46,8 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
-  ~PqResultImpl();
+  PqResultPrep(const DbConnectionPtr& pConn, const std::string& sql);
+  ~PqResultPrep();
 
 private:
   static PGresult* prepare(PGconn* conn, const std::string& sql);
