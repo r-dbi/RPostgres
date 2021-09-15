@@ -65,6 +65,11 @@ List DbResult::get_column_info() {
   return out;
 }
 
+void DbResult::close() {
+  // Called from destructor
+  if (impl) impl->close();
+}
+
 // Privates ///////////////////////////////////////////////////////////////////
 
 void DbResult::validate_params(const List& params) const {

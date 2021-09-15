@@ -54,6 +54,7 @@ private:
   void init(bool params_have_rows);
 
 public:
+  void close() {} // FIXME
   bool complete() const;
   int n_rows_fetched();
   int n_rows_affected();
