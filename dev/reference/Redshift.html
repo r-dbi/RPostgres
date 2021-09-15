@@ -40,8 +40,9 @@
 
 
 <meta property="og:title" content="Redshift driver/connection — Redshift" />
-<meta property="og:description" content="Redshift currently uses all the same methods as Postgres, but provides an
-extension point for future methods and downstream packages." />
+<meta property="og:description" content="Use Redshift() instead of Postgres() to connect to an AWS Redshift cluster.
+All methods in RPostgres and downstream packages can be called on such connections.
+Some have different behavior for Redshift connections, to ensure better interoperability." />
 
 
 <meta name="robots" content="noindex">
@@ -132,8 +133,9 @@ extension point for future methods and downstream packages." />
     </div>
 
     <div class="ref-description">
-    <p>Redshift currently uses all the same methods as Postgres, but provides an
-extension point for future methods and downstream packages.</p>
+    <p>Use <code>Redshift()</code> instead of <code><a href='Postgres.html'>Postgres()</a></code> to connect to an AWS Redshift cluster.
+All methods in <span class="pkg">RPostgres</span> and downstream packages can be called on such connections.
+Some have different behavior for Redshift connections, to ensure better interoperability.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>Redshift</span><span class='op'>(</span><span class='op'>)</span>
