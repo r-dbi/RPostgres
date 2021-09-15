@@ -1,2 +1,2 @@
-class PqResultPrep;
-typedef PqResultPrep DbResultImpl;
+class PqResultImpl;
+typedef PqResultImpl DbResultImpl;

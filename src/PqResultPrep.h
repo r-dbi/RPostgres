@@ -1,15 +1,16 @@
-#ifndef RPOSTGRES_PQRESULTIMPL_H
-#define RPOSTGRES_PQRESULTIMPL_H
+#ifndef RPOSTGRES_PQRESULTPREP_H
+#define RPOSTGRES_PQRESULTPREP_H
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include "DbColumnDataType.h"
+#include "PqResultImpl.h"
 #include "PqResultSource.h"
 
 class DbConnection;
 typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
-class PqResultPrep : boost::noncopyable, public PqResultSource {
+class PqResultPrep : boost::noncopyable, public PqResultImpl, public PqResultSource {
   // Back pointer
   boost::shared_ptr<DbConnection> pConnPtr_;
 
@@ -54,14 +55,18 @@ private:
   void init(bool params_have_rows);
 
 public:
-  void close() {} // FIXME
-  bool complete() const;
-  int n_rows_fetched();
-  int n_rows_affected();
-  void bind(const List& params);
-  List fetch(const int n_max);
+  // PgResultImpl
+  virtual void close();
 
-  List get_column_info();
+  virtual void bind(const List& params);
+
+  virtual List get_column_info();
+
+  virtual List fetch(int n_max = -1);
+
+  virtual int n_rows_affected();
+  virtual int n_rows_fetched();
+  virtual bool complete();
 
 private:
   void set_params(const List& params);

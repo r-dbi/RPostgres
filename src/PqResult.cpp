@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "PqResult.h"
-#include "DbResultImpl.h"
+#include "PqResultPrep.h"
 
 
 
@@ -9,7 +9,7 @@
 PqResult::PqResult(const DbConnectionPtr& pConn, const std::string& sql) :
   DbResult(pConn)
 {
-  impl.reset(new DbResultImpl(pConn, sql));
+  impl.reset(new PqResultPrep(pConn, sql));
 }
 
 

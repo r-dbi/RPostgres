@@ -214,18 +214,8 @@ void PqResultPrep::init(bool params_have_rows) {
 
 // Publics /////////////////////////////////////////////////////////////////////
 
-bool PqResultPrep::complete() const {
-  return complete_;
-}
-
-int PqResultPrep::n_rows_fetched() {
-  return nrows_;
-}
-
-int PqResultPrep::n_rows_affected() {
-  if (!ready_) return NA_INTEGER;
-  if (cache.ncols_ > 0) return 0;
-  return rows_affected_;
+void PqResultPrep::close() {
+  // FIXME
 }
 
 void PqResultPrep::bind(const List& params) {
@@ -255,21 +245,6 @@ void PqResultPrep::bind(const List& params) {
   after_bind(has_params);
 }
 
-List PqResultPrep::fetch(const int n_max) {
-  if (!ready_)
-    stop("Query needs to be bound before fetching");
-
-  int n = 0;
-  List out;
-
-  if (n_max != 0)
-    out = fetch_rows(n_max, n);
-  else
-    out = peek_first_row();
-
-  return out;
-}
-
 List PqResultPrep::get_column_info() {
   peek_first_row();
 
@@ -286,6 +261,35 @@ List PqResultPrep::get_column_info() {
     _[".oid"] = cache.oids_,
     _[".known"] = cache.known_
   );
+}
+
+List PqResultPrep::fetch(const int n_max) {
+  if (!ready_)
+    stop("Query needs to be bound before fetching");
+
+  int n = 0;
+  List out;
+
+  if (n_max != 0)
+    out = fetch_rows(n_max, n);
+  else
+    out = peek_first_row();
+
+  return out;
+}
+
+int PqResultPrep::n_rows_fetched() {
+  return nrows_;
+}
+
+int PqResultPrep::n_rows_affected() {
+  if (!ready_) return NA_INTEGER;
+  if (cache.ncols_ > 0) return 0;
+  return rows_affected_;
+}
+
+bool PqResultPrep::complete() {
+  return complete_;
 }
 
 
