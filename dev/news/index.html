@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9002</span>
       </span>
     </div>
 
@@ -128,6 +128,15 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-1339002-2021-09-15" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9002">
+<a href="#rpostgres-1339002-2021-09-15" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9002 (2021-09-15)<small> Unreleased </small></h1>
+<ul><li>Document when <code>field.types</code> is used in <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/206'>#206</a>).</li>
+<li>Document setting the tablespace before writing a table (<a href='https://github.com/r-dbi/RPostgres/issues/246'>#246</a>).</li>
+<li>Tweak error message for named <code>params</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/266'>#266</a>).</li>
+<li>
+<code><a href="../reference/Redshift.html">Redshift()</a></code> connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary tables (<a href='https://github.com/r-dbi/RPostgres/issues/215'>#215</a>).</li>
+</ul></div>
     <div id="rpostgres-1339001-2021-09-13" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.3.9001">
 <a href="#rpostgres-1339001-2021-09-13" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9001 (2021-09-13)<small> Unreleased </small></h1>
