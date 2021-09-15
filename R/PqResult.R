@@ -87,7 +87,9 @@ NULL
 
 #' @export
 #' @rdname postgres-query
-setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ...) {
+setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ...) {
+  stopifnot(is.character(statement))
+
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
