@@ -10,6 +10,8 @@
 PqResult::PqResult(const DbConnectionPtr& pConn, const std::string& sql, const bool immediate) :
   DbResult(pConn)
 {
+  LOG_DEBUG << immediate;
+
   if (immediate) {
     impl.reset(new PqResultSimple(pConn, sql));
   }

@@ -15,31 +15,19 @@
 PqResultSimple::PqResultSimple(const DbConnectionPtr& pConn, const std::string& sql) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
-  pSpec_(prepare(pConn_, sql)),
-  cache(pSpec_),
+  pRes_(prepare(pConn_, sql)),
+  cache(pRes_),
   complete_(false),
-  ready_(false),
-  data_ready_(false),
+  ready_(true),
+  data_ready_(true),
   nrows_(0),
-  rows_affected_(0),
-  pRes_(NULL)
+  rows_affected_(0)
 {
 
   LOG_DEBUG << sql;
-
-  try {
-    bind();
-  } catch (...) {
-    PQclear(pSpec_);
-    pSpec_ = NULL;
-    throw;
-  }
 }
 
 PqResultSimple::~PqResultSimple() {
-  try {
-    if (pSpec_) PQclear(pSpec_);
-  } catch (...) {}
   if (pRes_) PQclear(pRes_);
 }
 
@@ -179,9 +167,16 @@ std::vector<bool> PqResultSimple::_cache::get_column_known(const std::vector<Oid
 }
 
 PGresult* PqResultSimple::prepare(PGconn* conn, const std::string& sql) {
+  LOG_DEBUG << sql;
+
+  LOG_DEBUG << conn;
+
   // Execute query
   PGresult* spec = PQexec(conn, sql.c_str());
-  if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
+  ExecStatusType status = PQresultStatus(spec);
+  if (status != PGRES_COMMAND_OK && status != PGRES_TUPLES_OK) {
+    LOG_VERBOSE << PQresultStatus(spec);
+
     PQclear(spec);
     DbConnection::conn_stop(conn, "Failed to execute query");
   }
@@ -290,15 +285,7 @@ List PqResultSimple::fetch_rows(const int n_max, int& n) {
 void PqResultSimple::step() {
   LOG_VERBOSE;
 
-  if (pRes_) PQclear(pRes_);
-
-  // Check user interrupts while waiting for the data to be ready
-  if (!data_ready_) {
-    wait_for_data();
-    data_ready_ = true;
-  }
-
-  pRes_ = PQgetResult(pConn_);
+  data_ready_ = true;
 
   // We're done, but we need to call PQgetResult until it returns NULL
   if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
@@ -351,10 +338,6 @@ List PqResultSimple::peek_first_row() {
 
 void PqResultSimple::conn_stop(const char* msg) const {
   DbConnection::conn_stop(pConn_, msg);
-}
-
-void PqResultSimple::bind() {
-  bind(List());
 }
 
 void PqResultSimple::add_oids(List& data) const {

@@ -16,7 +16,7 @@ class PqResultSimple : boost::noncopyable, public PqResultImpl, public PqResultS
 
   // Wrapped pointer
   PGconn* pConn_;
-  PGresult* pSpec_;
+  PGresult* pRes_;
 
   // Cache
   struct _cache {
@@ -42,7 +42,6 @@ class PqResultSimple : boost::noncopyable, public PqResultImpl, public PqResultS
   int nrows_;
   int rows_affected_;
   List params_;
-  PGresult* pRes_;
 
 public:
   PqResultSimple(const DbConnectionPtr& pConn, const std::string& sql);
@@ -74,8 +73,6 @@ private:
 
 private:
   void conn_stop(const char* msg) const;
-
-  void bind();
 
   void add_oids(List& data) const;
 
