@@ -37,11 +37,8 @@ class PqResultSimple : boost::noncopyable, public PqResultImpl, public PqResultS
 
   // State
   bool complete_;
-  bool ready_;
-  bool data_ready_;
   int nrows_;
   int rows_affected_;
-  List params_;
 
 public:
   PqResultSimple(const DbConnectionPtr& pConn, const std::string& sql);

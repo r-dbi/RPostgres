@@ -18,8 +18,6 @@ PqResultSimple::PqResultSimple(const DbConnectionPtr& pConn, const std::string& 
   pRes_(prepare(pConn_, sql)),
   cache(pRes_),
   complete_(false),
-  ready_(true),
-  data_ready_(true),
   nrows_(0),
   rows_affected_(0)
 {
@@ -185,7 +183,6 @@ PGresult* PqResultSimple::prepare(PGconn* conn, const std::string& sql) {
 }
 
 void PqResultSimple::init(bool params_have_rows) {
-  ready_ = true;
   nrows_ = 0;
   complete_ = !params_have_rows;
 }
@@ -220,9 +217,6 @@ List PqResultSimple::get_column_info() {
 }
 
 List PqResultSimple::fetch(const int n_max) {
-  if (!ready_)
-    stop("Query needs to be bound before fetching");
-
   int n = 0;
   List out;
 
@@ -239,7 +233,6 @@ int PqResultSimple::n_rows_fetched() {
 }
 
 int PqResultSimple::n_rows_affected() {
-  if (!ready_) return NA_INTEGER;
   if (cache.ncols_ > 0) return 0;
   return rows_affected_;
 }
@@ -284,8 +277,6 @@ List PqResultSimple::fetch_rows(const int n_max, int& n) {
 
 void PqResultSimple::step() {
   LOG_VERBOSE;
-
-  data_ready_ = true;
 
   // We're done, but we need to call PQgetResult until it returns NULL
   if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
