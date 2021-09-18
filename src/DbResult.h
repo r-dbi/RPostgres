@@ -28,7 +28,7 @@ public:
 public:
   void close();
 
-  bool complete();
+  bool complete() const;
   bool is_active() const;
   int n_rows_fetched();
   int n_rows_affected();
