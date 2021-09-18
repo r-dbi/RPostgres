@@ -87,12 +87,12 @@ NULL
 
 #' @export
 #' @rdname postgres-query
-setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ...) {
+setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ..., immediate = FALSE) {
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
     conn = conn,
-    ptr = result_create(conn@ptr, statement),
+    ptr = result_create(conn@ptr, statement, immediate),
     sql = statement,
     bigint = conn@bigint
   )
