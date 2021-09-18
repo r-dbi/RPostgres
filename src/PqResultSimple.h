@@ -25,7 +25,6 @@ class PqResultSimple : boost::noncopyable, public PqResultImpl, public PqResultS
     const std::vector<DATA_TYPE> types_;
     const std::vector<bool> known_;
     const size_t ncols_;
-    const int nparams_;
 
     _cache(PGresult* spec);
 
@@ -43,7 +42,6 @@ class PqResultSimple : boost::noncopyable, public PqResultImpl, public PqResultS
   int nrows_;
   int rows_affected_;
   List params_;
-  int group_, groups_;
   PGresult* pRes_;
 
 public:
@@ -69,14 +67,9 @@ public:
   virtual bool complete();
 
 private:
-  void set_params(const List& params);
-  bool bind_row();
-  void after_bind(bool params_have_rows);
-
   List fetch_rows(int n_max, int& n);
   void step();
-  bool step_run();
-  bool step_done();
+  void step_done();
   List peek_first_row();
 
 private:

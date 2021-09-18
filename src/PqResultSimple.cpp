@@ -22,17 +22,13 @@ PqResultSimple::PqResultSimple(const DbConnectionPtr& pConn, const std::string& 
   data_ready_(false),
   nrows_(0),
   rows_affected_(0),
-  group_(0),
-  groups_(0),
   pRes_(NULL)
 {
 
   LOG_DEBUG << sql;
 
   try {
-    if (cache.nparams_ == 0) {
-      bind();
-    }
+    bind();
   } catch (...) {
     PQclear(pSpec_);
     pSpec_ = NULL;
@@ -56,11 +52,8 @@ PqResultSimple::_cache::_cache(PGresult* spec) :
   oids_(get_column_oids(spec)),
   types_(get_column_types(oids_, names_)),
   known_(get_column_known(oids_)),
-  ncols_(names_.size()),
-  nparams_(PQnparams(spec))
+  ncols_(names_.size())
 {
-  for (int i = 0; i < nparams_; ++i)
-    LOG_VERBOSE << PQparamtype(spec, i);
 }
 
 
@@ -186,19 +179,11 @@ std::vector<bool> PqResultSimple::_cache::get_column_known(const std::vector<Oid
 }
 
 PGresult* PqResultSimple::prepare(PGconn* conn, const std::string& sql) {
-  // Simpleare query
-  PGresult* prep = PQprepare(conn, "", sql.c_str(), 0, NULL);
-  if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
-    PQclear(prep);
-    DbConnection::conn_stop(conn, "Failed to prepare query");
-  }
-  PQclear(prep);
-
-  // Retrieve query specification
-  PGresult* spec = PQdescribeSimpleared(conn, "");
+  // Execute query
+  PGresult* spec = PQexec(conn, sql.c_str());
   if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
     PQclear(spec);
-    DbConnection::conn_stop(conn, "Failed to retrieve query result metadata");
+    DbConnection::conn_stop(conn, "Failed to execute query");
   }
 
   return spec;
@@ -218,31 +203,7 @@ void PqResultSimple::close() {
   // FIXME
 }
 
-void PqResultSimple::bind(const List& params) {
-  if (params.size() != cache.nparams_) {
-    stop("Query requires %i params; %i supplied.",
-         cache.nparams_, params.size());
-  }
-
-  if (params.size() == 0 && ready_) {
-    stop("Query does not require parameters.");
-  }
-
-  set_params(params);
-
-  if (params.length() > 0) {
-    SEXP first_col = params[0];
-    groups_ = Rf_length(first_col);
-  }
-  else {
-    groups_ = 1;
-  }
-  group_ = 0;
-
-  rows_affected_ = 0;
-
-  bool has_params = bind_row();
-  after_bind(has_params);
+void PqResultSimple::bind(const List&) {
 }
 
 List PqResultSimple::get_column_info() {
@@ -301,64 +262,6 @@ bool PqResultSimple::complete() {
 
 // Privates ////////////////////////////////////////////////////////////////////
 
-void PqResultSimple::set_params(const List& params) {
-  params_ = params;
-}
-
-bool PqResultSimple::bind_row() {
-  LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
-
-  if (group_ >= groups_)
-    return false;
-
-  if (ready_ || group_ > 0) {
-    DbConnection::finish_query(pConn_);
-  }
-
-  std::vector<const char*> c_params(cache.nparams_);
-  std::vector<int> formats(cache.nparams_);
-  std::vector<int> lengths(cache.nparams_);
-  for (int i = 0; i < cache.nparams_; ++i) {
-    if (TYPEOF(params_[i]) == VECSXP) {
-      List param(params_[i]);
-      if (!Rf_isNull(param[group_])) {
-        Rbyte* param_value = RAW(param[group_]);
-        c_params[i] = reinterpret_cast<const char*>(param_value);
-        formats[i] = 1;
-        lengths[i] = Rf_length(param[group_]);
-      }
-    }
-    else {
-      CharacterVector param(params_[i]);
-      if (param[group_] != NA_STRING) {
-        c_params[i] = CHAR(param[group_]);
-      }
-    }
-  }
-
-  // Pointer to first element of empty vector is undefined behavior!
-  int success =
-    cache.nparams_ ?
-    PQsendQuerySimpleared(pConn_, "", cache.nparams_, &c_params[0],
-                        &lengths[0], &formats[0], 0) :
-    PQsendQuerySimpleared(pConn_, "", 0, NULL, NULL, NULL, 0);
-  data_ready_ = false;
-
-  if (!success)
-    conn_stop("Failed to send query");
-
-  if (!PQsetSingleRowMode(pConn_))
-    conn_stop("Failed to set single row mode");
-
-  return true;
-}
-
-void PqResultSimple::after_bind(bool params_have_rows) {
-  init(params_have_rows);
-  if (params_have_rows)
-    step();
-}
-
 List PqResultSimple::fetch_rows(const int n_max, int& n) {
   n = (n_max < 0) ? 100 : n_max;
 
@@ -385,11 +288,6 @@ List PqResultSimple::fetch_rows(const int n_max, int& n) {
 }
 
 void PqResultSimple::step() {
-  while (step_run())
-    ;
-}
-
-bool PqResultSimple::step_run() {
   LOG_VERBOSE;
 
   if (pRes_) PQclear(pRes_);
@@ -423,27 +321,20 @@ bool PqResultSimple::step_run() {
       PQclear(pRes_);
       pRes_ = NULL;
       conn_stop("Failed to fetch row");
-      return false;
+      return;
     }
   case PGRES_SINGLE_TUPLE:
-    return false;
+    return;
   default:
-    return step_done();
+    step_done();
+    return;
   }
 }
 
-bool PqResultSimple::step_done() {
+void PqResultSimple::step_done() {
   char* tuples = PQcmdTuples(pRes_);
-  rows_affected_ += atoi(tuples);
-
-  ++group_;
-  bool more_params = bind_row();
-
-  if (!more_params)
-    complete_ = true;
-
-  LOG_VERBOSE << "group: " << group_ << ", more_params: " << more_params;
-  return more_params;
+  rows_affected_ = atoi(tuples);
+  complete_ = true;
 }
 
 List PqResultSimple::peek_first_row() {
