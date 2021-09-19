@@ -25,12 +25,12 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
     )
   })
 
-  session$poll_process(200)
+  session$poll_process(300)
   expect_null(session$read())
 
   session$interrupt()
 
-  # Should take much less than 1.9 seconds
+  # Should take much less than 1.7 seconds
   time <- system.time(
     expect_equal(session$poll_process(2000), "ready")
   )
