@@ -36,7 +36,12 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   )
   expect_lt(time[["elapsed"]], 1)
 
+  local_edition(3)
+
   # Should return a proper error message
   out <- session$read()
-  expect_match(out$result$message, "cancel")
+
+  expect_snapshot({
+    out
+  })
 })
