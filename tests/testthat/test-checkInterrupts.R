@@ -12,6 +12,8 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
 
   session <- callr::r_session$new()
 
+  session$supervise(TRUE)
+
   session$run(function() {
     library(RPostgres)
     .GlobalEnv$conn <- postgresDefault(check_interrupts = TRUE)
@@ -46,4 +48,6 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   expect_snapshot({
     out
   })
+
+  session$close()
 })
