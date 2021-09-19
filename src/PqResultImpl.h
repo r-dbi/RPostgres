@@ -86,7 +86,7 @@ public:
   PGresult* get_result();
 
 private:
-  void wait_for_data();
+  bool wait_for_data();
 };
 
 #endif //RPOSTGRES_PQRESULTIMPL_H
