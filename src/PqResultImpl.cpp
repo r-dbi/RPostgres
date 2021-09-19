@@ -8,8 +8,10 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #define SOCKERR WSAGetLastError()
+#define SOCKET_EINTR WSAEINTR
 #else
 #define SOCKERR errno
+#define SOCKET_EINTR EINTR
 #endif
 
 PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
@@ -187,7 +189,7 @@ std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>&
   return known;
 }
 
-PGresult* PqResultPrep::prepare(PGconn* conn, const std::string& sql) {
+PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
   LOG_DEBUG << sql;
 
   // Prepare query
@@ -232,7 +234,7 @@ int PqResultImpl::n_rows_affected() {
   return rows_affected_;
 }
 
-void PqResultPrep::bind(const List& params) {
+void PqResultImpl::bind(const List& params) {
   LOG_DEBUG << params.size();
 
   if (params.size() != cache.nparams_) {
@@ -261,7 +263,7 @@ void PqResultPrep::bind(const List& params) {
   after_bind(has_params);
 }
 
-List PqResultPrep::fetch(const int n_max) {
+List PqResultImpl::fetch(const int n_max) {
   LOG_DEBUG << n_max;
 
   if (!ready_)
@@ -363,7 +365,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
     step();
 }
 
-List PqResultPrep::fetch_rows(const int n_max, int& n) {
+List PqResultImpl::fetch_rows(const int n_max, int& n) {
   LOG_DEBUG << n_max << "/" << n;
 
   n = (n_max < 0) ? 100 : n_max;
@@ -390,7 +392,7 @@ List PqResultPrep::fetch_rows(const int n_max, int& n) {
   return ret;
 }
 
-void PqResultPrep::step() {
+void PqResultImpl::step() {
   LOG_VERBOSE;
 
   while (step_run())
@@ -404,7 +406,10 @@ bool PqResultImpl::step_run() {
 
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
-    wait_for_data();
+    if (!wait_for_data()) {
+      pConnPtr_->cancel_query();
+    }
+
     data_ready_ = true;
   }
 
@@ -493,11 +498,12 @@ PGresult* PqResultImpl::get_result() {
 
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
-void PqResultPrep::wait_for_data() {
+// Returns `false` if an interrupt was detected
+bool PqResultImpl::wait_for_data() {
   LOG_DEBUG << pConnPtr_->is_check_interrupts();
 
   if (!pConnPtr_->is_check_interrupts())
-    return;
+    return true;
 
   int socket, ret;
   fd_set input;
@@ -523,13 +529,21 @@ void PqResultPrep::wait_for_data() {
 
       // timeout reached - check user interrupt
       try {
+        // FIXME: Do we even need this?
         checkUserInterrupt();
-      } catch (...) {
-        LOG_DEBUG << "Cancelled";
       }
-      LOG_DEBUG;
+      catch (...) {
+        return false;
+      }
     } else if (ret < 0) {
-      stop("select() failed with error code %d", SOCKERR);
+      // caught interrupt in select()
+      if (SOCKERR == SOCKET_EINTR) {
+        LOG_DEBUG;
+        return false;
+      } else {
+        LOG_DEBUG;
+        stop("select() failed with error code %d", SOCKERR);
+      }
     }
 
     // update db connection state using data available on the socket
@@ -537,4 +551,6 @@ void PqResultPrep::wait_for_data() {
       stop("Failed to consume input from the server");
     }
   } while (PQisBusy(pConn_)); // check if PQgetResult will still block
+
+  return true;
 }
