@@ -41,6 +41,7 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   # Should return a proper error message
   out <- session$read()
   out$message <- NULL
+  out$stderr <- gsub("\r\n", "", out$stderr)
 
   expect_snapshot({
     out
