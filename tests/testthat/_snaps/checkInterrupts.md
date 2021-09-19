@@ -6,25 +6,18 @@
       $code
       [1] 200
       
-      $message
-      [1] "done callr-rs-result-ac0d53be20f45"
-      
       $result
-      NULL
+      <Rcpp::exception: Failed to fetch row: ERROR:  canceling statement due to user request
+      >
       
       $stdout
       [1] ""
       
       $stderr
-      [1] "Error in mycall(sym_setout, as.integer(fd), as.logical(drop)) : \n  Cannot reroute stdout (system error 9, Bad file descriptor) @client.c:180 (processx_set_std)\nCalls: tryCatch ... tryCatchList -> tryCatchOne -> <Anonymous> -> <Anonymous>\n"
+      [1] ""
       
       $error
-      <callr_status_error: callr subprocess failed:>
-       in process 
-      -->
-      <callr_remote_error in NULL:
-       >
-       in process 704753 
+      NULL
       
       attr(,"class")
       [1] "callr_session_result"
