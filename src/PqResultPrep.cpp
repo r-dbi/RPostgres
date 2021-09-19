@@ -8,8 +8,10 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #define SOCKERR WSAGetLastError()
+#define SOCKET_EINTR WSAEINTR
 #else
 #define SOCKERR errno
+#define SOCKET_EINTR EINTR
 #endif
 
 PqResultPrep::PqResultPrep(const DbConnectionPtr& pConn, const std::string& sql) :
@@ -396,7 +398,10 @@ bool PqResultPrep::step_run() {
 
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
-    wait_for_data();
+    if (!wait_for_data()) {
+      pConnPtr_->cancel_query();
+    }
+
     data_ready_ = true;
   }
 
@@ -485,9 +490,11 @@ PGresult* PqResultPrep::get_result() {
 
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
-void PqResultPrep::wait_for_data() {
+bool PqResultPrep::wait_for_data() {
+  LOG_DEBUG << pConnPtr_->is_check_interrupts();
+
   if (!pConnPtr_->is_check_interrupts())
-    return;
+    return true;
 
   int socket, ret;
   fd_set input;
@@ -499,6 +506,8 @@ void PqResultPrep::wait_for_data() {
   }
 
   do {
+    LOG_DEBUG;
+
     // wait for any traffic on the db connection socket but no longer then 1s
     timeval timeout = {0, 0};
     timeout.tv_sec = 1;
@@ -507,14 +516,32 @@ void PqResultPrep::wait_for_data() {
     const int nfds = socket + 1;
     ret = select(nfds, &input, NULL, NULL, &timeout);
     if (ret == 0) {
+      LOG_DEBUG;
+
       // timeout reached - check user interrupt
-      checkUserInterrupt();
-    } else if(ret < 0) {
-      stop("select() failed with error code %d", SOCKERR);
+      try {
+        // FIXME: Do we even need this?
+        checkUserInterrupt();
+      }
+      catch (...) {
+        return false;
+      }
+    } else if (ret < 0) {
+      // caught interrupt in select()
+      if (SOCKERR == SOCKET_EINTR) {
+        LOG_DEBUG;
+        return false;
+      } else {
+        LOG_DEBUG;
+        stop("select() failed with error code %d", SOCKERR);
+      }
     }
+
     // update db connection state using data available on the socket
     if (!PQconsumeInput(pConn_)) {
       stop("Failed to consume input from the server");
     }
   } while (PQisBusy(pConn_)); // check if PQgetResult will still block
+
+  return true;
 }
