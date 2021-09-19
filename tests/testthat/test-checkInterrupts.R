@@ -25,7 +25,7 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
     )
   })
 
-  session$poll_process(100)
+  session$poll_process(200)
   expect_null(session$read())
 
   session$interrupt()
