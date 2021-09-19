@@ -7,11 +7,14 @@ test_that("check_interrupts = TRUE works with queries > 1 second (#244)", {
 })
 
 test_that("check_interrupts = TRUE interrupts immediately (#336)", {
+  # For skipping if not available
+  dbDisconnect(postgresDefault())
+
   session <- callr::r_session$new()
 
   session$run(function() {
     library(RPostgres)
-    .GlobalEnv$conn <- dbConnect(Postgres(), check_interrupts = TRUE)
+    .GlobalEnv$conn <- postgresDefault(check_interrupts = TRUE)
     invisible()
   })
 
