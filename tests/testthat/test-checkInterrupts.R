@@ -7,6 +7,8 @@ test_that("check_interrupts = TRUE works with queries > 1 second (#244)", {
 })
 
 test_that("check_interrupts = TRUE interrupts immediately (#336)", {
+  skip_if(Sys.getenv("R_COVR") != "")
+
   # For skipping if not available
   dbDisconnect(postgresDefault())
 
