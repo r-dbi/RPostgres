@@ -402,7 +402,10 @@ void PqResultImpl::step() {
 bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
-  if (pRes_) PQclear(pRes_);
+  if (pRes_) {
+    PQclear(pRes_);
+    pRes_ = NULL;
+  }
 
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
