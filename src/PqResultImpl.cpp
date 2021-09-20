@@ -464,15 +464,14 @@ bool PqResultImpl::step_run() {
   if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
     LOG_VERBOSE;
 
-    PGresult* next = PQgetResult(pConn_);
-    while (next != NULL) {
-      PQclear(next);
-      next = PQgetResult(pConn_);
-    }
+    step_done();
+    data_ready_ = false;
+    return true;
   }
 
   if (pRes_ == NULL) {
-    stop("No active query");
+    complete_ = true;
+    return false;
   }
 
   ExecStatusType status = PQresultStatus(pRes_);
