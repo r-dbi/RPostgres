@@ -341,10 +341,13 @@ void PqResultImpl::set_params(const List& params) {
 bool PqResultImpl::bind_row() {
   LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
 
-  if (group_ >= groups_)
-    return false;
+  if (group_ >= groups_) {
+    // Multi-statement support for immediate queries
+    return immediate_;
+  }
 
   if (ready_ || group_ > 0) {
+    LOG_VERBOSE;
     DbConnection::finish_query(pConn_);
   }
 
@@ -375,8 +378,9 @@ bool PqResultImpl::bind_row() {
   if (immediate_) {
     int success = PQsendQuery(pConn_, sql_.c_str());
 
-    if (!success)
-      conn_stop("Failed to set query parameters");
+    if (!success) {
+      conn_stop("Failed to send query");
+    }
   }
   else {
     int success = PQsendQueryPrepared(
@@ -454,8 +458,12 @@ bool PqResultImpl::step_run() {
 
   pRes_ = PQgetResult(pConn_);
 
+  LOG_VERBOSE;
+
   // We're done, but we need to call PQgetResult until it returns NULL
   if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
+    LOG_VERBOSE;
+
     PGresult* next = PQgetResult(pConn_);
     while (next != NULL) {
       PQclear(next);
@@ -479,15 +487,19 @@ bool PqResultImpl::step_run() {
   cache.set(pRes_);
 
   if (status == PGRES_SINGLE_TUPLE) {
+    LOG_VERBOSE;
     return false;
   }
 
+  LOG_VERBOSE;
   return step_done();
 }
 
 bool PqResultImpl::step_done() {
   char* tuples = PQcmdTuples(pRes_);
+  LOG_VERBOSE << tuples;
   rows_affected_ += atoi(tuples);
+  LOG_VERBOSE << rows_affected_;
 
   ++group_;
   bool more_params = bind_row();
