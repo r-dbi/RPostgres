@@ -57,7 +57,7 @@ public:
   ~PqResultImpl();
 
 private:
-  static PGresult* prepare(PGconn* conn, const std::string& sql);
+  void prepare();
   void init(bool params_have_rows);
 
 public:

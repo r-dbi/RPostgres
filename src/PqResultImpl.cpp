@@ -31,8 +31,7 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
 
   LOG_DEBUG << sql;
 
-  pSpec_ = prepare(pConn_, sql);
-  cache.set(pSpec_);
+  prepare();
 
   try {
     if (cache.nparams_ == 0) {
@@ -207,25 +206,26 @@ std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>&
   return known;
 }
 
-PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
-  LOG_DEBUG << sql;
+void PqResultImpl::prepare() {
+  LOG_DEBUG << sql_;
 
   // Prepare query
-  PGresult* prep = PQprepare(conn, "", sql.c_str(), 0, NULL);
+  PGresult* prep = PQprepare(pConn_, "", sql_.c_str(), 0, NULL);
   if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
     PQclear(prep);
-    DbConnection::conn_stop(conn, "Failed to prepare query");
+    conn_stop("Failed to prepare query");
   }
   PQclear(prep);
 
   // Retrieve query specification
-  PGresult* spec = PQdescribePrepared(conn, "");
+  PGresult* spec = PQdescribePrepared(pConn_, "");
   if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
     PQclear(spec);
-    DbConnection::conn_stop(conn, "Failed to retrieve query result metadata");
+    conn_stop("Failed to retrieve query result metadata");
   }
 
-  return spec;
+  pSpec_ = spec;
+  cache.set(spec);
 }
 
 void PqResultImpl::init(bool params_have_rows) {
