@@ -17,7 +17,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGconn* pConn_;
 
   // Expression
-  std::string sql_;
+  const std::string sql_;
 
   // Wrapped pointer
   PGresult* pSpec_;
