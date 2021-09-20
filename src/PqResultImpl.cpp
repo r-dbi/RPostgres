@@ -17,6 +17,7 @@
 PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
+  sql_(sql),
   pSpec_(prepare(pConn_, sql)),
   cache(pSpec_),
   complete_(false),
