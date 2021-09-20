@@ -18,8 +18,7 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
   sql_(sql),
-  pSpec_(prepare(pConn_, sql)),
-  cache(pSpec_),
+  pSpec_(NULL),
   complete_(false),
   ready_(false),
   data_ready_(false),
@@ -31,6 +30,9 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
 {
 
   LOG_DEBUG << sql;
+
+  pSpec_ = prepare(pConn_, sql);
+  cache.set(pSpec_);
 
   try {
     if (cache.nparams_ == 0) {
@@ -54,18 +56,33 @@ PqResultImpl::~PqResultImpl() {
 
 // Cache ///////////////////////////////////////////////////////////////////////
 
-PqResultImpl::_cache::_cache(PGresult* spec) :
-  names_(get_column_names(spec)),
-  oids_(get_column_oids(spec)),
-  types_(get_column_types(oids_, names_)),
-  known_(get_column_known(oids_)),
-  ncols_(names_.size()),
-  nparams_(PQnparams(spec))
+PqResultImpl::_cache::_cache() :
+  initialized_(false),
+  ncols_(0),
+  nparams_(0)
 {
+}
+
+void PqResultImpl::_cache::set(PGresult* spec)
+{
+  if (initialized_) {
+    LOG_VERBOSE;
+    return;
+  }
+
+  initialized_ = true;
+  names_ = get_column_names(spec);
+  oids_ = get_column_oids(spec);
+  types_ = get_column_types(oids_, names_);
+  known_ = get_column_known(oids_);
+  ncols_ = names_.size();
+  nparams_ = PQnparams(spec);
+
   LOG_DEBUG << nparams_;
 
-  for (int i = 0; i < nparams_; ++i)
+  for (int i = 0; i < nparams_; ++i) {
     LOG_VERBOSE << PQparamtype(spec, i);
+  }
 }
 
 
