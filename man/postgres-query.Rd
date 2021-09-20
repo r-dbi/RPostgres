@@ -9,7 +9,7 @@
 \alias{dbClearResult,PqResult-method}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ...)
+\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ..., immediate = FALSE)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = FALSE)
 
@@ -31,6 +31,9 @@ cast the parameter with e.g. \code{"$1::bigint"}.}
 
 \item{...}{Other arguments needed for compatibility with generic (currently
 ignored).}
+
+\item{immediate}{If \code{TRUE}, uses the \code{PGsendQuery()} API instead of \code{PGprepare()}.
+This allows to pass multiple statements and turns off the ability to pass parameters.}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}

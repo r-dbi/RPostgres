@@ -14,10 +14,11 @@
 #define SOCKET_EINTR EINTR
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
   sql_(sql),
+  immediate_(immediate),
   pSpec_(NULL),
   complete_(false),
   ready_(false),
@@ -255,6 +256,10 @@ int PqResultImpl::n_rows_affected() {
 void PqResultImpl::bind(const List& params) {
   LOG_DEBUG << params.size();
 
+  if (immediate_ && params.size() > 0) {
+    stop("Immediate query cannot be parameterized.");
+  }
+
   if (params.size() != cache.nparams_) {
     stop("Query requires %i params; %i supplied.",
          cache.nparams_, params.size());
@@ -361,15 +366,24 @@ bool PqResultImpl::bind_row() {
   }
 
   // Pointer to first element of empty vector is undefined behavior!
-  int success =
-    cache.nparams_ ?
-    PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                        &lengths[0], &formats[0], 0) :
-    PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
   data_ready_ = false;
 
-  if (!success)
-    conn_stop("Failed to send query");
+  if (immediate_) {
+    int success = PQsendQuery(pConn_, sql_.c_str());
+
+    if (!success)
+      conn_stop("Failed to set query parameters");
+  }
+  else {
+    int success = PQsendQueryPrepared(
+      pConn_, "", cache.nparams_, &c_params[0],
+      cache.nparams_ ? &lengths[0] : NULL,
+      cache.nparams_ ? &formats[0] : NULL,
+      0);
+
+    if (!success)
+      conn_stop("Failed to set query parameters");
+  }
 
   if (!PQsetSingleRowMode(pConn_))
     conn_stop("Failed to set single row mode");

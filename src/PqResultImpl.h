@@ -18,6 +18,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
 
   // Expression
   const std::string sql_;
+  const bool immediate_;
 
   // Wrapped pointer
   PGresult* pSpec_;
@@ -53,7 +54,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate);
   ~PqResultImpl();
 
 private:
