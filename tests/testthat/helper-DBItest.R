@@ -8,6 +8,8 @@ DBItest::make_context(
     # Redshift:
     # omit_blob_tests = TRUE,
 
+    dbitest_version = "1.7.2",
+
     # immediate = TRUE:
     # placeholder_pattern = character(),
     placeholder_pattern = "$1",
