@@ -208,6 +208,10 @@ std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>&
 }
 
 void PqResultImpl::prepare() {
+  if (immediate_) {
+    return;
+  }
+
   LOG_DEBUG << sql_;
 
   // Prepare query
@@ -465,19 +469,20 @@ bool PqResultImpl::step_run() {
 
   ExecStatusType status = PQresultStatus(pRes_);
 
-  switch (status) {
-  case PGRES_FATAL_ERROR:
-    {
-      PQclear(pRes_);
-      pRes_ = NULL;
-      conn_stop("Failed to fetch row");
-      return false;
-    }
-  case PGRES_SINGLE_TUPLE:
+  if (status == PGRES_FATAL_ERROR) {
+    PQclear(pRes_);
+    pRes_ = NULL;
+    conn_stop("Failed to fetch row");
     return false;
-  default:
-    return step_done();
   }
+
+  cache.set(pRes_);
+
+  if (status == PGRES_SINGLE_TUPLE) {
+    return false;
+  }
+
+  return step_done();
 }
 
 bool PqResultImpl::step_done() {
