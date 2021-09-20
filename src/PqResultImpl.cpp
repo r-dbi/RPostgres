@@ -67,6 +67,12 @@ void PqResultImpl::_cache::set(PGresult* spec)
 {
   if (initialized_) {
     LOG_VERBOSE;
+    if (names_ != get_column_names(spec)) {
+      stop("Multiple queries must use the same column names.");
+    }
+    if (oids_ != get_column_oids(spec)) {
+      stop("Multiple queries must use the same column types.");
+    }
     return;
   }
 
@@ -447,6 +453,8 @@ bool PqResultImpl::step_run() {
     pRes_ = NULL;
   }
 
+  bool need_cache_reset = false;
+
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
     if (!wait_for_data()) {
@@ -454,6 +462,7 @@ bool PqResultImpl::step_run() {
     }
 
     data_ready_ = true;
+    need_cache_reset = true;
   }
 
   pRes_ = PQgetResult(pConn_);
@@ -483,7 +492,9 @@ bool PqResultImpl::step_run() {
     return false;
   }
 
-  cache.set(pRes_);
+  if (need_cache_reset) {
+    cache.set(pRes_);
+  }
 
   if (status == PGRES_SINGLE_TUPLE) {
     LOG_VERBOSE;
