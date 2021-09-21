@@ -65,24 +65,31 @@ PqResultImpl::_cache::_cache() :
 
 void PqResultImpl::_cache::set(PGresult* spec)
 {
-  if (initialized_) {
+  // always: should be fast
+  if (nparams_ == 0) {
+    nparams_ = PQnparams(spec);
+  }
+
+  std::vector<std::string> new_names = get_column_names(spec);
+  std::vector<Oid> new_oids = get_column_oids(spec);
+
+  if (initialized_ || new_names.size() == 0) {
     LOG_VERBOSE;
-    if (names_ != get_column_names(spec)) {
+    if (names_.size() != 0 && new_names.size() != 0 && names_ != new_names) {
       stop("Multiple queries must use the same column names.");
     }
-    if (oids_ != get_column_oids(spec)) {
+    if (oids_.size() != 0 && new_oids.size() != 0 && oids_ != new_oids) {
       stop("Multiple queries must use the same column types.");
     }
     return;
   }
 
   initialized_ = true;
-  names_ = get_column_names(spec);
-  oids_ = get_column_oids(spec);
+  names_ = new_names;
+  oids_ = new_oids;
   types_ = get_column_types(oids_, names_);
   known_ = get_column_known(oids_);
   ncols_ = names_.size();
-  nparams_ = PQnparams(spec);
 
   LOG_DEBUG << nparams_;
 
@@ -455,8 +462,12 @@ bool PqResultImpl::step_run() {
 
   bool need_cache_reset = false;
 
+  LOG_VERBOSE << data_ready_;
+
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
+    LOG_VERBOSE;
+
     if (!wait_for_data()) {
       pConnPtr_->cancel_query();
     }
@@ -474,7 +485,6 @@ bool PqResultImpl::step_run() {
     LOG_VERBOSE;
 
     step_done();
-    data_ready_ = false;
     return true;
   }
 
@@ -512,6 +522,8 @@ bool PqResultImpl::step_done() {
   LOG_VERBOSE << rows_affected_;
 
   ++group_;
+  data_ready_ = false;
+
   bool more_params = bind_row();
 
   if (!more_params)
