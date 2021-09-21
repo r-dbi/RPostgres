@@ -6,14 +6,11 @@
       $code
       [1] 200
       
-      $result
-      NULL
-      
       $stdout
       [1] ""
       
       $stderr
-      [1] "NOTICE:  message_one\n\n"
+      [1] "NOTICE:  message_one\n"
       
       $error
       NULL

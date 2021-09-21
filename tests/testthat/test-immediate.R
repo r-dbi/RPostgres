@@ -155,7 +155,11 @@ $$
   # Should return a proper error message
   out <- session$read()
   out$stderr <- gsub("\r\n", "", out$stderr)
+  out$stderr <- gsub("\n+$", "\n", out$stderr)
   out$message <- NULL
+
+  # unclear
+  out$result <- NULL
 
   expect_snapshot({
     out
@@ -215,6 +219,7 @@ $$
   # Should return a proper error message
   out <- session$read()
   out$stderr <- gsub("\r\n", "", out$stderr)
+  out$stderr <- gsub("\n+$", "\n", out$stderr)
   out$message <- NULL
 
   expect_snapshot({
