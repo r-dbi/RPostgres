@@ -10,7 +10,7 @@
       [1] ""
       
       $stderr
-      [1] "NOTICE:  message_one\n"
+      [1] "NOTICE:  message_one"
       
       $error
       NULL
