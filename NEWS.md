@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.0 (2021-09-25)
+
+- Same as previous version.
+
+
 # RPostgres 1.3.3.9003 (2021-09-25)
 
 - `dbBegin()`, `dbCommit()` and `dbRollback()` gain `name` argument to support savepoints. An unnamed transaction must be started beforehand (#13).
