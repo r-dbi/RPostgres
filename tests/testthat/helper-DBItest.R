@@ -8,6 +8,10 @@ DBItest::make_context(
     # Redshift:
     # omit_blob_tests = TRUE,
 
+    dbitest_version = "1.7.2",
+
+    # immediate = TRUE:
+    # placeholder_pattern = character(),
     placeholder_pattern = "$1",
     date_cast = function(x) paste0("date '", x, "'"),
     time_cast = function(x) paste0("time '", x, "'"),
