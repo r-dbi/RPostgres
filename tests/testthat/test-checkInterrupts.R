@@ -25,21 +25,21 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
 
   session$call(function() {
     tryCatch(
-      print(dbGetQuery(.GlobalEnv$conn, "SELECT pg_sleep(2)")),
+      print(dbGetQuery(.GlobalEnv$conn, "SELECT pg_sleep(3)")),
       error = identity
     )
   })
 
-  session$poll_process(300)
+  session$poll_process(500)
   expect_null(session$read())
 
   session$interrupt()
 
   # Should take much less than 1.7 seconds
   time <- system.time(
-    expect_equal(session$poll_process(2000), "ready")
+    expect_equal(session$poll_process(3000), "ready")
   )
-  expect_lt(time[["elapsed"]], 1)
+  expect_lt(time[["elapsed"]], 1.5)
 
   local_edition(3)
 

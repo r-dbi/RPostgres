@@ -126,7 +126,7 @@ BEGIN
 END
 $$
 ;
-SELECT pg_sleep(2);
+SELECT pg_sleep(3);
 DO
 $$
 BEGIN
@@ -147,9 +147,9 @@ $$
   session$interrupt()
 
   time <- system.time(
-    expect_equal(session$poll_process(2000), "ready")
+    expect_equal(session$poll_process(3000), "ready")
   )
-  expect_lt(time[["elapsed"]], 1)
+  expect_lt(time[["elapsed"]], 1.5)
 
   local_edition(3)
 
@@ -184,7 +184,7 @@ test_that("immediate with interrupts before notice", {
 
   session$call(function() {
     sql <- "
-SELECT pg_sleep(2);
+SELECT pg_sleep(3);
 DO
 $$
 BEGIN
@@ -212,9 +212,9 @@ $$
   session$interrupt()
 
   time <- system.time(
-    expect_equal(session$poll_process(2000), "ready")
+    expect_equal(session$poll_process(3000), "ready")
   )
-  expect_lt(time[["elapsed"]], 1)
+  expect_lt(time[["elapsed"]], 1.5)
 
   local_edition(3)
 
