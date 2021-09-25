@@ -172,6 +172,7 @@ $$
 
 test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
+  skip_if(Sys.getenv("R_COVR") != "")
   # wat?
   skip_if(getRversion() >= "3.6" && getRversion() < "4.0")
   skip_if(getRversion() >= "3.4" && getRversion() < "3.5")
