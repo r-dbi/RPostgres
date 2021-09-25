@@ -1,6 +1,7 @@
 context("transactions")
 
 test_that("autocommit", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -19,6 +20,7 @@ test_that("autocommit", {
 })
 
 test_that("commit unnamed transactions", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -45,6 +47,7 @@ test_that("commit unnamed transactions", {
 })
 
 test_that("rollback unnamed transactions", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -71,6 +74,7 @@ test_that("rollback unnamed transactions", {
 })
 
 test_that("no nested unnamed transactions (commit after error)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -92,6 +96,7 @@ test_that("no nested unnamed transactions (commit after error)", {
 })
 
 test_that("no nested unnamed transactions (rollback after error)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -113,6 +118,7 @@ test_that("no nested unnamed transactions (rollback after error)", {
 })
 
 test_that("named transactions need unnamed transaction", {
+  skip_on_cran()
   con <- postgresDefault()
   on.exit(
     {
@@ -125,6 +131,7 @@ test_that("named transactions need unnamed transaction", {
 })
 
 test_that("commit named transactions", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -155,6 +162,7 @@ test_that("commit named transactions", {
 })
 
 test_that("rollback named transactions", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -187,6 +195,7 @@ test_that("rollback named transactions", {
 })
 
 test_that("nested named transactions (commit - commit)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -232,6 +241,7 @@ test_that("nested named transactions (commit - commit)", {
 })
 
 test_that("nested named transactions (commit - rollback)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -277,6 +287,7 @@ test_that("nested named transactions (commit - rollback)", {
 })
 
 test_that("nested named transactions (rollback - commit)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -322,6 +333,7 @@ test_that("nested named transactions (rollback - commit)", {
 })
 
 test_that("nested named transactions (rollback - rollback)", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
@@ -367,6 +379,7 @@ test_that("nested named transactions (rollback - rollback)", {
 })
 
 test_that("named transactions with keywords", {
+  skip_on_cran()
   con <- postgresDefault()
   con2 <- postgresDefault()
   on.exit(
