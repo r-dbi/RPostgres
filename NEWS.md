@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.0.9000 (2021-09-25)
+
+- Same as previous version.
+
+
 # RPostgres 1.4.0 (2021-09-25)
 
 - Same as previous version.
