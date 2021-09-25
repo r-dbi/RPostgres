@@ -9,10 +9,10 @@
 
 class PqResult : public DbResult {
 protected:
-  PqResult(const DbConnectionPtr& pConn, const std::string& sql);
+  PqResult(const DbConnectionPtr& pConn, const std::string& sql, const bool immediate);
 
 public:
-  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql);
+  static DbResult* create_and_send_query(const DbConnectionPtr& con, const std::string& sql, const bool immediate);
 };
 
 #endif // __RPOSTGRES_PQ_RESULT__
