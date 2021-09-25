@@ -12,6 +12,8 @@ test_that("autocommit", {
     add = TRUE
   )
 
+  local_edition(3)
+
   dbCreateTable(con, "a", data.frame(a = 1))
   expect_equal(dbListTables(con2), "a")
 })
