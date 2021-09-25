@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.3.9003 (2021-09-25)
+
+- `dbBegin()`, `dbCommit()` and `dbRollback()` gain `name` argument to support savepoints. An unnamed transaction must be started beforehand (#13).
+- `dbSendQuery()` uses single dispatch (#320).
+- `dbSendQuery()` gains `immediate` argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (#272).
+- `dbConnect(check_interrupts = TRUE)` now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (#336).
+- `dbQuoteLiteral()` uses single dispatch and switchpatching (#320).
+
+
 # RPostgres 1.3.3.9002 (2021-09-15)
 
 - Document when `field.types` is used in `dbWriteTable()` (#206).
