@@ -7,17 +7,20 @@
 \alias{dbRollback,PqConnection-method}
 \title{Transaction management.}
 \usage{
-\S4method{dbBegin}{PqConnection}(conn, ...)
+\S4method{dbBegin}{PqConnection}(conn, ..., name = NULL)
 
-\S4method{dbCommit}{PqConnection}(conn, ...)
+\S4method{dbCommit}{PqConnection}(conn, ..., name = NULL)
 
-\S4method{dbRollback}{PqConnection}(conn, ...)
+\S4method{dbRollback}{PqConnection}(conn, ..., name = NULL)
 }
 \arguments{
 \item{conn}{a \linkS4class{PqConnection} object, produced by
 \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{...}{Unused, for extensibility.}
+
+\item{name}{If provided, uses the \code{SAVEPOINT} SQL syntax
+to establish, remove (commit) or undo a ßsavepoint.}
 }
 \value{
 A boolean, indicating success or failure.
