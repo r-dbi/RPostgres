@@ -38,8 +38,8 @@ test_that("commit unnamed transactions", {
   expect_equal(dbListTables(con2), "a")
 
   dbCreateTable(con, "b", data.frame(a = 1))
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), c("a", "b"))
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), c("a", "b"))
 })
 
 test_that("rollback unnamed transactions", {
@@ -57,15 +57,15 @@ test_that("rollback unnamed transactions", {
 
   dbBegin(con)
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
   dbRollback(con)
-  expect_equal(dbListTables(con), character())
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), character())
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCreateTable(con, "b", data.frame(a = 1))
-  expect_equal(dbListTables(con), "b")
-  expect_equal(dbListTables(con2), "b")
+  expect_equal(sort(dbListTables(con)), "b")
+  expect_equal(sort(dbListTables(con2)), "b")
 })
 
 test_that("no nested unnamed transactions (commit after error)", {
@@ -85,8 +85,8 @@ test_that("no nested unnamed transactions (commit after error)", {
   dbCommit(con)
 
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), "a")
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), "a")
 })
 
 test_that("no nested unnamed transactions (rollback after error)", {
@@ -106,8 +106,8 @@ test_that("no nested unnamed transactions (rollback after error)", {
   dbCommit(con)
 
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), "a")
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), "a")
 })
 
 test_that("named transactions need unnamed transaction", {
@@ -138,18 +138,18 @@ test_that("commit named transactions", {
   dbBegin(con)
   dbBegin(con, name = "tx")
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
   dbCommit(con, name = "tx")
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
   dbCommit(con)
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), "a")
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), "a")
 
   dbCreateTable(con, "b", data.frame(a = 1))
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), c("a", "b"))
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), c("a", "b"))
 })
 
 test_that("rollback named transactions", {
@@ -168,20 +168,20 @@ test_that("rollback named transactions", {
   dbBegin(con)
   dbBegin(con, name = "tx")
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbRollback(con, name = "tx")
-  expect_equal(dbListTables(con), character())
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), character())
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbRollback(con)
-  expect_equal(dbListTables(con), character())
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), character())
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCreateTable(con, "b", data.frame(a = 1))
-  expect_equal(dbListTables(con), "b")
-  expect_equal(dbListTables(con2), "b")
+  expect_equal(sort(dbListTables(con)), "b")
+  expect_equal(sort(dbListTables(con2)), "b")
 })
 
 test_that("nested named transactions (commit - commit)", {
@@ -201,32 +201,32 @@ test_that("nested named transactions (commit - commit)", {
   dbBegin(con)
   dbBegin(con, name = "tx")
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbBegin(con, name = "tx2")
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCreateTable(con, "b", data.frame(a = 1))
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCommit(con, name = "tx2")
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCommit(con, name = "tx")
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCommit(con)
-  expect_equal(dbListTables(con), c("a", "b"))
-  expect_equal(dbListTables(con2), c("a", "b"))
+  expect_equal(sort(dbListTables(con)), c("a", "b"))
+  expect_equal(sort(dbListTables(con2)), c("a", "b"))
 
   dbCreateTable(con, "c", data.frame(a = 1))
-  expect_equal(dbListTables(con), c("a", "b", "c"))
-  expect_equal(dbListTables(con2), c("a", "b", "c"))
+  expect_equal(sort(dbListTables(con)), c("a", "b", "c"))
+  expect_equal(sort(dbListTables(con2)), c("a", "b", "c"))
 })
 
 test_that("nested named transactions (commit - rollback)", {
@@ -246,12 +246,12 @@ test_that("nested named transactions (commit - rollback)", {
   dbBegin(con)
   dbBegin(con, name = "tx")
   dbCreateTable(con, "a", data.frame(a = 1))
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbBegin(con, name = "tx2")
-  expect_equal(dbListTables(con), "a")
-  expect_equal(dbListTables(con2), character())
+  expect_equal(sort(dbListTables(con)), "a")
+  expect_equal(sort(dbListTables(con2)), character())
 
   dbCreateTable(con, "b", data.frame(a = 1))
   expect_equal(dbListTables(con), c("a", "b"))
