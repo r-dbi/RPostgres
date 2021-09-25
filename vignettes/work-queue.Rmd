@@ -265,8 +265,11 @@ writeLines(outputs[[2]])
 Notice that the work has been shared between the 2 workers.
 If these 2 weren't enough, we could happily add more to keep the system going.
 
-```{r, echo = FALSE}
-if (!is.null(rs)) { dbClearResult(rs) ; rs <- NULL }
-if (!is.null(con)) { dbDisconnect(con) ; con <- NULL }
-if (!is.null(rp)) { rp$wait() ; rp <- NULL }
+```{r, echo = FALSE, error = FALSE}
+dbClearResult(rs)
+
+dbExecute(con, "DROP TABLE IF EXISTS sqroot_vignette_example;")
+dbDisconnect(con)
+
+rp$wait()
 ```
