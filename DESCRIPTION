@@ -55,7 +55,7 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.1.2
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
     postgresql-devel (rpm)
 Collate: 

@@ -9,7 +9,7 @@
 \alias{dbClearResult,PqResult-method}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ...)
+\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ..., immediate = FALSE)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = FALSE)
 
@@ -31,6 +31,9 @@ cast the parameter with e.g. \code{"$1::bigint"}.}
 
 \item{...}{Other arguments needed for compatibility with generic (currently
 ignored).}
+
+\item{immediate}{If \code{TRUE}, uses the \code{PGsendQuery()} API instead of \code{PGprepare()}.
+This allows to pass multiple statements and turns off the ability to pass parameters.}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
@@ -54,6 +57,17 @@ To retrieve results a chunk at a time, use \code{dbSendQuery()},
 results (and they'll fit in memory) use \code{dbGetQuery()} which sends,
 fetches and clears for you.
 }
+\section{Multiple queries and statements}{
+
+With \code{immediate = TRUE}, it is possible to pass multiple queries or statements,
+separated by semicolons.
+For multiple statements, the resulting value of \code{\link[=dbGetRowsAffected]{dbGetRowsAffected()}}
+corresponds to the total number of affected rows.
+If multiple queries are used, all queries must return data with the same
+column names and types.
+Queries and statements can be mixed.
+}
+
 \examples{
 \dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
