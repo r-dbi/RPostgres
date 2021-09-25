@@ -1,5 +1,13 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.3.3.9002 (2021-09-15)
+
+- Document when `field.types` is used in `dbWriteTable()` (#206).
+- Document setting the tablespace before writing a table (#246).
+- Tweak error message for named `params` argument to `dbBind()` (#266).
+- `Redshift()` connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary tables (#215).
+
+
 # RPostgres 1.3.3.9001 (2021-09-13)
 
 - `dbExistsTable()`, `dbListTables()` and `dbListObjects()` now work for Redshift, with the limitation that only the topmost tables on the search path are returned (#215, #326).

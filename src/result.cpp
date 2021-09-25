@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "workarounds/XPtr.h"
 #include "RPostgres_types.h"
 #include "PqResult.h"
 

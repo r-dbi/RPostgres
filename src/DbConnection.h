@@ -54,9 +54,9 @@ public:
   static void finish_query(PGconn* pConn);
   List wait_for_notify(int timeout_secs);
 
-private:
   void cancel_query();
 
+private:
   static void process_notice(void* This, const char* message);
 };
 
