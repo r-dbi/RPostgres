@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -128,9 +128,64 @@
       <small>Source: <a href='https://github.com/r-dbi/RPostgres/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rpostgres-140-2021-09-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.4.0">
+<a href="#rpostgres-140-2021-09-25" class="anchor" aria-hidden="true"></a>RPostgres 1.4.0 (2021-09-25)<small> Unreleased </small></h1>
+<ul><li>Same as previous version.</li>
+</ul></div>
+    <div id="rpostgres-1339003-2021-09-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9003">
+<a href="#rpostgres-1339003-2021-09-25" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9003 (2021-09-25)<small> Unreleased </small></h1>
+<ul><li>
+<code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbBegin()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbCommit()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbRollback()</a></code> gain <code>name</code> argument to support savepoints. An unnamed transaction must be started beforehand (<a href='https://github.com/r-dbi/RPostgres/issues/13'>#13</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> uses single dispatch (<a href='https://github.com/r-dbi/RPostgres/issues/320'>#320</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> gains <code>immediate</code> argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (<a href='https://github.com/r-dbi/RPostgres/issues/272'>#272</a>).</li>
+<li>
+<code>dbConnect(check_interrupts = TRUE)</code> now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (<a href='https://github.com/r-dbi/RPostgres/issues/336'>#336</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> uses single dispatch and switchpatching (<a href='https://github.com/r-dbi/RPostgres/issues/320'>#320</a>).</li>
+</ul></div>
+    <div id="rpostgres-1339002-2021-09-15" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9002">
+<a href="#rpostgres-1339002-2021-09-15" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9002 (2021-09-15)<small> Unreleased </small></h1>
+<ul><li>Document when <code>field.types</code> is used in <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/206'>#206</a>).</li>
+<li>Document setting the tablespace before writing a table (<a href='https://github.com/r-dbi/RPostgres/issues/246'>#246</a>).</li>
+<li>Tweak error message for named <code>params</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href='https://github.com/r-dbi/RPostgres/issues/266'>#266</a>).</li>
+<li>
+<code><a href="../reference/Redshift.html">Redshift()</a></code> connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary tables (<a href='https://github.com/r-dbi/RPostgres/issues/215'>#215</a>).</li>
+</ul></div>
+    <div id="rpostgres-1339001-2021-09-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9001">
+<a href="#rpostgres-1339001-2021-09-13" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9001 (2021-09-13)<small> Unreleased </small></h1>
+<ul><li>
+<code><a href="https://dbi.r-dbi.org/reference/dbExistsTable.html" class="external-link">dbExistsTable()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> now work for Redshift, with the limitation that only the topmost tables on the search path are returned (<a href='https://github.com/r-dbi/RPostgres/issues/215'>#215</a>, <a href='https://github.com/r-dbi/RPostgres/issues/326'>#326</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> default to <code>copy = NULL</code>, this translates to <code>TRUE</code> for <code><a href="../reference/Postgres.html">Postgres()</a></code> and <code>FALSE</code> for <code><a href="../reference/Redshift.html">Redshift()</a></code> connections (<a href='https://github.com/r-dbi/RPostgres/issues/329'>#329</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> quotes values only once for Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/328'>#328</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteString.html" class="external-link">dbQuoteString()</a></code> uses custom quoting routine for Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/327'>#327</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone (<a href='https://github.com/r-dbi/RPostgres/issues/325'>#325</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> uses a transaction (<a href='https://github.com/r-dbi/RPostgres/issues/307'>#307</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> gains <code>copy</code> argument, <code>TRUE</code> by default. If set, data is imported via <code>COPY name FROM STDIN</code> (<a href='https://github.com/r-dbi/RPostgres/issues/241'>#241</a>, <a href='https://github.com/hugheylab'>@hugheylab</a>).</li>
+<li>Order help topics on pkgdown site.</li>
+<li>Use <code>@examplesIf</code> in method documentation.</li>
+<li>Skip timestamp tests on i386 (<a href='https://github.com/r-dbi/RPostgres/issues/318'>#318</a>).</li>
+<li>Postgres <code>NOTICE</code> messages are now forwarded as proper R messages and can be captured and suppressed (<a href='https://github.com/r-dbi/RPostgres/issues/208'>#208</a>).</li>
+</ul></div>
+    <div id="rpostgres-1339000-2021-07-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.3.9000">
+<a href="#rpostgres-1339000-2021-07-05" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3.9000 (2021-07-05)<small> Unreleased </small></h1>
+<ul><li>Same as previous version.</li>
+</ul></div>
     <div id="rpostgres-133-2021-07-05" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.3">
-<a href="#rpostgres-133-2021-07-05" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3 (2021-07-05)<small> Unreleased </small></h1>
+<a href="#rpostgres-133-2021-07-05" class="anchor" aria-hidden="true"></a>RPostgres 1.3.3 (2021-07-05)<small> 2021-07-05 </small></h1>
 <ul><li>Fix <code>dbConnect(check_interrupts = TRUE)</code> on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/244'>#244</a>, <a href='https://github.com/zozlak'>@zozlak</a>).</li>
 <li>Windows: update to libpq 13.2.0 and add UCRT support (<a href='https://github.com/r-dbi/RPostgres/issues/309'>#309</a>, <a href='https://github.com/jeroen'>@jeroen</a>).</li>
 </ul></div>

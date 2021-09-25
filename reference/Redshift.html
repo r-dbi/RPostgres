@@ -40,8 +40,9 @@
 
 
 <meta property="og:title" content="Redshift driver/connection — Redshift" />
-<meta property="og:description" content="Redshift currently uses all the same methods as Postgres, but provides an
-extension point for future methods and downstream packages." />
+<meta property="og:description" content="Use Redshift() instead of Postgres() to connect to an AWS Redshift cluster.
+All methods in RPostgres and downstream packages can be called on such connections.
+Some have different behavior for Redshift connections, to ensure better interoperability." />
 
 
 
@@ -81,7 +82,7 @@ extension point for future methods and downstream packages." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -132,8 +133,9 @@ extension point for future methods and downstream packages." />
     </div>
 
     <div class="ref-description">
-    <p>Redshift currently uses all the same methods as Postgres, but provides an
-extension point for future methods and downstream packages.</p>
+    <p>Use <code>Redshift()</code> instead of <code><a href='Postgres.html'>Postgres()</a></code> to connect to an AWS Redshift cluster.
+All methods in <span class="pkg">RPostgres</span> and downstream packages can be called on such connections.
+Some have different behavior for Redshift connections, to ensure better interoperability.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>Redshift</span><span class='op'>(</span><span class='op'>)</span>
@@ -167,7 +169,7 @@ to use the <span class="pkg">RPostgres</span> package.</p></td>
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, <code>expand_dbname</code> is set to
 <code>false</code> in the call to
-<a href='https://www.postgresql.org/docs/9.6/static/libpq-connect.html'><code>PQconnectdbParams()</code></a>).</p></td>
+<a href='https://www.postgresql.org/docs/current/libpq-connect.html'><code>PQconnectdbParams()</code></a>).</p></td>
     </tr>
     <tr>
       <th>host</th>
@@ -184,7 +186,7 @@ be parsed as a connection string (internally, <code>expand_dbname</code> is set 
       <td><p>User name and password. If <code>NULL</code>, will be
 retrieved from <code>PGUSER</code> and <code>PGPASSWORD</code> envvars, or from the
 appropriate line in <code>~/.pgpass</code>. See
-<a href='http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html'>http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html</a> for
+<a href='https://www.postgresql.org/docs/current/libpq-pgpass.html'>https://www.postgresql.org/docs/current/libpq-pgpass.html</a> for
 more details.</p></td>
     </tr>
     <tr>
@@ -192,21 +194,21 @@ more details.</p></td>
       <td><p>User name and password. If <code>NULL</code>, will be
 retrieved from <code>PGUSER</code> and <code>PGPASSWORD</code> envvars, or from the
 appropriate line in <code>~/.pgpass</code>. See
-<a href='http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html'>http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html</a> for
+<a href='https://www.postgresql.org/docs/current/libpq-pgpass.html'>https://www.postgresql.org/docs/current/libpq-pgpass.html</a> for
 more details.</p></td>
     </tr>
     <tr>
       <th>service</th>
       <td><p>Name of service to connect as.  If <code>NULL</code>, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-file and used.  See <a href='http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html'>http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html</a>
+file and used.  See <a href='https://www.postgresql.org/docs/current/libpq-pgservice.html'>https://www.postgresql.org/docs/current/libpq-pgservice.html</a>
 for details on this file and syntax.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Other name-value pairs that describe additional connection
 options as described at
-<a href='http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS'>http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></td>
+<a href='https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS'>https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></td>
     </tr>
     <tr>
       <th>bigint</th>

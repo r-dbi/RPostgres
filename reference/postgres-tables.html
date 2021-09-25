@@ -86,7 +86,7 @@ uses placeholders of the form $1, $2 etc. instead of ?." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -157,14 +157,14 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
   append <span class='op'>=</span> <span class='cn'>FALSE</span>,
   field.types <span class='op'>=</span> <span class='cn'>NULL</span>,
   temporary <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  copy <span class='op'>=</span> <span class='cn'>TRUE</span>
+  copy <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/sqlData.html'>sqlData</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>value</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbAppendTable.html'>dbAppendTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>value</span>, copy <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, row.names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S4 method for PqConnection,character</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>name</span>, <span class='va'>...</span>, check.names <span class='op'>=</span> <span class='cn'>TRUE</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
@@ -202,7 +202,9 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
       <th>name</th>
       <td><p>a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
-just any valid bare table name.</p></td>
+just any valid bare table name.
+Alternatively, pass a name quoted with <code><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier()</a></code>,
+an <code><a href='https://dbi.r-dbi.org/reference/Id.html'>Id()</a></code> object, or a string escaped with <code><a href='https://dbi.r-dbi.org/reference/SQL.html'>SQL()</a></code>.</p></td>
     </tr>
     <tr>
       <th>value</th>
@@ -235,8 +237,9 @@ in the DBMS. Its default is <code>FALSE</code>.</p></td>
     <tr>
       <th>field.types</th>
       <td><p>character vector of named SQL field types where
-the names are the names of new table's columns. If missing, types inferred
-with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbDataType()</a></code>).</p></td>
+the names are the names of new table's columns.
+If missing, types are inferred with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbDataType()</a></code>).
+The types can only be specified with <code>append = FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>temporary</th>
@@ -247,7 +250,9 @@ with <code><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>DBI::dbData
       <td><p>If <code>TRUE</code>, serializes the data frame to a single string
 and uses <code>COPY name FROM stdin</code>. This is fast, but not supported by
 all postgres servers (e.g. Amazon's Redshift). If <code>FALSE</code>, generates
-a single SQL string. This is slower, but always supported.</p></td>
+a single SQL string. This is slower, but always supported.
+The default maps to <code>TRUE</code> on connections established via <code><a href='Postgres.html'>Postgres()</a></code>
+and to <code>FALSE</code> on connections established via <code><a href='Redshift.html'>Redshift()</a></code>.</p></td>
     </tr>
     <tr>
       <th>con</th>
@@ -271,29 +276,34 @@ If given the method will return all objects accessible through this prefix.</p><
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="schemas-catalogs-tablespaces"><a class="anchor" href="#schemas-catalogs-tablespaces"></a>Schemas, catalogs, tablespaces</h2>
+
+    
+
+<p>Pass an identifier created with <code><a href='https://dbi.r-dbi.org/reference/Id.html'>Id()</a></code> as the <code>name</code> argument
+to specify the schema or catalog, e.g.
+<code>name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")</code> .
+To specify the tablespace, use
+<code>dbExecute(conn, "SET default_tablespace TO my_tablespace")</code>
+before creating the table.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># For running the examples on systems without PostgreSQL connection:</span></span>
-<span class='r-in'><span class='va'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='postgresHasDefault.html'>postgresHasDefault</a></span><span class='op'>(</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Could not initialise default postgres database. If postgres is running</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> check that the environment variables PGHOST, PGPORT, </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> point to your database.</span>
-<span class='r-in'></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span> <span class='co'># postgresHasDefault()</span></span>
 <span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbi.r-dbi.org'>DBI</a></span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span>, <span class='va'>mtcars</span>, temporary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RPostgres</span><span class='fu'>::</span><span class='fu'><a href='Postgres.html'>Postgres</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span>, <span class='va'>mtcars</span>, temporary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># A zero row data frame just creates a table definition.</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars2"</span>, <span class='va'>mtcars</span><span class='op'>[</span><span class='fl'>0</span>, <span class='op'>]</span>, temporary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars2"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars2"</span>, <span class='va'>mtcars</span><span class='op'>[</span><span class='fl'>0</span>, <span class='op'>]</span>, temporary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars2"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
