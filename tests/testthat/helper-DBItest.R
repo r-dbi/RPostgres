@@ -20,7 +20,7 @@ DBItest::make_context(
     if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
     if (.Platform$r_arch == "i386") "roundtrip_timestamp",
 
-    if (getRversion() < "3.6") "check_compliance",
+    if (getRversion() < "3.6") "compliance",
 
     # Redshift:
     # "exists_table_temporary",
