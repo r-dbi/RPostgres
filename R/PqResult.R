@@ -98,7 +98,9 @@ NULL
 #' column names and types.
 #' Queries and statements can be mixed.
 #' @rdname postgres-query
-setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ..., immediate = FALSE) {
+setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ..., immediate = FALSE) {
+  stopifnot(is.character(statement))
+
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",

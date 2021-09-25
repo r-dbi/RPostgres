@@ -2,14 +2,14 @@
 % Please edit documentation in R/PqResult.R
 \name{postgres-query}
 \alias{postgres-query}
-\alias{dbSendQuery,PqConnection,character-method}
+\alias{dbSendQuery,PqConnection-method}
 \alias{dbFetch,PqResult-method}
 \alias{dbBind,PqResult-method}
 \alias{dbHasCompleted,PqResult-method}
 \alias{dbClearResult,PqResult-method}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ..., immediate = FALSE)
+\S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ..., immediate = FALSE)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = FALSE)
 
