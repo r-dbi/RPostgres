@@ -172,7 +172,9 @@ $$
 
 test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
+  # wat?
   skip_if(getRversion() >= "3.6" && getRversion() < "4.0")
+  skip_if(getRversion() >= "3.4" && getRversion() < "3.5")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)
