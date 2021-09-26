@@ -2,44 +2,34 @@
 
 # RPostgres 1.4.0 (2021-09-25)
 
-- Same as previous version.
+## Features
 
-
-# RPostgres 1.3.3.9003 (2021-09-25)
-
+- `Redshift()` connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary and persistent tables (#215, #326).
 - `dbBegin()`, `dbCommit()` and `dbRollback()` gain `name` argument to support savepoints. An unnamed transaction must be started beforehand (#13).
-- `dbSendQuery()` uses single dispatch (#320).
 - `dbSendQuery()` gains `immediate` argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (#272).
 - `dbConnect(check_interrupts = TRUE)` now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (#336).
-- `dbQuoteLiteral()` uses single dispatch and switchpatching (#320).
+- `dbAppendTable()` gains `copy` argument. If set to `TRUE`, data is imported via `COPY name FROM STDIN` (#241, @hugheylab).
+- Postgres `NOTICE` messages are now forwarded as proper R messages and can be captured and suppressed (#208).
+- `dbWriteTable()` uses a transaction (#307).
 
 
-# RPostgres 1.3.3.9002 (2021-09-15)
+## Bug fixes
 
+- `dbQuoteLiteral()` converts timestamp values to input time zone, used when writing tables to Redshift (#325).
+
+## Internal
+
+- Skip timestamp tests on i386 (#318).
+- `dbSendQuery()` and `dbQuoteLiteral()` use single dispatch (#320).
+- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329). 
+
+## Documentation
+
+- Order help topics on pkgdown site.
+- Use `@examplesIf` in method documentation.
 - Document when `field.types` is used in `dbWriteTable()` (#206).
 - Document setting the tablespace before writing a table (#246).
 - Tweak error message for named `params` argument to `dbBind()` (#266).
-- `Redshift()` connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary tables (#215).
-
-
-# RPostgres 1.3.3.9001 (2021-09-13)
-
-- `dbExistsTable()`, `dbListTables()` and `dbListObjects()` now work for Redshift, with the limitation that only the topmost tables on the search path are returned (#215, #326).
-- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329). 
-- `dbAppendTable()` quotes values only once for Redshift (#328).
-- `dbQuoteString()` uses custom quoting routine for Redshift (#327).
-- `dbQuoteLiteral()` converts timestamp values to input time zone (#325).
-- `dbWriteTable()` uses a transaction (#307).
-- `dbAppendTable()` gains `copy` argument, `TRUE` by default. If set, data is imported via `COPY name FROM STDIN` (#241, @hugheylab).
-- Order help topics on pkgdown site.
-- Use `@examplesIf` in method documentation.
-- Skip timestamp tests on i386 (#318).
-- Postgres `NOTICE` messages are now forwarded as proper R messages and can be captured and suppressed (#208).
-
-
-# RPostgres 1.3.3.9000 (2021-07-05)
-
-- Same as previous version.
 
 
 # RPostgres 1.3.3 (2021-07-05)
