@@ -9,8 +9,7 @@ RPostgres 1.4.1
 - [x] Checked locally, R 4.1.1
 - [x] Checked on CI system, R 4.1.1
 - [x] Checked on win-builder, R devel
-
-Check the boxes above after successful execution and remove this line. Then run `fledge::release()`.
+    - NOTE: Resubmission of version submitted today due to previously undetected fatal crash on some systems.
 
 ## Current CRAN check results
 
