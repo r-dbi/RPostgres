@@ -131,13 +131,12 @@
     <div id="rpostgres-141-2021-09-26" class="section level1">
 <h1 class="page-header" data-toc-text="1.4.1">
 <a href="#rpostgres-141-2021-09-26" class="anchor" aria-hidden="true"></a>RPostgres 1.4.1 (2021-09-26)<small> Unreleased </small></h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>Avoid crash by dereferencing 0-size vector (<a href='https://github.com/r-dbi/RPostgres/issues/343'>#343</a>).</li>
 </ul></div>
-    <div id="rpostgres-1409000-2021-09-25" class="section level1">
-<h1 class="page-header" data-toc-text="1.4.0.9000">
-<a href="#rpostgres-1409000-2021-09-25" class="anchor" aria-hidden="true"></a>RPostgres 1.4.0.9000 (2021-09-25)<small> Unreleased </small></h1>
-<ul><li>Same as previous version.</li>
-</ul></div>
+</div>
     <div id="rpostgres-140-2021-09-25" class="section level1">
 <h1 class="page-header" data-toc-text="1.4.0">
 <a href="#rpostgres-140-2021-09-25" class="anchor" aria-hidden="true"></a>RPostgres 1.4.0 (2021-09-25)<small> 2021-09-26 </small></h1>
@@ -158,9 +157,9 @@
 <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> gains <code>copy</code> argument. If set to <code>TRUE</code>, data is imported via <code>COPY name FROM STDIN</code> (<a href='https://github.com/r-dbi/RPostgres/issues/241'>#241</a>, <a href='https://github.com/hugheylab'>@hugheylab</a>).</li>
 <li>Postgres <code>NOTICE</code> messages are now forwarded as proper R messages and can be captured and suppressed (<a href='https://github.com/r-dbi/RPostgres/issues/208'>#208</a>).</li>
 </ul></div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>
 <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href='https://github.com/r-dbi/RPostgres/issues/325'>#325</a>).</li>
 </ul></div>
@@ -200,9 +199,9 @@
     <div id="rpostgres-131-2021-01-19" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.1">
 <a href="#rpostgres-131-2021-01-19" class="anchor" aria-hidden="true"></a>RPostgres 1.3.1 (2021-01-19)<small> 2021-01-19 </small></h1>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>
 <code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
 <li>Fix behavior with invalid time zone (<a href='https://github.com/r-dbi/RPostgres/issues/284'>#284</a>, <a href='https://github.com/ateucher'>@ateucher</a>).</li>
@@ -228,9 +227,9 @@
 <li>
 <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href='https://github.com/r-dbi/RPostgres/issues/270'>#270</a>).</li>
 <li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href='https://github.com/r-dbi/RPostgres/issues/237'>#237</a>, <a href='https://github.com/lentinj'>@lentinj</a>).</li>
-</ul><div id="bug-fixes-2" class="section level2">
+</ul><div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>
 <code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href='https://github.com/r-dbi/RPostgres/issues/267'>#267</a>).</li>
 <li>
@@ -280,9 +279,9 @@
 <li>Windows: update libpq to 11.1.0.</li>
 <li>Fulfill CII badge requirements (<a href='https://github.com/r-dbi/RPostgres/issues/227'>#227</a>, <a href='https://github.com/TSchiefer'>@TSchiefer</a>).</li>
 </ul></div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>Hide unused symbols in shared library (<a href='https://github.com/r-dbi/RPostgres/issues/230'>#230</a>, <a href='https://github.com/troels'>@troels</a>).</li>
 <li>Fix partial argument matching in <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> (r-dbi/DBI#249).</li>
 <li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href='https://github.com/r-dbi/RPostgres/issues/191'>#191</a>).</li>
