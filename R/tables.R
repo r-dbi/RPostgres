@@ -88,7 +88,16 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     need_transaction <- !connection_is_transacting(conn@ptr)
     if (need_transaction) {
       dbBegin(conn)
-      on.exit(dbRollback(conn))
+      dbBegin(conn, name = "dbWriteTable")
+      on.exit({
+        dbRollback(conn, name = "dbWriteTable")
+        dbRollback(conn)
+      })
+    } else {
+      dbBegin(conn, name = "dbWriteTable")
+      on.exit({
+        dbRollback(conn, name = "dbWriteTable")
+      })
     }
 
     found <- dbExistsTable(conn, name)
@@ -127,10 +136,11 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       db_append_table(conn, name, value, copy, warn = FALSE)
     }
 
+    dbCommit(conn, name = "dbWriteTable")
     if (need_transaction) {
       dbCommit(conn)
-      on.exit(NULL)
     }
+    on.exit(NULL)
 
     invisible(TRUE)
   }
