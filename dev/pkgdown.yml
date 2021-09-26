@@ -3,7 +3,7 @@ pkgdown: 1.6.1.9001
 pkgdown_sha: 9ac9c8d5a6ca30325100205161441df8cf427035
 articles:
   work-queue: work-queue.html
-last_built: 2021-09-25T19:23Z
+last_built: 2021-09-26T09:06Z
 urls:
   reference: https://rpostgres.r-dbi.org/reference
   article: https://rpostgres.r-dbi.org/articles
