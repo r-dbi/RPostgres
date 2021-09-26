@@ -6,12 +6,11 @@
 
 - `Redshift()` connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary and persistent tables (#215, #326).
 - `dbBegin()`, `dbCommit()` and `dbRollback()` gain `name` argument to support savepoints. An unnamed transaction must be started beforehand (#13).
+- `dbWriteTable()` uses a transaction (#307).
 - `dbSendQuery()` gains `immediate` argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (#272).
 - `dbConnect(check_interrupts = TRUE)` now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (#336).
 - `dbAppendTable()` gains `copy` argument. If set to `TRUE`, data is imported via `COPY name FROM STDIN` (#241, @hugheylab).
 - Postgres `NOTICE` messages are now forwarded as proper R messages and can be captured and suppressed (#208).
-- `dbWriteTable()` uses a transaction (#307).
-
 
 ## Bug fixes
 
