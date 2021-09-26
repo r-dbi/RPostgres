@@ -397,7 +397,8 @@ bool PqResultImpl::bind_row() {
   }
   else {
     int success = PQsendQueryPrepared(
-      pConn_, "", cache.nparams_, &c_params[0],
+      pConn_, "", cache.nparams_,
+      cache.nparams_ ? &c_params[0] : NULL,
       cache.nparams_ ? &lengths[0] : NULL,
       cache.nparams_ ? &formats[0] : NULL,
       0);
