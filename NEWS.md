@@ -7,12 +7,9 @@
 
 # RPostgres 1.4.1 (2021-09-26)
 
+## Bug fixes
+
 - Avoid crash by dereferencing 0-size vector (#343). 
-
-
-# RPostgres 1.4.0.9000 (2021-09-25)
-
-- Same as previous version.
 
 
 # RPostgres 1.4.0 (2021-09-25)
