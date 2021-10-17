@@ -112,8 +112,8 @@
 <p>When a client wants a square root value, it can insert a new row into a table, filling <code>in_val</code>. We’ll then have a bunch of workers that will calculate the results for the client, and fill in <code>out_val</code>.</p>
 <p>To manage these workers, we will combine 2 PostgreSQL concepts:</p>
 <div id="listen-notify" class="section level2">
-<h2 class="hasAnchor">
-<a href="#listen-notify" class="anchor" aria-hidden="true"></a>LISTEN / NOTIFY</h2>
+<h2>LISTEN / NOTIFY<a class="anchor" aria-label="anchor" href="#listen-notify"></a>
+</h2>
 <p>The Postgres <code>LISTEN</code> and <code>NOTIFY</code> commands allow you to send and receive messages between clients connected to a PostgreSQL database. This is known as a publish/subscribe architecture.</p>
 <p>We tell Postgres that we are interested in receiving messages using <code>LISTEN</code>. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -138,8 +138,8 @@
 <span class="va">n</span><span class="op">$</span><span class="va">payload</span></code></pre></div>
 </div>
 <div id="skip-locked" class="section level2">
-<h2 class="hasAnchor">
-<a href="#skip-locked" class="anchor" aria-hidden="true"></a>SKIP LOCKED</h2>
+<h2>SKIP LOCKED<a class="anchor" aria-label="anchor" href="#skip-locked"></a>
+</h2>
 <p>We can use LISTEN/NOTIFY to inform all workers that there is something to be done, but how do we decide which worker actually does the work? This is done using <code>SKIP LOCKED</code>.</p>
 <p>We notify all workers that the input <code>99</code> is ready for processing. After receiving this, they all do the following:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -154,8 +154,8 @@
 <p>Using SKIP LOCKED is discussed in more detail <a href="https://www.2ndquadrant.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/" class="external-link">in this article</a>.</p>
 </div>
 <div id="implementing-our-worker" class="section level2">
-<h2 class="hasAnchor">
-<a href="#implementing-our-worker" class="anchor" aria-hidden="true"></a>Implementing our worker</h2>
+<h2>Implementing our worker<a class="anchor" aria-label="anchor" href="#implementing-our-worker"></a>
+</h2>
 <p>Now we can put the concepts together. The following implements our worker as a function (again, this would be running as a script on several servers):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
@@ -290,7 +290,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>

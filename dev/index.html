@@ -81,8 +81,8 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div id="rpostgres" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#rpostgres" class="anchor" aria-hidden="true"></a>RPostgres</h1></div>
+<div class="page-header"><h1>RPostgres<a class="anchor" aria-label="anchor" href="#rpostgres"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p>RPostgres is an DBI-compliant interface to the postgres database. It’s a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:</p>
@@ -93,8 +93,8 @@
 <li><p>A simplified build process that relies on system libpq.</p></li>
 </ul>
 <div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
+<h2>Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Install the latest RPostgres release from CRAN:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"RPostgres"</span><span class="op">)</span>
@@ -105,8 +105,8 @@
 <p>Discussions associated with DBI and related database packages take place on <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-db" class="external-link">R-SIG-DB</a>. The website <a href="https://db.rstudio.com/" class="external-link">Databases using R</a> describes the tools and best practices in this ecosystem.</p>
 </div>
 <div id="basic-usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage" class="anchor" aria-hidden="true"></a>Basic usage</h2>
+<h2>Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to the default postgres database</span>
@@ -137,8 +137,8 @@
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="connecting-to-a-specific-postgres-instance" class="section level2">
-<h2 class="hasAnchor">
-<a href="#connecting-to-a-specific-postgres-instance" class="anchor" aria-hidden="true"></a>Connecting to a specific Postgres instance</h2>
+<h2>Connecting to a specific Postgres instance<a class="anchor" aria-label="anchor" href="#connecting-to-a-specific-postgres-instance"></a>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
 <span class="co"># Connect to a specific postgres database i.e. Heroku</span>
@@ -149,8 +149,8 @@
                  password <span class="op">=</span> <span class="st">'PASSWORD'</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="design-notes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#design-notes" class="anchor" aria-hidden="true"></a>Design notes</h2>
+<h2>Design notes<a class="anchor" aria-label="anchor" href="#design-notes"></a>
+</h2>
 <p>The original DBI design imagined that each package could instantiate X drivers, with each driver having Y connections and each connection having Z results. This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set. In the RPostgres package there’s only one class on the C side: a connection, which optionally contains a result set. On the R side, the driver class is just a dummy class with no contents (used only for dispatch), and both the connection and result objects point to the same external pointer.</p>
 <hr>
 <p>Please note that the ‘RPostgres’ project is released with a <a href="https://rpostgres.r-dbi.org/code_of_conduct">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
@@ -225,7 +225,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
