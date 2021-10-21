@@ -33,11 +33,14 @@ test_that("commit unnamed transactions", {
     add = TRUE
   )
 
+  expect_fale(postgresIsTransacting(con))
   dbBegin(con)
+  expect_true(postgresIsTransacting(con))
   dbCreateTable(con, "a", data.frame(a = 1))
   expect_equal(sort(dbListTables(con)), "a")
   expect_equal(sort(dbListTables(con2)), character())
   dbCommit(con)
+  expect_fale(postgresIsTransacting(con))
   expect_equal(sort(dbListTables(con)), "a")
   expect_equal(sort(dbListTables(con2)), "a")
 
