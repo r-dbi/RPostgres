@@ -37,6 +37,7 @@ test_that("commit unnamed transactions", {
   dbCreateTable(con, "a", data.frame(a = 1))
   expect_equal(sort(dbListTables(con)), "a")
   expect_equal(sort(dbListTables(con2)), character())
+  dbCommit(con)
   expect_equal(sort(dbListTables(con)), "a")
   expect_equal(sort(dbListTables(con2)), "a")
 
