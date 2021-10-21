@@ -68,7 +68,6 @@ Collate:
     'default.R'
     'export.R'
     'names.R'
-    'postgresIsTransacting.R'
     'quote.R'
     'tables.R'
     'transactions.R'
