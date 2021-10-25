@@ -39,7 +39,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/r-dbi/RPostgres/">
+  <a href="https://github.com/r-dbi/RPostgres/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -54,198 +54,173 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/NEWS.md"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rpostgres-1419000-2021-09-26" class="section level1">
-<h1 class="page-header" data-toc-text="1.4.1.9000">RPostgres 1.4.1.9000 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-1419000-2021-09-26"></a>
-<small> Unreleased </small></h1>
-<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343">#343</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.1.9000" id="rpostgres-1419000-2021-09-26">RPostgres 1.4.1.9000 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-1419000-2021-09-26"></a></h2>
+<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li>
 </ul></div>
-    <div id="rpostgres-141-2021-09-26" class="section level1">
-<h1 class="page-header" data-toc-text="1.4.1">RPostgres 1.4.1 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-141-2021-09-26"></a>
-<small> 2021-09-27 </small></h1>
-<div id="bug-fixes" class="section level2">
-<h2>Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes"></a>
-</h2>
-<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343">#343</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.1" id="rpostgres-141-2021-09-26">RPostgres 1.4.1 (2021-09-26)<small>2021-09-27</small><a class="anchor" aria-label="anchor" href="#rpostgres-141-2021-09-26"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
+<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li>
 </ul></div>
 </div>
-    <div id="rpostgres-140-2021-09-25" class="section level1">
-<h1 class="page-header" data-toc-text="1.4.0">RPostgres 1.4.0 (2021-09-25)<a class="anchor" aria-label="anchor" href="#rpostgres-140-2021-09-25"></a>
-<small> 2021-09-26 </small></h1>
-<div id="features" class="section level2">
-<h2>Features<a class="anchor" aria-label="anchor" href="#features"></a>
-</h2>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.0" id="rpostgres-140-2021-09-25">RPostgres 1.4.0 (2021-09-25)<small>2021-09-26</small><a class="anchor" aria-label="anchor" href="#rpostgres-140-2021-09-25"></a></h2>
+<div class="section level3">
+<h3 id="features-1-4-0">Features<a class="anchor" aria-label="anchor" href="#features-1-4-0"></a></h3>
 <ul><li>
-<code><a href="../reference/Redshift.html">Redshift()</a></code> connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary and persistent tables (<a href="https://github.com/r-dbi/RPostgres/issues/215">#215</a>, <a href="https://github.com/r-dbi/RPostgres/issues/326">#326</a>).</li>
+<code><a href="../reference/Redshift.html">Redshift()</a></code> connections now adhere to almost all of the DBI specification when connecting to a Redshift cluster. BLOBs are not supported on Redshift, and there are limitations with enumerating temporary and persistent tables (<a href="https://github.com/r-dbi/RPostgres/issues/215" class="external-link">#215</a>, <a href="https://github.com/r-dbi/RPostgres/issues/326" class="external-link">#326</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbBegin()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbCommit()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbRollback()</a></code> gain <code>name</code> argument to support savepoints. An unnamed transaction must be started beforehand (<a href="https://github.com/r-dbi/RPostgres/issues/13">#13</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbBegin()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbCommit()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbRollback()</a></code> gain <code>name</code> argument to support savepoints. An unnamed transaction must be started beforehand (<a href="https://github.com/r-dbi/RPostgres/issues/13" class="external-link">#13</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> uses a transaction (<a href="https://github.com/r-dbi/RPostgres/issues/307">#307</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> uses a transaction (<a href="https://github.com/r-dbi/RPostgres/issues/307" class="external-link">#307</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> gains <code>immediate</code> argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (<a href="https://github.com/r-dbi/RPostgres/issues/272">#272</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> gains <code>immediate</code> argument. Multiple queries (separated by semicolons) can be passed in this mode, query parameters are not supported (<a href="https://github.com/r-dbi/RPostgres/issues/272" class="external-link">#272</a>).</li>
 <li>
-<code>dbConnect(check_interrupts = TRUE)</code> now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (<a href="https://github.com/r-dbi/RPostgres/issues/336">#336</a>).</li>
+<code>dbConnect(check_interrupts = TRUE)</code> now aborts a running query faster and more reliably when the user signals an interrupt, e.g. by pressing Ctrl+C (<a href="https://github.com/r-dbi/RPostgres/issues/336" class="external-link">#336</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> gains <code>copy</code> argument. If set to <code>TRUE</code>, data is imported via <code>COPY name FROM STDIN</code> (<a href="https://github.com/r-dbi/RPostgres/issues/241">#241</a>, <a href="https://github.com/hugheylab">@hugheylab</a>).</li>
-<li>Postgres <code>NOTICE</code> messages are now forwarded as proper R messages and can be captured and suppressed (<a href="https://github.com/r-dbi/RPostgres/issues/208">#208</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> gains <code>copy</code> argument. If set to <code>TRUE</code>, data is imported via <code>COPY name FROM STDIN</code> (<a href="https://github.com/r-dbi/RPostgres/issues/241" class="external-link">#241</a>, <a href="https://github.com/hugheylab" class="external-link">@hugheylab</a>).</li>
+<li>Postgres <code>NOTICE</code> messages are now forwarded as proper R messages and can be captured and suppressed (<a href="https://github.com/r-dbi/RPostgres/issues/208" class="external-link">#208</a>).</li>
 </ul></div>
-<div id="bug-fixes-1" class="section level2">
-<h2>Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1"></a>
-</h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-0"></a></h3>
 <ul><li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325">#325</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325" class="external-link">#325</a>).</li>
 </ul></div>
-<div id="internal" class="section level2">
-<h2>Internal<a class="anchor" aria-label="anchor" href="#internal"></a>
-</h2>
-<ul><li>Skip timestamp tests on i386 (<a href="https://github.com/r-dbi/RPostgres/issues/318">#318</a>).</li>
+<div class="section level3">
+<h3 id="internal-1-4-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-0"></a></h3>
+<ul><li>Skip timestamp tests on i386 (<a href="https://github.com/r-dbi/RPostgres/issues/318" class="external-link">#318</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> use single dispatch (<a href="https://github.com/r-dbi/RPostgres/issues/320">#320</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> use single dispatch (<a href="https://github.com/r-dbi/RPostgres/issues/320" class="external-link">#320</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> default to <code>copy = NULL</code>, this translates to <code>TRUE</code> for <code><a href="../reference/Postgres.html">Postgres()</a></code> and <code>FALSE</code> for <code><a href="../reference/Redshift.html">Redshift()</a></code> connections (<a href="https://github.com/r-dbi/RPostgres/issues/329">#329</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> default to <code>copy = NULL</code>, this translates to <code>TRUE</code> for <code><a href="../reference/Postgres.html">Postgres()</a></code> and <code>FALSE</code> for <code><a href="../reference/Redshift.html">Redshift()</a></code> connections (<a href="https://github.com/r-dbi/RPostgres/issues/329" class="external-link">#329</a>).</li>
 </ul></div>
-<div id="documentation" class="section level2">
-<h2>Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h2>
+<div class="section level3">
+<h3 id="documentation-1-4-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-0"></a></h3>
 <ul><li>Order help topics on pkgdown site.</li>
 <li>Use <code>@examplesIf</code> in method documentation.</li>
-<li>Document when <code>field.types</code> is used in <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/206">#206</a>).</li>
-<li>Document setting the tablespace before writing a table (<a href="https://github.com/r-dbi/RPostgres/issues/246">#246</a>).</li>
-<li>Tweak error message for named <code>params</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/266">#266</a>).</li>
+<li>Document when <code>field.types</code> is used in <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/206" class="external-link">#206</a>).</li>
+<li>Document setting the tablespace before writing a table (<a href="https://github.com/r-dbi/RPostgres/issues/246" class="external-link">#246</a>).</li>
+<li>Tweak error message for named <code>params</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/266" class="external-link">#266</a>).</li>
 </ul></div>
 </div>
-    <div id="rpostgres-133-2021-07-05" class="section level1">
-<h1 class="page-header" data-toc-text="1.3.3">RPostgres 1.3.3 (2021-07-05)<a class="anchor" aria-label="anchor" href="#rpostgres-133-2021-07-05"></a>
-<small> 2021-07-05 </small></h1>
-<ul><li>Fix <code>dbConnect(check_interrupts = TRUE)</code> on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/244">#244</a>, <a href="https://github.com/zozlak">@zozlak</a>).</li>
-<li>Windows: update to libpq 13.2.0 and add UCRT support (<a href="https://github.com/r-dbi/RPostgres/issues/309">#309</a>, <a href="https://github.com/jeroen">@jeroen</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.3.3" id="rpostgres-133-2021-07-05">RPostgres 1.3.3 (2021-07-05)<small>2021-07-05</small><a class="anchor" aria-label="anchor" href="#rpostgres-133-2021-07-05"></a></h2>
+<ul><li>Fix <code>dbConnect(check_interrupts = TRUE)</code> on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/244" class="external-link">#244</a>, <a href="https://github.com/zozlak" class="external-link">@zozlak</a>).</li>
+<li>Windows: update to libpq 13.2.0 and add UCRT support (<a href="https://github.com/r-dbi/RPostgres/issues/309" class="external-link">#309</a>, <a href="https://github.com/jeroen" class="external-link">@jeroen</a>).</li>
 </ul></div>
-    <div id="rpostgres-132-2021-04-12" class="section level1">
-<h1 class="page-header" data-toc-text="1.3.2">RPostgres 1.3.2 (2021-04-12)<a class="anchor" aria-label="anchor" href="#rpostgres-132-2021-04-12"></a>
-<small> 2021-04-12 </small></h1>
-<ul><li>Remove BH dependency by inlining the header files (<a href="https://github.com/r-dbi/RPostgres/issues/300">#300</a>).</li>
-<li>Use Autobrew if libpq is older than version 12 (<a href="https://github.com/r-dbi/RPostgres/issues/294">#294</a>, <a href="https://github.com/jeroen">@jeroen</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.3.2" id="rpostgres-132-2021-04-12">RPostgres 1.3.2 (2021-04-12)<small>2021-04-12</small><a class="anchor" aria-label="anchor" href="#rpostgres-132-2021-04-12"></a></h2>
+<ul><li>Remove BH dependency by inlining the header files (<a href="https://github.com/r-dbi/RPostgres/issues/300" class="external-link">#300</a>).</li>
+<li>Use Autobrew if libpq is older than version 12 (<a href="https://github.com/r-dbi/RPostgres/issues/294" class="external-link">#294</a>, <a href="https://github.com/jeroen" class="external-link">@jeroen</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> now issues <code>SET datestyle to iso, mdy</code> to avoid translation errors for datetime values with databases configured differently (<a href="https://github.com/r-dbi/RPostgres/issues/287">#287</a>, <a href="https://github.com/baderstine">@baderstine</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> now issues <code>SET datestyle to iso, mdy</code> to avoid translation errors for datetime values with databases configured differently (<a href="https://github.com/r-dbi/RPostgres/issues/287" class="external-link">#287</a>, <a href="https://github.com/baderstine" class="external-link">@baderstine</a>).</li>
 </ul></div>
-    <div id="rpostgres-131-2021-01-19" class="section level1">
-<h1 class="page-header" data-toc-text="1.3.1">RPostgres 1.3.1 (2021-01-19)<a class="anchor" aria-label="anchor" href="#rpostgres-131-2021-01-19"></a>
-<small> 2021-01-19 </small></h1>
-<div id="bug-fixes-2" class="section level2">
-<h2>Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2"></a>
-</h2>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.3.1" id="rpostgres-131-2021-01-19">RPostgres 1.3.1 (2021-01-19)<small>2021-01-19</small><a class="anchor" aria-label="anchor" href="#rpostgres-131-2021-01-19"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-1"></a></h3>
 <ul><li>
-<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/267">#267</a>).</li>
-<li>Fix behavior with invalid time zone (<a href="https://github.com/r-dbi/RPostgres/issues/284">#284</a>, <a href="https://github.com/ateucher">@ateucher</a>).</li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/267" class="external-link">#267</a>).</li>
+<li>Fix behavior with invalid time zone (<a href="https://github.com/r-dbi/RPostgres/issues/284" class="external-link">#284</a>, <a href="https://github.com/ateucher" class="external-link">@ateucher</a>).</li>
 </ul></div>
-<div id="internal-1" class="section level2">
-<h2>Internal<a class="anchor" aria-label="anchor" href="#internal-1"></a>
-</h2>
+<div class="section level3">
+<h3 id="internal-1-3-1">Internal<a class="anchor" aria-label="anchor" href="#internal-1-3-1"></a></h3>
 <ul><li>
 <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> defaults to <code>timezone_out = NULL</code>, this means to use <code>timezone</code>.</li>
 <li>
-<code>FORCE_AUTOBREW</code> environment variable enforces use of <code>autobrew</code> in <code>configure</code> (<a href="https://github.com/r-dbi/RPostgres/issues/283">#283</a>, <a href="https://github.com/jeroen">@jeroen</a>).</li>
-<li>Fix <code>configure</code> on macOS, small tweaks (<a href="https://github.com/r-dbi/RPostgres/issues/282">#282</a>, <a href="https://github.com/r-dbi/RPostgres/issues/283">#283</a>, <a href="https://github.com/jeroen">@jeroen</a>).</li>
+<code>FORCE_AUTOBREW</code> environment variable enforces use of <code>autobrew</code> in <code>configure</code> (<a href="https://github.com/r-dbi/RPostgres/issues/283" class="external-link">#283</a>, <a href="https://github.com/jeroen" class="external-link">@jeroen</a>).</li>
+<li>Fix <code>configure</code> on macOS, small tweaks (<a href="https://github.com/r-dbi/RPostgres/issues/282" class="external-link">#282</a>, <a href="https://github.com/r-dbi/RPostgres/issues/283" class="external-link">#283</a>, <a href="https://github.com/jeroen" class="external-link">@jeroen</a>).</li>
 <li>Fix <code>configure</code> script, remove <code>$()</code> not reliably detected by <code>checkbashisms</code>.</li>
 <li>
-<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href="https://github.com/r-dbi/RPostgres/issues/265">#265</a>).</li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href="https://github.com/r-dbi/RPostgres/issues/265" class="external-link">#265</a>).</li>
 </ul></div>
 </div>
-    <div id="rpostgres-130-2021-01-05" class="section level1">
-<h1 class="page-header" data-toc-text="1.3.0">RPostgres 1.3.0 (2021-01-05)<a class="anchor" aria-label="anchor" href="#rpostgres-130-2021-01-05"></a>
-<small> 2021-01-07 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.3.0" id="rpostgres-130-2021-01-05">RPostgres 1.3.0 (2021-01-05)<small>2021-01-07</small><a class="anchor" aria-label="anchor" href="#rpostgres-130-2021-01-05"></a></h2>
 <ul><li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>timezone_out</code> argument, the default <code>NULL</code> means to use <code>timezone</code> (<a href="https://github.com/r-dbi/RPostgres/issues/222">#222</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>timezone_out</code> argument, the default <code>NULL</code> means to use <code>timezone</code> (<a href="https://github.com/r-dbi/RPostgres/issues/222" class="external-link">#222</a>).</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href="https://github.com/r-dbi/RPostgres/issues/270">#270</a>).</li>
-<li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href="https://github.com/r-dbi/RPostgres/issues/237">#237</a>, <a href="https://github.com/lentinj">@lentinj</a>).</li>
-</ul><div id="bug-fixes-3" class="section level2">
-<h2>Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3"></a>
-</h2>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> now quotes difftime values as <code>interval</code> (<a href="https://github.com/r-dbi/RPostgres/issues/270" class="external-link">#270</a>).</li>
+<li>New <code><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify()</a></code> adds <code>LISTEN/NOTIFY</code> support (<a href="https://github.com/r-dbi/RPostgres/issues/237" class="external-link">#237</a>, <a href="https://github.com/lentinj" class="external-link">@lentinj</a>).</li>
+</ul><div class="section level3">
+<h3 id="bug-fixes-1-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-0"></a></h3>
 <ul><li>
-<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/267">#267</a>).</li>
+<code>Inf</code>, <code>-Inf</code> and <code>NaN</code> values are returned correctly on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/267" class="external-link">#267</a>).</li>
 <li>
-<code>DATETIME</code> values (=without time zone) and <code>DATETIMETZ</code> values (=with time zone) are returned correctly (<a href="https://github.com/r-dbi/RPostgres/issues/190">#190</a>, <a href="https://github.com/r-dbi/RPostgres/issues/205">#205</a>, <a href="https://github.com/r-dbi/RPostgres/issues/229">#229</a>), also if they start before 1970 (<a href="https://github.com/r-dbi/RPostgres/issues/221">#221</a>).</li>
+<code>DATETIME</code> values (=without time zone) and <code>DATETIMETZ</code> values (=with time zone) are returned correctly (<a href="https://github.com/r-dbi/RPostgres/issues/190" class="external-link">#190</a>, <a href="https://github.com/r-dbi/RPostgres/issues/205" class="external-link">#205</a>, <a href="https://github.com/r-dbi/RPostgres/issues/229" class="external-link">#229</a>), also if they start before 1970 (<a href="https://github.com/r-dbi/RPostgres/issues/221" class="external-link">#221</a>).</li>
 </ul></div>
-<div id="internal-2" class="section level2">
-<h2>Internal<a class="anchor" aria-label="anchor" href="#internal-2"></a>
-</h2>
+<div class="section level3">
+<h3 id="internal-1-3-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-3-0"></a></h3>
 <ul><li>
-<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href="https://github.com/r-dbi/RPostgres/issues/265">#265</a>).</li>
-<li>Switch to GitHub Actions (<a href="https://github.com/r-dbi/RPostgres/issues/268">#268</a>, thanks <a href="https://github.com/ankane">@ankane</a>).</li>
+<code>configure</code> uses a shell script and no longer forwards to <code>src/configure.bash</code> (<a href="https://github.com/r-dbi/RPostgres/issues/265" class="external-link">#265</a>).</li>
+<li>Switch to GitHub Actions (<a href="https://github.com/r-dbi/RPostgres/issues/268" class="external-link">#268</a>, thanks <a href="https://github.com/ankane" class="external-link">@ankane</a>).</li>
 <li>Now imports the lubridate package.</li>
 </ul></div>
 </div>
-    <div id="rpostgres-121-2020-09-28" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.1">RPostgres 1.2.1 (2020-09-28)<a class="anchor" aria-label="anchor" href="#rpostgres-121-2020-09-28"></a>
-<small> 2020-09-28 </small></h1>
-<ul><li>Gains new <code>Redshift</code> driver for connecting to Redshift databases. Redshift databases behave almost identically to Postgres so this driver allows downstream packages to distinguish between the two (<a href="https://github.com/r-dbi/RPostgres/issues/258">#258</a>).</li>
-<li>Datetime values are now passed to the database using an unambiguous time zone format (<a href="https://github.com/r-dbi/RPostgres/issues/255">#255</a>, <a href="https://github.com/imlijunda">@imlijunda</a>).</li>
-<li>Document <code><a href="../reference/Postgres.html">Postgres()</a></code> together with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/242">#242</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.2.1" id="rpostgres-121-2020-09-28">RPostgres 1.2.1 (2020-09-28)<small>2020-09-28</small><a class="anchor" aria-label="anchor" href="#rpostgres-121-2020-09-28"></a></h2>
+<ul><li>Gains new <code>Redshift</code> driver for connecting to Redshift databases. Redshift databases behave almost identically to Postgres so this driver allows downstream packages to distinguish between the two (<a href="https://github.com/r-dbi/RPostgres/issues/258" class="external-link">#258</a>).</li>
+<li>Datetime values are now passed to the database using an unambiguous time zone format (<a href="https://github.com/r-dbi/RPostgres/issues/255" class="external-link">#255</a>, <a href="https://github.com/imlijunda" class="external-link">@imlijunda</a>).</li>
+<li>Document <code><a href="../reference/Postgres.html">Postgres()</a></code> together with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/242" class="external-link">#242</a>).</li>
 <li>Windows: update libpq to 12.2.0.</li>
 </ul></div>
-    <div id="rpostgres-120" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.0">RPostgres 1.2.0<a class="anchor" aria-label="anchor" href="#rpostgres-120"></a>
-<small> 2019-12-18 </small></h1>
-<div id="communication-with-the-database" class="section level2">
-<h2>Communication with the database<a class="anchor" aria-label="anchor" href="#communication-with-the-database"></a>
-</h2>
-<ul><li>Breaking: Translate floating-point values to <code>DOUBLE PRECISION</code> by default (<a href="https://github.com/r-dbi/RPostgres/issues/194">#194</a>).</li>
-<li>Avoid aggressive rounding when passing numeric values to the database (<a href="https://github.com/r-dbi/RPostgres/issues/184">#184</a>).</li>
-<li>Avoid adding extra spaces for numerics (<a href="https://github.com/r-dbi/RPostgres/issues/216">#216</a>).</li>
-<li>Column names and error messages are UTF-8 encoded (<a href="https://github.com/r-dbi/RPostgres/issues/172">#172</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.2.0" id="rpostgres-120">RPostgres 1.2.0<small>2019-12-18</small><a class="anchor" aria-label="anchor" href="#rpostgres-120"></a></h2>
+<div class="section level3">
+<h3 id="communication-with-the-database-1-2-0">Communication with the database<a class="anchor" aria-label="anchor" href="#communication-with-the-database-1-2-0"></a></h3>
+<ul><li>Breaking: Translate floating-point values to <code>DOUBLE PRECISION</code> by default (<a href="https://github.com/r-dbi/RPostgres/issues/194" class="external-link">#194</a>).</li>
+<li>Avoid aggressive rounding when passing numeric values to the database (<a href="https://github.com/r-dbi/RPostgres/issues/184" class="external-link">#184</a>).</li>
+<li>Avoid adding extra spaces for numerics (<a href="https://github.com/r-dbi/RPostgres/issues/216" class="external-link">#216</a>).</li>
+<li>Column names and error messages are UTF-8 encoded (<a href="https://github.com/r-dbi/RPostgres/issues/172" class="external-link">#172</a>).</li>
 <li>
-<code>dbWriteTable(copy = FALSE)</code>, <code><a href="https://dbi.r-dbi.org/reference/sqlData.html" class="external-link">sqlData()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> now work for character columns (<a href="https://github.com/r-dbi/RPostgres/issues/209">#209</a>), which are always converted to UTF-8.</li>
+<code>dbWriteTable(copy = FALSE)</code>, <code><a href="https://dbi.r-dbi.org/reference/sqlData.html" class="external-link">sqlData()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> now work for character columns (<a href="https://github.com/r-dbi/RPostgres/issues/209" class="external-link">#209</a>), which are always converted to UTF-8.</li>
 </ul></div>
-<div id="new-features" class="section level2">
-<h2>New features<a class="anchor" aria-label="anchor" href="#new-features"></a>
-</h2>
-<ul><li>Add <code>timezone</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/187">#187</a>, <a href="https://github.com/trafficonese">@trafficonese</a>).</li>
+<div class="section level3">
+<h3 id="new-features-1-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
+<ul><li>Add <code>timezone</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/187" class="external-link">#187</a>, <a href="https://github.com/trafficonese" class="external-link">@trafficonese</a>).</li>
 <li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbGetInfo.html" class="external-link">dbGetInfo()</a></code> for the driver and the connection object.</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>check_interrupts</code> argument that allows interrupting execution safely while waiting for query results to be ready (<a href="https://github.com/r-dbi/RPostgres/issues/193">#193</a>, <a href="https://github.com/zozlak">@zozlak</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains <code>check_interrupts</code> argument that allows interrupting execution safely while waiting for query results to be ready (<a href="https://github.com/r-dbi/RPostgres/issues/193" class="external-link">#193</a>, <a href="https://github.com/zozlak" class="external-link">@zozlak</a>).</li>
 <li>
 <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> also handles unquoted identifiers of the form <code>table</code> or <code>schema.table</code>, for compatibility with dbplyr. In addition, a <code>catalog</code> component is supported for quoting and unquoting with <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>.</li>
 <li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href="https://github.com/r-dbi/RPostgres/issues/209">#209</a>).</li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> available for <code>"character"</code> (<a href="https://github.com/r-dbi/RPostgres/issues/209" class="external-link">#209</a>).</li>
 <li>Windows: update libpq to 11.1.0.</li>
-<li>Fulfill CII badge requirements (<a href="https://github.com/r-dbi/RPostgres/issues/227">#227</a>, <a href="https://github.com/TSchiefer">@TSchiefer</a>).</li>
+<li>Fulfill CII badge requirements (<a href="https://github.com/r-dbi/RPostgres/issues/227" class="external-link">#227</a>, <a href="https://github.com/TSchiefer" class="external-link">@TSchiefer</a>).</li>
 </ul></div>
-<div id="bug-fixes-4" class="section level2">
-<h2>Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-4"></a>
-</h2>
-<ul><li>Hide unused symbols in shared library (<a href="https://github.com/r-dbi/RPostgres/issues/230">#230</a>, <a href="https://github.com/troels">@troels</a>).</li>
+<div class="section level3">
+<h3 id="bug-fixes-1-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
+<ul><li>Hide unused symbols in shared library (<a href="https://github.com/r-dbi/RPostgres/issues/230" class="external-link">#230</a>, <a href="https://github.com/troels" class="external-link">@troels</a>).</li>
 <li>Fix partial argument matching in <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> (r-dbi/DBI#249).</li>
-<li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href="https://github.com/r-dbi/RPostgres/issues/191">#191</a>).</li>
+<li>Fix binding for whole numbers and <code>POSIXt</code> timestamps (<a href="https://github.com/r-dbi/RPostgres/issues/191" class="external-link">#191</a>).</li>
 </ul></div>
-<div id="internal-3" class="section level2">
-<h2>Internal<a class="anchor" aria-label="anchor" href="#internal-3"></a>
-</h2>
+<div class="section level3">
+<h3 id="internal-1-2-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-2-0"></a></h3>
 <ul><li>
-<code>sqlData(copy = FALSE)</code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/209">#209</a>).</li>
-<li>Add tests for <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/220">#220</a>, <a href="https://github.com/baileych">@baileych</a>).</li>
-<li>Improved tests for numerical precision (<a href="https://github.com/r-dbi/RPostgres/issues/203">#203</a>, <a href="https://github.com/harvey131">@harvey131</a>).</li>
-<li>Fix test: change from <code>REAL</code> to <code>DOUBLE PRECISION</code> (<a href="https://github.com/r-dbi/RPostgres/issues/204">#204</a>, <a href="https://github.com/harvey131">@harvey131</a>).</li>
+<code>sqlData(copy = FALSE)</code> now uses <code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/209" class="external-link">#209</a>).</li>
+<li>Add tests for <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/220" class="external-link">#220</a>, <a href="https://github.com/baileych" class="external-link">@baileych</a>).</li>
+<li>Improved tests for numerical precision (<a href="https://github.com/r-dbi/RPostgres/issues/203" class="external-link">#203</a>, <a href="https://github.com/harvey131" class="external-link">@harvey131</a>).</li>
+<li>Fix test: change from <code>REAL</code> to <code>DOUBLE PRECISION</code> (<a href="https://github.com/r-dbi/RPostgres/issues/204" class="external-link">#204</a>, <a href="https://github.com/harvey131" class="external-link">@harvey131</a>).</li>
 <li>Implement <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> for own connection class, don’t hijack base class implementation (r-dbi/RMariaDB#119).</li>
 <li>Avoid including the call in errors.</li>
 <li>Align <code>DbResult</code> and other classes with RSQLite and RMariaDB.</li>
 </ul></div>
 </div>
-    <div id="rpostgres-113" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.3">RPostgres 1.1.3<a class="anchor" aria-label="anchor" href="#rpostgres-113"></a>
-<small> 2019-12-07 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.3" id="rpostgres-113">RPostgres 1.1.3<small>2019-12-07</small><a class="anchor" aria-label="anchor" href="#rpostgres-113"></a></h2>
 <ul><li>Replace <code>std::mem_fn()</code> by <code>boost::mem_fn()</code> which works for older compilers.</li>
 </ul></div>
-    <div id="rpostgres-112" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.2">RPostgres 1.1.2<a class="anchor" aria-label="anchor" href="#rpostgres-112"></a>
-<small> 2019-12-03 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.2" id="rpostgres-112">RPostgres 1.1.2<small>2019-12-03</small><a class="anchor" aria-label="anchor" href="#rpostgres-112"></a></h2>
 <ul><li>Replace <code>std::mem_fun_ref()</code> by <code>std::mem_fn()</code>.</li>
 </ul></div>
-    <div id="rpostgres-111-2018-05-05" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.1">RPostgres 1.1.1 (2018-05-05)<a class="anchor" aria-label="anchor" href="#rpostgres-111-2018-05-05"></a>
-<small> 2018-05-06 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.1" id="rpostgres-111-2018-05-05">RPostgres 1.1.1 (2018-05-05)<small>2018-05-06</small><a class="anchor" aria-label="anchor" href="#rpostgres-111-2018-05-05"></a></h2>
 <ul><li>Add support for <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest#133).</li>
 <li>Data frames resulting from a query always have unique non-empty column names (r-dbi/DBItest#137).</li>
 <li>New arguments <code>temporary</code> and <code>fail_if_missing</code> (default: <code>TRUE</code>) to <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code> (r-dbi/DBI#141, r-dbi/DBI#197).</li>
@@ -259,31 +234,28 @@
 <li>Reexporting <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbIsReadOnly.html" class="external-link">DBI::dbIsReadOnly()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbCanConnect.html" class="external-link">DBI::dbCanConnect()</a></code>.</li>
 <li>Now imports DBI 1.0.0.</li>
 </ul></div>
-    <div id="rpostgres-110-2018-04-04" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.0">RPostgres 1.1.0 (2018-04-04)<a class="anchor" aria-label="anchor" href="#rpostgres-110-2018-04-04"></a>
-<small> 2018-04-06 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.0" id="rpostgres-110-2018-04-04">RPostgres 1.1.0 (2018-04-04)<small>2018-04-06</small><a class="anchor" aria-label="anchor" href="#rpostgres-110-2018-04-04"></a></h2>
 <ul><li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbGetException.html" class="external-link">dbGetException()</a></code> is no longer reexported from DBI.</li>
-<li>Make “typname” information available after <code><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code><a href="https://dbi.r-dbi.org/reference/dbColumnInfo.html" class="external-link">dbColumnInfo()</a></code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>) (<a href="https://github.com/r-dbi/RPostgres/issues/114">#114</a>, <a href="https://github.com/etiennebr">@etiennebr</a>).</li>
-<li>Values of class <code>"integer64"</code> are now supported for <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/178">#178</a>).</li>
+<li>Make “typname” information available after <code><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>. Values of unknown type are returned as character vector of class <code>"pq_xxx"</code>, where <code>"xxx"</code> is the “typname” returned from PostgreSQL. In particular, <code>JSON</code> and <code>JSONB</code> values now have class <code>"pq_json"</code> and <code>"pq_jsonb"</code>, respectively. The return value of <code><a href="https://dbi.r-dbi.org/reference/dbColumnInfo.html" class="external-link">dbColumnInfo()</a></code> gains new columns <code>".oid"</code> (<code>integer</code>), <code>". known"</code> (<code>logical</code>) and <code>".typname"</code> (<code>character</code>) (<a href="https://github.com/r-dbi/RPostgres/issues/114" class="external-link">#114</a>, <a href="https://github.com/etiennebr" class="external-link">@etiennebr</a>).</li>
+<li>Values of class <code>"integer64"</code> are now supported for <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/178" class="external-link">#178</a>).</li>
 <li>Schema support, as specified by DBI: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code>.</li>
 <li>Names in the <code>x</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> are preserved in the output (r-lib/DBI#173).</li>
-<li>All generics defined in DBI (e.g., <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>) are now exported, even if the package doesn’t provide a custom implementation (<a href="https://github.com/r-dbi/RPostgres/issues/168">#168</a>).</li>
+<li>All generics defined in DBI (e.g., <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>) are now exported, even if the package doesn’t provide a custom implementation (<a href="https://github.com/r-dbi/RPostgres/issues/168" class="external-link">#168</a>).</li>
 <li>Replace non-portable <code>timegm()</code> with private implementation.</li>
-<li>Correct reference to RPostgreSQL package (<a href="https://github.com/r-dbi/RPostgres/issues/165">#165</a>, <a href="https://github.com/ClaytonJY">@ClaytonJY</a>).</li>
+<li>Correct reference to RPostgreSQL package (<a href="https://github.com/r-dbi/RPostgres/issues/165" class="external-link">#165</a>, <a href="https://github.com/ClaytonJY" class="external-link">@ClaytonJY</a>).</li>
 </ul></div>
-    <div id="rpostgres-10-4-2017-12-20" class="section level1">
-<h1 class="page-header" data-toc-text="1.0-4">RPostgres 1.0-4 (2017-12-20)<a class="anchor" aria-label="anchor" href="#rpostgres-10-4-2017-12-20"></a>
-<small> 2017-12-20 </small></h1>
-<ul><li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/159">#159</a>, <a href="https://github.com/mmuurr">@mmuurr</a>).</li>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0-4" id="rpostgres-10-4-2017-12-20">RPostgres 1.0-4 (2017-12-20)<small>2017-12-20</small><a class="anchor" aria-label="anchor" href="#rpostgres-10-4-2017-12-20"></a></h2>
+<ul><li>Only call <code>PQcancel()</code> if the query hasn’t completed, fixes transactions on Amazon Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/159" class="external-link">#159</a>, <a href="https://github.com/mmuurr" class="external-link">@mmuurr</a>).</li>
 <li>Fix installation on macOS.</li>
 <li>Check libpq version in configure script (need at least 9.0).</li>
-<li>Fix UBSAN warning: reference binding to null pointer (<a href="https://github.com/r-dbi/RPostgres/issues/156">#156</a>).</li>
-<li>Fix rchk warning: PROTECT internal temporary SEXP objects (<a href="https://github.com/r-dbi/RPostgres/issues/157">#157</a>).</li>
-<li>Fix severe memory leak when fetching results (<a href="https://github.com/r-dbi/RPostgres/issues/154">#154</a>).</li>
+<li>Fix UBSAN warning: reference binding to null pointer (<a href="https://github.com/r-dbi/RPostgres/issues/156" class="external-link">#156</a>).</li>
+<li>Fix rchk warning: PROTECT internal temporary SEXP objects (<a href="https://github.com/r-dbi/RPostgres/issues/157" class="external-link">#157</a>).</li>
+<li>Fix severe memory leak when fetching results (<a href="https://github.com/r-dbi/RPostgres/issues/154" class="external-link">#154</a>).</li>
 </ul></div>
-    <div id="rpostgres-10-3-2017-12-01" class="section level1">
-<h1 class="page-header" data-toc-text="1.0-3">RPostgres 1.0-3 (2017-12-01)<a class="anchor" aria-label="anchor" href="#rpostgres-10-3-2017-12-01"></a>
-<small> 2017-12-06 </small></h1>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0-3" id="rpostgres-10-3-2017-12-01">RPostgres 1.0-3 (2017-12-01)<small>2017-12-06</small><a class="anchor" aria-label="anchor" href="#rpostgres-10-3-2017-12-01"></a></h2>
 <p>Initial release, compliant to the DBI specification.</p>
 <ul><li>Test almost all test cases of the DBI specification.</li>
 <li>Fully support parametrized queries.</li>
