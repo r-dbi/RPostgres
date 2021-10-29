@@ -10,6 +10,7 @@
 #define SOCKERR WSAGetLastError()
 #define SOCKET_EINTR WSAEINTR
 #else
+#include <errno.h>
 #define SOCKERR errno
 #define SOCKET_EINTR EINTR
 #endif
