@@ -99,7 +99,7 @@
 - Document `Postgres()` together with `dbConnect()` (#242).
 - Windows: update libpq to 12.2.0.
 
-# RPostgres 1.2.0
+# RPostgres 1.2.0 (2019-12-18)
 
 ## Communication with the database
 
@@ -136,12 +136,12 @@
 - Align `DbResult` and other classes with RSQLite and RMariaDB.
 
 
-# RPostgres 1.1.3
+# RPostgres 1.1.3 (2019-12-07)
 
 - Replace `std::mem_fn()` by `boost::mem_fn()` which works for older compilers.
 
 
-# RPostgres 1.1.2
+# RPostgres 1.1.2 (2019-12-03)
 
 - Replace `std::mem_fun_ref()` by `std::mem_fn()`.
 
