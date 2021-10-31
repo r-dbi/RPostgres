@@ -47,3 +47,6 @@ development:
 authors:
   Kirill Müller:
     href: https://krlmlr.info
+
+news:
+  cran_dates: false
