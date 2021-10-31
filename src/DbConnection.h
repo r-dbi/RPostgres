@@ -52,9 +52,12 @@ public:
 
   void cleanup_query();
   static void finish_query(PGconn* pConn);
+  List wait_for_notify(int timeout_secs);
+
+  void cancel_query();
 
 private:
-  void cancel_query();
+  static void process_notice(void* This, const char* message);
 };
 
 #endif

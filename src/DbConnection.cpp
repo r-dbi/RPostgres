@@ -3,6 +3,9 @@
 #include "encode.h"
 #include "DbResult.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
 
 DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
                            bool check_interrupts) :
@@ -29,6 +32,8 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
   }
 
   PQsetClientEncoding(pConn_, "UTF-8");
+
+  PQsetNoticeProcessor(pConn_, &process_notice, this);
 }
 
 DbConnection::~DbConnection() {
@@ -80,7 +85,7 @@ void DbConnection::reset_current_result(const DbResult* pResult) {
 
 /**
  * Documentation for canceling queries:
- * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
+ * https://www.postgresql.org/docs/current/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
   check_connection();
@@ -253,4 +258,49 @@ void DbConnection::cleanup_query() {
     cancel_query();
   }
   finish_query(pConn_);
+}
+
+List DbConnection::wait_for_notify(int timeout_secs) {
+  PGnotify   *notify;
+  List out;
+  int socket = -1;
+  fd_set input;
+
+  while (TRUE) {
+    // See if there's a notification waiting, if so return it
+    if (!PQconsumeInput(pConn_)) {
+      stop("Failed to consume input from the server");
+    }
+    if ((notify = PQnotifies(pConn_)) != NULL) {
+      out = Rcpp::List::create(
+        _["channel"] = CharacterVector::create(notify->relname),
+        _["pid"] = IntegerVector::create(notify->be_pid),
+        _["payload"] = CharacterVector::create(notify->extra)
+      );
+      PQfreemem(notify);
+      return out;
+    }
+
+    if (socket != -1) {
+      // Socket open, so already been round once, give up.
+      return R_NilValue;
+    }
+
+    // Open DB socket and wait for new data for at most (timeout_secs) seconds
+    if ((socket = PQsocket(pConn_)) < 0) {
+      stop("Failed to get connection socket");
+    }
+    FD_ZERO(&input);
+    FD_SET(socket, &input);
+    timeval timeout = {0, 0};
+    timeout.tv_sec = timeout_secs;
+    if (select(socket + 1, &input, NULL, NULL, &timeout) < 0) {
+        stop("select() on the connection failed");
+    }
+  }
+}
+
+void DbConnection::process_notice(void* /*This*/, const char* message) {
+  Rcpp::CharacterVector msg(message);
+  Rcpp::message(msg);
 }

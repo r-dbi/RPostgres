@@ -7,13 +7,19 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#define SOCKERR WSAGetLastError()
+#define SOCKET_EINTR WSAEINTR
+#else
+#define SOCKERR errno
+#define SOCKET_EINTR EINTR
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql) :
+PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate) :
   pConnPtr_(pConn),
   pConn_(pConn->conn()),
-  pSpec_(prepare(pConn_, sql)),
-  cache(pSpec_),
+  sql_(sql),
+  immediate_(immediate),
+  pSpec_(NULL),
   complete_(false),
   ready_(false),
   data_ready_(false),
@@ -25,6 +31,8 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql)
 {
 
   LOG_DEBUG << sql;
+
+  prepare();
 
   try {
     if (cache.nparams_ == 0) {
@@ -48,16 +56,46 @@ PqResultImpl::~PqResultImpl() {
 
 // Cache ///////////////////////////////////////////////////////////////////////
 
-PqResultImpl::_cache::_cache(PGresult* spec) :
-  names_(get_column_names(spec)),
-  oids_(get_column_oids(spec)),
-  types_(get_column_types(oids_, names_)),
-  known_(get_column_known(oids_)),
-  ncols_(names_.size()),
-  nparams_(PQnparams(spec))
+PqResultImpl::_cache::_cache() :
+  initialized_(false),
+  ncols_(0),
+  nparams_(0)
 {
-  for (int i = 0; i < nparams_; ++i)
+}
+
+void PqResultImpl::_cache::set(PGresult* spec)
+{
+  // always: should be fast
+  if (nparams_ == 0) {
+    nparams_ = PQnparams(spec);
+  }
+
+  std::vector<std::string> new_names = get_column_names(spec);
+  std::vector<Oid> new_oids = get_column_oids(spec);
+
+  if (initialized_ || new_names.size() == 0) {
+    LOG_VERBOSE;
+    if (names_.size() != 0 && new_names.size() != 0 && names_ != new_names) {
+      stop("Multiple queries must use the same column names.");
+    }
+    if (oids_.size() != 0 && new_oids.size() != 0 && oids_ != new_oids) {
+      stop("Multiple queries must use the same column types.");
+    }
+    return;
+  }
+
+  initialized_ = true;
+  names_ = new_names;
+  oids_ = new_oids;
+  types_ = get_column_types(oids_, names_);
+  known_ = get_column_known(oids_);
+  ncols_ = names_.size();
+
+  LOG_DEBUG << nparams_;
+
+  for (int i = 0; i < nparams_; ++i) {
     LOG_VERBOSE << PQparamtype(spec, i);
+  }
 }
 
 
@@ -182,23 +220,30 @@ std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>&
   return known;
 }
 
-PGresult* PqResultImpl::prepare(PGconn* conn, const std::string& sql) {
+void PqResultImpl::prepare() {
+  if (immediate_) {
+    return;
+  }
+
+  LOG_DEBUG << sql_;
+
   // Prepare query
-  PGresult* prep = PQprepare(conn, "", sql.c_str(), 0, NULL);
+  PGresult* prep = PQprepare(pConn_, "", sql_.c_str(), 0, NULL);
   if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
     PQclear(prep);
-    DbConnection::conn_stop(conn, "Failed to prepare query");
+    conn_stop("Failed to prepare query");
   }
   PQclear(prep);
 
   // Retrieve query specification
-  PGresult* spec = PQdescribePrepared(conn, "");
+  PGresult* spec = PQdescribePrepared(pConn_, "");
   if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
     PQclear(spec);
-    DbConnection::conn_stop(conn, "Failed to retrieve query result metadata");
+    conn_stop("Failed to retrieve query result metadata");
   }
 
-  return spec;
+  pSpec_ = spec;
+  cache.set(spec);
 }
 
 void PqResultImpl::init(bool params_have_rows) {
@@ -226,6 +271,12 @@ int PqResultImpl::n_rows_affected() {
 }
 
 void PqResultImpl::bind(const List& params) {
+  LOG_DEBUG << params.size();
+
+  if (immediate_ && params.size() > 0) {
+    stop("Immediate query cannot be parameterized.");
+  }
+
   if (params.size() != cache.nparams_) {
     stop("Query requires %i params; %i supplied.",
          cache.nparams_, params.size());
@@ -253,6 +304,8 @@ void PqResultImpl::bind(const List& params) {
 }
 
 List PqResultImpl::fetch(const int n_max) {
+  LOG_DEBUG << n_max;
+
   if (!ready_)
     stop("Query needs to be bound before fetching");
 
@@ -301,10 +354,13 @@ void PqResultImpl::set_params(const List& params) {
 bool PqResultImpl::bind_row() {
   LOG_VERBOSE << "groups: " << group_ << "/" << groups_;
 
-  if (group_ >= groups_)
-    return false;
+  if (group_ >= groups_) {
+    // Multi-statement support for immediate queries
+    return immediate_;
+  }
 
   if (ready_ || group_ > 0) {
+    LOG_VERBOSE;
     DbConnection::finish_query(pConn_);
   }
 
@@ -330,15 +386,26 @@ bool PqResultImpl::bind_row() {
   }
 
   // Pointer to first element of empty vector is undefined behavior!
-  int success =
-    cache.nparams_ ?
-    PQsendQueryPrepared(pConn_, "", cache.nparams_, &c_params[0],
-                        &lengths[0], &formats[0], 0) :
-    PQsendQueryPrepared(pConn_, "", 0, NULL, NULL, NULL, 0);
   data_ready_ = false;
 
-  if (!success)
-    conn_stop("Failed to send query");
+  if (immediate_) {
+    int success = PQsendQuery(pConn_, sql_.c_str());
+
+    if (!success) {
+      conn_stop("Failed to send query");
+    }
+  }
+  else {
+    int success = PQsendQueryPrepared(
+      pConn_, "", cache.nparams_,
+      cache.nparams_ ? &c_params[0] : NULL,
+      cache.nparams_ ? &lengths[0] : NULL,
+      cache.nparams_ ? &formats[0] : NULL,
+      0);
+
+    if (!success)
+      conn_stop("Failed to set query parameters");
+  }
 
   if (!PQsetSingleRowMode(pConn_))
     conn_stop("Failed to set single row mode");
@@ -353,6 +420,8 @@ void PqResultImpl::after_bind(bool params_have_rows) {
 }
 
 List PqResultImpl::fetch_rows(const int n_max, int& n) {
+  LOG_DEBUG << n_max << "/" << n;
+
   n = (n_max < 0) ? 100 : n_max;
 
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
@@ -378,6 +447,8 @@ List PqResultImpl::fetch_rows(const int n_max, int& n) {
 }
 
 void PqResultImpl::step() {
+  LOG_VERBOSE;
+
   while (step_run())
     ;
 }
@@ -385,51 +456,75 @@ void PqResultImpl::step() {
 bool PqResultImpl::step_run() {
   LOG_VERBOSE;
 
-  if (pRes_) PQclear(pRes_);
+  if (pRes_) {
+    PQclear(pRes_);
+    pRes_ = NULL;
+  }
+
+  bool need_cache_reset = false;
+
+  LOG_VERBOSE << data_ready_;
 
   // Check user interrupts while waiting for the data to be ready
   if (!data_ready_) {
-    wait_for_data();
+    LOG_VERBOSE;
+
+    if (!wait_for_data()) {
+      pConnPtr_->cancel_query();
+    }
+
     data_ready_ = true;
+    need_cache_reset = true;
   }
 
   pRes_ = PQgetResult(pConn_);
 
+  LOG_VERBOSE;
+
   // We're done, but we need to call PQgetResult until it returns NULL
   if (PQresultStatus(pRes_) == PGRES_TUPLES_OK) {
-    PGresult* next = PQgetResult(pConn_);
-    while (next != NULL) {
-      PQclear(next);
-      next = PQgetResult(pConn_);
-    }
+    LOG_VERBOSE;
+
+    step_done();
+    return true;
   }
 
   if (pRes_ == NULL) {
-    stop("No active query");
+    complete_ = true;
+    return false;
   }
 
   ExecStatusType status = PQresultStatus(pRes_);
 
-  switch (status) {
-  case PGRES_FATAL_ERROR:
-    {
-      PQclear(pRes_);
-      pRes_ = NULL;
-      conn_stop("Failed to fetch row");
-      return false;
-    }
-  case PGRES_SINGLE_TUPLE:
+  if (status == PGRES_FATAL_ERROR) {
+    PQclear(pRes_);
+    pRes_ = NULL;
+    conn_stop("Failed to fetch row");
     return false;
-  default:
-    return step_done();
   }
+
+  if (need_cache_reset) {
+    cache.set(pRes_);
+  }
+
+  if (status == PGRES_SINGLE_TUPLE) {
+    LOG_VERBOSE;
+    return false;
+  }
+
+  LOG_VERBOSE;
+  return step_done();
 }
 
 bool PqResultImpl::step_done() {
   char* tuples = PQcmdTuples(pRes_);
+  LOG_VERBOSE << tuples;
   rows_affected_ += atoi(tuples);
+  LOG_VERBOSE << rows_affected_;
 
   ++group_;
+  data_ready_ = false;
+
   bool more_params = bind_row();
 
   if (!more_params)
@@ -462,6 +557,14 @@ void PqResultImpl::bind() {
 void PqResultImpl::add_oids(List& data) const {
   data.attr("oids") = cache.oids_;
   data.attr("known") = cache.known_;
+
+  LogicalVector is_without_tz = LogicalVector(cache.types_.size());
+  for (size_t i = 0; i < cache.types_.size(); ++i) {
+    bool set = (cache.types_[i] == DT_DATETIME);
+    LOG_VERBOSE << "is_without_tz[" << i << "]: " << set;
+    is_without_tz[i] = set;
+  }
+  data.attr("without_tz") = is_without_tz;
 }
 
 PGresult* PqResultImpl::get_result() {
@@ -470,36 +573,59 @@ PGresult* PqResultImpl::get_result() {
 
 // checks user interrupts while waiting for the first row of data to be ready
 // see https://www.postgresql.org/docs/current/static/libpq-async.html
-void PqResultImpl::wait_for_data() {
+// Returns `false` if an interrupt was detected
+bool PqResultImpl::wait_for_data() {
+  LOG_DEBUG << pConnPtr_->is_check_interrupts();
+
   if (!pConnPtr_->is_check_interrupts())
-    return;
+    return true;
 
   int socket, ret;
   fd_set input;
+  FD_ZERO(&input);
 
   socket = PQsocket(pConn_);
   if (socket < 0) {
     stop("Failed to get connection socket");
   }
-  FD_ZERO(&input);
-  FD_SET(socket, &input);
 
   do {
-    // wait for any traffic on the db connection socket but no longet then 1s
+    LOG_DEBUG;
+
+    // wait for any traffic on the db connection socket but no longer then 1s
     timeval timeout = {0, 0};
     timeout.tv_sec = 1;
+    FD_SET(socket, &input);
 
     const int nfds = socket + 1;
     ret = select(nfds, &input, NULL, NULL, &timeout);
     if (ret == 0) {
+      LOG_DEBUG;
+
       // timeout reached - check user interrupt
-      checkUserInterrupt();
-    } else if(ret < 0) {
-      stop("select() on the connection failed");
+      try {
+        // FIXME: Do we even need this?
+        checkUserInterrupt();
+      }
+      catch (...) {
+        return false;
+      }
+    } else if (ret < 0) {
+      // caught interrupt in select()
+      if (SOCKERR == SOCKET_EINTR) {
+        LOG_DEBUG;
+        return false;
+      } else {
+        LOG_DEBUG;
+        stop("select() failed with error code %d", SOCKERR);
+      }
     }
+
     // update db connection state using data available on the socket
     if (!PQconsumeInput(pConn_)) {
       stop("Failed to consume input from the server");
     }
   } while (PQisBusy(pConn_)); // check if PQgetResult will still block
+
+  return true;
 }

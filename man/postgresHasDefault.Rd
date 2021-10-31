@@ -14,7 +14,7 @@ postgresDefault(...)
 }
 \description{
 RPostgres examples and tests connect to a default database via
-\verb{dbConnect(}\code{\link[RPostgres:Postgres]{RPostgres::Postgres()}}\verb{)}. This function checks if that
+\verb{dbConnect(}\code{\link[=Postgres]{Postgres()}}\verb{)}. This function checks if that
 database is available, and if not, displays an informative message.
 
 \code{postgresDefault()} works similarly but returns a connection on success and
@@ -24,7 +24,9 @@ tests.
 \examples{
 if (postgresHasDefault()) {
   db <- postgresDefault()
-  dbListTables(db)
+  print(dbListTables(db))
   dbDisconnect(db)
+} else {
+  message("No database connection.")
 }
 }

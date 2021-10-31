@@ -7,19 +7,17 @@ NULL
 #' at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
-#' @param x A character to escaped
-#' @param ... Other arguments needed for compatibility with generic
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @param x A character vector to be quoted.
+#' @param ... Other arguments needed for compatibility with generic (currently
+#'   ignored).
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) con <- dbConnect(RPostgres::Postgres())
+#' con <- dbConnect(RPostgres::Postgres())
 #'
 #' x <- c("a", "b c", "d'e", "\\f")
-#' if (run) dbQuoteString(con, x)
-#' if (run) dbQuoteIdentifier(con, x)
-#' if (run) dbDisconnect(con)
+#' dbQuoteString(con, x)
+#' dbQuoteIdentifier(con, x)
+#' dbDisconnect(con)
 #' @name quote
 NULL
 
@@ -27,8 +25,13 @@ NULL
 #' @rdname quote
 setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...) {
   if (length(x) == 0) return(SQL(character()))
-  res <- SQL(connection_quote_string(conn@ptr, enc2utf8(x)))
-  res
+  if (is(conn, "RedshiftConnection")) {
+    out <- paste0("'", gsub("(['\\\\])", "\\1\\1", enc2utf8(x)), "'")
+    out[is.na(x)] <- "NULL"
+  } else {
+    out <- connection_quote_string(conn@ptr, enc2utf8(x))
+  }
+  SQL(out)
 })
 
 #' @export
@@ -107,98 +110,53 @@ as_table <- function(catalog, schema, table) {
   do.call(Id, as.list(args))
 }
 
-# locally for now, requires DBI > 0.7
-#' @rdname quote
-setGeneric("dbQuoteLiteral",
-  def = function(conn, x, ...) standardGeneric("dbQuoteLiteral")
-)
-
 #' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "logical"), function(conn, x, ...) {
-  ret <- as.character(x)
-  ret[is.na(ret)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "integer"), function(conn, x, ...) {
-  ret <- paste0(as.character(x), "::int4")
-  ret[is.na(x)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "numeric"), function(conn, x, ...) {
-  ret <- paste0(as.character(x), "::float8")
-  ret[is.na(x)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "factor"), function(conn, x, ...) {
-  dbQuoteLiteral(conn, as.character(x))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "Date"), function(conn, x, ...) {
-  ret <- paste0("'", as.character(x), "'::date")
-  ret[is.na(x)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "POSIXt"), function(conn, x, ...) {
-  ret <- paste0("'", as.character(x), "'::timestamp")
-  ret[is.na(x)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "difftime"), function(conn, x, ...) {
-  ret <- paste0(as.character(x), "::time")
-  ret[is.na(x)] <- "NULL"
-  SQL(ret, names = names(ret))
-})
-
-#' @export
-#' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "list"), function(conn, x, ...) {
-  quote_blob(x)
-})
-
-# Workaround, remove when blob > 1.1.0 is on CRAN
-setOldClass("blob")
-
-#' @export
-#' @rdname quote
 #' @importFrom blob blob
-setMethod("dbQuoteLiteral", c("PqConnection", "blob"), function(conn, x, ...) {
-  quote_blob(x)
-})
-
-quote_blob <- function(x) {
-  blob_data <- vcapply(
-    x,
-    function(x) {
-      if (is.null(x)) "NULL"
-      else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
-      else {
-        stop("Lists must contain raw vectors or NULL", call. = FALSE)
-      }
-    }
-  )
-  SQL(blob_data, names = names(x))
-}
-
-#' @export
 #' @rdname quote
-setMethod("dbQuoteLiteral", c("PqConnection", "character"), function(conn, x, ...) {
-  dbQuoteString(conn, x)
+setMethod("dbQuoteLiteral", "PqConnection", function(conn, x, ...) {
+  if (is.factor(x)) {
+    x <- as.character(x)
+  }
+
+  if (inherits(x, "Date")) {
+    ret <- paste0("'", as.character(x), "'::date")
+    ret[is.na(x)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (inherits(x, "POSIXt")) {
+    ret <- paste0("'", as.character(lubridate::with_tz(x, conn@timezone)), "'::timestamp")
+    ret[is.na(x)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (inherits(x, "difftime")) {
+    ret <- paste0("'", as.character(hms::as_hms(x)), "'::interval")
+    ret[is.na(x)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (is.logical(x)) {
+    ret <- as.character(x)
+    ret[is.na(ret)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (is.integer(x)) {
+    ret <- paste0(as.character(x), "::int4")
+    ret[is.na(x)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (is.numeric(x)) {
+    ret <- paste0(as.character(x), "::float8")
+    ret[is.na(x)] <- "NULL"
+    SQL(ret, names = names(ret))
+  } else if (is.list(x) || inherits(x, "blob")) {
+    blob_data <- vcapply(
+      x,
+      function(x) {
+        if (is.null(x)) "NULL"
+        else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
+        else {
+          stopc("Lists must contain raw vectors or NULL")
+        }
+      }
+    )
+    SQL(blob_data, names = names(x))
+  } else if (is.character(x)) {
+    dbQuoteString(conn, x)
+  } else {
+    stopc("Can't convert value of class ", class(x)[[1]], " to SQL.", call. = FALSE)
+  }
 })

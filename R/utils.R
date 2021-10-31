@@ -17,3 +17,7 @@ stopc <- function(...) {
 warningc <- function(...) {
   warning(..., call. = FALSE, domain = NA)
 }
+
+try_silent <- function(code) {
+  tryCatch(code, error = function(e) invisible())
+}

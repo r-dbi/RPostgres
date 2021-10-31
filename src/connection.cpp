@@ -99,6 +99,11 @@ void connection_copy_data(DbConnection* con, std::string sql, List df) {
   return con->copy_data(sql, df);
 }
 
+// [[Rcpp::export]]
+List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
+  return con->wait_for_notify(timeout_secs);
+}
+
 
 // as() override
 

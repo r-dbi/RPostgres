@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // client_version
 int client_version();
 RcppExport SEXP _RPostgres_client_version() {
@@ -119,6 +124,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// connection_wait_for_notify
+List connection_wait_for_notify(DbConnection* con, int timeout_secs);
+RcppExport SEXP _RPostgres_connection_wait_for_notify(SEXP conSEXP, SEXP timeout_secsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< int >::type timeout_secs(timeout_secsSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_wait_for_notify(con, timeout_secs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP _RPostgres_encode_vector(SEXP xSEXP) {
@@ -164,14 +181,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // result_create
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql);
-RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP) {
+XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool immediate);
+RcppExport SEXP _RPostgres_result_create(SEXP conSEXP, SEXP sqlSEXP, SEXP immediateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<DbConnectionPtr> >::type con(conSEXP);
     Rcpp::traits::input_parameter< std::string >::type sql(sqlSEXP);
-    rcpp_result_gen = Rcpp::wrap(result_create(con, sql));
+    Rcpp::traits::input_parameter< bool >::type immediate(immediateSEXP);
+    rcpp_result_gen = Rcpp::wrap(result_create(con, sql, immediate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -275,11 +293,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_is_transacting", (DL_FUNC) &_RPostgres_connection_is_transacting, 1},
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
+    {"_RPostgres_connection_wait_for_notify", (DL_FUNC) &_RPostgres_connection_wait_for_notify, 2},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},
     {"_RPostgres_init_logging", (DL_FUNC) &_RPostgres_init_logging, 1},
-    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 2},
+    {"_RPostgres_result_create", (DL_FUNC) &_RPostgres_result_create, 3},
     {"_RPostgres_result_release", (DL_FUNC) &_RPostgres_result_release, 1},
     {"_RPostgres_result_valid", (DL_FUNC) &_RPostgres_result_valid, 1},
     {"_RPostgres_result_fetch", (DL_FUNC) &_RPostgres_result_fetch, 2},

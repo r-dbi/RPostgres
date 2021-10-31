@@ -41,6 +41,10 @@ connection_copy_data <- function(con, sql, df) {
     invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
 
+connection_wait_for_notify <- function(con, timeout_secs) {
+    .Call(`_RPostgres_connection_wait_for_notify`, con, timeout_secs)
+}
+
 encode_vector <- function(x) {
     .Call(`_RPostgres_encode_vector`, x)
 }
@@ -57,8 +61,8 @@ init_logging <- function(log_level) {
     invisible(.Call(`_RPostgres_init_logging`, log_level))
 }
 
-result_create <- function(con, sql) {
-    .Call(`_RPostgres_result_create`, con, sql)
+result_create <- function(con, sql, immediate) {
+    .Call(`_RPostgres_result_create`, con, sql, immediate)
 }
 
 result_release <- function(res) {
