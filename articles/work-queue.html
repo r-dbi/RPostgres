@@ -82,17 +82,17 @@
                         <h4 data-toc-skip class="author">Jamie Lentin</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/vignettes/work-queue.Rmd" class="external-link"><code>vignettes/work-queue.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/vignettes/work-queue.Rmd" class="external-link"><code>vignettes/work-queue.Rmd</code></a></small>
       <div class="hidden name"><code>work-queue.Rmd</code></div>
 
     </div>
 
     
     
-<pre><code>## Could not initialise default postgres database. If postgres is running
-## check that the environment variables PGHOST, PGPORT, 
-## PGUSER, PGPASSWORD, and PGDATABASE, are defined and
-## point to your database.</code></pre>
+<pre><code><span class="co">## Could not initialise default postgres database. If postgres is running</span>
+<span class="co">## check that the environment variables PGHOST, PGPORT, </span>
+<span class="co">## PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
+<span class="co">## point to your database.</span></code></pre>
 <p>Imagine you have an R process that is relatively intensive, based on user input.</p>
 <p>To keep things as fast as possible, you may want to use several servers to all process incoming requests for square roots. However, to do this you need to co-ordinate between all of your servers (or workers). How do you decide which server works on what? What if one server dies mid-way? To decide this, we need a work queue, also known as a job queue or task queue. This document will show show you how to build a work queue system using R and PostgreSQL that would ordinarily require an external tool, like <a href="https://www.rabbitmq.com/" class="external-link">RabbitMQ</a>.</p>
 <p>In this example, our work will be generating square roots. We’ll keep track of the results in a table:</p>
@@ -110,9 +110,9 @@
 "</span><span class="op">)</span></code></pre></div>
 <p>When a client wants a square root value, it can insert a new row into a table, filling <code>in_val</code>. We’ll then have a bunch of workers that will calculate the results for the client, and fill in <code>out_val</code>.</p>
 <p>To manage these workers, we will combine 2 PostgreSQL concepts:</p>
-<div id="listen-notify" class="section level2">
-<h2 class="hasAnchor">
-<a href="#listen-notify" class="anchor" aria-hidden="true"></a>LISTEN / NOTIFY</h2>
+<div class="section level2">
+<h2 id="listen-notify">LISTEN / NOTIFY<a class="anchor" aria-label="anchor" href="#listen-notify"></a>
+</h2>
 <p>The Postgres <code>LISTEN</code> and <code>NOTIFY</code> commands allow you to send and receive messages between clients connected to a PostgreSQL database. This is known as a publish/subscribe architecture.</p>
 <p>We tell Postgres that we are interested in receiving messages using <code>LISTEN</code>. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -136,9 +136,9 @@
 <span class="op">}</span>
 <span class="va">n</span><span class="op">$</span><span class="va">payload</span></code></pre></div>
 </div>
-<div id="skip-locked" class="section level2">
-<h2 class="hasAnchor">
-<a href="#skip-locked" class="anchor" aria-hidden="true"></a>SKIP LOCKED</h2>
+<div class="section level2">
+<h2 id="skip-locked">SKIP LOCKED<a class="anchor" aria-label="anchor" href="#skip-locked"></a>
+</h2>
 <p>We can use LISTEN/NOTIFY to inform all workers that there is something to be done, but how do we decide which worker actually does the work? This is done using <code>SKIP LOCKED</code>.</p>
 <p>We notify all workers that the input <code>99</code> is ready for processing. After receiving this, they all do the following:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -152,9 +152,9 @@
 <p>One lucky worker will get a row back, but thanks to <code>FOR UPDATE</code>, the row is now locked. For any other worker, as the row is now locked, they will skip over it (<code>SKIP LOCKED</code>) and find something else to do. If there are no other jobs available, then nothing will be returned.</p>
 <p>Using SKIP LOCKED is discussed in more detail <a href="https://www.2ndquadrant.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/" class="external-link">in this article</a>.</p>
 </div>
-<div id="implementing-our-worker" class="section level2">
-<h2 class="hasAnchor">
-<a href="#implementing-our-worker" class="anchor" aria-hidden="true"></a>Implementing our worker</h2>
+<div class="section level2">
+<h2 id="implementing-our-worker">Implementing our worker<a class="anchor" aria-label="anchor" href="#implementing-our-worker"></a>
+</h2>
 <p>Now we can put the concepts together. The following implements our worker as a function (again, this would be running as a script on several servers):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span>
@@ -284,12 +284,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="http://hadley.nz" class="external-link external-link">Hadley Wickham</a>, Jeroen Ooms, <a href="https://krlmlr.info" class="external-link external-link">Kirill Müller</a>, <a href="https://www.r-consortium.org" class="external-link external-link">R Consortium</a>.</p>
+<p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Jeroen Ooms, <a href="https://krlmlr.info" class="external-link">Kirill Müller</a>, <a href="https://www.r-consortium.org" class="external-link">R Consortium</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
