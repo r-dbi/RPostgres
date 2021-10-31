@@ -60,7 +60,7 @@ disconnected during the next GC with a warning."><meta name="robots" content="no
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Postgres driver</h1>
-    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/R/PqDriver.R" class="external-link"><code>R/PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/master/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/PqDriver.R" class="external-link"><code>R/PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
     <div class="hidden name"><code>Postgres.Rd</code></div>
     </div>
 
@@ -98,42 +98,51 @@ disconnected during the next GC with a warning.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>drv</dt><dd><p>Should be set to <code>Postgres()</code>
+    <dl><dt>drv</dt>
+<dd><p>Should be set to <code>Postgres()</code>
 to use the <span class="pkg">RPostgres</span> package.</p></dd>
-</dl><dl><dt>dbname</dt><dd><p>Database name. If <code>NULL</code>, defaults to the user name.
+<dt>dbname</dt>
+<dd><p>Database name. If <code>NULL</code>, defaults to the user name.
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, <code>expand_dbname</code> is set to
 <code>false</code> in the call to
 <a href="https://www.postgresql.org/docs/current/libpq-connect.html" class="external-link"><code>PQconnectdbParams()</code></a>).</p></dd>
-</dl><dl><dt>host, port</dt><dd><p>Host and port. If <code>NULL</code>, will be retrieved from
+<dt>host, port</dt>
+<dd><p>Host and port. If <code>NULL</code>, will be retrieved from
 <code>PGHOST</code> and <code>PGPORT</code> env vars.</p></dd>
-</dl><dl><dt>user, password</dt><dd><p>User name and password. If <code>NULL</code>, will be
+<dt>user, password</dt>
+<dd><p>User name and password. If <code>NULL</code>, will be
 retrieved from <code>PGUSER</code> and <code>PGPASSWORD</code> envvars, or from the
 appropriate line in <code>~/.pgpass</code>. See
 <a href="https://www.postgresql.org/docs/current/libpq-pgpass.html" class="external-link">https://www.postgresql.org/docs/current/libpq-pgpass.html</a> for
 more details.</p></dd>
-</dl><dl><dt>service</dt><dd><p>Name of service to connect as.  If <code>NULL</code>, will be
+<dt>service</dt>
+<dd><p>Name of service to connect as.  If <code>NULL</code>, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
 file and used.  See <a href="https://www.postgresql.org/docs/current/libpq-pgservice.html" class="external-link">https://www.postgresql.org/docs/current/libpq-pgservice.html</a>
 for details on this file and syntax.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Other name-value pairs that describe additional connection
+<dt>...</dt>
+<dd><p>Other name-value pairs that describe additional connection
 options as described at
 <a href="https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS" class="external-link">https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></dd>
-</dl><dl><dt>bigint</dt><dd><p>The R type that 64-bit integer types should be mapped to,
+<dt>bigint</dt>
+<dd><p>The R type that 64-bit integer types should be mapped to,
 default is <a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a>, which allows the full range of 64 bit
 integers.</p></dd>
-</dl><dl><dt>check_interrupts</dt><dd><p>Should user interrupts be checked during the query execution (before
+<dt>check_interrupts</dt>
+<dd><p>Should user interrupts be checked during the query execution (before
 first row of data is available)? Setting to <code>TRUE</code> allows interruption of queries
 running too long.</p></dd>
-</dl><dl><dt>timezone</dt><dd><p>Sets the timezone for the connection. The default is <code>"UTC"</code>.
+<dt>timezone</dt>
+<dd><p>Sets the timezone for the connection. The default is <code>"UTC"</code>.
 If <code>NULL</code> then no timezone is set, which defaults to the server's time zone.</p></dd>
-</dl><dl><dt>timezone_out</dt><dd><p>The time zone returned to R, defaults to <code>timezone</code>.
+<dt>timezone_out</dt>
+<dd><p>The time zone returned to R, defaults to <code>timezone</code>.
 If you want to display datetime values in the local timezone,
 set to <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">Sys.timezone()</a></code> or <code>""</code>.
 This setting does not change the time values returned, only their display.</p></dd>
-</dl><dl><dt>conn</dt><dd><p>Connection to disconnect.</p></dd>
+<dt>conn</dt>
+<dd><p>Connection to disconnect.</p></dd>
 </dl></div>
     </div>
 

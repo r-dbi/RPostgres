@@ -55,7 +55,7 @@ responses on each channel."><meta name="robots" content="noindex"><!-- mathjax -
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Wait for and return any notifications that return within timeout</h1>
-    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
     <div class="hidden name"><code>postgresWaitForNotify.Rd</code></div>
     </div>
 
@@ -69,17 +69,23 @@ responses on each channel.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>conn</dt><dd><p>a <a href="PqConnection-class.html">PqConnection</a> object, produced by
+    <dl><dt>conn</dt>
+<dd><p>a <a href="PqConnection-class.html">PqConnection</a> object, produced by
 <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code></p></dd>
-</dl><dl><dt>timeout</dt><dd><p>How long to wait, in seconds. Default 1</p></dd>
+<dt>timeout</dt>
+<dd><p>How long to wait, in seconds. Default 1</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If a notification was available, a list of:</p><dl><dt>channel</dt><dd><p>Name of channel</p></dd>
-<dt>pid</dt><dd><p>PID of notifying server process</p></dd>
-<dt>payload</dt><dd><p>Content of notification</p></dd>
+    <p>If a notification was available, a list of:</p><dl><dt>channel</dt>
+<dd><p>Name of channel</p></dd>
+
+<dt>pid</dt>
+<dd><p>PID of notifying server process</p></dd>
+
+<dt>payload</dt>
+<dd><p>Content of notification</p></dd>
+
 
 </dl><p>If no notifications are available, return NULL</p>
     </div>

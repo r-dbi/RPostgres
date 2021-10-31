@@ -83,17 +83,17 @@
                         <h4 data-toc-skip class="author">Jamie Lentin</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/vignettes/work-queue.Rmd" class="external-link"><code>vignettes/work-queue.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/vignettes/work-queue.Rmd" class="external-link"><code>vignettes/work-queue.Rmd</code></a></small>
       <div class="hidden name"><code>work-queue.Rmd</code></div>
 
     </div>
 
     
     
-<pre><code>## Could not initialise default postgres database. If postgres is running
-## check that the environment variables PGHOST, PGPORT, 
-## PGUSER, PGPASSWORD, and PGDATABASE, are defined and
-## point to your database.</code></pre>
+<pre><code><span class="co">## Could not initialise default postgres database. If postgres is running</span>
+<span class="co">## check that the environment variables PGHOST, PGPORT, </span>
+<span class="co">## PGUSER, PGPASSWORD, and PGDATABASE, are defined and</span>
+<span class="co">## point to your database.</span></code></pre>
 <p>Imagine you have an R process that is relatively intensive, based on user input.</p>
 <p>To keep things as fast as possible, you may want to use several servers to all process incoming requests for square roots. However, to do this you need to co-ordinate between all of your servers (or workers). How do you decide which server works on what? What if one server dies mid-way? To decide this, we need a work queue, also known as a job queue or task queue. This document will show show you how to build a work queue system using R and PostgreSQL that would ordinarily require an external tool, like <a href="https://www.rabbitmq.com/" class="external-link">RabbitMQ</a>.</p>
 <p>In this example, our work will be generating square roots. We’ll keep track of the results in a table:</p>

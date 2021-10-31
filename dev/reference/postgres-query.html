@@ -57,7 +57,7 @@ fetches and clears for you."><meta name="robots" content="noindex"><!-- mathjax 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute a SQL statement on a database connection</h1>
-    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R" class="external-link"><code>R/PqResult.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/PqResult.R" class="external-link"><code>R/PqResult.R</code></a></small>
     <div class="hidden name"><code>postgres-query.Rd</code></div>
     </div>
 
@@ -86,25 +86,34 @@ fetches and clears for you.</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>conn</dt><dd><p>A <a href="PqConnection-class.html">PqConnection</a> created by <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>.</p></dd>
-</dl><dl><dt>statement</dt><dd><p>An SQL string to execute.</p></dd>
-</dl><dl><dt>params</dt><dd><p>A list of query parameters to be substituted into
+    <dl><dt>conn</dt>
+<dd><p>A <a href="PqConnection-class.html">PqConnection</a> created by <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>.</p></dd>
+<dt>statement</dt>
+<dd><p>An SQL string to execute.</p></dd>
+<dt>params</dt>
+<dd><p>A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the
 correct type is imputed by PostgreSQL. If this fails, you can manually
 cast the parameter with e.g. <code>"$1::bigint"</code>.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Other arguments needed for compatibility with generic (currently
+<dt>...</dt>
+<dd><p>Other arguments needed for compatibility with generic (currently
 ignored).</p></dd>
-</dl><dl><dt>immediate</dt><dd><p>If <code>TRUE</code>, uses the <code>PGsendQuery()</code> API instead of <code>PGprepare()</code>.
+<dt>immediate</dt>
+<dd><p>If <code>TRUE</code>, uses the <code>PGsendQuery()</code> API instead of <code>PGprepare()</code>.
 This allows to pass multiple statements and turns off the ability to pass parameters.</p></dd>
-</dl><dl><dt>res</dt><dd><p>Code a <a href="PqResult-class.html">PqResult</a> produced by
+<dt>res</dt>
+<dd><p>Code a <a href="PqResult-class.html">PqResult</a> produced by
 <code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">DBI::dbSendQuery()</a></code>.</p></dd>
-</dl><dl><dt>n</dt><dd><p>Number of rows to return. If less than zero returns all rows.</p></dd>
-</dl><dl><dt>row.names</dt><dd><p>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.If <code>TRUE</code>, always translate row names to a column called "row_names".
+<dt>n</dt>
+<dd><p>Number of rows to return. If less than zero returns all rows.</p></dd>
+<dt>row.names</dt>
+<dd><p>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.</p>
+<p>If <code>TRUE</code>, always translate row names to a column called "row_names".
 If <code>FALSE</code>, never translate row names. If <code>NA</code>, translate
-rownames only if they're a character vector.A string is equivalent to <code>TRUE</code>, but allows you to override the
-default name.For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</p></dd>
+rownames only if they're a character vector.</p>
+<p>A string is equivalent to <code>TRUE</code>, but allows you to override the
+default name.</p>
+<p>For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</p></dd>
 </dl></div>
     <div id="multiple-queries-and-statements">
     <h2>Multiple queries and statements</h2>

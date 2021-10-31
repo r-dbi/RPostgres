@@ -60,7 +60,7 @@ uses placeholders of the form $1, $2 etc. instead of ?."><meta name="robots" con
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convenience functions for reading/writing DBMS tables</h1>
-    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/master/R/tables.R" class="external-link"><code>R/tables.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/tables.R" class="external-link"><code>R/tables.R</code></a></small>
     <div class="hidden name"><code>postgres-tables.Rd</code></div>
     </div>
 
@@ -121,42 +121,57 @@ uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>conn</dt><dd><p>a <a href="PqConnection-class.html">PqConnection</a> object, produced by
+    <dl><dt>conn</dt>
+<dd><p>a <a href="PqConnection-class.html">PqConnection</a> object, produced by
 <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code></p></dd>
-</dl><dl><dt>name</dt><dd><p>a character string specifying a table name. Names will be
+<dt>name</dt>
+<dd><p>a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.
 Alternatively, pass a name quoted with <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>,
 an <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> object, or a string escaped with <code><a href="https://dbi.r-dbi.org/reference/SQL.html" class="external-link">SQL()</a></code>.</p></dd>
-</dl><dl><dt>value</dt><dd><p>A data.frame to write to the database.</p></dd>
-</dl><dl><dt>...</dt><dd><p>Ignored.</p></dd>
-</dl><dl><dt>row.names</dt><dd><p>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.If <code>TRUE</code>, always translate row names to a column called "row_names".
+<dt>value</dt>
+<dd><p>A data.frame to write to the database.</p></dd>
+<dt>...</dt>
+<dd><p>Ignored.</p></dd>
+<dt>row.names</dt>
+<dd><p>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.</p>
+<p>If <code>TRUE</code>, always translate row names to a column called "row_names".
 If <code>FALSE</code>, never translate row names. If <code>NA</code>, translate
-rownames only if they're a character vector.A string is equivalent to <code>TRUE</code>, but allows you to override the
-default name.For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</p></dd>
-</dl><dl><dt>overwrite</dt><dd><p>a logical specifying whether to overwrite an existing table
+rownames only if they're a character vector.</p>
+<p>A string is equivalent to <code>TRUE</code>, but allows you to override the
+default name.</p>
+<p>For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</p></dd>
+<dt>overwrite</dt>
+<dd><p>a logical specifying whether to overwrite an existing table
 or not. Its default is <code>FALSE</code>.</p></dd>
-</dl><dl><dt>append</dt><dd><p>a logical specifying whether to append to an existing table
+<dt>append</dt>
+<dd><p>a logical specifying whether to append to an existing table
 in the DBMS. Its default is <code>FALSE</code>.</p></dd>
-</dl><dl><dt>field.types</dt><dd><p>character vector of named SQL field types where
+<dt>field.types</dt>
+<dd><p>character vector of named SQL field types where
 the names are the names of new table's columns.
 If missing, types are inferred with <code><a href="https://dbi.r-dbi.org/reference/dbDataType.html" class="external-link">DBI::dbDataType()</a></code>).
 The types can only be specified with <code>append = FALSE</code>.</p></dd>
-</dl><dl><dt>temporary</dt><dd><p>If <code>TRUE</code>, only temporary tables are considered.</p></dd>
-</dl><dl><dt>copy</dt><dd><p>If <code>TRUE</code>, serializes the data frame to a single string
+<dt>temporary</dt>
+<dd><p>If <code>TRUE</code>, only temporary tables are considered.</p></dd>
+<dt>copy</dt>
+<dd><p>If <code>TRUE</code>, serializes the data frame to a single string
 and uses <code>COPY name FROM stdin</code>. This is fast, but not supported by
 all postgres servers (e.g. Amazon's Redshift). If <code>FALSE</code>, generates
 a single SQL string. This is slower, but always supported.
 The default maps to <code>TRUE</code> on connections established via <code><a href="Postgres.html">Postgres()</a></code>
 and to <code>FALSE</code> on connections established via <code><a href="Redshift.html">Redshift()</a></code>.</p></dd>
-</dl><dl><dt>con</dt><dd><p>A database connection.</p></dd>
-</dl><dl><dt>check.names</dt><dd><p>If <code>TRUE</code>, the default, column names will be
+<dt>con</dt>
+<dd><p>A database connection.</p></dd>
+<dt>check.names</dt>
+<dd><p>If <code>TRUE</code>, the default, column names will be
 converted to valid R identifiers.</p></dd>
-</dl><dl><dt>fail_if_missing</dt><dd><p>If <code>FALSE</code>, <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code> succeeds if the
+<dt>fail_if_missing</dt>
+<dd><p>If <code>FALSE</code>, <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code> succeeds if the
 table doesn't exist.</p></dd>
-</dl><dl><dt>prefix</dt><dd><p>A fully qualified path in the database's namespace, or <code>NULL</code>.
+<dt>prefix</dt>
+<dd><p>A fully qualified path in the database's namespace, or <code>NULL</code>.
 This argument will be processed with <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code>.
 If given the method will return all objects accessible through this prefix.</p></dd>
 </dl></div>
