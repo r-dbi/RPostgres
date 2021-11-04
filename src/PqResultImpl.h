@@ -15,18 +15,26 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
 
   // Wrapped pointer
   PGconn* pConn_;
+
+  // Expression
+  const std::string sql_;
+  const bool immediate_;
+
+  // Wrapped pointer
   PGresult* pSpec_;
 
   // Cache
   struct _cache {
-    const std::vector<std::string> names_;
-    const std::vector<Oid> oids_;
-    const std::vector<DATA_TYPE> types_;
-    const std::vector<bool> known_;
-    const size_t ncols_;
-    const int nparams_;
+    bool initialized_;
+    std::vector<std::string> names_;
+    std::vector<Oid> oids_;
+    std::vector<DATA_TYPE> types_;
+    std::vector<bool> known_;
+    size_t ncols_;
+    int nparams_;
 
-    _cache(PGresult* spec);
+    _cache();
+    void set(PGresult* spec);
 
     static std::vector<std::string> get_column_names(PGresult* spec);
     static DATA_TYPE get_column_type_from_oid(const Oid type);
@@ -46,14 +54,15 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql);
+  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate);
   ~PqResultImpl();
 
 private:
-  static PGresult* prepare(PGconn* conn, const std::string& sql);
+  void prepare();
   void init(bool params_have_rows);
 
 public:
+  void close() {} // FIXME
   bool complete() const;
   int n_rows_fetched();
   int n_rows_affected();
@@ -85,7 +94,7 @@ public:
   PGresult* get_result();
 
 private:
-  void wait_for_data();
+  bool wait_for_data();
 };
 
 #endif //RPOSTGRES_PQRESULTIMPL_H

@@ -136,21 +136,21 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'   Note that this argument can only contain the database name, it will not
 #'   be parsed as a connection string (internally, `expand_dbname` is set to
 #'   `false` in the call to
-#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/9.6/static/libpq-connect.html)).
+#'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/current/libpq-connect.html)).
 #' @param user,password User name and password. If `NULL`, will be
 #'   retrieved from `PGUSER` and `PGPASSWORD` envvars, or from the
 #'   appropriate line in `~/.pgpass`. See
-#'   <http://www.postgresql.org/docs/9.6/static/libpq-pgpass.html> for
+#'   <https://www.postgresql.org/docs/current/libpq-pgpass.html> for
 #'   more details.
 #' @param host,port Host and port. If `NULL`, will be retrieved from
 #'   `PGHOST` and `PGPORT` env vars.
 #' @param service Name of service to connect as.  If `NULL`, will be
 #'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-#'   file and used.  See <http://www.postgresql.org/docs/9.6/static/libpq-pgservice.html>
+#'   file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html>
 #'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
-#'   <http://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
+#'   <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
@@ -166,13 +166,11 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #' @param conn Connection to disconnect.
 #' @export
 #' @rdname Postgres
-#' @examples
-#' if (postgresHasDefault()) {
-#'   library(DBI)
-#'   # Pass more arguments as necessary to dbConnect()
-#'   con <- dbConnect(RPostgres::Postgres())
-#'   dbDisconnect(con)
-#' }
+#' @examplesIf postgresHasDefault()
+#' library(DBI)
+#' # Pass more arguments as necessary to dbConnect()
+#' con <- dbConnect(RPostgres::Postgres())
+#' dbDisconnect(con)
 setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
@@ -278,36 +276,33 @@ setMethod("dbDisconnect", "PqConnection", function(conn, ...) {
 #'   \item{payload}{Content of notification}
 #' }
 #' If no notifications are available, return NULL
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' if (postgresHasDefault()) {
+#' @examplesIf postgresHasDefault()
+#' library(DBI)
+#' library(callr)
+#'
+#' # listen for messages on the grapevine
+#' db_listen <- dbConnect(RPostgres::Postgres())
+#' dbExecute(db_listen, "LISTEN grapevine")
+#'
+#' # Start another process, which sends a message after a delay
+#' rp <- r_bg(function () {
 #'     library(DBI)
-#'     library(callr)
+#'     Sys.sleep(0.3)
+#'     db_notify <- dbConnect(RPostgres::Postgres())
+#'     dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
+#'     dbDisconnect(db_notify)
+#' })
 #'
-#'     # listen for messages on the grapevine
-#'     db_listen <- dbConnect(RPostgres::Postgres())
-#'     dbExecute(db_listen, "LISTEN grapevine")
-#'
-#'     # Start another process, which sends a message after a delay
-#'     rp <- r_bg(function () {
-#'         library(DBI)
-#'         Sys.sleep(0.3)
-#'         db_notify <- dbConnect(RPostgres::Postgres())
-#'         dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
-#'         dbDisconnect(db_notify)
-#'     })
-#'
-#'     # Sleep until we get the message
-#'     n <- NULL
-#'     while (is.null(n)) {
-#'         n <- RPostgres::postgresWaitForNotify(db_listen, 60)
-#'     }
-#'     stopifnot(n$payload == 'psst')
-#'
-#'     # Tidy up
-#'     rp$wait()
-#'     dbDisconnect(db_listen)
+#' # Sleep until we get the message
+#' n <- NULL
+#' while (is.null(n)) {
+#'     n <- RPostgres::postgresWaitForNotify(db_listen, 60)
 #' }
+#' stopifnot(n$payload == 'psst')
+#'
+#' # Tidy up
+#' rp$wait()
+#' dbDisconnect(db_listen)
 postgresWaitForNotify <- function (conn, timeout = 1) {
   out <- connection_wait_for_notify(conn@ptr, timeout)
   if ('pid' %in% names(out)) out else NULL

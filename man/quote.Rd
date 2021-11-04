@@ -8,16 +8,7 @@
 \alias{dbQuoteIdentifier,PqConnection,SQL-method}
 \alias{dbQuoteIdentifier,PqConnection,Id-method}
 \alias{dbUnquoteIdentifier,PqConnection,SQL-method}
-\alias{dbQuoteLiteral,PqConnection,logical-method}
-\alias{dbQuoteLiteral,PqConnection,integer-method}
-\alias{dbQuoteLiteral,PqConnection,numeric-method}
-\alias{dbQuoteLiteral,PqConnection,factor-method}
-\alias{dbQuoteLiteral,PqConnection,Date-method}
-\alias{dbQuoteLiteral,PqConnection,POSIXt-method}
-\alias{dbQuoteLiteral,PqConnection,difftime-method}
-\alias{dbQuoteLiteral,PqConnection,list-method}
-\alias{dbQuoteLiteral,PqConnection,blob-method}
-\alias{dbQuoteLiteral,PqConnection,character-method}
+\alias{dbQuoteLiteral,PqConnection-method}
 \title{Quote postgres strings, identifiers, and literals}
 \usage{
 \S4method{dbQuoteString}{PqConnection,character}(conn, x, ...)
@@ -32,25 +23,7 @@
 
 \S4method{dbUnquoteIdentifier}{PqConnection,SQL}(conn, x, ...)
 
-\S4method{dbQuoteLiteral}{PqConnection,logical}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,integer}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,numeric}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,factor}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,Date}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,POSIXt}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,difftime}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,list}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,blob}(conn, x, ...)
-
-\S4method{dbQuoteLiteral}{PqConnection,character}(conn, x, ...)
+\S4method{dbQuoteLiteral}{PqConnection}(conn, x, ...)
 }
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}
@@ -65,14 +38,13 @@ If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs
 at most one \code{table} component and at most one \code{schema} component.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) con <- dbConnect(RPostgres::Postgres())
+con <- dbConnect(RPostgres::Postgres())
 
 x <- c("a", "b c", "d'e", "\\\\f")
-if (run) dbQuoteString(con, x)
-if (run) dbQuoteIdentifier(con, x)
-if (run) dbDisconnect(con)
+dbQuoteString(con, x)
+dbQuoteIdentifier(con, x)
+dbDisconnect(con)
+\dontshow{\}) # examplesIf}
 }

@@ -64,38 +64,48 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #'   cast the parameter with e.g. `"$1::bigint"`.
 #' @param ... Other arguments needed for compatibility with generic (currently
 #'   ignored).
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) db <- dbConnect(RPostgres::Postgres())
-#' if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+#' db <- dbConnect(RPostgres::Postgres())
+#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
-#' if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+#' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 #'
 #' # Send query to pull requests in batches
-#' if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbHasCompleted(res)
-#' if (run) dbClearResult(res)
+#' res <- dbSendQuery(db, "SELECT * FROM usarrests")
+#' dbFetch(res, n = 2)
+#' dbFetch(res, n = 2)
+#' dbHasCompleted(res)
+#' dbClearResult(res)
 #'
-#' if (run) dbRemoveTable(db, "usarrests")
+#' dbRemoveTable(db, "usarrests")
 #'
-#' if (run) dbDisconnect(db)
+#' dbDisconnect(db)
 #' @name postgres-query
 NULL
 
 #' @export
+#' @param immediate If `TRUE`, uses the `PGsendQuery()` API instead of `PGprepare()`.
+#'   This allows to pass multiple statements and turns off the ability to pass parameters.
+#'
+#' @section Multiple queries and statements:
+#' With `immediate = TRUE`, it is possible to pass multiple queries or statements,
+#' separated by semicolons.
+#' For multiple statements, the resulting value of [dbGetRowsAffected()]
+#' corresponds to the total number of affected rows.
+#' If multiple queries are used, all queries must return data with the same
+#' column names and types.
+#' Queries and statements can be mixed.
 #' @rdname postgres-query
-setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ...) {
+setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ..., immediate = FALSE) {
+  stopifnot(is.character(statement))
+
   statement <- enc2utf8(statement)
 
   rs <- new("PqResult",
     conn = conn,
-    ptr = result_create(conn@ptr, statement),
+    ptr = result_create(conn@ptr, statement, immediate),
     sql = statement,
     bigint = conn@bigint
   )
@@ -189,12 +199,12 @@ type_lookup <- function(x, conn) {
 #' @export
 setMethod("dbBind", "PqResult", function(res, params, ...) {
   if (!is.null(names(params))) {
-    stop("Named parameters not supported", call. = FALSE)
+    stopc("`params` must not be named.")
   }
   if (!is.list(params)) params <- as.list(params)
 
   params <- factor_to_string(params, warn = TRUE)
-  params <- fix_posixt(params)
+  params <- fix_posixt(params, res@conn@timezone)
   params <- difftime_to_hms(params)
   params <- fix_numeric(params)
   params <- prepare_for_binding(params)
@@ -211,11 +221,14 @@ factor_to_string <- function(value, warn = FALSE) {
   value
 }
 
-fix_posixt <- function(value) {
+fix_posixt <- function(value, tz) {
   is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
   withr::with_options(
     list(digits.secs = 6),
-    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, format = "%Y-%m-%dT%H:%M:%OS%z"))
+    value[is_posixt] <- lapply(value[is_posixt], function(col) {
+      tz_col <- lubridate::with_tz(col, tz)
+      format_keep_na(tz_col, format = "%Y-%m-%dT%H:%M:%OS%z")
+    })
   )
   value
 }

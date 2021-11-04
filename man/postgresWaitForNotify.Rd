@@ -26,33 +26,32 @@ Once you subscribe to notifications with LISTEN, use this to wait for
 responses on each channel.
 }
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-if (postgresHasDefault()) {
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(DBI)
+library(callr)
+
+# listen for messages on the grapevine
+db_listen <- dbConnect(RPostgres::Postgres())
+dbExecute(db_listen, "LISTEN grapevine")
+
+# Start another process, which sends a message after a delay
+rp <- r_bg(function () {
     library(DBI)
-    library(callr)
+    Sys.sleep(0.3)
+    db_notify <- dbConnect(RPostgres::Postgres())
+    dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
+    dbDisconnect(db_notify)
+})
 
-    # listen for messages on the grapevine
-    db_listen <- dbConnect(RPostgres::Postgres())
-    dbExecute(db_listen, "LISTEN grapevine")
-
-    # Start another process, which sends a message after a delay
-    rp <- r_bg(function () {
-        library(DBI)
-        Sys.sleep(0.3)
-        db_notify <- dbConnect(RPostgres::Postgres())
-        dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
-        dbDisconnect(db_notify)
-    })
-
-    # Sleep until we get the message
-    n <- NULL
-    while (is.null(n)) {
-        n <- RPostgres::postgresWaitForNotify(db_listen, 60)
-    }
-    stopifnot(n$payload == 'psst')
-
-    # Tidy up
-    rp$wait()
-    dbDisconnect(db_listen)
+# Sleep until we get the message
+n <- NULL
+while (is.null(n)) {
+    n <- RPostgres::postgresWaitForNotify(db_listen, 60)
 }
+stopifnot(n$payload == 'psst')
+
+# Tidy up
+rp$wait()
+dbDisconnect(db_listen)
+\dontshow{\}) # examplesIf}
 }
