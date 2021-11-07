@@ -8,7 +8,7 @@
 
 # Library settings
 PKG_CONFIG_NAME="libpq"
-PKG_DEB_NAME="libpq-dev"
+PKG_DEB_NAME="libpq-dev libssl-dev"
 PKG_RPM_NAME="postgresql-devel"
 PKG_AMZ_RPM_NAMES="postgreql8-devel, psstgresql92-devel, postgresql93-devel, or postgresql94-devel"
 PKG_CSW_NAME="postgresql_dev"
