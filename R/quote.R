@@ -43,8 +43,15 @@ setMethod("dbQuoteString", c("PqConnection", "SQL"), function(conn, x, ...) {
 #' @export
 #' @rdname quote
 setMethod("dbQuoteIdentifier", c("PqConnection", "character"), function(conn, x, ...) {
+  args <- list(...)
   if (anyNA(x)) {
     stop("Cannot pass NA to dbQuoteIdentifier()", call. = FALSE)
+  }
+  # Case where schema and table are character identifier
+  if(isTRUE(conn@unquote_id) && length(x) == 1 && is.null(args$id) && grepl("\\.", x) &&
+     !grepl("names\\((.*?)\\)", as.character(match.call())[[3]])) {
+    id <- dbUnquoteIdentifier(conn, SQL(x))[[1]]
+    return(dbQuoteIdentifier(conn, id, ...))
   }
   SQL(connection_quote_identifier(conn@ptr, x), names = names(x))
 })
@@ -63,13 +70,13 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
 
   ret <- ""
   if ("catalog" %in% names(x@name)) {
-    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["catalog"]]), ".")
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["catalog"]], id = "catalog"), ".")
   }
   if ("schema" %in% names(x@name)) {
-    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["schema"]]), ".")
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["schema"]], id = "schema"), ".")
   }
   if ("table" %in% names(x@name)) {
-    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["table"]]))
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["table"]], id = "table"))
   }
   SQL(ret)
 })

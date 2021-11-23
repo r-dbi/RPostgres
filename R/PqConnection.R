@@ -12,7 +12,8 @@ setClass("PqConnection",
     bigint = "character",
     timezone = "character",
     timezone_out = "character",
-    typnames = "data.frame"
+    typnames = "data.frame",
+    unquote_id = "logical"
   )
 )
 
@@ -164,6 +165,8 @@ setMethod("dbGetInfo", "PqConnection", function(dbObj, ...) {
 #'   set to [Sys.timezone()] or `""`.
 #'   This setting does not change the time values returned, only their display.
 #' @param conn Connection to disconnect.
+#' @param unquote_id Should driver unquote character automatically (before
+#'   quote the character)? Setting to `TRUE` convert character to Identifier before quote.
 #' @export
 #' @rdname Postgres
 #' @examplesIf postgresHasDefault()
@@ -175,7 +178,7 @@ setMethod("dbConnect", "PqDriver",
   function(drv, dbname = NULL,
            host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
            bigint = c("integer64", "integer", "numeric", "character"),
-           check_interrupts = FALSE, timezone = "UTC", timezone_out = NULL) {
+           check_interrupts = FALSE, timezone = "UTC", timezone_out = NULL, unquote_id = FALSE) {
 
     opts <- unlist(list(dbname = dbname, user = user, password = password,
       host = host, port = as.character(port), service = service, client_encoding = "utf8", ...))
@@ -199,7 +202,7 @@ setMethod("dbConnect", "PqDriver",
 
     # timezone is set later
     conn <- new("PqConnection",
-      ptr = ptr, bigint = bigint, timezone = character(), typnames = data.frame()
+      ptr = ptr, bigint = bigint, timezone = character(), typnames = data.frame(), unquote_id = unquote_id
     )
     on.exit(dbDisconnect(conn))
 
