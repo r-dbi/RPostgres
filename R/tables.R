@@ -300,7 +300,15 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       " AS table_schema) t"
     )
   } else if (is_redshift) {
-    query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
+    query <- paste0(
+      "(SELECT nr, current_schemas[nr] AS table_schema FROM ",
+      "(SELECT generate_series(1, ",
+      "(SELECT max(regexp_count(setting, '[,]')) AS max_num ",
+      "FROM pg_settings WHERE name='search_path')+2) AS nr, current_schemas FROM ",
+      "(SELECT current_schemas(true)::text[]) t ) ",
+      "tt WHERE current_schemas[nr] <> 'pg_catalog') ",
+      "ttt"
+    )
     only_first <- FALSE
   } else {
     # https://stackoverflow.com/a/8767450/946850
