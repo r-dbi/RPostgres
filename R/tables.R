@@ -300,6 +300,8 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       " AS table_schema) t"
     )
   } else if (is_redshift) {
+    # A variant of the Postgres version that uses CTEs and generate_series()
+    # instead of generate_subscripts(), the latter is not supported on Redshift
     query <- paste0(
       "(WITH ",
       " n_schemas AS (",
