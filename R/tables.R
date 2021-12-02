@@ -301,13 +301,13 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
     )
   } else if (is_redshift) {
     query <- paste0(
-      "(SELECT nr, current_schemas[nr] AS table_schema FROM ",
-      "(SELECT generate_series(1, ",
-      "(SELECT max(regexp_count(setting, '[,]')) AS max_num ",
-      "FROM pg_settings WHERE name='search_path')+2) AS nr, current_schemas FROM ",
-      "(SELECT current_schemas(true)::text[]) t ) ",
-      "tt WHERE current_schemas[nr] <> 'pg_catalog') ",
-      "ttt"
+      "(WITH ",
+      " t AS (SELECT current_schemas(true)::text[] AS current_schemas), ",
+      " tt AS (SELECT generate_series(1, ",
+      "   (SELECT max(regexp_count(setting, '[,]')) AS max_num ",
+      "    FROM pg_settings WHERE name='search_path')+2) AS nr, current_schemas FROM t)",
+      " SELECT nr, current_schemas[nr] AS table_schema FROM tt WHERE current_schemas[nr] <> 'pg_catalog'",
+      ") ttt"
     )
     only_first <- FALSE
   } else {
