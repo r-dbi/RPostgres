@@ -12,3 +12,4 @@ configure.log
 autobrew
 cleanup
 .vscode
+.Renviron
