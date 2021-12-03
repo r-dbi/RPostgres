@@ -83,6 +83,8 @@ jobs:
       # Begin custom: before install
       # End custom: before install
 
+      - uses: r-lib/actions/setup-pandoc@v1
+
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
