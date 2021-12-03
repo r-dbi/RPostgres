@@ -65,7 +65,6 @@ jobs:
           # End custom: matrix elements
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       # prevent rgl issues because no X11 display is available
       RGL_USE_NULL: true
