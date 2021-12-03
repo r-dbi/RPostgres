@@ -91,49 +91,15 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - name: Install remotes
-        run: |
-          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
-          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-        shell: Rscript {0}
-
-      - name: Query dependencies
-        if: runner.os != 'Windows'
-        run: |
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE, type = .Platform$pkgType), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Restore R package cache
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
+      - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}${{ matrix.config.os-version }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ matrix.config.os }}${{ matrix.config.os-version }}-${{ hashFiles('.github/R-version') }}-2-
-
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update -y
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "${{matrix.config.os-version}}"))')
+          extra-packages: rcmdcheck
 
       - name: Add fake qpdf and checkbashisms
         if: runner.os == 'Linux'
         run: |
           sudo ln -s $(which true) /usr/local/bin/qpdf
           sudo ln -s $(which true) /usr/local/bin/checkbashisms
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE, type = .Platform$pkgType)
-          remotes::install_cran("rcmdcheck")
-        shell: Rscript {0}
 
       - name: Session info
         run: |
