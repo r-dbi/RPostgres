@@ -208,15 +208,9 @@ $$
     )
   })
 
-  session$poll_process(500)
-  expect_null(session$read())
-
+  expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
-
-  time <- system.time(
-    expect_equal(session$poll_process(3000), "ready")
-  )
-  expect_lt(time[["elapsed"]], 1.5)
+  expect_equal(session$poll_process(500), "ready")
 
   local_edition(3)
 

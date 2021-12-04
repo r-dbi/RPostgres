@@ -29,15 +29,8 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   })
 
   expect_equal(session$poll_process(500), "timeout")
-  expect_null(session$read())
-
   session$interrupt()
-
-  # Should take much less than 1.7 seconds
-  time <- system.time(
-    expect_equal(session$poll_process(3000), "ready")
-  )
-  expect_lt(time[["elapsed"]], 1.5)
+  expect_equal(session$poll_process(500), "ready")
 
   local_edition(3)
 
