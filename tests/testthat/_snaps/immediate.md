@@ -7,7 +7,7 @@
       [1] 200
       
       $stdout
-      [1] ""
+      [1] "<Rcpp::exception: Interrupted.>\n"
       
       $stderr
       [1] "NOTICE:  message_one"
