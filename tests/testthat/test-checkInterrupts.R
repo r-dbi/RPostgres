@@ -11,9 +11,6 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   skip_if(Sys.getenv("R_COVR") != "")
   skip_if(getRversion() < "4.0")
 
-  # For skipping if not available
-  dbDisconnect(postgresDefault())
-
   session <- callr::r_session$new()
 
   session$supervise(TRUE)
@@ -31,7 +28,7 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
     )
   })
 
-  session$poll_process(500)
+  expect_equal(session$poll_process(500), "timeout")
   expect_null(session$read())
 
   session$interrupt()

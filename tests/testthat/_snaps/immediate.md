@@ -27,8 +27,7 @@
       [1] 200
       
       $result
-      <Rcpp::exception: Failed to fetch row: ERROR:  canceling statement due to user request
-      >
+      <Rcpp::exception: Interrupted.>
       
       $stdout
       [1] ""
