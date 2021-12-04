@@ -107,6 +107,8 @@ SELECT 1 AS a
 
 test_that("immediate with interrupts after notice", {
   skip_if_not(postgresHasDefault())
+  skip_if(Sys.getenv("R_COVR") != "")
+  skip_on_os("windows")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)
@@ -151,6 +153,7 @@ $$
 test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
+  skip_on_os("windows")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)

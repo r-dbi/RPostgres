@@ -9,7 +9,7 @@ test_that("check_interrupts = TRUE works with queries > 1 second (#244)", {
 test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
-  skip_if(getRversion() < "4.0")
+  skip_on_os("windows")
 
   session <- callr::r_session$new()
 
