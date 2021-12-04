@@ -4,6 +4,17 @@ DBItest::make_context(
   Postgres(),
   NULL,
   name = "RPostgres",
+
+  # Redshift:
+  # Redshift(),
+  # list(
+  #   host = Sys.getenv("TMP_DB_REDSHIFT_HOST"),
+  #   port = as.integer(Sys.getenv("TMP_DB_REDSHIFT_PORT")),
+  #   user = Sys.getenv("TMP_DB_REDSHIFT_USER"),
+  #   password = Sys.getenv("TMP_DB_REDSHIFT_PASSWORD")
+  # ),
+  # name = "Redshift",
+
   tweaks = DBItest::tweaks(
     # Redshift:
     # omit_blob_tests = TRUE,

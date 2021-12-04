@@ -469,11 +469,16 @@ bool PqResultImpl::step_run() {
   if (!data_ready_) {
     LOG_VERBOSE;
 
-    if (!wait_for_data()) {
-      pConnPtr_->cancel_query();
-    }
+    bool proceed = wait_for_data();
 
     data_ready_ = true;
+
+    if (!proceed) {
+      pConnPtr_->cancel_query();
+      complete_ = TRUE;
+      stop("Interrupted.");
+    }
+
     need_cache_reset = true;
   }
 
@@ -490,6 +495,8 @@ bool PqResultImpl::step_run() {
   }
 
   if (pRes_ == NULL) {
+    LOG_VERBOSE;
+
     complete_ = true;
     return false;
   }
@@ -608,6 +615,7 @@ bool PqResultImpl::wait_for_data() {
         checkUserInterrupt();
       }
       catch (...) {
+        LOG_DEBUG;
         return false;
       }
     } else if (ret < 0) {
