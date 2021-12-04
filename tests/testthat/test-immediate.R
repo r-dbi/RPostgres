@@ -107,6 +107,7 @@ SELECT 1 AS a
 
 test_that("immediate with interrupts after notice", {
   skip_if_not(postgresHasDefault())
+  skip_if(Sys.getenv("R_COVR") != "")
   skip_on_os("windows")
 
   session <- callr::r_session$new()
@@ -135,36 +136,15 @@ END
 $$
 ;
 "
-    tryCatch(
-      dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE),
-      error = identity
-    )
+
+    dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE)
   })
 
-  session$poll_process(500)
-  expect_null(session$read())
-
+  expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
+  expect_equal(session$poll_process(500), "ready")
 
-  time <- system.time(
-    expect_equal(session$poll_process(3000), "ready")
-  )
-  expect_lt(time[["elapsed"]], 1.5)
-
-  local_edition(3)
-
-  # Should return a proper error message
-  out <- session$read()
-  out$stderr <- gsub("\r\n", "", out$stderr)
-  out$stderr <- gsub("\n+$", "", out$stderr)
-  out$message <- NULL
-
-  # unclear
-  out$result <- NULL
-
-  expect_snapshot({
-    out
-  })
+  # Tests for error behavior are brittle
 
   session$close()
 })
@@ -173,7 +153,7 @@ $$
 test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
-  skip_if(getRversion() < "4.0")
+  skip_on_os("windows")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)
@@ -201,33 +181,14 @@ END
 $$
 ;
 "
-    tryCatch(
-      dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE),
-      error = identity
-    )
+    dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE)
   })
 
-  session$poll_process(500)
-  expect_null(session$read())
-
+  expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
+  expect_equal(session$poll_process(500), "ready")
 
-  time <- system.time(
-    expect_equal(session$poll_process(3000), "ready")
-  )
-  expect_lt(time[["elapsed"]], 1.5)
-
-  local_edition(3)
-
-  # Should return a proper error message
-  out <- session$read()
-  out$stderr <- gsub("\r\n", "", out$stderr)
-  out$stderr <- gsub("\n+$", "", out$stderr)
-  out$message <- NULL
-
-  expect_snapshot({
-    out
-  })
+  # Tests for error behavior are brittle
 
   session$close()
 })
