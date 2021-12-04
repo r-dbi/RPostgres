@@ -204,13 +204,13 @@ setMethod("dbConnect", "PqDriver",
     on.exit(dbDisconnect(conn))
 
     # set datestyle workaround - https://github.com/r-dbi/RPostgres/issues/287
-    dbExecute(conn, "SET datestyle to 'iso, mdy'")
+    dbExecute(conn, "SET datestyle to 'iso, mdy'", immediate = TRUE)
 
     if (!is.null(timezone)) {
       # Side effect: check if time zone valid
-      dbExecute(conn, paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)))
+      dbExecute(conn, paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)), immediate = TRUE)
     } else {
-      timezone <- dbGetQuery(conn, "SHOW timezone")[[1]]
+      timezone <- dbGetQuery(conn, "SHOW timezone", immediate = TRUE)[[1]]
     }
 
     # Check if this is a valid time zone in R:
@@ -224,7 +224,7 @@ setMethod("dbConnect", "PqDriver",
 
     conn@timezone <- timezone
     conn@timezone_out <- timezone_out
-    conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type")
+    conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type", immediate = TRUE)
 
     on.exit(NULL)
     conn
