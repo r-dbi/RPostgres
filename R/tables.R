@@ -361,7 +361,25 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
       extra <- "IF EXISTS "
     }
     if (temporary) {
-      extra <- paste0(extra, "pg_temp.")
+      if (is(conn, "RedshiftConnection")) {
+        temp_schema <- dbGetQuery(
+          conn,
+          paste0(
+            "SELECT current_schemas[1] as schema ",
+            "FROM (SELECT current_schemas(true)) ",
+            "WHERE current_schemas[1] LIKE 'pg_temp%'"
+          )
+        )
+
+        if (nrow(temp_schema) == 1) {
+          extra <- paste0(extra, temp_schema[[1]], ".")
+        } else {
+          # Temporary schema do not exist yet.
+          extra <- paste0(extra, "pg_temp.")
+        }
+      } else {
+        extra <- paste0(extra, "pg_temp.")
+      }
     }
     dbExecute(conn, paste0("DROP TABLE ", extra, name))
     invisible(TRUE)
