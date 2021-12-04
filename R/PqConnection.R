@@ -204,7 +204,7 @@ setMethod("dbConnect", "PqDriver",
     on.exit(dbDisconnect(conn))
 
     # set datestyle workaround - https://github.com/r-dbi/RPostgres/issues/287
-    dbExecute(conn, "SET datestyle to iso, mdy", immediate = TRUE)
+    dbExecute(conn, "SET datestyle to 'iso, mdy'", immediate = TRUE)
 
     if (!is.null(timezone)) {
       # Side effect: check if time zone valid
