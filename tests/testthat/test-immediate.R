@@ -138,9 +138,14 @@ $$
 
     print(tryCatch(
       rs <- dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE),
-      error = identity,
+      error = function(e) {
+        message("error")
+        e
+      },
       interrupt = identity
     ))
+
+    message("done")
   })
 
   expect_equal(session$poll_process(500), "timeout")
