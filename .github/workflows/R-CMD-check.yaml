@@ -116,7 +116,7 @@ jobs:
       # https://github.com/ankane/setup-mariadb/issues/2
       - uses: ankane/setup-postgres@v1
         with:
-          postgres-version: 13
+          postgres-version: 14
 
       - name: Create database
         if: runner.os != 'Windows'
