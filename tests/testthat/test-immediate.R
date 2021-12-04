@@ -107,13 +107,18 @@ SELECT 1 AS a
 
 test_that("immediate with interrupts after notice", {
   skip_if_not(postgresHasDefault())
+
+  # Brittle test, works semi-reliably on Ubuntu
   skip_on_os("windows")
+  skip_on_os("mac")
+  skip_if_not(getRversion() >= "4.0")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)
   session$run(function() {
     library(RPostgres)
     .GlobalEnv$conn1 <- postgresDefault(check_interrupts = TRUE)
+    requireNamespace("testthat", quietly = TRUE)
     invisible()
   })
 
@@ -136,36 +141,20 @@ $$
 ;
 "
 
-    print(tryCatch(
-      rs <- dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE),
-      error = function(e) {
-        message("error")
-        e
-      },
-      interrupt = identity
-    ))
-
-    message("done")
+    testthat::expect_condition(
+      testthat::expect_message(
+        dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE)
+      )
+    )
   })
 
   expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
   expect_equal(session$poll_process(500), "ready")
 
-  local_edition(3)
-
   # Should return a proper error message
   out <- session$read()
-  out$stderr <- gsub("\r\n", "", out$stderr)
-  out$stderr <- gsub("\n+$", "", out$stderr)
-  out$message <- NULL
-
-  # unclear
-  out$result <- NULL
-
-  expect_snapshot({
-    out
-  })
+  expect_null(out$error)
 
   session$close()
 })
@@ -174,13 +163,18 @@ $$
 test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
-  skip_if(getRversion() < "4.0")
+
+  # Brittle test, works semi-reliably on Ubuntu
+  skip_on_os("windows")
+  skip_on_os("mac")
+  skip_if_not(getRversion() >= "4.0")
 
   session <- callr::r_session$new()
   session$supervise(TRUE)
   session$run(function() {
     library(RPostgres)
     .GlobalEnv$conn1 <- postgresDefault(check_interrupts = TRUE)
+    requireNamespace("testthat", quietly = TRUE)
     invisible()
   })
 
@@ -202,9 +196,8 @@ END
 $$
 ;
 "
-    tryCatch(
-      dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE),
-      error = identity
+    testthat::expect_condition(
+      dbGetQuery(.GlobalEnv$conn1, sql, immediate = TRUE)
     )
   })
 
@@ -212,17 +205,9 @@ $$
   session$interrupt()
   expect_equal(session$poll_process(500), "ready")
 
-  local_edition(3)
-
   # Should return a proper error message
   out <- session$read()
-  out$stderr <- gsub("\r\n", "", out$stderr)
-  out$stderr <- gsub("\n+$", "", out$stderr)
-  out$message <- NULL
-
-  expect_snapshot({
-    out
-  })
+  expect_null(out$error)
 
   session$close()
 })

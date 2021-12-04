@@ -18,30 +18,21 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   session$run(function() {
     library(RPostgres)
     .GlobalEnv$conn <- postgresDefault(check_interrupts = TRUE)
+    requireNamespace("testthat", quietly = TRUE)
     invisible()
   })
 
   session$call(function() {
-    tryCatch(
-      print(dbGetQuery(.GlobalEnv$conn, "SELECT pg_sleep(3)")),
-      error = identity
-    )
+    testthat::expect_condition(dbGetQuery(.GlobalEnv$conn, "SELECT pg_sleep(3)"))
   })
 
   expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
   expect_equal(session$poll_process(500), "ready")
 
-  local_edition(3)
-
   # Should return a proper error message
   out <- session$read()
-  out$message <- NULL
-  out$stderr <- gsub("\r\n", "", out$stderr)
-
-  expect_snapshot({
-    out
-  })
+  expect_null(out$error)
 
   session$close()
 })
