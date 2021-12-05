@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![rcc](https://github.com/r-dbi/RPostgres/workflows/rcc/badge.svg)](https://github.com/r-dbi/RPostgres/actions)
-[![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/RPostgres?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/RPostgres?branch=main)
 [![CRAN status](https://www.r-pkg.org/badges/version/RPostgres)](https://CRAN.R-project.org/package=RPostgres)
 <!-- badges: end -->
 
