@@ -88,7 +88,20 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     need_transaction <- !connection_is_transacting(conn@ptr)
     if (need_transaction) {
       dbBegin(conn)
-      on.exit(dbRollback(conn))
+    }
+
+    if (!is(conn, "RedshiftConnection")) {
+      dbBegin(conn, name = "dbWriteTable")
+      # This is executed first, the `after` argument requires quite recent R
+      on.exit({
+        dbRollback(conn, name = "dbWriteTable")
+      })
+    }
+
+    if (need_transaction) {
+      on.exit({
+        dbRollback(conn)
+      })
     }
 
     found <- dbExistsTable(conn, name)
@@ -127,10 +140,13 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
       db_append_table(conn, name, value, copy, warn = FALSE)
     }
 
+    if (!is(conn, "RedshiftConnection")) {
+      dbCommit(conn, name = "dbWriteTable")
+    }
     if (need_transaction) {
       dbCommit(conn)
-      on.exit(NULL)
     }
+    on.exit(NULL)
 
     invisible(TRUE)
   }
