@@ -233,7 +233,7 @@ SEXP DbConnection::quote_identifier(const String& x) {
 }
 
 SEXP DbConnection::get_null_string() {
-  static RObject null = Rf_mkCharCE("NULL", CE_UTF8);
+  static RObject null = Rf_mkCharCE("NULL::text", CE_UTF8);
   return null;
 }
 
