@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9001</span>
       </span>
     </div>
 
@@ -57,6 +57,18 @@
       <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.1.9001" id="rpostgres-1419001-2021-12-05">RPostgres 1.4.1.9001 (2021-12-05)<a class="anchor" aria-label="anchor" href="#rpostgres-1419001-2021-12-05"></a></h2>
+<ul><li>With <code>dbConnect(check_interrupts = TRUE)</code>, interrupting a query now gives a dedicated error message. Very short-running queries no longer take one second to complete (<a href="https://github.com/r-dbi/RPostgres/issues/344" class="external-link">#344</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> correctly quotes length-0 values (<a href="https://github.com/r-dbi/RPostgres/issues/355" class="external-link">#355</a>) and generates typed <code>NULL</code> expressions for <code>NA</code> values (<a href="https://github.com/r-dbi/RPostgres/issues/357" class="external-link">#357</a>).</li>
+<li>
+<code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> executes initial queries with <code>immediate = TRUE</code> (<a href="https://github.com/r-dbi/RPostgres/issues/346" class="external-link">#346</a>).</li>
+<li>Check Postgres starting from version 10 on GitHub Actions (<a href="https://github.com/r-dbi/RPostgres/issues/368" class="external-link">#368</a>).</li>
+<li>The <code>SET DATESTYLE</code> query sent after connecting uses quotes for compatibility with CockroachDB (<a href="https://github.com/r-dbi/RPostgres/issues/360" class="external-link">#360</a>).</li>
+<li>Fix build on Ubuntu 16.04 (<a href="https://github.com/r-dbi/RPostgres/issues/352" class="external-link">#352</a>).</li>
+<li>Mention <code>libssl-dev</code> in <code>configure</code> script (<a href="https://github.com/r-dbi/RPostgres/issues/350" class="external-link">#350</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.1.9000" id="rpostgres-1419000-2021-09-26">RPostgres 1.4.1.9000 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-1419000-2021-09-26"></a></h2>
 <ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li>
