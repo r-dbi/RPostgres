@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.2 (2021-12-05)
+
+- Same as previous version.
+
+
 # RPostgres 1.4.1.9002 (2021-12-05)
 
 - `dbWriteTable()` uses savepoints for its transactions, even if an external transaction is open. This does not affect Redshift, because savepoints are not supproted there (#342).
