@@ -6,11 +6,21 @@
 #' benchmarks revealed that this was considerably slower than using a single
 #' SQL string.
 #'
+#' @section Schemas, catalogs, tablespaces:
+#' Pass an identifier created with [Id()] as the `name` argument
+#' to specify the schema or catalog, e.g.
+#' `name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")` .
+#' To specify the tablespace, use
+#' `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
+#' before creating the table.
+#'
 #' @param conn a [PqConnection-class] object, produced by
 #'   [DBI::dbConnect()]
 #' @param name a character string specifying a table name. Names will be
 #'   automatically quoted so you can use any sequence of characters, not
 #'   just any valid bare table name.
+#'   Alternatively, pass a name quoted with [dbQuoteIdentifier()],
+#'   an [Id()] object, or a string escaped with [SQL()].
 #' @param value A data.frame to write to the database.
 #' @inheritParams DBI::sqlCreateTable
 #' @param overwrite a logical specifying whether to overwrite an existing table
@@ -18,31 +28,31 @@
 #' @param append a logical specifying whether to append to an existing table
 #'   in the DBMS. Its default is `FALSE`.
 #' @param field.types character vector of named SQL field types where
-#'   the names are the names of new table's columns. If missing, types inferred
-#'   with [DBI::dbDataType()]).
+#'   the names are the names of new table's columns.
+#'   If missing, types are inferred with [DBI::dbDataType()]).
+#'   The types can only be specified with `append = FALSE`.
 #' @param copy If `TRUE`, serializes the data frame to a single string
 #'   and uses `COPY name FROM stdin`. This is fast, but not supported by
-#'   all postgres servers (e.g. Amazon's redshift). If `FALSE`, generates
+#'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
 #'   a single SQL string. This is slower, but always supported.
+#'   The default maps to `TRUE` on connections established via [Postgres()]
+#'   and to `FALSE` on connections established via [Redshift()].
 #'
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) con <- dbConnect(RPostgres::Postgres())
-#' if (run) dbListTables(con)
-#' if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-#' if (run) dbReadTable(con, "mtcars")
+#' con <- dbConnect(RPostgres::Postgres())
+#' dbListTables(con)
+#' dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+#' dbReadTable(con, "mtcars")
 #'
-#' if (run) dbListTables(con)
-#' if (run) dbExistsTable(con, "mtcars")
+#' dbListTables(con)
+#' dbExistsTable(con, "mtcars")
 #'
 #' # A zero row data frame just creates a table definition.
-#' if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-#' if (run) dbReadTable(con, "mtcars2")
+#' dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+#' dbReadTable(con, "mtcars2")
 #'
-#' if (run) dbDisconnect(con)
+#' dbDisconnect(con)
 #' @name postgres-tables
 NULL
 
@@ -50,7 +60,7 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
-           field.types = NULL, temporary = FALSE, copy = TRUE) {
+           field.types = NULL, temporary = FALSE, copy = NULL) {
 
     if (is.null(row.names)) row.names <- FALSE
     if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
@@ -73,6 +83,12 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
     if (append && !is.null(field.types)) {
       stopc("Cannot specify `field.types` with `append = TRUE`")
+    }
+
+    need_transaction <- !connection_is_transacting(conn@ptr)
+    if (need_transaction) {
+      dbBegin(conn)
+      on.exit(dbRollback(conn))
     }
 
     found <- dbExistsTable(conn, name)
@@ -108,22 +124,12 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      if (!copy) {
-        value <- sqlData(conn, value, row.names = FALSE)
+      db_append_table(conn, name, value, copy, warn = FALSE)
+    }
 
-        sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-        dbExecute(conn, sql)
-      } else {
-        value <- sql_data_copy(value, row.names = FALSE)
-
-        fields <- dbQuoteIdentifier(conn, names(value))
-        sql <- paste0(
-          "COPY ", dbQuoteIdentifier(conn, name),
-          " (", paste(fields, collapse = ", "), ")",
-          " FROM STDIN"
-        )
-        connection_copy_data(conn@ptr, sql, value)
-      }
+    if (need_transaction) {
+      dbCommit(conn)
+      on.exit(NULL)
     }
 
     invisible(TRUE)
@@ -223,14 +229,14 @@ setMethod("sqlData", "PqConnection", function(con, value, row.names = FALSE, ...
   value
 })
 
-sql_data_copy <- function(value, row.names = FALSE) {
+sql_data_copy <- function(value, conn, row.names = FALSE) {
   # C code takes care of atomic vectors, just need to coerce objects
   is_object <- vlapply(value, is.object)
   is_difftime <- vlapply(value, function(c) inherits(c, "difftime"))
   is_blob <- vlapply(value, is.list)
   is_character <- vlapply(value, is.character)
 
-  value <- fix_posixt(value)
+  value <- fix_posixt(value, conn@timezone)
 
   value[is_difftime] <- lapply(value[is_difftime], function(col) format_keep_na(hms::as_hms(col)))
   value[is_blob] <- lapply(
@@ -266,23 +272,38 @@ format_keep_na <- function(x, ...) {
 #' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
 #' @rdname postgres-tables
 #' @export
-setMethod("dbAppendTable", c("PqConnection"),
-  function(conn, name, value, ..., row.names = NULL) {
+setMethod("dbAppendTable", "PqConnection",
+  function(conn, name, value, copy = NULL, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
-
-    query <- sqlAppendTableTemplate(
-      con = conn,
-      table = name,
-      values = value,
-      row.names = row.names,
-      prefix = "$",
-      pattern = "1",
-      ...
-    )
-
-    dbExecute(conn, query, params = unname(as.list(value)))
+    stopifnot(is.data.frame(value))
+    db_append_table(conn, name, value, copy = copy, warn = TRUE)
   }
 )
+
+db_append_table <- function(conn, name, value, copy, warn) {
+  value <- factor_to_string(value, warn = warn)
+
+  if (is.null(copy)) {
+    copy <- !is(conn, "RedshiftConnection")
+  }
+
+  if (copy) {
+    value <- sql_data_copy(value, conn, row.names = FALSE)
+
+    fields <- dbQuoteIdentifier(conn, names(value))
+    sql <- paste0(
+      "COPY ", dbQuoteIdentifier(conn, name),
+      " (", paste(fields, collapse = ", "), ")",
+      " FROM STDIN"
+    )
+    connection_copy_data(conn@ptr, sql, value)
+  } else {
+    sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+    dbExecute(conn, sql)
+  }
+
+  nrow(value)
+}
 
 #' @export
 #' @param check.names If `TRUE`, the default, column names will be
@@ -349,12 +370,17 @@ exists_table <- function(conn, id) {
 }
 
 find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
+  is_redshift <- is(conn, "RedshiftConnection")
+
   if ("schema" %in% names(id)) {
     query <- paste0(
       "(SELECT 1 AS nr, ",
       dbQuoteString(conn, id[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
+  } else if (is_redshift) {
+    query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
+    only_first <- FALSE
   } else {
     # https://stackoverflow.com/a/8767450/946850
     query <- paste0(
@@ -445,13 +471,14 @@ list_fields <- function(conn, id) {
 #' @rdname postgres-tables
 setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NULL, ...) {
   query <- NULL
+  is_redshift <- is(conn, "RedshiftConnection")
+
   if (is.null(prefix)) {
     query <- paste0(
-      "SELECT NULL AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
-      "WHERE ",
-      "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
+      "SELECT NULL::text AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "WHERE (table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, NULL AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, NULL::text AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)

@@ -26,7 +26,7 @@
   append = FALSE,
   field.types = NULL,
   temporary = FALSE,
-  copy = TRUE
+  copy = NULL
 )
 
 \S4method{dbWriteTable}{PqConnection,character,character}(
@@ -50,7 +50,7 @@
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 
-\S4method{dbAppendTable}{PqConnection}(conn, name, value, ..., row.names = NULL)
+\S4method{dbAppendTable}{PqConnection}(conn, name, value, copy = NULL, ..., row.names = NULL)
 
 \S4method{dbReadTable}{PqConnection,character}(conn, name, ..., check.names = TRUE, row.names = FALSE)
 
@@ -74,7 +74,9 @@
 
 \item{name}{a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
-just any valid bare table name.}
+just any valid bare table name.
+Alternatively, pass a name quoted with \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}},
+an \code{\link[=Id]{Id()}} object, or a string escaped with \code{\link[=SQL]{SQL()}}.}
 
 \item{value}{A data.frame to write to the database.}
 
@@ -98,15 +100,18 @@ or not. Its default is \code{FALSE}.}
 in the DBMS. Its default is \code{FALSE}.}
 
 \item{field.types}{character vector of named SQL field types where
-the names are the names of new table's columns. If missing, types inferred
-with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).}
+the names are the names of new table's columns.
+If missing, types are inferred with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).
+The types can only be specified with \code{append = FALSE}.}
 
 \item{temporary}{If \code{TRUE}, only temporary tables are considered.}
 
 \item{copy}{If \code{TRUE}, serializes the data frame to a single string
 and uses \verb{COPY name FROM stdin}. This is fast, but not supported by
-all postgres servers (e.g. Amazon's redshift). If \code{FALSE}, generates
-a single SQL string. This is slower, but always supported.}
+all postgres servers (e.g. Amazon's Redshift). If \code{FALSE}, generates
+a single SQL string. This is slower, but always supported.
+The default maps to \code{TRUE} on connections established via \code{\link[=Postgres]{Postgres()}}
+and to \code{FALSE} on connections established via \code{\link[=Redshift]{Redshift()}}.}
 
 \item{header}{is a logical indicating whether the first data line (but see
 \code{skip}) has a header or not.  If missing, it value is determined
@@ -148,22 +153,31 @@ SQL string.
 \code{\link[=dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres}
 uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
 }
+\section{Schemas, catalogs, tablespaces}{
+
+Pass an identifier created with \code{\link[=Id]{Id()}} as the \code{name} argument
+to specify the schema or catalog, e.g.
+\code{name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")} .
+To specify the tablespace, use
+\code{dbExecute(conn, "SET default_tablespace TO my_tablespace")}
+before creating the table.
+}
+
 \examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
-
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) con <- dbConnect(RPostgres::Postgres())
-if (run) dbListTables(con)
-if (run) dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
-if (run) dbReadTable(con, "mtcars")
+con <- dbConnect(RPostgres::Postgres())
+dbListTables(con)
+dbWriteTable(con, "mtcars", mtcars, temporary = TRUE)
+dbReadTable(con, "mtcars")
 
-if (run) dbListTables(con)
-if (run) dbExistsTable(con, "mtcars")
+dbListTables(con)
+dbExistsTable(con, "mtcars")
 
 # A zero row data frame just creates a table definition.
-if (run) dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
-if (run) dbReadTable(con, "mtcars2")
+dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
+dbReadTable(con, "mtcars2")
 
-if (run) dbDisconnect(con)
+dbDisconnect(con)
+\dontshow{\}) # examplesIf}
 }

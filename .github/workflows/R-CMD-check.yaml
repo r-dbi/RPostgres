@@ -1,20 +1,22 @@
-# NOTE: This workflow is overkill for most R packages
-# check-standard.yaml is likely a better choice
-# usethis::use_github_action("check-standard") will install it.
+# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 #
-# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
-# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
+# NOTE: This workflow is overkill for most R packages and
+# check-standard.yaml is likely a better choice.
+# usethis::use_github_action("check-standard") will install it.
 on:
   push:
     branches:
       - main
       - master
+      - "r-*"
   pull_request:
     branches:
       - main
       - master
+      - "r-*"
   schedule:
-    - cron:  '20 2 * * *'
+    - cron:  '10 0 * * *'
 
 name: rcc
 
@@ -29,35 +31,50 @@ jobs:
 
     strategy:
       fail-fast: false
+      # Ensure that the "cancel" workflow gets a chance to run quickly, even if we just pushed
+      # Need to figure out how to smoke-test
+      max-parallel: 5
       matrix:
         config:
           - {os: macOS-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release', rspm: "https://packagemanager.rstudio.com/all/latest" }
-          - {os: windows-latest, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/all/latest" }
-          - {os: ubuntu-16.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest", http-user-agent: "R/4.0.0 (ubuntu-16.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
-          - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+
+          - {os: windows-latest, r: 'release'}
+          # Use 3.6 to trigger usage of RTools35
+          - {os: windows-latest, r: '3.6'}
+
+          - {os: ubuntu-20.04,   r: 'release'}
+
+          # Use older ubuntu to maximise backward compatibility
+          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-18.04,   r: 'release'}
+          - {os: ubuntu-18.04,   r: 'oldrel-1'}
+
+          # Begin custom: R 3.6
+          - {os: ubuntu-18.04,   r: 'oldrel-2'}
+          # End custom: R 3.6
 
           # Begin custom: R 3.5
-          - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-18.04,   r: 'oldrel-3'}
           # End custom: R 3.5
 
           # Begin custom: R 3.4
-          - {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-18.04,   r: 'oldrel-4'}
           # End custom: R 3.4
 
-          # Begin custom: R 3.3
-          - {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          # End custom: R 3.3
-
           # Begin custom: matrix elements
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 13,   desc: 'Postgres 13'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 12,   desc: 'Postgres 12'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 11,   desc: 'Postgres 11'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 10,   desc: 'Postgres 10'}
           # End custom: matrix elements
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
       # prevent rgl issues because no X11 display is available
       RGL_USE_NULL: true
+      _R_CHECK_SYSTEM_CLOCK_: false
+      _R_CHECK_FUTURE_FILE_TIMESTAMPS_: false
       # Begin custom: env vars
       # End custom: env vars
 
@@ -69,52 +86,26 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      # Begin custom: before install
+      # End custom: before install
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - name: Install remotes
-        run: |
-          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
-          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-        shell: Rscript {0}
-
-      - name: Prepare cache keys
-        if: runner.os != 'Windows'
-        run: |
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE, type = .Platform$pkgType), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
+      - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-2-
+          extra-packages: rcmdcheck
 
-      - name: Install system dependencies
+      - name: Add fake qpdf and checkbashisms
         if: runner.os == 'Linux'
         run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
-
-      # Begin custom: before install
-      # End custom: before install
-
-      - name: Install dependencies
-        run: |
-          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
-          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-          remotes::install_deps(dependencies = TRUE, type = .Platform$pkgType)
-          remotes::install_cran("rcmdcheck")
-        shell: Rscript {0}
+          sudo ln -s $(which true) /usr/local/bin/qpdf
+          sudo ln -s $(which true) /usr/local/bin/checkbashisms
 
       - name: Session info
         run: |
@@ -129,7 +120,7 @@ jobs:
       # https://github.com/ankane/setup-mariadb/issues/2
       - uses: ankane/setup-postgres@v1
         with:
-          postgres-version: 13
+          postgres-version: ${{ matrix.pg-version || 14 }}
 
       - name: Create database
         if: runner.os != 'Windows'
@@ -143,22 +134,12 @@ jobs:
         shell: bash
       # End custom: after install
 
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-          _R_CHECK_SYSTEM_CLOCK_: false
-          _R_CHECK_FUTURE_FILE_TIMESTAMPS_: false
-        run: |
-          error_on <- "note"
-          # Begin custom: rcmdcheck error_on
-          error_on <- "warning"
-          # End custom: rcmdcheck error_on
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = error_on, check_dir = "check")
-        shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v1
 
       - name: Show test output
         if: always()
-        run: find check -name '*.Rout*' -exec head -n 1000000 '{}' \; || true
+        run: |
+          find check -name '*.Rout*' -exec head -n 1000000 '{}' \; || true
         shell: bash
 
       - name: Upload check results

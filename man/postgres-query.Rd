@@ -2,14 +2,14 @@
 % Please edit documentation in R/PqResult.R
 \name{postgres-query}
 \alias{postgres-query}
-\alias{dbSendQuery,PqConnection,character-method}
+\alias{dbSendQuery,PqConnection-method}
 \alias{dbFetch,PqResult-method}
 \alias{dbBind,PqResult-method}
 \alias{dbHasCompleted,PqResult-method}
 \alias{dbClearResult,PqResult-method}
 \title{Execute a SQL statement on a database connection}
 \usage{
-\S4method{dbSendQuery}{PqConnection,character}(conn, statement, params = NULL, ...)
+\S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ..., immediate = FALSE)
 
 \S4method{dbFetch}{PqResult}(res, n = -1, ..., row.names = FALSE)
 
@@ -22,15 +22,18 @@
 \arguments{
 \item{conn}{A \linkS4class{PqConnection} created by \code{\link[=dbConnect]{dbConnect()}}.}
 
-\item{statement}{An SQL string to execute}
+\item{statement}{An SQL string to execute.}
 
 \item{params}{A list of query parameters to be substituted into
 a parameterised query. Query parameters are sent as strings, and the
 correct type is imputed by PostgreSQL. If this fails, you can manually
 cast the parameter with e.g. \code{"$1::bigint"}.}
 
-\item{...}{Another arguments needed for compatibility with generic (
-currently ignored).}
+\item{...}{Other arguments needed for compatibility with generic (currently
+ignored).}
+
+\item{immediate}{If \code{TRUE}, uses the \code{PGsendQuery()} API instead of \code{PGprepare()}.
+This allows to pass multiple statements and turns off the ability to pass parameters.}
 
 \item{res}{Code a \linkS4class{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
@@ -54,25 +57,35 @@ To retrieve results a chunk at a time, use \code{dbSendQuery()},
 results (and they'll fit in memory) use \code{dbGetQuery()} which sends,
 fetches and clears for you.
 }
-\examples{
-# For running the examples on systems without PostgreSQL connection:
-run <- postgresHasDefault()
+\section{Multiple queries and statements}{
 
+With \code{immediate = TRUE}, it is possible to pass multiple queries or statements,
+separated by semicolons.
+For multiple statements, the resulting value of \code{\link[=dbGetRowsAffected]{dbGetRowsAffected()}}
+corresponds to the total number of affected rows.
+If multiple queries are used, all queries must return data with the same
+column names and types.
+Queries and statements can be mixed.
+}
+
+\examples{
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
-if (run) db <- dbConnect(RPostgres::Postgres())
-if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+db <- dbConnect(RPostgres::Postgres())
+dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 
 # Run query to get results as dataframe
-if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 
 # Send query to pull requests in batches
-if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
-if (run) dbFetch(res, n = 2)
-if (run) dbFetch(res, n = 2)
-if (run) dbHasCompleted(res)
-if (run) dbClearResult(res)
+res <- dbSendQuery(db, "SELECT * FROM usarrests")
+dbFetch(res, n = 2)
+dbFetch(res, n = 2)
+dbHasCompleted(res)
+dbClearResult(res)
 
-if (run) dbRemoveTable(db, "usarrests")
+dbRemoveTable(db, "usarrests")
 
-if (run) dbDisconnect(db)
+dbDisconnect(db)
+\dontshow{\}) # examplesIf}
 }

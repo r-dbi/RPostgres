@@ -130,6 +130,34 @@ with_database_connection({
       })
     })
   })
+
+  describe("Inf values", {
+    test_that("Inf values come back correctly", {
+      skip_on_cran()
+
+      res <- dbGetQuery(con, "SELECT '-inf'::float8 AS a, '+inf'::float8 AS b, 'NaN'::float8 AS c, NULL::float8 AS d")
+      expect_equal(res$a, -Inf)
+      expect_equal(res$b, Inf)
+      expect_true(is.nan(res$c))
+      expect_true(is.na(res$d))
+      expect_false(is.nan(res$d))
+    })
+
+    test_that("Inf values are roundtripped correctly", {
+      skip_on_cran()
+
+      with_table(con, "xy", {
+        data <- data.frame(
+          column_1 = c("A", "B", "C"), column_2 = c(1, Inf, 3),
+          stringsAsFactors = FALSE
+        )
+        dbWriteTable(con, "xy", data, row.names = FALSE)
+
+        data_out <- dbReadTable(con, "xy")
+        expect_equal(data, data_out)
+      })
+    })
+  })
 })
 
 }

@@ -32,7 +32,7 @@ public:
   virtual double fetch_time() const;
 
 private:
-  static double convert_datetime(const char* val, bool use_local);
+  static double convert_datetime(const char* val);
   PGresult* get_result() const;
   const char* get_result_value() const;
 };

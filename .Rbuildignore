@@ -16,3 +16,9 @@ windows
 ^codecov\.yml$
 ^LICENSE\.md$
 ^CODE_OF_CONDUCT\.md$
+^tests/testthat/testthat-problems\.rds$
+^.*\.log$
+^\.vscode$
+^\.deps$
+^autobrew$
+^cleanup$

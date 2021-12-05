@@ -7,3 +7,9 @@ src/*.h.gch
 windows/*
 CRAN-RELEASE
 tests/testthat/testthat-problems.rds
+configure.log
+.deps/
+autobrew
+cleanup
+.vscode
+.Renviron

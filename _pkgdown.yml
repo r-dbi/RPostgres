@@ -11,10 +11,42 @@ home:
   - text: DBI project website
     href: https://r-dbi.org
 
+reference:
+- title: Connecting and disconnecting
+  desc: Connecting to and disconnecting from a database.
+  contents:
+  - Postgres
+  - Redshift
+
+- title: Tables
+  desc: Reading and writing entire tables.
+  contents:
+  - '`postgres-tables`'
+  - quote
+
+- title: Queries and statements
+  desc: Sending queries and executing statements.
+  contents:
+  - '`postgres-query`'
+
+- title: Transactions
+  desc: Ensuring multiple statements are executed together, or not at all.
+  contents:
+  - '`postgres-transactions`'
+
+- title: Misellaneous
+  desc: Functions specific to Postgres
+  contents:
+  - '`RPostgres-package`'
+  - postgresHasDefault
+  - postgresWaitForNotify
 
 development:
   mode: auto
 
 authors:
   Kirill Müller:
-    href: http://krlmlr.info
+    href: https://krlmlr.info
+
+news:
+  cran_dates: false
