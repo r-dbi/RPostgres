@@ -88,21 +88,19 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     need_transaction <- !connection_is_transacting(conn@ptr)
     if (need_transaction) {
       dbBegin(conn)
-      if (!is(conn, "RedshiftConnection")) {
-        dbBegin(conn, name = "dbWriteTable")
-      }
-      on.exit({
-        if (!is(conn, "RedshiftConnection")) {
-          dbRollback(conn, name = "dbWriteTable")
-        }
-        dbRollback(conn)
-      })
-    } else {
-      if (!is(conn, "RedshiftConnection")) {
-        dbBegin(conn, name = "dbWriteTable")
-      }
+    }
+
+    if (!is(conn, "RedshiftConnection")) {
+      dbBegin(conn, name = "dbWriteTable")
+      # This is executed first, the `after` argument requires quite recent R
       on.exit({
         dbRollback(conn, name = "dbWriteTable")
+      })
+    }
+
+    if (need_transaction) {
+      on.exit({
+        dbRollback(conn)
       })
     }
 
