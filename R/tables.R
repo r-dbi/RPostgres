@@ -413,16 +413,11 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
   is_redshift <- is(conn, "RedshiftConnection")
 
   if (is.null(prefix)) {
-    if (is_redshift) {
-      null_varchar <- "NULL::varchar(max)"
-    } else {
-      null_varchar <- "NULL"
-    }
     query <- paste0(
-      "SELECT ", null_varchar, " AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
+      "SELECT NULL::text AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
       "WHERE (table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, NULL::text AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
