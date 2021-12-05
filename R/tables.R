@@ -347,6 +347,33 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
   query
 }
 
+find_temp_schema <- function(conn, fail_if_missing = TRUE) {
+  if(!is.na(connection_get_temp_schema(conn@ptr)))
+    return(connection_get_temp_schema(conn@ptr))
+  if (is(conn, "RedshiftConnection")) {
+    temp_schema <- dbGetQuery(
+      conn,
+      paste0(
+        "SELECT current_schemas[1] as schema ",
+        "FROM (SELECT current_schemas(true)) ",
+        "WHERE current_schemas[1] LIKE 'pg_temp_%'"
+      )
+    )
+
+    if (nrow(temp_schema) == 1 && is.character(temp_schema[[1]])) {
+      connection_set_temp_schema(conn@ptr, temp_schema[[1]])
+      return(connection_get_temp_schema(conn@ptr))
+    } else {
+      # Temporary schema do not exist yet.
+      if (fail_if_missing) stopc("temporary schema does not exist")
+      return(NULL)
+    }
+  } else {
+    connection_set_temp_schema(conn@ptr, "pg_temp")
+    return(connection_get_temp_schema(conn@ptr))
+  }
+}
+
 #' @export
 #' @rdname postgres-tables
 #' @param temporary If `TRUE`, only temporary tables are considered.
@@ -361,25 +388,9 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
       extra <- "IF EXISTS "
     }
     if (temporary) {
-      if (is(conn, "RedshiftConnection")) {
-        temp_schema <- dbGetQuery(
-          conn,
-          paste0(
-            "SELECT current_schemas[1] as schema ",
-            "FROM (SELECT current_schemas(true)) ",
-            "WHERE current_schemas[1] LIKE 'pg_temp%'"
-          )
-        )
-
-        if (nrow(temp_schema) == 1) {
-          extra <- paste0(extra, temp_schema[[1]], ".")
-        } else {
-          # Temporary schema do not exist yet.
-          extra <- paste0(extra, "pg_temp.")
-        }
-      } else {
-        extra <- paste0(extra, "pg_temp.")
-      }
+      temp_schema <- find_temp_schema(conn, fail_if_missing)
+      if (is.null(temp_schema)) return(invisible(TRUE))
+      extra <- paste0(extra, temp_schema, ".")
     }
     dbExecute(conn, paste0("DROP TABLE ", extra, name))
     invisible(TRUE)
