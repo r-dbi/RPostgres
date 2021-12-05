@@ -7,10 +7,10 @@
       [1] 200
       
       $stdout
-      [1] ""
+      [1] "<interrupt: >\n"
       
       $stderr
-      [1] "NOTICE:  message_one"
+      [1] "NOTICE:  message_one\n\ndone"
       
       $error
       NULL
@@ -27,8 +27,7 @@
       [1] 200
       
       $result
-      <Rcpp::exception: Failed to fetch row: ERROR:  canceling statement due to user request
-      >
+      <Rcpp::exception: Interrupted.>
       
       $stdout
       [1] ""
