@@ -114,6 +114,10 @@ as_table <- function(catalog, schema, table) {
 #' @importFrom blob blob
 #' @rdname quote
 setMethod("dbQuoteLiteral", "PqConnection", function(conn, x, ...) {
+  if (length(x) == 0) {
+    return(SQL(character()))
+  }
+
   if (is.factor(x)) {
     x <- as.character(x)
   }
