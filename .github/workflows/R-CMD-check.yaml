@@ -62,10 +62,10 @@ jobs:
           # End custom: R 3.4
 
           # Begin custom: matrix elements
-          - {os: ubuntu-18.04,   r: 'release',   pg-version: 13}
-          - {os: ubuntu-18.04,   r: 'release',   pg-version: 12}
-          - {os: ubuntu-18.04,   r: 'release',   pg-version: 11}
-          - {os: ubuntu-18.04,   r: 'release',   pg-version: 10}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 13,   desc: 'Postgres 13'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 12,   desc: 'Postgres 12'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 11,   desc: 'Postgres 11'}
+          - {os: ubuntu-18.04,   r: 'release',   pg-version: 10,   desc: 'Postgres 10'}
           # End custom: matrix elements
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

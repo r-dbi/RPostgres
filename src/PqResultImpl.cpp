@@ -588,6 +588,16 @@ bool PqResultImpl::wait_for_data() {
   if (!pConnPtr_->is_check_interrupts())
     return true;
 
+  // update db connection state using data available on the socket
+  if (!PQconsumeInput(pConn_)) {
+    stop("Failed to consume input from the server");
+  }
+
+  // check if PQgetResult will block before waiting
+  if (!PQisBusy(pConn_)) {
+    return true;
+  }
+
   int socket, ret;
   fd_set input;
   FD_ZERO(&input);
@@ -600,7 +610,7 @@ bool PqResultImpl::wait_for_data() {
   do {
     LOG_DEBUG;
 
-    // wait for any traffic on the db connection socket but no longer then 1s
+    // wait for any traffic on the db connection socket but no longer than 1s
     timeval timeout = {0, 0};
     timeout.tv_sec = 1;
     FD_SET(socket, &input);

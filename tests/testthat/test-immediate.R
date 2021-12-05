@@ -109,9 +109,6 @@ test_that("immediate with interrupts after notice", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
 
-  # https://github.com/r-lib/processx/issues/319
-  skip_on_os("windows")
-
   session <- callr::r_session$new()
   session$supervise(TRUE)
   session$run(function() {
@@ -129,7 +126,7 @@ BEGIN
 END
 $$
 ;
-SELECT pg_sleep(3);
+SELECT pg_sleep(10);
 DO
 $$
 BEGIN
@@ -144,7 +141,8 @@ $$
 
   expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
-  expect_equal(session$poll_process(500), "ready")
+  # Interrupts are slow on Windows, give ample time
+  expect_equal(session$poll_process(2000), "ready")
 
   # Tests for error behavior are brittle
 
@@ -156,9 +154,6 @@ test_that("immediate with interrupts before notice", {
   skip_if_not(postgresHasDefault())
   skip_if(Sys.getenv("R_COVR") != "")
 
-  # https://github.com/r-lib/processx/issues/319
-  skip_on_os("windows")
-
   session <- callr::r_session$new()
   session$supervise(TRUE)
   session$run(function() {
@@ -169,7 +164,7 @@ test_that("immediate with interrupts before notice", {
 
   session$call(function() {
     sql <- "
-SELECT pg_sleep(3);
+SELECT pg_sleep(10);
 DO
 $$
 BEGIN
@@ -190,7 +185,8 @@ $$
 
   expect_equal(session$poll_process(500), "timeout")
   session$interrupt()
-  expect_equal(session$poll_process(500), "ready")
+  # Interrupts are slow on Windows, give ample time
+  expect_equal(session$poll_process(2000), "ready")
 
   # Tests for error behavior are brittle
 

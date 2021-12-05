@@ -22,8 +22,9 @@ DBItest::make_context(
     dbitest_version = "1.7.2",
 
     # immediate = TRUE:
-    # placeholder_pattern = character(),
     placeholder_pattern = "$1",
+    # Redshift:
+    # placeholder_pattern = character(),
     date_cast = function(x) paste0("date '", x, "'"),
     time_cast = function(x) paste0("time '", x, "'"),
     timestamp_cast = function(x) paste0("timestamp '", x, "'"),
