@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.1.9002 (2021-12-05)
+
+- `dbWriteTable()` uses savepoints for its transactions, even if an external transaction is open. This does not affect Redshift, because savepoints are not supproted there (#342).
+
+
 # RPostgres 1.4.1.9001 (2021-12-05)
 
 - With `dbConnect(check_interrupts = TRUE)`, interrupting a query now gives a dedicated error message. Very short-running queries no longer take one second to complete (#344).
@@ -13,7 +18,7 @@
 
 # RPostgres 1.4.1.9000 (2021-09-26)
 
-- Avoid crash by dereferencing 0-size vector (#343). 
+Only internal changes.
 
 
 # RPostgres 1.4.1 (2021-09-26)
