@@ -37,6 +37,9 @@
 #'   a single SQL string. This is slower, but always supported.
 #'   The default maps to `TRUE` on connections established via [Postgres()]
 #'   and to `FALSE` on connections established via [Redshift()].
+#' @param bulk_insertion If `TRUE` and copy is `FALSE` split value into
+#' smaller pieces and load them one by one.
+#' @param max_bulk_lenght Defines maximum number of cells to send in one bulk.
 #'
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
@@ -60,7 +63,8 @@ NULL
 #' @rdname postgres-tables
 setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
   function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
-           field.types = NULL, temporary = FALSE, copy = NULL) {
+           field.types = NULL, temporary = FALSE, copy = NULL, bulk_insertion = TRUE,
+           max_bulk_lenght = 600000) {
 
     if (is.null(row.names)) row.names <- FALSE
     if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
@@ -137,7 +141,7 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
     }
 
     if (nrow(value) > 0) {
-      db_append_table(conn, name, value, copy, warn = FALSE)
+      db_append_table(conn, name, value, copy, bulk_insertion, max_bulk_lenght,  warn = FALSE)
     }
 
     if (!is(conn, "RedshiftConnection")) {
@@ -210,14 +214,21 @@ format_keep_na <- function(x, ...) {
 #' @rdname postgres-tables
 #' @export
 setMethod("dbAppendTable", "PqConnection",
-  function(conn, name, value, copy = NULL, ..., row.names = NULL) {
+  function(conn, name, value, copy = NULL, bulk_insertion = TRUE,
+           max_bulk_lenght = 600000, ..., row.names = NULL) {
     stopifnot(is.null(row.names))
     stopifnot(is.data.frame(value))
-    db_append_table(conn, name, value, copy = copy, warn = TRUE)
+    db_append_table(
+      conn, name, value,
+      copy = copy,
+      bulk_insertion = bulk_insertion,
+      max_bulk_lenght = max_bulk_lenght,
+      warn = TRUE
+    )
   }
 )
 
-db_append_table <- function(conn, name, value, copy, warn) {
+db_append_table <- function(conn, name, value, copy, bulk_insertion, max_bulk_lenght, warn) {
   value <- factor_to_string(value, warn = warn)
 
   if (is.null(copy)) {
@@ -235,8 +246,19 @@ db_append_table <- function(conn, name, value, copy, warn) {
     )
     connection_copy_data(conn@ptr, sql, value)
   } else {
-    sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
-    dbExecute(conn, sql)
+    if (isTRUE(bulk_insertion)) {
+      n_row <- nrow(value)
+      n_variable <- length(value)
+      n_bulk <- ceiling((n_row*n_variable)/max_bulk_lenght)
+
+      for (bulk in split(value, (seq(n_row)-1) %/% (n_row/n_bulk))) {
+        sql <- sqlAppendTable(conn, name, bulk, row.names = FALSE)
+        dbExecute(conn, sql)
+      }
+    } else {
+      sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
+      dbExecute(conn, sql)
+    }
   }
 
   nrow(value)
