@@ -1,0 +1,21 @@
+name: 'Actions to run after R packages are installed'
+
+runs:
+  using: "composite"
+  steps:
+    # Must happen after installing system dependencies,
+    # https://github.com/ankane/setup-mariadb/issues/2
+    - uses: ankane/setup-postgres@v1
+      with:
+        postgres-version: ${{ matrix.pg-version || 14 }}
+
+    - name: Create database
+      if: runner.os != 'Windows'
+      run: |
+        createdb ${USER}
+
+    - name: Create database
+      if: runner.os == 'Windows'
+      run: |
+        createdb ${USERNAME}
+      shell: bash
