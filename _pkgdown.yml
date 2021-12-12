@@ -33,6 +33,7 @@ reference:
   desc: Ensuring multiple statements are executed together, or not at all.
   contents:
   - '`postgres-transactions`'
+  - postgresIsTransacting
 
 - title: Misellaneous
   desc: Functions specific to Postgres
