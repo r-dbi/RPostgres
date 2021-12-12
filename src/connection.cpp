@@ -104,6 +104,15 @@ List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
   return con->wait_for_notify(timeout_secs);
 }
 
+// Temporary Schema
+// [[Rcpp::export]]
+CharacterVector connection_get_temp_schema(DbConnection* con) {
+  return con->get_temp_schema();
+}
+// [[Rcpp::export]]
+void connection_set_temp_schema(DbConnection* con, CharacterVector temp_schema) {
+  con->set_temp_schema(temp_schema);
+}
 
 // as() override
 

@@ -11,7 +11,8 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
                            bool check_interrupts) :
   pCurrentResult_(NULL),
   transacting_(false),
-  check_interrupts_(check_interrupts)
+  check_interrupts_(check_interrupts),
+  temp_schema_(CharacterVector::create(NA_STRING))
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
@@ -243,6 +244,14 @@ bool DbConnection::is_transacting() const {
 
 void DbConnection::set_transacting(bool transacting) {
   transacting_ = transacting;
+}
+
+CharacterVector DbConnection::get_temp_schema() const {
+  return temp_schema_;
+}
+
+void DbConnection::set_temp_schema(CharacterVector temp_schema) {
+  temp_schema_ = temp_schema;
 }
 
 void DbConnection::conn_stop(const char* msg) {

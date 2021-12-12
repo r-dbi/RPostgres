@@ -136,6 +136,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// connection_get_temp_schema
+CharacterVector connection_get_temp_schema(DbConnection* con);
+RcppExport SEXP _RPostgres_connection_get_temp_schema(SEXP conSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    rcpp_result_gen = Rcpp::wrap(connection_get_temp_schema(con));
+    return rcpp_result_gen;
+END_RCPP
+}
+// connection_set_temp_schema
+void connection_set_temp_schema(DbConnection* con, CharacterVector temp_schema);
+RcppExport SEXP _RPostgres_connection_set_temp_schema(SEXP conSEXP, SEXP temp_schemaSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DbConnection* >::type con(conSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type temp_schema(temp_schemaSEXP);
+    connection_set_temp_schema(con, temp_schema);
+    return R_NilValue;
+END_RCPP
+}
 // encode_vector
 std::string encode_vector(RObject x);
 RcppExport SEXP _RPostgres_encode_vector(SEXP xSEXP) {
@@ -294,6 +316,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_connection_set_transacting", (DL_FUNC) &_RPostgres_connection_set_transacting, 2},
     {"_RPostgres_connection_copy_data", (DL_FUNC) &_RPostgres_connection_copy_data, 3},
     {"_RPostgres_connection_wait_for_notify", (DL_FUNC) &_RPostgres_connection_wait_for_notify, 2},
+    {"_RPostgres_connection_get_temp_schema", (DL_FUNC) &_RPostgres_connection_get_temp_schema, 1},
+    {"_RPostgres_connection_set_temp_schema", (DL_FUNC) &_RPostgres_connection_set_temp_schema, 2},
     {"_RPostgres_encode_vector", (DL_FUNC) &_RPostgres_encode_vector, 1},
     {"_RPostgres_encode_data_frame", (DL_FUNC) &_RPostgres_encode_data_frame, 1},
     {"_RPostgres_encrypt_password", (DL_FUNC) &_RPostgres_encrypt_password, 2},

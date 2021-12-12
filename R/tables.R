@@ -316,7 +316,21 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       " AS table_schema) t"
     )
   } else if (is_redshift) {
-    query <- "(SELECT 1 AS nr, current_schema() AS table_schema) ttt"
+    # A variant of the Postgres version that uses CTEs and generate_series()
+    # instead of generate_subscripts(), the latter is not supported on Redshift
+    query <- paste0(
+      "(WITH ",
+      " n_schemas AS (",
+      "  SELECT max(regexp_count(setting, '[,]')) + 2 AS max_num ",
+      "  FROM pg_settings WHERE name='search_path'",
+      " ),",
+      " tt AS (",
+      "  SELECT generate_series(1, max_num) AS nr, current_schemas(true)::text[] ",
+      "  FROM n_schemas",
+      " )",
+      " SELECT nr, current_schemas[nr] AS table_schema FROM tt WHERE current_schemas[nr] <> 'pg_catalog'",
+      ") ttt"
+    )
     only_first <- FALSE
   } else {
     # https://stackoverflow.com/a/8767450/946850
@@ -349,6 +363,33 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
   query
 }
 
+find_temp_schema <- function(conn, fail_if_missing = TRUE) {
+  if(!is.na(connection_get_temp_schema(conn@ptr)))
+    return(connection_get_temp_schema(conn@ptr))
+  if (is(conn, "RedshiftConnection")) {
+    temp_schema <- dbGetQuery(
+      conn,
+      paste0(
+        "SELECT current_schemas[1] as schema ",
+        "FROM (SELECT current_schemas(true)) ",
+        "WHERE current_schemas[1] LIKE 'pg_temp_%'"
+      )
+    )
+
+    if (nrow(temp_schema) == 1 && is.character(temp_schema[[1]])) {
+      connection_set_temp_schema(conn@ptr, temp_schema[[1]])
+      return(connection_get_temp_schema(conn@ptr))
+    } else {
+      # Temporary schema do not exist yet.
+      if (fail_if_missing) stopc("temporary schema does not exist")
+      return(NULL)
+    }
+  } else {
+    connection_set_temp_schema(conn@ptr, "pg_temp")
+    return(connection_get_temp_schema(conn@ptr))
+  }
+}
+
 #' @export
 #' @rdname postgres-tables
 #' @param temporary If `TRUE`, only temporary tables are considered.
@@ -363,7 +404,9 @@ setMethod("dbRemoveTable", c("PqConnection", "character"),
       extra <- "IF EXISTS "
     }
     if (temporary) {
-      extra <- paste0(extra, "pg_temp.")
+      temp_schema <- find_temp_schema(conn, fail_if_missing)
+      if (is.null(temp_schema)) return(invisible(TRUE))
+      extra <- paste0(extra, temp_schema, ".")
     }
     dbExecute(conn, paste0("DROP TABLE ", extra, name))
     invisible(TRUE)
