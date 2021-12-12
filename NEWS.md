@@ -1,5 +1,11 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.2.9001 (2021-12-12)
+
+- New `postgresIsTransacting()` (#351, @jakob-r).
+- Fix discovery of temporary tables for Redshift connections (#358, @galachad).
+
+
 # RPostgres 1.4.2.9000 (2021-12-05)
 
 - Same as previous version.
