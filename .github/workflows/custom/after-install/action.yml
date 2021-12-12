@@ -13,6 +13,7 @@ runs:
       if: runner.os != 'Windows'
       run: |
         createdb ${USER}
+      shell: bash
 
     - name: Create database
       if: runner.os == 'Windows'
