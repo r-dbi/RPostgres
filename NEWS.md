@@ -1,8 +1,28 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-# RPostgres 1.4.1.9000 (2021-09-26)
+# RPostgres 1.4.2.9000 (2021-12-05)
 
-- Avoid crash by dereferencing 0-size vector (#343). 
+- Same as previous version.
+
+
+# RPostgres 1.4.2 (2021-12-05)
+
+## Features
+
+- `dbWriteTable()` uses savepoints for its transactions, even if an external transaction is open. This does not affect Redshift, because savepoints are not supproted there (#342).
+- With `dbConnect(check_interrupts = TRUE)`, interrupting a query now gives a dedicated error message. Very short-running queries no longer take one second to complete (#344).
+
+## Bug fixes
+
+- `dbQuoteLiteral()` correctly quotes length-0 values (#355) and generates typed `NULL` expressions for `NA` values (#357).
+- The `SET DATESTYLE` query sent after connecting uses quotes for compatibility with CockroachDB (#360).
+
+## Internal
+
+- `dbConnect()` executes initial queries with `immediate = TRUE` (#346).
+- Check Postgres starting from version 10 on GitHub Actions (#368).
+- Fix build on Ubuntu 16.04 (#352).
+- Mention `libssl-dev` in `configure` script (#350).
 
 
 # RPostgres 1.4.1 (2021-09-26)

@@ -27,7 +27,7 @@ setMethod("dbQuoteString", c("PqConnection", "character"), function(conn, x, ...
   if (length(x) == 0) return(SQL(character()))
   if (is(conn, "RedshiftConnection")) {
     out <- paste0("'", gsub("(['\\\\])", "\\1\\1", enc2utf8(x)), "'")
-    out[is.na(x)] <- "NULL"
+    out[is.na(x)] <- "NULL::varchar(max)"
   } else {
     out <- connection_quote_string(conn@ptr, enc2utf8(x))
   }
@@ -114,39 +114,43 @@ as_table <- function(catalog, schema, table) {
 #' @importFrom blob blob
 #' @rdname quote
 setMethod("dbQuoteLiteral", "PqConnection", function(conn, x, ...) {
+  if (length(x) == 0) {
+    return(SQL(character()))
+  }
+
   if (is.factor(x)) {
     x <- as.character(x)
   }
 
   if (inherits(x, "Date")) {
-    ret <- paste0("'", as.character(x), "'::date")
+    ret <- paste0("'", as.character(x), "'")
     ret[is.na(x)] <- "NULL"
-    SQL(ret, names = names(ret))
+    SQL(paste0(ret, "::date"), names = names(ret))
   } else if (inherits(x, "POSIXt")) {
-    ret <- paste0("'", as.character(lubridate::with_tz(x, conn@timezone)), "'::timestamp")
+    ret <- paste0("'", as.character(lubridate::with_tz(x, conn@timezone)), "'")
     ret[is.na(x)] <- "NULL"
-    SQL(ret, names = names(ret))
+    SQL(paste0(ret, "::timestamp"), names = names(ret))
   } else if (inherits(x, "difftime")) {
-    ret <- paste0("'", as.character(hms::as_hms(x)), "'::interval")
+    ret <- paste0("'", as.character(hms::as_hms(x)), "'")
     ret[is.na(x)] <- "NULL"
-    SQL(ret, names = names(ret))
+    SQL(paste0(ret, "::interval"), names = names(ret))
   } else if (is.logical(x)) {
     ret <- as.character(x)
-    ret[is.na(ret)] <- "NULL"
+    ret[is.na(ret)] <- "NULL::bool"
     SQL(ret, names = names(ret))
   } else if (is.integer(x)) {
-    ret <- paste0(as.character(x), "::int4")
+    ret <- as.character(x)
     ret[is.na(x)] <- "NULL"
-    SQL(ret, names = names(ret))
+    SQL(paste0(ret, "::int4"), names = names(ret))
   } else if (is.numeric(x)) {
-    ret <- paste0(as.character(x), "::float8")
+    ret <- as.character(x)
     ret[is.na(x)] <- "NULL"
-    SQL(ret, names = names(ret))
+    SQL(paste0(ret, "::float8"), names = names(ret))
   } else if (is.list(x) || inherits(x, "blob")) {
     blob_data <- vcapply(
       x,
       function(x) {
-        if (is.null(x)) "NULL"
+        if (is.null(x)) "NULL::bytea"
         else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
         else {
           stopc("Lists must contain raw vectors or NULL")
