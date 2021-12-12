@@ -318,7 +318,7 @@ postgresWaitForNotify <- function (conn, timeout = 1) {
 #'   [DBI::dbConnect()]
 #' @return A boolean, indicating if a transaction is ongoing.
 postgresIsTransacting <- function(conn) {
-  connection_is_transacting(conn)
+  connection_is_transacting(conn@ptr)
 }
 
 #' Determine database type for R vector.
