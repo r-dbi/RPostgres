@@ -38,9 +38,6 @@ DBItest::make_context(
 
     if (getRversion() < "3.6") "compliance",
 
-    # Redshift:
-    # "remove_table_temporary_arg",
-
     NULL
   )
 )
