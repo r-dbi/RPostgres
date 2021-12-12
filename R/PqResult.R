@@ -214,7 +214,11 @@ setMethod("dbBind", "PqResult", function(res, params, ...) {
 
 factor_to_string <- function(value, warn = FALSE) {
   is_factor <- vlapply(value, is.factor)
-  if (warn && any(is_factor)) {
+  if (!any(is_factor)) {
+    return(value)
+  }
+
+  if (warn) {
     warning("Factors converted to character", call. = FALSE)
   }
   value[is_factor] <- lapply(value[is_factor], as.character)
@@ -223,6 +227,10 @@ factor_to_string <- function(value, warn = FALSE) {
 
 fix_posixt <- function(value, tz) {
   is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
+  if (!any(is_posixt)) {
+    return(value)
+  }
+
   withr::with_options(
     list(digits.secs = 6),
     value[is_posixt] <- lapply(value[is_posixt], function(col) {
@@ -235,6 +243,10 @@ fix_posixt <- function(value, tz) {
 
 difftime_to_hms <- function(value) {
   is_difftime <- vlapply(value, inherits, "difftime")
+  if (!any(is_difftime)) {
+    return(value)
+  }
+
   # https://github.com/tidyverse/hms/issues/84
   value[is_difftime] <- lapply(value[is_difftime], function(x) {
     mode(x) <- "double"
@@ -245,6 +257,10 @@ difftime_to_hms <- function(value) {
 
 fix_numeric <- function(value) {
   is_numeric <- vlapply(value, is.numeric)
+  if (!any(is_numeric)) {
+    return(value)
+  }
+
   value[is_numeric] <- lapply(
     value[is_numeric],
     function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE, trim = TRUE)
