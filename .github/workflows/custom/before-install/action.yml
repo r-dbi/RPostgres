@@ -1,0 +1,9 @@
+name: 'Actions to run before R packages are installed'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Define R CMD check error condition
+      run: |
+        echo 'RCMDCHECK_ERROR_ON="warning"' | tee -a $GITHUB_ENV
+      shell: bash
