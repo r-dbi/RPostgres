@@ -2,7 +2,7 @@ context("isTransacting")
 
 test_that("isTransacting detects transactions correctly", {
   skip_on_cran()
-  db <- postgresDefault()
+  con <- postgresDefault()
   expect_false(postgresIsTransacting(con))
   dbBegin(con)
   expect_true(postgresIsTransacting(con))
