@@ -13,42 +13,6 @@ setClass("PqResult",
   )
 )
 
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetStatement", "PqResult", function(res, ...) {
-  if (!dbIsValid(res)) {
-    stop("Invalid result set.", call. = FALSE)
-  }
-  res@sql
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
-  result_valid(dbObj@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetRowCount", "PqResult", function(res, ...) {
-  result_rows_fetched(res@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
-  result_rows_affected(res@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbColumnInfo", "PqResult", function(res, ...) {
-  rci <- result_column_info(res@ptr)
-  rci <- cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
-  rci$name <- tidy_names(rci$name)
-  rci
-})
-
 #' Execute a SQL statement on a database connection
 #'
 #' To retrieve results a chunk at a time, use `dbSendQuery()`,
@@ -84,56 +48,6 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' dbDisconnect(db)
 #' @name postgres-query
 NULL
-
-#' @export
-#' @param immediate If `TRUE`, uses the `PGsendQuery()` API instead of `PGprepare()`.
-#'   This allows to pass multiple statements and turns off the ability to pass parameters.
-#'
-#' @section Multiple queries and statements:
-#' With `immediate = TRUE`, it is possible to pass multiple queries or statements,
-#' separated by semicolons.
-#' For multiple statements, the resulting value of [dbGetRowsAffected()]
-#' corresponds to the total number of affected rows.
-#' If multiple queries are used, all queries must return data with the same
-#' column names and types.
-#' Queries and statements can be mixed.
-#' @rdname postgres-query
-setMethod("dbSendQuery", "PqConnection", function(conn, statement, params = NULL, ..., immediate = FALSE) {
-  stopifnot(is.character(statement))
-
-  statement <- enc2utf8(statement)
-
-  rs <- new("PqResult",
-    conn = conn,
-    ptr = result_create(conn@ptr, statement, immediate),
-    sql = statement,
-    bigint = conn@bigint
-  )
-
-  if (!is.null(params)) {
-    dbBind(rs, params)
-  }
-
-  rs
-})
-
-#' @param res Code a [PqResult-class] produced by
-#'   [DBI::dbSendQuery()].
-#' @param n Number of rows to return. If less than zero returns all rows.
-#' @inheritParams DBI::sqlRownamesToColumn
-#' @export
-#' @rdname postgres-query
-setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
-  if (length(n) != 1) stopc("n must be scalar")
-  if (n < -1) stopc("n must be nonnegative or -1")
-  if (is.infinite(n)) n <- -1
-  if (trunc(n) != n) stopc("n must be a whole number")
-  ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
-  ret <- convert_bigint(ret, res@bigint)
-  ret <- finalize_types(ret, res@conn)
-  ret <- fix_timezone(ret, res@conn)
-  set_tidy_names(ret)
-})
 
 convert_bigint <- function(df, bigint) {
   if (bigint == "integer64") return(df)
@@ -194,23 +108,6 @@ type_lookup <- function(x, conn) {
   typnames <- conn@typnames
   typnames$typname[match(x, typnames$oid)]
 }
-
-#' @rdname postgres-query
-#' @export
-setMethod("dbBind", "PqResult", function(res, params, ...) {
-  if (!is.null(names(params))) {
-    stopc("`params` must not be named.")
-  }
-  if (!is.list(params)) params <- as.list(params)
-
-  params <- factor_to_string(params, warn = TRUE)
-  params <- fix_posixt(params, res@conn@timezone)
-  params <- difftime_to_hms(params)
-  params <- fix_numeric(params)
-  params <- prepare_for_binding(params)
-  result_bind(res@ptr, params)
-  invisible(res)
-})
 
 factor_to_string <- function(value, warn = FALSE) {
   is_factor <- vlapply(value, is.factor)
@@ -281,20 +178,3 @@ prepare_for_binding <- function(value) {
   })
   value
 }
-
-#' @rdname postgres-query
-#' @export
-setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_has_completed(res@ptr)
-})
-
-#' @rdname postgres-query
-#' @export
-setMethod("dbClearResult", "PqResult", function(res, ...) {
-  if (!dbIsValid(res)) {
-    warningc("Expired, result set already closed")
-    return(invisible(TRUE))
-  }
-  result_release(res@ptr)
-  invisible(TRUE)
-})

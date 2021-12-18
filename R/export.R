@@ -4,7 +4,6 @@
 #   setdiff(c("dbCallProc", "dbListConnections", "dbSetDataMappings", "dbGetException")) %>%
 #   paste0("#' @exportMethod ", ., "\nNULL\n", collapse = "\n") %>%
 #   cat(file = "R/export.R")
-
 #' @exportMethod dbAppendTable
 NULL
 

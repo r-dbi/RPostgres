@@ -35,18 +35,18 @@ db_listen <- dbConnect(RPostgres::Postgres())
 dbExecute(db_listen, "LISTEN grapevine")
 
 # Start another process, which sends a message after a delay
-rp <- r_bg(function () {
-    library(DBI)
-    Sys.sleep(0.3)
-    db_notify <- dbConnect(RPostgres::Postgres())
-    dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
-    dbDisconnect(db_notify)
+rp <- r_bg(function() {
+  library(DBI)
+  Sys.sleep(0.3)
+  db_notify <- dbConnect(RPostgres::Postgres())
+  dbExecute(db_notify, "NOTIFY grapevine, 'psst'")
+  dbDisconnect(db_notify)
 })
 
 # Sleep until we get the message
 n <- NULL
 while (is.null(n)) {
-    n <- RPostgres::postgresWaitForNotify(db_listen, 60)
+  n <- RPostgres::postgresWaitForNotify(db_listen, 60)
 }
 stopifnot(n$payload == 'psst')
 
