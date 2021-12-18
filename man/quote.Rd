@@ -5,7 +5,8 @@
 %   R/dbQuoteLiteral_PqConnection.R, R/dbQuoteString_PqConnection_SQL.R,
 %   R/dbQuoteString_PqConnection_character.R,
 %   R/dbUnquoteIdentifier_PqConnection_SQL.R, R/quote.R
-\name{dbQuoteIdentifier_PqConnection_Id}
+\name{quote}
+\alias{quote}
 \alias{dbQuoteIdentifier_PqConnection_Id}
 \alias{dbQuoteIdentifier,PqConnection,Id-method}
 \alias{dbQuoteIdentifier_PqConnection_SQL}
@@ -20,7 +21,6 @@
 \alias{dbQuoteString,PqConnection,character-method}
 \alias{dbUnquoteIdentifier_PqConnection_SQL}
 \alias{dbUnquoteIdentifier,PqConnection,SQL-method}
-\alias{quote}
 \title{Quote postgres strings, identifiers, and literals}
 \usage{
 \S4method{dbQuoteIdentifier}{PqConnection,Id}(conn, x, ...)

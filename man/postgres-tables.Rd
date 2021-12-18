@@ -7,7 +7,8 @@
 %   R/dbRemoveTable_PqConnection_character.R,
 %   R/dbWriteTable_PqConnection_character_data.frame.R,
 %   R/sqlData_PqConnection.R, R/tables.R
-\name{dbAppendTable_PqConnection}
+\name{postgres-tables}
+\alias{postgres-tables}
 \alias{dbAppendTable_PqConnection}
 \alias{dbAppendTable,PqConnection-method}
 \alias{dbExistsTable_PqConnection_Id}
@@ -30,7 +31,6 @@
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
 \alias{sqlData_PqConnection}
 \alias{sqlData,PqConnection-method}
-\alias{postgres-tables}
 \title{Convenience functions for reading/writing DBMS tables}
 \usage{
 \S4method{dbAppendTable}{PqConnection}(conn, name, value, copy = NULL, ..., row.names = NULL)

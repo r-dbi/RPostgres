@@ -1,6 +1,6 @@
 #' @param name If provided, uses the `SAVEPOINT` SQL syntax
 #'   to establish, remove (commit) or undo a ßsavepoint.
-#' @rdname postgres-transactions
+#' @name postgres-transactions
 #' @usage NULL
 dbBegin_PqConnection <- function(conn, ..., name = NULL) {
   if (is.null(name)) {

@@ -1,4 +1,4 @@
-#' @rdname quote
+#' @name quote
 #' @usage NULL
 dbQuoteIdentifier_PqConnection_Id <- function(conn, x, ...) {
   stopifnot(all(names(x@name) %in% c("catalog", "schema", "table")))
