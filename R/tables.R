@@ -153,6 +153,85 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
 )
 
 
+#' @param header is a logical indicating whether the first data line (but see
+#'   `skip`) has a header or not.  If missing, it value is determined
+#'   following [read.table()] convention, namely, it is set to TRUE if
+#'   and only if the first row has one fewer field that the number of columns.
+#' @param sep The field separator, defaults to `','`.
+#' @param eol The end-of-line delimiter, defaults to `'\n'`.
+#' @param skip number of lines to skip before reading the data. Defaults to 0.
+#' @param nrows Number of rows to read to determine types.
+#' @param colClasses Character vector of R type names, used to override
+#'   defaults when imputing classes from on-disk file.
+#' @param na.strings a character vector of strings which are to be interpreted as NA values.
+#' @export
+#' @rdname postgres-tables
+setMethod("dbWriteTable", c("PqConnection", "character", "character"),
+  function(conn, name, value, ..., field.types = NULL, overwrite = FALSE,
+           append = FALSE, header = TRUE, colClasses = NA, row.names = FALSE,
+           nrows = 50, sep = ",", na.strings = "NA", eol = "\n", skip = 0, temporary = FALSE) {
+
+    if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite))  {
+      stopc("`overwrite` must be a logical scalar")
+    }
+    if (!is.logical(append) || length(append) != 1L || is.na(append))  {
+      stopc("`append` must be a logical scalar")
+    }
+    if (!is.logical(temporary) || length(temporary) != 1L)  {
+      stopc("`temporary` must be a logical scalar")
+    }
+    if (overwrite && append) {
+      stopc("overwrite and append cannot both be TRUE")
+    }
+    if (!is.null(field.types) && !(is.character(field.types) && !is.null(names(field.types)) && !anyDuplicated(names(field.types)))) {
+      stopc("`field.types` must be a named character vector with unique names, or NULL")
+    }
+    if (append && !is.null(field.types)) {
+      stopc("Cannot specify `field.types` with `append = TRUE`")
+    }
+
+    found <- dbExistsTable(conn, name)
+    if (found && !overwrite && !append) {
+      stop("Table ", name, " exists in database, and both overwrite and",
+           " append are FALSE", call. = FALSE)
+    }
+    if (found && overwrite) {
+      dbRemoveTable(conn, name)
+    }
+
+    if (!found || overwrite) {
+      if (is.null(field.types)) {
+        tmp_value <- utils::read.table(
+          value, sep = sep, header = header, skip = skip, nrows = nrows,
+          na.strings = na.strings, comment.char = "", colClasses = colClasses,
+          stringsAsFactors = FALSE)
+        field.types <- lapply(tmp_value, dbDataType, dbObj = conn)
+      }
+
+      dbCreateTable(
+        conn = conn,
+        name = name,
+        fields = field.types,
+        temporary = temporary
+      )
+    }
+
+    value <- path.expand(value)
+    fields <- dbQuoteIdentifier(conn, names(field.types))
+
+    skip <- skip + as.integer(header)
+    sql <- paste0(
+      "COPY ", dbQuoteIdentifier(conn, name),
+      " (", paste(fields, collapse = ","), ") ",
+      "FROM STDIN ", "(FORMAT CSV, DELIMITER '", sep, "', HEADER '", header, "')"
+    )
+
+    connection_copy_file(conn@ptr, sql, value)
+
+    invisible(TRUE)
+  }
+)
+
 #' @export
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @param ... Ignored.

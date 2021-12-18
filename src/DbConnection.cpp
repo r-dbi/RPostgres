@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <fstream>
 #include "DbConnection.h"
 #include "encode.h"
 #include "DbResult.h"
@@ -152,6 +153,49 @@ void DbConnection::copy_data(std::string sql, List df) {
     }
   }
 
+
+  if (PQputCopyEnd(pConn_, NULL) != 1) {
+    conn_stop("Failed to finish COPY");
+  }
+
+  PGresult* pComplete = PQgetResult(pConn_);
+  if (PQresultStatus(pComplete) != PGRES_COMMAND_OK) {
+    PQclear(pComplete);
+    conn_stop("COPY returned error");
+  }
+  PQclear(pComplete);
+}
+
+void DbConnection::copy_csv(std::string sql, std::string file) {
+  LOG_DEBUG << sql;
+
+  if (file.size() == 0)
+    return;
+
+  PGresult* pInit = PQexec(pConn_, sql.c_str());
+  if (PQresultStatus(pInit) != PGRES_COPY_IN) {
+    PQclear(pInit);
+    conn_stop("Failed to initialise COPY");
+  }
+  PQclear(pInit);
+
+
+  const size_t buffer_size = 1024 * 64;
+  std::string buffer;
+  buffer.reserve(buffer_size);
+
+  std::ifstream fs(file.c_str(), std::ios::in);
+  if (!fs.is_open()) {
+    stop("Can not open file '%s'.", file);
+  }
+
+  while (!fs.eof()) {
+    buffer.clear();
+    fs.read(&buffer[0], buffer_size);
+    if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(fs.gcount())) != 1) {
+      conn_stop("Failed to put data");
+    }
+  }
 
   if (PQputCopyEnd(pConn_, NULL) != 1) {
     conn_stop("Failed to finish COPY");

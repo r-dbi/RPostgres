@@ -119,6 +119,16 @@ with_database_connection({
         expect_equal(dbGetQuery(con, "SELECT * FROM xy"), value)
       })
     })
+
+    test_that("Writing CSV to the database", {
+      with_table(con, "iris", {
+        tmp <- tempfile()
+        iris2 <- transform(iris, Species = as.character(Species))
+        write.csv(iris2, tmp, row.names = FALSE)
+        dbWriteTable(con, "iris", tmp, temporary = TRUE)
+        expect_equal(dbReadTable(con, "iris"), iris2)
+      })
+    })
   })
 
   describe("Inf values", {

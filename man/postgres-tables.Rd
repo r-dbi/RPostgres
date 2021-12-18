@@ -3,6 +3,7 @@
 \name{postgres-tables}
 \alias{postgres-tables}
 \alias{dbWriteTable,PqConnection,character,data.frame-method}
+\alias{dbWriteTable,PqConnection,character,character-method}
 \alias{sqlData,PqConnection-method}
 \alias{dbAppendTable,PqConnection-method}
 \alias{dbReadTable,PqConnection,character-method}
@@ -26,6 +27,25 @@
   field.types = NULL,
   temporary = FALSE,
   copy = NULL
+)
+
+\S4method{dbWriteTable}{PqConnection,character,character}(
+  conn,
+  name,
+  value,
+  ...,
+  field.types = NULL,
+  overwrite = FALSE,
+  append = FALSE,
+  header = TRUE,
+  colClasses = NA,
+  row.names = FALSE,
+  nrows = 50,
+  sep = ",",
+  na.strings = "NA",
+  eol = "\\n",
+  skip = 0,
+  temporary = FALSE
 )
 
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
@@ -92,6 +112,24 @@ all postgres servers (e.g. Amazon's Redshift). If \code{FALSE}, generates
 a single SQL string. This is slower, but always supported.
 The default maps to \code{TRUE} on connections established via \code{\link[=Postgres]{Postgres()}}
 and to \code{FALSE} on connections established via \code{\link[=Redshift]{Redshift()}}.}
+
+\item{header}{is a logical indicating whether the first data line (but see
+\code{skip}) has a header or not.  If missing, it value is determined
+following \code{\link[=read.table]{read.table()}} convention, namely, it is set to TRUE if
+and only if the first row has one fewer field that the number of columns.}
+
+\item{colClasses}{Character vector of R type names, used to override
+defaults when imputing classes from on-disk file.}
+
+\item{nrows}{Number of rows to read to determine types.}
+
+\item{sep}{The field separator, defaults to \code{','}.}
+
+\item{na.strings}{a character vector of strings which are to be interpreted as NA values.}
+
+\item{eol}{The end-of-line delimiter, defaults to \code{'\\n'}.}
+
+\item{skip}{number of lines to skip before reading the data. Defaults to 0.}
 
 \item{con}{A database connection.}
 

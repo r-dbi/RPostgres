@@ -36,6 +36,8 @@ public:
 
   void copy_data(std::string sql, List df);
 
+  void copy_csv(std::string sql, std::string file);
+
   void check_connection();
   List info();
 
