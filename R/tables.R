@@ -63,16 +63,16 @@ setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"),
            field.types = NULL, temporary = FALSE, copy = NULL) {
 
     if (is.null(row.names)) row.names <- FALSE
-    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
+    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L) {
       stopc("`row.names` must be a logical scalar or a string")
     }
-    if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite))  {
+    if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite)) {
       stopc("`overwrite` must be a logical scalar")
     }
-    if (!is.logical(append) || length(append) != 1L || is.na(append))  {
+    if (!is.logical(append) || length(append) != 1L || is.na(append)) {
       stopc("`append` must be a logical scalar")
     }
-    if (!is.logical(temporary) || length(temporary) != 1L)  {
+    if (!is.logical(temporary) || length(temporary) != 1L) {
       stopc("`temporary` must be a logical scalar")
     }
     if (overwrite && append) {
@@ -250,11 +250,11 @@ setMethod("dbReadTable", c("PqConnection", "character"),
   function(conn, name, ..., check.names = TRUE, row.names = FALSE) {
 
     if (is.null(row.names)) row.names <- FALSE
-    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
+    if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L) {
       stopc("`row.names` must be a logical scalar or a string")
     }
 
-    if (!is.logical(check.names) || length(check.names) != 1L)  {
+    if (!is.logical(check.names) || length(check.names) != 1L) {
       stopc("`check.names` must be a logical scalar")
     }
 
@@ -364,7 +364,7 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
 }
 
 find_temp_schema <- function(conn, fail_if_missing = TRUE) {
-  if(!is.na(connection_get_temp_schema(conn@ptr)))
+  if (!is.na(connection_get_temp_schema(conn@ptr)))
     return(connection_get_temp_schema(conn@ptr))
   if (is(conn, "RedshiftConnection")) {
     temp_schema <- dbGetQuery(
@@ -468,7 +468,9 @@ setMethod("dbListObjects", c("PqConnection", "ANY"), function(conn, prefix = NUL
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
-    is_prefix <- vlapply(unquoted, function(x) { "schema" %in% names(x@name) && !("table" %in% names(x@name)) })
+    is_prefix <- vlapply(unquoted, function(x) {
+      "schema" %in% names(x@name) && !("table" %in% names(x@name))
+    })
     schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
     if (length(schemas) > 0) {
       schema_strings <- dbQuoteString(conn, schemas)

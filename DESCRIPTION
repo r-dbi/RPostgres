@@ -72,3 +72,5 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
+Config/autostyle/scope: line_breaks
+Config/autostyle/strict: false
