@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.2.9002 (2021-12-19)
+
+- Make method definition more similar to S3. All `setMethod()` calls refer to top-level functions (#380).
+
+
 # RPostgres 1.4.2.9001 (2021-12-12)
 
 - New `postgresIsTransacting()` (#351, @jakob-r).
