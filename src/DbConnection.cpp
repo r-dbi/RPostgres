@@ -100,6 +100,8 @@ void DbConnection::cancel_query() {
   PGcancel* cancel = PQgetCancel(pConn_);
   if (cancel == NULL) stop("Connection error detected via PQgetCancel()");
 
+  LOG_DEBUG;
+
   // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
   if (!PQcancel(cancel, errbuf, sizeof(errbuf))) {
