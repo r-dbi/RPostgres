@@ -67,6 +67,9 @@
     <loc>https://rpostgres.r-dbi.org/reference/postgresHasDefault.html</loc>
   </url>
   <url>
+    <loc>https://rpostgres.r-dbi.org/reference/postgresIsTransacting.html</loc>
+  </url>
+  <url>
     <loc>https://rpostgres.r-dbi.org/reference/postgresWaitForNotify.html</loc>
   </url>
   <url>

@@ -18,7 +18,7 @@ end the transaction by either committing or rolling back the changes."><!-- math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.3</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@ end the transaction by either committing or rolling back the changes."><!-- math
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transaction management.</h1>
-    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/transactions.R" class="external-link"><code>R/transactions.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbBegin_PqConnection.R" class="external-link"><code>R/dbBegin_PqConnection.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbCommit_PqConnection.R" class="external-link"><code>R/dbCommit_PqConnection.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbRollback_PqConnection.R" class="external-link"><code>R/dbRollback_PqConnection.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>postgres-transactions.Rd</code></div>
     </div>
 
@@ -93,23 +93,28 @@ to establish, remove (commit) or undo a ßsavepoint.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># postgresHasDefault()</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"USarrests"</span>, <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/USArrests.html" class="external-link">USArrests</a></span>, temporary <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">'SELECT count(*) from "USarrests"'</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   count</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    50</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbBegin</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">'DELETE from "USarrests" WHERE "Murder" &gt; 1'</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 49</span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">'SELECT count(*) from "USarrests"'</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   count</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1</span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/transactions.html" class="external-link">dbRollback</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Rolling back changes leads to original count</span></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">'SELECT count(*) from "USarrests"'</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   count</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    50</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"USarrests"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
   </div>
