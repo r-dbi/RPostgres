@@ -89,6 +89,8 @@ void DbConnection::reset_current_result(const DbResult* pResult) {
  * https://www.postgresql.org/docs/current/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
+  LOG_DEBUG;
+
   check_connection();
 
   // first allocate a 'cancel command' data structure.
