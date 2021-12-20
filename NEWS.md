@@ -7,23 +7,14 @@
 
 # RPostgres 1.4.3 (2021-12-20)
 
-- Same as previous version.
-
-
-# RPostgres 1.4.2.9002 (2021-12-19)
-
-- Make method definition more similar to S3. All `setMethod()` calls refer to top-level functions (#380).
-
-
-# RPostgres 1.4.2.9001 (2021-12-12)
+## Features
 
 - New `postgresIsTransacting()` (#351, @jakob-r).
-- Fix discovery of temporary tables for Redshift connections (#358, @galachad).
+- Temporary tables are now discovered correctly for `Redshift()` connections, all DBItest tests pass (#358, @galachad).
 
+## Internal
 
-# RPostgres 1.4.2.9000 (2021-12-05)
-
-- Same as previous version.
+- Make method definition more similar to S3. All `setMethod()` calls refer to top-level functions (#380).
 
 
 # RPostgres 1.4.2 (2021-12-05)
