@@ -1,4 +1,4 @@
-RPostgres 1.4.2
+RPostgres 1.4.3
 
 ## Cran Repository Policy
 
@@ -7,10 +7,14 @@ RPostgres 1.4.2
 ## R CMD check results
 
 - [x] Checked locally, R 4.1.1
-- [x] Checked on CI system, R 4.1.2
-- [x] Checked on win-builder, R devel
+- [ ] Checked on CI system, R 4.1.2
+- [ ] Checked on win-builder, R devel
+
+Check the boxes above after successful execution and remove this line. Then run `fledge::release()`.
 
 ## Current CRAN check results
 
-- [x] Checked on 2021-12-05, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
-- [x] NOTE: r-release-macos-arm64, r-release-macos-x86_64, r-release-windows-ix86+x86_64, r-oldrel-macos-x86_64, r-oldrel-windows-ix86+x86_64: Large binary.
+- [x] Checked on 2021-12-20, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
+- [ ] NOTE: r-release-macos-arm64, r-release-macos-x86_64, r-release-windows-ix86+x86_64, r-oldrel-macos-x86_64, r-oldrel-windows-ix86+x86_64
+
+Check results at: https://cran.r-project.org/web/checks/check_results_RPostgres.html
