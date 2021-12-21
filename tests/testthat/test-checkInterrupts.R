@@ -20,6 +20,8 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   session$run(function() {
     library(RPostgres)
     .GlobalEnv$conn <- postgresDefault(check_interrupts = TRUE)
+    .GlobalEnv$connPid <- dbGetQuery(.GlobalEnv$conn, "SELECT pg_backend_pid() AS pid")$pid
+    .GlobalEnv$checkConn <- postgresDefault()
     invisible()
   })
 
@@ -31,8 +33,13 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   session$interrupt()
   # Interrupts are slow on Windows, give ample time
   expect_equal(session$poll_process(2000), "ready")
+  session$read()
 
-  # Tests for error behavior are brittle
+  queryStatus = session$run(function() {
+    dbGetQuery(.GlobalEnv$checkConn, "SELECT state FROM pg_stat_activity WHERE pid = $1", params = .GlobalEnv$connPid)
+  })
+  expect_equal(queryStatus$state, "idle")
+
 
   session$close()
 })
