@@ -167,6 +167,8 @@ void DbConnection::copy_data(std::string sql, List df) {
     conn_stop("COPY returned error");
   }
   PQclear(pComplete);
+
+  finish_query(pConn_);
 }
 
 void DbConnection::check_connection() {
