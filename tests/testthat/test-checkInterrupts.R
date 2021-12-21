@@ -1,9 +1,9 @@
 context("checkInterrupts")
 
-test_that("check_interrupts = TRUE works with queries < 1 second (#244)", {
+test_that("check_interrupts = TRUE works with queries > 1 second (#244)", {
   con <- postgresDefault(check_interrupts = TRUE)
   time <- system.time(
-    expect_equal(dbGetQuery(con, "SELECT pg_sleep(0.2), 'foo' AS x")$x, "foo")
+    expect_equal(dbGetQuery(con, "SELECT pg_sleep(2), 'foo' AS x")$x, "foo")
   )
   expect_lt(time[["elapsed"]], 0.9)
   dbDisconnect(con)
