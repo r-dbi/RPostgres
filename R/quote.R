@@ -55,12 +55,20 @@ setMethod("dbQuoteIdentifier", c("PqConnection", "SQL"), function(conn, x, ...) 
 #' @export
 #' @rdname quote
 setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), function(conn, x, ...) {
-  elements <- c("catalog", "schema", "table", "column")
-  stopifnot(all(names(x@name) %in% elements))
+  stopifnot(all(names(x@name) %in% c("catalog", "schema", "table")))
   stopifnot(!anyDuplicated(names(x@name)))
 
-  ret <- na.omit(x@name[match(elements, names(x@name))])
-  SQL(paste0(dbQuoteIdentifier(conn, ret), collapse = "."))
+  ret <- ""
+  if ("catalog" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["catalog"]]), ".")
+  }
+  if ("schema" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["schema"]]), ".")
+  }
+  if ("table" %in% names(x@name)) {
+    ret <- paste0(ret, dbQuoteIdentifier(conn, x@name[["table"]]))
+  }
+  SQL(ret)
 })
 
 #' @export
