@@ -17,6 +17,7 @@ class DbConnection : boost::noncopyable {
   const DbResult* pCurrentResult_;
   bool transacting_;
   bool check_interrupts_;
+  CharacterVector temp_schema_;
 
 public:
   DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
@@ -47,6 +48,9 @@ public:
   bool is_transacting() const;
   void set_transacting(bool transacting);
 
+  CharacterVector get_temp_schema() const;
+  void set_temp_schema(CharacterVector temp_schema);
+
   void conn_stop(const char* msg);
   static void conn_stop(PGconn* conn, const char* msg);
 
@@ -54,8 +58,10 @@ public:
   static void finish_query(PGconn* pConn);
   List wait_for_notify(int timeout_secs);
 
-private:
   void cancel_query();
+
+private:
+  static void process_notice(void* This, const char* message);
 };
 
 #endif

@@ -11,6 +11,7 @@ vignette: >
 ```{r, echo = FALSE}
 library(DBI)
 knitr::opts_chunk$set(
+  error = (Sys.getenv("IN_PKGDOWN") != "true"),
   collapse = TRUE,
   comment = "#>",
   eval = RPostgres::postgresHasDefault()
@@ -68,7 +69,7 @@ con <- dbConnect(RPostgres::Postgres())
 dbExecute(con, "LISTEN grapevine")
 ```
 
-...in this case, "grapevine" is arbitary, we don't need to create channels ahead of time.
+...in this case, "grapevine" is arbitrary, we don't need to create channels ahead of time.
 To make sure we have something to receive, we can start a separate R process using [callr](https://CRAN.R-project.org/package=callr).
 Ordinarily this would be part of another R script, maybe on another computer.
 This will wait a bit, and use ``NOTIFY`` to send a message, then finish:
@@ -264,8 +265,9 @@ writeLines(outputs[[2]])
 Notice that the work has been shared between the 2 workers.
 If these 2 weren't enough, we could happily add more to keep the system going.
 
-```{r, echo = FALSE}
-if (!is.null(rs)) { dbClearResult(rs) ; rs <- NULL }
-if (!is.null(con)) { dbDisconnect(con) ; con <- NULL }
-if (!is.null(rp)) { rp$wait() ; rp <- NULL }
+```{r, echo = FALSE, error = FALSE}
+dbExecute(con, "DROP TABLE IF EXISTS sqroot_vignette_example;")
+dbDisconnect(con)
+
+rp$wait()
 ```

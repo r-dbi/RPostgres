@@ -32,7 +32,7 @@ void DbDataFrame::set_col_values() {
 bool DbDataFrame::advance() {
   ++i;
 
-  if (i % 1000 == 0)
+  if (i % 1024 == 0)
     checkUserInterrupt();
 
   return (n_max < 0 || i < n_max);

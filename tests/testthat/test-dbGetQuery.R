@@ -63,5 +63,3 @@ test_that("queries with check_interrupt = TRUE work (#193)", {
 
   dbDisconnect(con)
 })
-
-

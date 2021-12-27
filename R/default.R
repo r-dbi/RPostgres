@@ -9,23 +9,27 @@
 #' @examples
 #' if (postgresHasDefault()) {
 #'   db <- postgresDefault()
-#'   dbListTables(db)
+#'   print(dbListTables(db))
 #'   dbDisconnect(db)
+#' } else {
+#'   message("No database connection.")
 #' }
 postgresHasDefault <- function(...) {
-  tryCatch({
-    con <- connect_default(...)
-    dbDisconnect(con)
-    TRUE
-  }, error = function(...) {
-    message(
-      "Could not initialise default postgres database. If postgres is running\n",
-      "check that the environment variables PGHOST, PGPORT, \n",
-      "PGUSER, PGPASSWORD, and PGDATABASE, are defined and\n",
-      "point to your database."
-    )
-    FALSE
-  })
+  tryCatch(
+    {
+      con <- connect_default(...)
+      dbDisconnect(con)
+      TRUE
+    },
+    error = function(...) {
+      message(
+        "Could not initialise default postgres database. If postgres is running\n",
+        "check that the environment variables PGHOST, PGPORT, \n",
+        "PGUSER, PGPASSWORD, and PGDATABASE, are defined and\n",
+        "point to your database."
+      )
+      FALSE
+    })
 }
 
 #' @description
@@ -35,11 +39,13 @@ postgresHasDefault <- function(...) {
 #' @export
 #' @rdname postgresHasDefault
 postgresDefault <- function(...) {
-  tryCatch({
-    connect_default(...)
-  }, error = function(...) {
-    testthat::skip("Test database not available")
-  })
+  tryCatch(
+    {
+      connect_default(...)
+    },
+    error = function(...) {
+      testthat::skip("Test database not available")
+    })
 }
 
 connect_default <- function(...) {

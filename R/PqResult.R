@@ -13,42 +13,6 @@ setClass("PqResult",
   )
 )
 
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetStatement", "PqResult", function(res, ...) {
-  if (!dbIsValid(res)) {
-    stop("Invalid result set.", call. = FALSE)
-  }
-  res@sql
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbIsValid", "PqResult", function(dbObj, ...) {
-  result_valid(dbObj@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetRowCount", "PqResult", function(res, ...) {
-  result_rows_fetched(res@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbGetRowsAffected", "PqResult", function(res, ...) {
-  result_rows_affected(res@ptr)
-})
-
-#' @rdname PqResult-class
-#' @export
-setMethod("dbColumnInfo", "PqResult", function(res, ...) {
-  rci <- result_column_info(res@ptr)
-  rci <- cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
-  rci$name <- tidy_names(rci$name)
-  rci
-})
-
 #' Execute a SQL statement on a database connection
 #'
 #' To retrieve results a chunk at a time, use `dbSendQuery()`,
@@ -57,73 +21,33 @@ setMethod("dbColumnInfo", "PqResult", function(res, ...) {
 #' fetches and clears for you.
 #'
 #' @param conn A [PqConnection-class] created by [dbConnect()].
-#' @param statement An SQL string to execute
+#' @param statement An SQL string to execute.
 #' @param params A list of query parameters to be substituted into
 #'   a parameterised query. Query parameters are sent as strings, and the
 #'   correct type is imputed by PostgreSQL. If this fails, you can manually
 #'   cast the parameter with e.g. `"$1::bigint"`.
-#' @param ... Another arguments needed for compatibility with generic (
-#'   currently ignored).
-#' @examples
-#' # For running the examples on systems without PostgreSQL connection:
-#' run <- postgresHasDefault()
-#'
+#' @param ... Other arguments needed for compatibility with generic (currently
+#'   ignored).
+#' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' if (run) db <- dbConnect(RPostgres::Postgres())
-#' if (run) dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
+#' db <- dbConnect(RPostgres::Postgres())
+#' dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)
 #'
 #' # Run query to get results as dataframe
-#' if (run) dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
+#' dbGetQuery(db, "SELECT * FROM usarrests LIMIT 3")
 #'
 #' # Send query to pull requests in batches
-#' if (run) res <- dbSendQuery(db, "SELECT * FROM usarrests")
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbFetch(res, n = 2)
-#' if (run) dbHasCompleted(res)
-#' if (run) dbClearResult(res)
+#' res <- dbSendQuery(db, "SELECT * FROM usarrests")
+#' dbFetch(res, n = 2)
+#' dbFetch(res, n = 2)
+#' dbHasCompleted(res)
+#' dbClearResult(res)
 #'
-#' if (run) dbRemoveTable(db, "usarrests")
+#' dbRemoveTable(db, "usarrests")
 #'
-#' if (run) dbDisconnect(db)
+#' dbDisconnect(db)
 #' @name postgres-query
 NULL
-
-#' @export
-#' @rdname postgres-query
-setMethod("dbSendQuery", c("PqConnection", "character"), function(conn, statement, params = NULL, ...) {
-  statement <- enc2utf8(statement)
-
-  rs <- new("PqResult",
-    conn = conn,
-    ptr = result_create(conn@ptr, statement),
-    sql = statement,
-    bigint = conn@bigint
-  )
-
-  if (!is.null(params)) {
-    dbBind(rs, params)
-  }
-
-  rs
-})
-
-#' @param res Code a [PqResult-class] produced by
-#'   [DBI::dbSendQuery()].
-#' @param n Number of rows to return. If less than zero returns all rows.
-#' @inheritParams DBI::sqlRownamesToColumn
-#' @export
-#' @rdname postgres-query
-setMethod("dbFetch", "PqResult", function(res, n = -1, ..., row.names = FALSE) {
-  if (length(n) != 1) stopc("n must be scalar")
-  if (n < -1) stopc("n must be nonnegative or -1")
-  if (is.infinite(n)) n <- -1
-  if (trunc(n) != n) stopc("n must be a whole number")
-  ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
-  ret <- convert_bigint(ret, res@bigint)
-  ret <- finalize_types(ret, res@conn)
-  ret <- fix_timezone(ret, res@conn)
-  set_tidy_names(ret)
-})
 
 convert_bigint <- function(df, bigint) {
   if (bigint == "integer64") return(df)
@@ -185,43 +109,41 @@ type_lookup <- function(x, conn) {
   typnames$typname[match(x, typnames$oid)]
 }
 
-#' @rdname postgres-query
-#' @export
-setMethod("dbBind", "PqResult", function(res, params, ...) {
-  if (!is.null(names(params))) {
-    stop("Named parameters not supported", call. = FALSE)
-  }
-  if (!is.list(params)) params <- as.list(params)
-
-  params <- factor_to_string(params, warn = TRUE)
-  params <- fix_posixt(params)
-  params <- difftime_to_hms(params)
-  params <- fix_numeric(params)
-  params <- prepare_for_binding(params)
-  result_bind(res@ptr, params)
-  invisible(res)
-})
-
 factor_to_string <- function(value, warn = FALSE) {
   is_factor <- vlapply(value, is.factor)
-  if (warn && any(is_factor)) {
+  if (!any(is_factor)) {
+    return(value)
+  }
+
+  if (warn) {
     warning("Factors converted to character", call. = FALSE)
   }
   value[is_factor] <- lapply(value[is_factor], as.character)
   value
 }
 
-fix_posixt <- function(value) {
+fix_posixt <- function(value, tz) {
   is_posixt <- vlapply(value, function(c) inherits(c, "POSIXt"))
+  if (!any(is_posixt)) {
+    return(value)
+  }
+
   withr::with_options(
     list(digits.secs = 6),
-    value[is_posixt] <- lapply(value[is_posixt], function(col) format_keep_na(col, format = "%Y-%m-%dT%H:%M:%OS%z"))
+    value[is_posixt] <- lapply(value[is_posixt], function(col) {
+      tz_col <- lubridate::with_tz(col, tz)
+      format_keep_na(tz_col, format = "%Y-%m-%dT%H:%M:%OS%z")
+    })
   )
   value
 }
 
 difftime_to_hms <- function(value) {
   is_difftime <- vlapply(value, inherits, "difftime")
+  if (!any(is_difftime)) {
+    return(value)
+  }
+
   # https://github.com/tidyverse/hms/issues/84
   value[is_difftime] <- lapply(value[is_difftime], function(x) {
     mode(x) <- "double"
@@ -232,6 +154,10 @@ difftime_to_hms <- function(value) {
 
 fix_numeric <- function(value) {
   is_numeric <- vlapply(value, is.numeric)
+  if (!any(is_numeric)) {
+    return(value)
+  }
+
   value[is_numeric] <- lapply(
     value[is_numeric],
     function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE, trim = TRUE)
@@ -252,20 +178,3 @@ prepare_for_binding <- function(value) {
   })
   value
 }
-
-#' @rdname postgres-query
-#' @export
-setMethod("dbHasCompleted", "PqResult", function(res, ...) {
-  result_has_completed(res@ptr)
-})
-
-#' @rdname postgres-query
-#' @export
-setMethod("dbClearResult", "PqResult", function(res, ...) {
-  if (!dbIsValid(res)) {
-    warningc("Expired, result set already closed")
-    return(invisible(TRUE))
-  }
-  result_release(res@ptr)
-  invisible(TRUE)
-})

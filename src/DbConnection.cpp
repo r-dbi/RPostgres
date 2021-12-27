@@ -11,7 +11,8 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
                            bool check_interrupts) :
   pCurrentResult_(NULL),
   transacting_(false),
-  check_interrupts_(check_interrupts)
+  check_interrupts_(check_interrupts),
+  temp_schema_(CharacterVector::create(NA_STRING))
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
@@ -32,6 +33,8 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
   }
 
   PQsetClientEncoding(pConn_, "UTF-8");
+
+  PQsetNoticeProcessor(pConn_, &process_notice, this);
 }
 
 DbConnection::~DbConnection() {
@@ -83,9 +86,11 @@ void DbConnection::reset_current_result(const DbResult* pResult) {
 
 /**
  * Documentation for canceling queries:
- * https://www.postgresql.org/docs/9.6/static/libpq-cancel.html
+ * https://www.postgresql.org/docs/current/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
+  LOG_DEBUG;
+
   check_connection();
 
   // first allocate a 'cancel command' data structure.
@@ -94,6 +99,8 @@ void DbConnection::cancel_query() {
   //  * the connection is invalid.
   PGcancel* cancel = PQgetCancel(pConn_);
   if (cancel == NULL) stop("Connection error detected via PQgetCancel()");
+
+  LOG_DEBUG;
 
   // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
@@ -231,7 +238,7 @@ SEXP DbConnection::quote_identifier(const String& x) {
 }
 
 SEXP DbConnection::get_null_string() {
-  static RObject null = Rf_mkCharCE("NULL", CE_UTF8);
+  static RObject null = Rf_mkCharCE("NULL::text", CE_UTF8);
   return null;
 }
 
@@ -241,6 +248,14 @@ bool DbConnection::is_transacting() const {
 
 void DbConnection::set_transacting(bool transacting) {
   transacting_ = transacting;
+}
+
+CharacterVector DbConnection::get_temp_schema() const {
+  return temp_schema_;
+}
+
+void DbConnection::set_temp_schema(CharacterVector temp_schema) {
+  temp_schema_ = temp_schema;
 }
 
 void DbConnection::conn_stop(const char* msg) {
@@ -296,4 +311,9 @@ List DbConnection::wait_for_notify(int timeout_secs) {
         stop("select() on the connection failed");
     }
   }
+}
+
+void DbConnection::process_notice(void* /*This*/, const char* message) {
+  Rcpp::CharacterVector msg(message);
+  Rcpp::message(msg);
 }
