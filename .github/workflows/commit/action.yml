@@ -7,32 +7,23 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Check if changed
-      id: changed
-      run: |
-        if [ -n "$(git status --porcelain)" ]; then
-          echo ::set-output name=changed::true
-        fi
-      shell: bash
-
-    - name: Fetch PR
-      if: ${{ steps.changed.outputs.changed }}
-      uses: r-lib/actions/pr-fetch@v2
-      with:
-        repo-token: ${{ github.token }}
-
     - name: Commit if changed
-      if: ${{ steps.changed.outputs.changed }}
       id: commit
       run: |
         set -x
-        git add .
-        git commit -m "Auto-update from GitHub Actions"$'\n'$'\n'"Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-        echo ::set-output name=sha::$(git rev-parse HEAD)
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "Changed"
+          git fetch
+          if [ -n "${GITHUB_HEAD_REF}" ]; then
+            git add .
+            git stash save
+            git switch ${GITHUB_HEAD_REF}
+            git merge origin/${GITHUB_BASE_REF} --no-edit
+            git stash pop
+          fi
+          git add .
+          git commit -m "Auto-update from GitHub Actions"$'\n'$'\n'"Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          git push -u origin HEAD
+          echo ::set-output name=sha::$(git rev-parse HEAD)
+        fi
       shell: bash
-
-    - name: Push PR
-      if: ${{ steps.changed.outputs.changed }}
-      uses: r-lib/actions/pr-push@v2
-      with:
-        repo-token: ${{ github.token }}
