@@ -27,6 +27,33 @@ test_that("quoting Id", {
     '"Robert"."Students;--"')
 })
 
+test_that("quoting Id with column, #263", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id(schema = 'Robert', table = 'Students;--', column = "dormitory"))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted),
+               '"Robert"."Students;--"."dormitory"')
+})
+
+test_that("quoting Id with column, unordered", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id(column = "dormitory", table = 'Students;--'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted),
+               '"Students;--"."dormitory"')
+})
+
+test_that("quoting errors", {
+  con <- postgresDefault()
+
+  expect_error(dbQuoteIdentifier(con, Id(tabel = 'Robert')),
+               "components")
+  expect_error(dbQuoteIdentifier(con, Id(table = 'Robert', table = 'Students;--')),
+               "Duplicated")
+})
+
 test_that("unquoting identifier - SQL with quotes", {
   con <- postgresDefault()
 
