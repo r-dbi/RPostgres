@@ -5,7 +5,7 @@ dbQuoteIdentifier_PqConnection_Id <- function(conn, x, ...) {
   stopifnot(all(names(x@name) %in% components))
   stopifnot(!anyDuplicated(names(x@name)))
 
-  ret <- na.omit(x@name[match(components, names(x@name))])
+  ret <- stats::na.omit(x@name[match(components, names(x@name))])
   SQL(paste0(dbQuoteIdentifier(conn, ret), collapse = "."))
 }
 
