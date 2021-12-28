@@ -53,6 +53,7 @@ jobs:
         if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
 
       - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/style
 
@@ -151,6 +152,7 @@ jobs:
         if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
 
       - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/check
         with:
@@ -217,6 +219,7 @@ jobs:
         if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
 
       - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/check
         with:
