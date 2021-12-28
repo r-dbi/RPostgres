@@ -66,6 +66,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: ./.github/workflows/custom/before-install
+        if: hashFiles('.github/workflows/custom/before-install/action.yml') != ''
 
       - uses: ./.github/workflows/install
         with:
@@ -91,6 +92,10 @@ jobs:
         shell: Rscript {0}
 
       - uses: ./.github/workflows/custom/after-install
+        if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
+
+      - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/check
         with:

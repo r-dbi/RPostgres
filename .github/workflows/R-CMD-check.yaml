@@ -39,6 +39,7 @@ jobs:
       - uses: ./.github/workflows/git-identity
 
       - uses: ./.github/workflows/custom/before-install
+        if: hashFiles('.github/workflows/custom/before-install/action.yml') != ''
 
       - uses: ./.github/workflows/install
         with:
@@ -46,15 +47,22 @@ jobs:
           install-r: false
           cache-version: rcc-smoke-1
           needs: check
-          extra-packages: any::rcmdcheck any::roxygen2 any::styler
+          extra-packages: any::rcmdcheck any::roxygen2 r-lib/styler
 
       - uses: ./.github/workflows/custom/after-install
+        if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
+
+      - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/style
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/roxygenize
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - id: commit
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: ./.github/workflows/commit
 
       - uses: ./.github/workflows/check
@@ -86,6 +94,7 @@ jobs:
         if: github.event_name == 'push'
 
       - uses: ./.github/workflows/custom/before-install
+        if: hashFiles('.github/workflows/custom/before-install/action.yml') != ''
 
       - uses: ./.github/workflows/install
         with:
@@ -96,6 +105,7 @@ jobs:
           extra-packages: r-lib/pkgdown local::.
 
       - uses: ./.github/workflows/custom/after-install
+        if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
 
       - uses: ./.github/workflows/pkgdown-build
         if: github.event_name != 'push'
@@ -132,6 +142,7 @@ jobs:
           ref: ${{ needs.rcc-smoke.outputs.sha }}
 
       - uses: ./.github/workflows/custom/before-install
+        if: hashFiles('.github/workflows/custom/before-install/action.yml') != ''
 
       - uses: ./.github/workflows/install
         with:
@@ -141,6 +152,10 @@ jobs:
           needs: check
 
       - uses: ./.github/workflows/custom/after-install
+        if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
+
+      - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/check
         with:
@@ -194,6 +209,7 @@ jobs:
           ref: ${{ needs.rcc-smoke.outputs.sha }}
 
       - uses: ./.github/workflows/custom/before-install
+        if: hashFiles('.github/workflows/custom/before-install/action.yml') != ''
 
       - uses: ./.github/workflows/install
         with:
@@ -203,6 +219,10 @@ jobs:
           needs: check
 
       - uses: ./.github/workflows/custom/after-install
+        if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
+
+      - uses: ./.github/workflows/update-snapshots
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
       - uses: ./.github/workflows/check
         with:
