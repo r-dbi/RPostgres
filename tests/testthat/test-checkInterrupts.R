@@ -14,7 +14,7 @@ test_that("check_interrupts = TRUE works with queries > 1 second (#244)", {
   time <- system.time(
     expect_equal(dbGetQuery(con, "SELECT pg_sleep(2), 'foo' AS x")$x, "foo")
   )
-  expect_gt(time[["elapsed"]], 2)
+  expect_gt(time[["elapsed"]], 1.5)
   dbDisconnect(con)
 })
 
