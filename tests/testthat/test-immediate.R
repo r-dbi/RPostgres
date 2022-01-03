@@ -192,3 +192,11 @@ $$
 
   session$close()
 })
+
+test_that("immediate queries after COPY (#382)", {
+  con <- postgresDefault()
+
+  dbCreateTable(con, "test", data.frame(a = integer()), temporary = TRUE)
+  dbAppendTable(con, "test", data.frame(a = 1:3), copy = TRUE)
+  expect_error(dbExecute(con, "DROP TABLE pg_temp.test", immediate = TRUE), NA)
+})
