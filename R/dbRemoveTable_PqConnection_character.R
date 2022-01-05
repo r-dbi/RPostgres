@@ -16,6 +16,7 @@ dbRemoveTable_PqConnection_character <- function(conn, name, ..., temporary = FA
     extra <- paste0(extra, temp_schema, ".")
   }
   dbExecute(conn, paste0("DROP TABLE ", extra, name))
+  on_connection_updated(conn)
   invisible(TRUE)
 }
 

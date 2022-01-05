@@ -111,6 +111,30 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
   conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type", immediate = TRUE)
 
   on.exit(NULL)
+
+  # perform the connection notification at the top level, to ensure that it's had
+  # a chance to get its external pointer connected, and so we can capture the
+  # expression that created it
+  if (!is.null(getOption("connectionObserver"))) { # nocov start
+    addTaskCallback(function(expr, ...) {
+      tryCatch({
+        if (is.call(expr) &&
+            as.character(expr[[1]]) %in% c("<-", "=") &&
+            "dbConnect" %in% as.character(expr[[3]][[1]])) {
+
+          # notify if this is an assignment we can replay
+          on_connection_opened(eval(expr[[2]]), paste(
+            c("library(DBI)", deparse(expr)), collapse = "\n"))
+        }
+      }, error = function(e) {
+        warning("Could not notify connection observer. ", e$message, call. = FALSE)
+      })
+
+      # always return false so the task callback is run at most once
+      FALSE
+    })
+  } # nocov end
+
   conn
 }
 
