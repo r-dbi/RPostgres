@@ -19,6 +19,7 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM INFORMATION_SCHEMA.tables"
     )
   } else {
+    stopifnot("prefix must be Id" = inherits(prefix, "Id"))
     unquoted <- dbUnquoteIdentifier(conn, prefix)
     is_prefix <- vlapply(unquoted, function(x) {
       "schema" %in% names(x@name) && !("table" %in% names(x@name))
