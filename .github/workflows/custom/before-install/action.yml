@@ -5,5 +5,5 @@ runs:
   steps:
     - name: Define R CMD check error condition
       run: |
-        echo 'RCMDCHECK_ERROR_ON="warning"' | tee -a $GITHUB_ENV
+        echo '_R_CHECK_PKG_SIZES_=FALSE' | tee -a $GITHUB_ENV
       shell: bash
