@@ -108,7 +108,14 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
 
   conn@timezone <- timezone
   conn@timezone_out <- timezone_out
-  conn@typnames <- dbGetQuery(conn, "SELECT oid, typname FROM pg_type", immediate = TRUE)
+  
+  typnames <- try(dbGetQuery(conn, "SELECT oid, typname FROM pg_type", immediate = TRUE), silent = TRUE)
+  
+  if(inherits(typnames, "try-error")){
+      typnames <- data.frame(typname = character(), oid = character())
+  }
+  
+  conn@typnames <- typnames
 
   on.exit(NULL)
   conn
