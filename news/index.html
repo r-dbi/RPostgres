@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.4</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,6 +58,19 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.4" id="rpostgres-144-2022-05-01">RPostgres 1.4.4 (2022-05-01)<a class="anchor" aria-label="anchor" href="#rpostgres-144-2022-05-01"></a></h2>
+<ul><li>Same as previous version.</li></ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.3.9001" id="rpostgres-1439001-2022-05-01">RPostgres 1.4.3.9001 (2022-05-01)<a class="anchor" aria-label="anchor" href="#rpostgres-1439001-2022-05-01"></a></h2>
+<ul><li>Allow connection if the <code>pg_type</code> table is missing (<a href="https://github.com/r-dbi/RPostgres/issues/394" class="external-link">#394</a>, <a href="https://github.com/r-dbi/RPostgres/issues/395" class="external-link">#395</a>, <a href="https://github.com/pedrobtz" class="external-link">@pedrobtz</a>).</li>
+<li>Expand tests for <code>dbConnect(check_interrupts = TRUE)</code> (<a href="https://github.com/r-dbi/RPostgres/issues/385" class="external-link">#385</a>, <a href="https://github.com/zozlak" class="external-link">@zozlak</a>).</li>
+<li>Fix <code>dbExecute(immediate = TRUE)</code> after <code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> (<a href="https://github.com/r-dbi/RPostgres/issues/382" class="external-link">#382</a>, <a href="https://github.com/r-dbi/RPostgres/issues/384" class="external-link">#384</a>).</li>
+<li>Ignore extended timestamp tests on i386 (<a href="https://github.com/r-dbi/RPostgres/issues/387" class="external-link">#387</a>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.3.9000" id="rpostgres-1439000-2021-12-20">RPostgres 1.4.3.9000 (2021-12-20)<a class="anchor" aria-label="anchor" href="#rpostgres-1439000-2021-12-20"></a></h2>
+<ul><li>Same as previous version.</li></ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.3" id="rpostgres-143-2021-12-20">RPostgres 1.4.3 (2021-12-20)<a class="anchor" aria-label="anchor" href="#rpostgres-143-2021-12-20"></a></h2>
 <div class="section level3">
 <h3 id="features-1-4-3">Features<a class="anchor" aria-label="anchor" href="#features-1-4-3"></a></h3>
@@ -66,8 +79,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="internal-1-4-3">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-3"></a></h3>
-<ul><li>Make method definition more similar to S3. All <code><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod()</a></code> calls refer to top-level functions (<a href="https://github.com/r-dbi/RPostgres/issues/380" class="external-link">#380</a>).</li>
-</ul></div>
+<ul><li>Make method definition more similar to S3. All <code><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod()</a></code> calls refer to top-level functions (<a href="https://github.com/r-dbi/RPostgres/issues/380" class="external-link">#380</a>).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.2" id="rpostgres-142-2021-12-05">RPostgres 1.4.2 (2021-12-05)<a class="anchor" aria-label="anchor" href="#rpostgres-142-2021-12-05"></a></h2>
@@ -96,8 +108,7 @@
 <h2 class="page-header" data-toc-text="1.4.1" id="rpostgres-141-2021-09-26">RPostgres 1.4.1 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-141-2021-09-26"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
-<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li>
-</ul></div>
+<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.0" id="rpostgres-140-2021-09-25">RPostgres 1.4.0 (2021-09-25)<a class="anchor" aria-label="anchor" href="#rpostgres-140-2021-09-25"></a></h2>
@@ -120,8 +131,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-1-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-0"></a></h3>
 <ul><li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325" class="external-link">#325</a>).</li>
-</ul></div>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325" class="external-link">#325</a>).</li></ul></div>
 <div class="section level3">
 <h3 id="internal-1-4-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-0"></a></h3>
 <ul><li>Skip timestamp tests on i386 (<a href="https://github.com/r-dbi/RPostgres/issues/318" class="external-link">#318</a>).</li>
@@ -244,12 +254,10 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.3" id="rpostgres-113-2019-12-07">RPostgres 1.1.3 (2019-12-07)<a class="anchor" aria-label="anchor" href="#rpostgres-113-2019-12-07"></a></h2>
-<ul><li>Replace <code>std::mem_fn()</code> by <code>boost::mem_fn()</code> which works for older compilers.</li>
-</ul></div>
+<ul><li>Replace <code>std::mem_fn()</code> by <code>boost::mem_fn()</code> which works for older compilers.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.2" id="rpostgres-112-2019-12-03">RPostgres 1.1.2 (2019-12-03)<a class="anchor" aria-label="anchor" href="#rpostgres-112-2019-12-03"></a></h2>
-<ul><li>Replace <code>std::mem_fun_ref()</code> by <code>std::mem_fn()</code>.</li>
-</ul></div>
+<ul><li>Replace <code>std::mem_fun_ref()</code> by <code>std::mem_fn()</code>.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.1" id="rpostgres-111-2018-05-05">RPostgres 1.1.1 (2018-05-05)<a class="anchor" aria-label="anchor" href="#rpostgres-111-2018-05-05"></a></h2>
 <ul><li>Add support for <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest#133).</li>
@@ -305,11 +313,11 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Jeroen Ooms, <a href="https://krlmlr.info" class="external-link">Kirill Müller</a>, <a href="https://www.r-consortium.org" class="external-link">R Consortium</a>.</p>
+  <p></p><p>Developed by Hadley Wickham, Jeroen Ooms, <a href="https://krlmlr.info" class="external-link">Kirill Müller</a>, R Consortium.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
       </footer></div>
