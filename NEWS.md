@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.4 (2022-05-01)
+
+- Same as previous version.
+
+
 # RPostgres 1.4.3.9001 (2022-05-01)
 
 - Allow connection if the `pg_type` table is missing (#394, #395, @pedrobtz).
