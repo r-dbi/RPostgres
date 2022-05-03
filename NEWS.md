@@ -7,20 +7,15 @@
 
 # RPostgres 1.4.4 (2022-05-01)
 
-- Same as previous version.
-
-
-# RPostgres 1.4.3.9001 (2022-05-01)
+## Bug fixes
 
 - Allow connection if the `pg_type` table is missing (#394, #395, @pedrobtz).
-- Expand tests for `dbConnect(check_interrupts = TRUE)` (#385, @zozlak).
 - Fix `dbExecute(immediate = TRUE)` after `dbAppendTable()` (#382, #384).
+
+## Internal
+
+- Expand tests for `dbConnect(check_interrupts = TRUE)` (#385, @zozlak).
 - Ignore extended timestamp tests on i386 (#387).
-
-
-# RPostgres 1.4.3.9000 (2021-12-20)
-
-- Same as previous version.
 
 
 # RPostgres 1.4.3 (2021-12-20)
