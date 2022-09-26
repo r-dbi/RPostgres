@@ -12,7 +12,7 @@ Authors@R:
       person(given = "Kirill",
              family = "M\u00fcller",
              role = c("aut", "cre"),
-             email = "krlmlr+r@mailbox.org",
+             email = "kirill@cynkra.com",
              comment = c(ORCID = "0000-0002-1416-3412")),
       person(given = "RStudio",
              role = "cph"),
