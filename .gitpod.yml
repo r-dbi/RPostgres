@@ -1,8 +1,9 @@
 image: 
   file: .gitpod.Dockerfile
 tasks:
-  -name: dependencies
-    init: echo R -q -e 'pak::pak("deps::.")'
+  - name: dependencies
+    init: |
+      echo R -q -e 'pak::pak("deps::.")'
 vscode:
   extensions:
     - ms-vscode.cpptools-extension-pack
