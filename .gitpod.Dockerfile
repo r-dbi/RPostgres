@@ -5,6 +5,7 @@ FROM gitpod/workspace-base:2022-05-08-14-31-53
 RUN sudo apt update
 RUN sudo apt install -y r-base
 RUN sudo apt install -y ccache
+RUN sudo apt install -y libharfbuzz-dev libfribidi-dev
 
 # Install pak in R 
 RUN sudo R -q -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
