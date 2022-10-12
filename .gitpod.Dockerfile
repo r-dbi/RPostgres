@@ -1,4 +1,4 @@
-FROM gitpod/workspace-base:2022-05-08-14-31-53
+FROM ubuntu:latest
 
-RUN install-packages r-base
+RUN sudo apt install r-base
 RUN echo "Run from the Docker!"
