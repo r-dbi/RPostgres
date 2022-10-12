@@ -1,8 +1,8 @@
 image: 
   file: .gitpod.Dockerfile
-# tasks:
-#   - init: echo 'init script' # runs during prebuild
-#     command: echo 'start script'
+tasks:
+  -name: dependencies
+    init: echo R -q -e 'pak::pak(deps::.)'
 vscode:
   extensions:
     - ms-vscode.cpptools-extension-pack
