@@ -3,7 +3,14 @@ image:
 tasks:
   - name: dependencies
     init: |
-      sudo R -q -e 'pak::pak("deps::.")'
+      curl -s https://raw.githubusercontent.com/krlmlr/scriptlets/master/bootstrap | sh
+
+      mkdir ~/R/x86_64-pc-linux-gnu-library/$(Rscript -e 'writeLines(as.character(getRversion()))')
+      # Install pak in R 
+      R -q -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
+      # Install R dependencies
+      R -q -e 'pak::pak("devtools")'
+      R -q -e 'pak::pak("deps::.")'
 vscode:
   extensions:
     - ms-vscode.cpptools-extension-pack
