@@ -4,7 +4,9 @@ tasks:
   - name: dependencies
     init: |
       set -euxo pipefail
+      mv ~/.gitconfig ~/.gitconfig.gitpod
       curl -s https://raw.githubusercontent.com/krlmlr/scriptlets/master/bootstrap | sh
+      echo -e "[credential]\n\thelper = /usr/bin/gp credential-helper" >> ~/.gitconfig
 
       mkdir -p ~/R/x86_64-pc-linux-gnu-library/$(Rscript -e 'writeLines(as.character(getRversion()))')
       # Install pak in R 
