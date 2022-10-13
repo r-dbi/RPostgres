@@ -17,3 +17,5 @@ tasks:
 vscode:
   extensions:
     - ms-vscode.cpptools-extension-pack
+    - go2sh.cmake-integration-vscode
+    - EditorConfig.EditorConfig
