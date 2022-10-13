@@ -3,6 +3,7 @@ image:
 tasks:
   - name: dependencies
     init: |
+      set -euxo pipefail
       curl -s https://raw.githubusercontent.com/krlmlr/scriptlets/master/bootstrap | sh
 
       mkdir -p ~/R/x86_64-pc-linux-gnu-library/$(Rscript -e 'writeLines(as.character(getRversion()))')
