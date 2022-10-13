@@ -8,7 +8,7 @@ tasks:
       curl -s https://raw.githubusercontent.com/krlmlr/scriptlets/master/bootstrap | sh
       echo -e "[credential]\n\thelper = /usr/bin/gp credential-helper" >> ~/.gitconfig
 
-      mkdir -p ~/R/x86_64-pc-linux-gnu-library/$(Rscript -e 'writeLines(as.character(getRversion()))')
+      mkdir -p ~/R/x86_64-pc-linux-gnu-library/$(Rscript -e 'writeLines(gsub("[.][^.]+$", "", as.character(getRversion())))')
       # Install pak in R 
       R -q -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
       # Install R dependencies
