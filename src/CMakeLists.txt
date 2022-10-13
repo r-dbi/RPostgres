@@ -1,0 +1,58 @@
+add_library(RPostgres 
+  connection.cpp
+  DbColumn.cpp
+  DbColumnDataSource.cpp
+  DbColumnDataSourceFactory.cpp
+  DbColumnStorage.cpp
+  DbConnection.cpp
+  DbDataFrame.cpp
+  DbResult.cpp
+  encode.cpp
+  encrypt.cpp
+  logging.cpp
+  PqColumnDataSource.cpp
+  PqColumnDataSourceFactory.cpp
+  PqDataFrame.cpp
+  PqResult.cpp
+  PqResultImpl.cpp
+  PqResultSource.cpp
+  PqUtils.cpp
+  RcppExports.cpp
+  result.cpp
+  DbColumnDataSourceFactory.h
+  DbColumnDataSource.h
+  DbColumnDataType.h
+  DbColumn.h
+  DbColumnStorage.h
+  DbConnection.h
+  DbDataFrame.h
+  DbResult.h
+  DbResultImplDecl.h
+  DbResultImpl.h
+  encode.h
+  integer64.h
+  pch.h
+  PqColumnDataSourceFactory.h
+  PqColumnDataSource.h
+  PqDataFrame.h
+  PqResult.h
+  PqResultImpl.h
+  PqResultSource.h
+  PqUtils.h
+  RPostgres-init.c
+  RPostgres_types.h
+)
+
+target_include_directories(RPostgres PUBLIC 
+    "/usr/share/R/include"
+    "/home/gitpod/R/x86_64-pc-linux-gnu-library/3.6/Rcpp/include/"
+    "/home/gitpod/R/x86_64-pc-linux-gnu-library/3.6/plogr/include/"
+    "/usr/include/postgresql"
+    "vendor"
+)
+
+target_compile_definitions(RPostgres PUBLIC
+    "RCPP_DEFAULT_INCLUDE_CALL=false"
+    "RCPP_USING_UTF8_ERROR_STRING"
+    "BOOST_NO_AUTO_PTR"
+)
