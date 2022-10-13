@@ -6,5 +6,6 @@ RUN sudo apt update
 RUN sudo apt install -y \
   r-base \
   ccache \
+  cmake \
   # Install dependencies for rlang packet
   libharfbuzz-dev libfribidi-dev
