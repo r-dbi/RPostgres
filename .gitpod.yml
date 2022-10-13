@@ -8,6 +8,9 @@ tasks:
       curl -s https://raw.githubusercontent.com/krlmlr/scriptlets/master/bootstrap | sh
       echo -e "[credential]\n\thelper = /usr/bin/gp credential-helper" >> ~/.gitconfig
 
+      # .editorconfig
+      ln -s ~/.editorconfig ..
+
       # Set up ccache
       ln -s /usr/lib/ccache/* ~/bin/
 
