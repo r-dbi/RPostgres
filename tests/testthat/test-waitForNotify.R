@@ -1,5 +1,3 @@
-context("waitForNotify")
-
 test_that("WaitForNotify without anything to do returns NULL", {
   db <- postgresDefault()
   n <- RPostgres::postgresWaitForNotify(db, 1)
