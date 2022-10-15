@@ -1,5 +1,3 @@
-context("Encoding")
-
 # Specific to RPostgres
 test_that("NAs encoded as NULLs", {
   expect_equal(encode_vector(NA), "\\N")

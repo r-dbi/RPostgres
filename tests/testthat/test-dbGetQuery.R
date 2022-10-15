@@ -1,5 +1,3 @@
-context("dbGetQuery")
-
 test_that("special characters work", {
   con <- postgresDefault()
 
