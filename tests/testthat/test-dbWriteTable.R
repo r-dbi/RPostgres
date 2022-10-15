@@ -1,5 +1,3 @@
-context("dbWriteTable")
-
 if (postgresHasDefault()) {
 
   with_database_connection({

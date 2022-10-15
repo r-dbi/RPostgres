@@ -1,5 +1,3 @@
-context("exotic types")
-
 test_that("can manipulate classes", {
   expect_is(set_class(1, "A"), "A")
 })

@@ -1,5 +1,3 @@
-context("checkInterrupts")
-
 test_that("check_interrupts = TRUE works with queries < 1 second", {
   con <- postgresDefault(check_interrupts = TRUE)
   time <- system.time(

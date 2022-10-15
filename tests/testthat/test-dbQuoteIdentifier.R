@@ -1,5 +1,3 @@
-context("dbQuoteIdentifier")
-
 test_that("quoting string", {
   con <- postgresDefault()
 
