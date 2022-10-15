@@ -46,7 +46,7 @@ Suggests:
     DBItest (>= 1.7.1),
     knitr,
     rmarkdown,
-    testthat
+    testthat (>= 3.0.0)
 LinkingTo: 
     plogr (>= 0.2.0),
     Rcpp
@@ -116,3 +116,4 @@ Collate:
     'utils.R'
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
+Config/testthat/edition: 3
