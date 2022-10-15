@@ -1,5 +1,5 @@
 test_that("can manipulate classes", {
-  expect_is(set_class(1, "A"), "A")
+  expect_s3_class(set_class(1, "A"), "A")
 })
 
 test_that("dbColumnInfo() knows about typnames", {
@@ -10,7 +10,7 @@ test_that("dbColumnInfo() knows about typnames", {
   expect_equal(dbColumnInfo(rs)[[".typname"]], c("int4", "json"))
 
   res <- dbFetch(rs)
-  expect_is(res$js, "pq_json")
+  expect_s3_class(res$js, "pq_json")
 
   dbClearResult(rs)
 })
