@@ -23,3 +23,6 @@ windows
 ^autobrew$
 ^cleanup$
 ^CRAN-SUBMISSION$
+^\.gitpod\.yml$
+^\.gitpod\.Dockerfile$
+^CMakeLists\.txt$
