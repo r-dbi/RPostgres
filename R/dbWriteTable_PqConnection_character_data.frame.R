@@ -90,6 +90,7 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
   }
   on.exit(NULL)
 
+  on_connection_updated(conn)
   invisible(TRUE)
 }
 

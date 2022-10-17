@@ -1,0 +1,7 @@
+Name: PostgreSQL
+HelpUrl: https://www.postgresql.org/docs/
+Icon: icons/elephant.png
+
+Name: Redshift
+HelpUrl: https://docs.aws.amazon.com/redshift/index.html
+Icon: icons/redshift.png
