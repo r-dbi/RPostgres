@@ -117,5 +117,3 @@ Collate:
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
 Config/testthat/edition: 3
-Remotes:  
-    r-dbi/DBItest
