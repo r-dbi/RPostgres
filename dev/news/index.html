@@ -59,7 +59,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.4.9000" id="rpostgres-1449000-2022-05-01">RPostgres 1.4.4.9000 (2022-05-01)<a class="anchor" aria-label="anchor" href="#rpostgres-1449000-2022-05-01"></a></h2>
-<ul><li>Same as previous version.</li></ul></div>
+<ul><li>Same as previous version.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.4" id="rpostgres-144-2022-05-01">RPostgres 1.4.4 (2022-05-01)<a class="anchor" aria-label="anchor" href="#rpostgres-144-2022-05-01"></a></h2>
 <div class="section level3">
@@ -82,7 +83,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="internal-1-4-3">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-3"></a></h3>
-<ul><li>Make method definition more similar to S3. All <code><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod()</a></code> calls refer to top-level functions (<a href="https://github.com/r-dbi/RPostgres/issues/380" class="external-link">#380</a>).</li></ul></div>
+<ul><li>Make method definition more similar to S3. All <code><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod()</a></code> calls refer to top-level functions (<a href="https://github.com/r-dbi/RPostgres/issues/380" class="external-link">#380</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.2" id="rpostgres-142-2021-12-05">RPostgres 1.4.2 (2021-12-05)<a class="anchor" aria-label="anchor" href="#rpostgres-142-2021-12-05"></a></h2>
@@ -111,7 +113,8 @@
 <h2 class="page-header" data-toc-text="1.4.1" id="rpostgres-141-2021-09-26">RPostgres 1.4.1 (2021-09-26)<a class="anchor" aria-label="anchor" href="#rpostgres-141-2021-09-26"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
-<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li></ul></div>
+<ul><li>Avoid crash by dereferencing 0-size vector (<a href="https://github.com/r-dbi/RPostgres/issues/343" class="external-link">#343</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.0" id="rpostgres-140-2021-09-25">RPostgres 1.4.0 (2021-09-25)<a class="anchor" aria-label="anchor" href="#rpostgres-140-2021-09-25"></a></h2>
@@ -134,7 +137,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-1-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-0"></a></h3>
 <ul><li>
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325" class="external-link">#325</a>).</li></ul></div>
+<code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> converts timestamp values to input time zone, used when writing tables to Redshift (<a href="https://github.com/r-dbi/RPostgres/issues/325" class="external-link">#325</a>).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="internal-1-4-0">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-0"></a></h3>
 <ul><li>Skip timestamp tests on i386 (<a href="https://github.com/r-dbi/RPostgres/issues/318" class="external-link">#318</a>).</li>
@@ -257,10 +261,12 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.3" id="rpostgres-113-2019-12-07">RPostgres 1.1.3 (2019-12-07)<a class="anchor" aria-label="anchor" href="#rpostgres-113-2019-12-07"></a></h2>
-<ul><li>Replace <code>std::mem_fn()</code> by <code>boost::mem_fn()</code> which works for older compilers.</li></ul></div>
+<ul><li>Replace <code>std::mem_fn()</code> by <code>boost::mem_fn()</code> which works for older compilers.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.2" id="rpostgres-112-2019-12-03">RPostgres 1.1.2 (2019-12-03)<a class="anchor" aria-label="anchor" href="#rpostgres-112-2019-12-03"></a></h2>
-<ul><li>Replace <code>std::mem_fun_ref()</code> by <code>std::mem_fn()</code>.</li></ul></div>
+<ul><li>Replace <code>std::mem_fun_ref()</code> by <code>std::mem_fn()</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.1" id="rpostgres-111-2018-05-05">RPostgres 1.1.1 (2018-05-05)<a class="anchor" aria-label="anchor" href="#rpostgres-111-2018-05-05"></a></h2>
 <ul><li>Add support for <code>bigint</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>, supported values are <code>"integer64"</code>, <code>"integer"</code>, <code>"numeric"</code> and <code>"character"</code>. Large integers are returned as values of that type (r-dbi/DBItest#133).</li>
