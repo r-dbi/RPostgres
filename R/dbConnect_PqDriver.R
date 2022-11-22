@@ -43,6 +43,13 @@
 #' @param check_interrupts Should user interrupts be checked during the query execution (before
 #'   first row of data is available)? Setting to `TRUE` allows interruption of queries
 #'   running too long.
+#' @param system_catalogs Should `dbList*()` functions query the [`system
+#'   catalogs`](https://www.postgresql.org/docs/current/catalogs.html) (`TRUE`)
+#'   or the
+#'   [`information_schema`](https://www.postgresql.org/docs/current/information-schema.html)?
+#'   The `information_schema` does not contain PostgreSQL-specific information,
+#'   in particular [Materialized
+#'   Views](https://www.postgresql.org/docs/current/sql-creatematerializedview.html).
 #' @param timezone Sets the timezone for the connection. The default is `"UTC"`.
 #'   If `NULL` then no timezone is set, which defaults to the server's time zone.
 #' @param timezone_out The time zone returned to R, defaults to `timezone`.
@@ -60,7 +67,8 @@
 dbConnect_PqDriver <- function(drv, dbname = NULL,
                                host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
                                bigint = c("integer64", "integer", "numeric", "character"),
-                               check_interrupts = FALSE, timezone = "UTC", timezone_out = NULL) {
+                               check_interrupts = FALSE, system_catalogs = TRUE,
+                               timezone = "UTC", timezone_out = NULL) {
   opts <- unlist(list(
     dbname = dbname, user = user, password = password,
     host = host, port = as.character(port), service = service, client_encoding = "utf8", ...
@@ -70,6 +78,7 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
   }
   bigint <- match.arg(bigint)
   stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
+  stopifnot(is.logical(system_catalogs))
   if (!is.null(timezone)) {
     stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
   }
@@ -85,7 +94,8 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
 
   # timezone is set later
   conn <- new("PqConnection",
-    ptr = ptr, bigint = bigint, timezone = character(), typnames = data.frame()
+    ptr = ptr, bigint = bigint, system_catalogs = system_catalogs,
+    timezone = character(), typnames = data.frame()
   )
   on.exit(dbDisconnect(conn))
 
