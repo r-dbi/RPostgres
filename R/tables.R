@@ -120,6 +120,21 @@ db_append_table <- function(conn, name, value, copy, warn) {
   nrow(value)
 }
 
+list_tables <- function(conn, order_by = NULL) {
+
+  query <- paste0(
+    # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
+    "SELECT table_name \n",
+    "FROM information_schema.tables \n",
+    "WHERE (table_schema = ANY(current_schemas(true))) \n",
+    "  AND (table_schema <> 'pg_catalog') \n"
+  )
+
+  if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
+
+  query
+}
+
 exists_table <- function(conn, id) {
   query <- paste0(
     "SELECT COUNT(*) FROM ",
