@@ -1,12 +1,9 @@
 #' @rdname postgres-tables
 #' @usage NULL
 dbListTables_PqConnection <- function(conn, ...) {
-  query <- paste0(
-    "SELECT table_name FROM INFORMATION_SCHEMA.tables ",
-    "WHERE ",
-    "(table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')"
-  )
-  dbGetQuery(conn, query)[[1]]
+  query <- list_tables(conn = conn, order_by = "table_type, table_name")
+
+  dbGetQuery(conn, query)[["table_name"]]
 }
 
 #' @rdname postgres-tables

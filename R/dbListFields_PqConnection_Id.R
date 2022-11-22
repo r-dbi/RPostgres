@@ -1,7 +1,7 @@
 #' @rdname postgres-tables
 #' @usage NULL
 dbListFields_PqConnection_Id <- function(conn, name, ...) {
-  list_fields(conn, name)
+  list_fields(conn, id = name)
 }
 
 #' @rdname postgres-tables
