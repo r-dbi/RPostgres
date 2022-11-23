@@ -13,10 +13,17 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       null_varchar <- "NULL::text"
     }
     query <- paste0(
-      "SELECT ", null_varchar, " AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
-      "WHERE (table_schema = ANY(current_schemas(true))) AND (table_schema <> 'pg_catalog')\n",
+      "SELECT ", null_varchar, " AS schema, table_name AS table FROM ( \n",
+        list_tables(
+          conn = conn,
+          where_schema = "current",
+          order_by = "table_type, table_name"
+        ),
+      ") as table_query \n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM INFORMATION_SCHEMA.tables"
+      "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM ( \n",
+        list_tables(conn = conn),
+      ") as schema_query;"
     )
   } else {
     unquoted <- dbUnquoteIdentifier(conn, prefix)
@@ -24,12 +31,22 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       "schema" %in% names(x@name) && !("table" %in% names(x@name))
     })
     schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
-    if (length(schemas) > 0) {
+    if (length(schemas) > 0) { # else query is NULL
       schema_strings <- dbQuoteString(conn, schemas)
+      where_schema <-
+        paste0(
+          "AND table_schema IN (",
+          paste(schema_strings, collapse = ", "),
+          ")"
+        )
       query <- paste0(
-        "SELECT table_schema AS schema, table_name AS table FROM INFORMATION_SCHEMA.tables\n",
-        "WHERE ",
-        "(table_schema IN (", paste(schema_strings, collapse = ", "), "))"
+        "SELECT table_schema AS schema, table_name AS table FROM ( \n",
+          list_tables(
+            conn = conn,
+            where_schema = where_schema,
+            order_by = "table_type, table_name"
+          ),
+        ") as table_query"
       )
     }
   }
