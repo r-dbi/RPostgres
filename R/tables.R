@@ -120,15 +120,29 @@ db_append_table <- function(conn, name, value, copy, warn) {
   nrow(value)
 }
 
-list_tables <- function(conn, order_by = NULL) {
+list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
 
   query <- paste0(
     # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
-    "SELECT table_name \n",
+    "SELECT table_schema, table_name \n",
     "FROM information_schema.tables \n",
-    "WHERE (table_schema = ANY(current_schemas(true))) \n",
-    "  AND (table_schema <> 'pg_catalog') \n"
+    "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
   )
+
+  if (!is.null(where_schema)) {
+    if (identical(where_schema, "current")) {
+      # `true` in `current_schemas(true)` is necessary to get temporary tables
+      query <- paste0(
+        query,
+        "  AND (table_schema = ANY(current_schemas(true))) \n",
+        "  AND (table_schema <> 'pg_catalog') \n"
+      )
+    } else {
+      query <- paste0(query, where_schema)
+    }
+  }
+
+  if (!is.null(where_table)) query <- paste0(query, where_table)
 
   if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
@@ -136,12 +150,23 @@ list_tables <- function(conn, order_by = NULL) {
 }
 
 exists_table <- function(conn, id) {
-  query <- paste0(
-    "SELECT COUNT(*) FROM ",
-    find_table(conn, id)
-  )
+  name <- id@name
+  stopifnot("table" %in% names(name))
+  table_name <- dbQuoteString(conn, name[["table"]])
+  where_table <- paste0("AND table_name = ", table_name, "\n")
 
-  dbGetQuery(conn, query)[[1]] >= 1
+  if ("schema" %in% names(name)) {
+    schema_name <- dbQuoteString(conn, name[["schema"]])
+    where_schema <- paste0("AND table_schema = ", schema_name, "\n")
+  } else {
+    where_schema <- "current"
+  }
+  query <- paste0(
+    "SELECT EXISTS ( \n",
+    list_tables(conn, where_schema = where_schema, where_table = where_table),
+    ")"
+  )
+  dbGetQuery(conn, query)[[1]]
 }
 
 find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {

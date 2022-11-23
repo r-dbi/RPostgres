@@ -4,6 +4,7 @@ dbListTables_PqConnection <- function(conn, ...) {
   query <-
     list_tables(
       conn = conn,
+      where_schema = "current",
       order_by = "table_type, table_name"
     )
 
