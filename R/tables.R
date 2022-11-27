@@ -169,7 +169,7 @@ exists_table <- function(conn, id) {
   dbGetQuery(conn, query)[[1]]
 }
 
-find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
+list_fields <- function(conn, id) {
   is_redshift <- is(conn, "RedshiftConnection")
 
   if ("schema" %in% names(id)) {
@@ -205,12 +205,13 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
       "tt WHERE schemas[nr] <> 'pg_catalog') ",
       "ttt"
     )
+    only_first <- TRUE
   }
 
   table <- dbQuoteString(conn, id[["table"]])
   query <- paste0(
     query, " ",
-    "INNER JOIN INFORMATION_SCHEMA.", inf_table, " USING (table_schema) ",
+    "INNER JOIN INFORMATION_SCHEMA.COLUMNS USING (table_schema) ",
     "WHERE table_name = ", table
   )
 
@@ -223,7 +224,16 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
     )
   }
 
-  query
+  query <- paste0(
+    "SELECT column_name FROM ",
+    query, " ",
+    "ORDER BY ordinal_position"
+  )
+  fields <- dbGetQuery(conn, query)[[1]]
+  if (length(fields) == 0) {
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+  }
+  fields
 }
 
 find_temp_schema <- function(conn, fail_if_missing = TRUE) {
@@ -251,18 +261,4 @@ find_temp_schema <- function(conn, fail_if_missing = TRUE) {
     connection_set_temp_schema(conn@ptr, "pg_temp")
     return(connection_get_temp_schema(conn@ptr))
   }
-}
-
-list_fields <- function(conn, id) {
-  query <- find_table(conn, id, "columns", only_first = TRUE)
-  query <- paste0(
-    "SELECT column_name FROM ",
-    query, " ",
-    "ORDER BY ordinal_position"
-  )
-  fields <- dbGetQuery(conn, query)[[1]]
-  if (length(fields) == 0) {
-    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
-  }
-  fields
 }
