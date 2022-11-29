@@ -196,14 +196,17 @@ list_fields <- function(conn, id) {
     )
     only_first <- FALSE
   } else {
-    # https://stackoverflow.com/a/8767450/946850
+    # Get `current_schemas()` in search_path order
+    # so $user and temp tables take precedence over the public schema (by default)
+    # https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH
+    # https://www.postgresql.org/docs/current/runtime-config-client.html#GUC-SEARCH-PATH
+    # How to unnest `current_schemas(true)` array with element number (works since v9.4):
+    # https://stackoverflow.com/a/8767450/2114932
     query <- paste0(
-      "(SELECT nr, schemas[nr] AS table_schema FROM ",
-      "(SELECT *, generate_subscripts(schemas, 1) AS nr FROM ",
-      "(SELECT current_schemas(true) AS schemas) ",
-      "t) ",
-      "tt WHERE schemas[nr] <> 'pg_catalog') ",
-      "ttt"
+        "(",
+        "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
+        "WHERE table_schema != 'pg_catalog'",
+        ") schemas_on_path"
     )
     only_first <- TRUE
   }
