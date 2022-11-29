@@ -170,12 +170,16 @@ exists_table <- function(conn, id) {
 }
 
 list_fields <- function(conn, id) {
+  name <- id@name
+
   is_redshift <- is(conn, "RedshiftConnection")
 
-  if ("schema" %in% names(id)) {
+  # get relevant schema
+  if ("schema" %in% names(name)) {
+    # either the user provides the schema
     query <- paste0(
       "(SELECT 1 AS nr, ",
-      dbQuoteString(conn, id[["schema"]]), "::varchar",
+      dbQuoteString(conn, name[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
   } else if (is_redshift) {
@@ -211,7 +215,7 @@ list_fields <- function(conn, id) {
     only_first <- TRUE
   }
 
-  table <- dbQuoteString(conn, id[["table"]])
+  table <- dbQuoteString(conn, name[["table"]])
   query <- paste0(
     query, " ",
     "INNER JOIN INFORMATION_SCHEMA.COLUMNS USING (table_schema) ",
