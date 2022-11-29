@@ -182,6 +182,12 @@ list_fields <- function(conn, id) {
       dbQuoteString(conn, name[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
+
+    # only_first not necessary,
+    # as there cannot be multiple tables with the same name in a single schema
+    only_first <- FALSE
+
+  # or we have to look the table up in the schemas on the search path
   } else if (is_redshift) {
     # A variant of the Postgres version that uses CTEs and generate_series()
     # instead of generate_subscripts(), the latter is not supported on Redshift
@@ -215,6 +221,7 @@ list_fields <- function(conn, id) {
     only_first <- TRUE
   }
 
+  # join columns info
   table <- dbQuoteString(conn, name[["table"]])
   query <- paste0(
     query, " ",
@@ -223,6 +230,7 @@ list_fields <- function(conn, id) {
   )
 
   if (only_first) {
+    # we can only detect duplicate table names after we know in which schemas they are
     # https://stackoverflow.com/a/31814584/946850
     query <- paste0(
       "(SELECT *, rank() OVER (ORDER BY nr) AS rnr ",
@@ -236,10 +244,13 @@ list_fields <- function(conn, id) {
     query, " ",
     "ORDER BY ordinal_position"
   )
+
   fields <- dbGetQuery(conn, query)[[1]]
+
   if (length(fields) == 0) {
     stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
   }
+
   fields
 }
 
