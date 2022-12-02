@@ -1,5 +1,3 @@
-context("Connection")
-
 test_that("querying closed connection throws error", {
   db <- postgresDefault()
   dbDisconnect(db)

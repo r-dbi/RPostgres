@@ -35,19 +35,10 @@ be parsed as a connection string (internally, \code{expand_dbname} is set to
 \code{false} in the call to
 \href{https://www.postgresql.org/docs/current/libpq-connect.html}{\code{PQconnectdbParams()}}).}
 
-\item{host}{Host and port. If \code{NULL}, will be retrieved from
+\item{host, port}{Host and port. If \code{NULL}, will be retrieved from
 \code{PGHOST} and \code{PGPORT} env vars.}
 
-\item{port}{Host and port. If \code{NULL}, will be retrieved from
-\code{PGHOST} and \code{PGPORT} env vars.}
-
-\item{password}{User name and password. If \code{NULL}, will be
-retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
-appropriate line in \verb{~/.pgpass}. See
-\url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for
-more details.}
-
-\item{user}{User name and password. If \code{NULL}, will be
+\item{user, password}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
 appropriate line in \verb{~/.pgpass}. See
 \url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for

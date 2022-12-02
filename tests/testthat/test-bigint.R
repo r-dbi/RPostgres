@@ -1,5 +1,3 @@
-context("bigint")
-
 test_that("integer", {
   con <- postgresDefault(bigint = "integer")
   on.exit(dbDisconnect(con))

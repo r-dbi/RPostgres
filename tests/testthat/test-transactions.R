@@ -1,5 +1,3 @@
-context("transactions")
-
 test_that("autocommit", {
   skip_on_cran()
   con <- postgresDefault()

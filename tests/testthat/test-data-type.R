@@ -1,5 +1,3 @@
-context("dbDataType")
-
 # Taken from DBI
 test_that("dbDataType works on a data frame", {
   con <- postgresDefault()

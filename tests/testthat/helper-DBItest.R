@@ -34,7 +34,9 @@ DBItest::make_context(
   default_skip = c(
     # Not implemented correctly for i386
     if (.Platform$r_arch == "i386") "append_roundtrip_timestamp",
+    if (.Platform$r_arch == "i386") "append_roundtrip_timestamp_extended",
     if (.Platform$r_arch == "i386") "roundtrip_timestamp",
+    if (.Platform$r_arch == "i386") "roundtrip_timestamp_extended",
 
     if (getRversion() < "3.6") "compliance",
 

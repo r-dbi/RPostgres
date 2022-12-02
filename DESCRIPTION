@@ -1,33 +1,21 @@
 Package: RPostgres
 Title: Rcpp Interface to PostgreSQL
-Version: 1.4.3.9000
-Date: 2021-12-20
-Authors@R: 
-    c(person(given = "Hadley",
-             family = "Wickham",
-             role = "aut"),
-      person(given = "Jeroen",
-             family = "Ooms",
-             role = "aut"),
-      person(given = "Kirill",
-             family = "M\u00fcller",
-             role = c("aut", "cre"),
-             email = "krlmlr+r@mailbox.org",
-             comment = c(ORCID = "0000-0002-1416-3412")),
-      person(given = "RStudio",
-             role = "cph"),
-      person(given = "R Consortium",
-             role = "fnd"),
-      person(given = "Tomoaki",
-             family = "Nishiyama",
-             role = "ctb",
-             comment = "Code for encoding vectors into strings derived from RPostgreSQL"))
-Description: Fully DBI-compliant Rcpp-backed interface to
-    PostgreSQL <https://www.postgresql.org/>, an open-source relational
-    database.
+Version: 1.4.4.9000
+Date: 2022-05-01
+Authors@R: c(
+    person("Hadley", "Wickham", role = "aut"),
+    person("Jeroen", "Ooms", role = "aut"),
+    person("Kirill", "Müller", , "kirill@cynkra.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1416-3412")),
+    person("RStudio", role = "cph"),
+    person("R Consortium", role = "fnd"),
+    person("Tomoaki", "Nishiyama", role = "ctb",
+           comment = "Code for encoding vectors into strings derived from RPostgreSQL")
+  )
+Description: Fully DBI-compliant Rcpp-backed interface to PostgreSQL
+    <https://www.postgresql.org/>, an open-source relational database.
 License: GPL-3
-URL: https://rpostgres.r-dbi.org,
-    https://github.com/r-dbi/RPostgres
+URL: https://rpostgres.r-dbi.org, https://github.com/r-dbi/RPostgres
 BugReports: https://github.com/r-dbi/RPostgres/issues
 Depends: 
     R (>= 3.1.0)
@@ -43,21 +31,24 @@ Imports:
 Suggests: 
     callr,
     covr,
-    DBItest (>= 1.7.1),
+    DBItest (>= 1.7.2.9001),
     knitr,
     rmarkdown,
-    testthat
+    testthat (>= 3.0.0)
 LinkingTo: 
     plogr (>= 0.2.0),
     Rcpp
 VignetteBuilder:
     knitr
+Config/autostyle/scope: line_breaks
+Config/autostyle/strict: false
+Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
-SystemRequirements: libpq >= 9.0: libpq-dev (deb) or
-    postgresql-devel (rpm)
+RoxygenNote: 7.2.2
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
+    (rpm)
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
@@ -114,5 +105,3 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
-Config/autostyle/scope: line_breaks
-Config/autostyle/strict: false

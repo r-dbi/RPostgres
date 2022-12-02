@@ -14,7 +14,11 @@ on:
       - main
       - master
   schedule:
-    - cron:  '10 0 * * *'
+    - cron: "10 0 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref || '' }}-${{ github.base_ref || '' }}
+  cancel-in-progress: true
 
 name: rcc
 
@@ -30,7 +34,7 @@ jobs:
     # End custom: services
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: ./.github/workflows/rate-limit
         with:
@@ -82,7 +86,7 @@ jobs:
     # End custom: services
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ needs.rcc-smoke.outputs.sha }}
 
@@ -137,7 +141,7 @@ jobs:
           - {os: windows-latest, r: '3.6'}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ needs.rcc-smoke.outputs.sha }}
 
@@ -147,7 +151,7 @@ jobs:
       - uses: ./.github/workflows/install
         with:
           r-version: ${{ matrix.config.r }}
-          cache-version: rcc-main-1
+          cache-version: rcc-windows-1
           token: ${{ secrets.GITHUB_TOKEN }}
           needs: check
 
@@ -175,7 +179,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: macos-latest,   r: 'release'}
 
           - {os: ubuntu-20.04,   r: 'release'}
 
@@ -204,7 +208,7 @@ jobs:
           # End custom: matrix elements
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ needs.rcc-smoke.outputs.sha }}
 
@@ -214,7 +218,7 @@ jobs:
       - uses: ./.github/workflows/install
         with:
           r-version: ${{ matrix.config.r }}
-          cache-version: rcc-main-1
+          cache-version: rcc-full-1
           token: ${{ secrets.GITHUB_TOKEN }}
           needs: check
 
