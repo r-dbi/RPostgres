@@ -120,7 +120,7 @@ db_append_table <- function(conn, name, value, copy, warn) {
   nrow(value)
 }
 
-list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
+list_tables <- function(where_schema = NULL, where_table = NULL, order_by = NULL) {
 
   query <- paste0(
     # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
@@ -163,7 +163,7 @@ exists_table <- function(conn, id) {
   }
   query <- paste0(
     "SELECT EXISTS ( \n",
-    list_tables(conn, where_schema = where_schema, where_table = where_table),
+    list_tables(where_schema = where_schema, where_table = where_table),
     ")"
   )
   dbGetQuery(conn, query)[[1]]
