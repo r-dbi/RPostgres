@@ -140,7 +140,7 @@ list_tables <- function(where_schema = NULL, where_table = NULL, order_by = NULL
     query <- paste0(query, "  AND ", where_schema)
   }
 
-  if (!is.null(where_table)) query <- paste0(query, where_table)
+  if (!is.null(where_table)) query <- paste0(query, "  AND ", where_table)
 
   if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
@@ -151,7 +151,7 @@ exists_table <- function(conn, id) {
   name <- id@name
   stopifnot("table" %in% names(name))
   table_name <- dbQuoteString(conn, name[["table"]])
-  where_table <- paste0("AND table_name = ", table_name, " \n")
+  where_table <- paste0("table_name = ", table_name, " \n")
 
   if ("schema" %in% names(name)) {
     schema_name <- dbQuoteString(conn, name[["schema"]])
