@@ -1,11 +1,7 @@
 #' @rdname postgres-tables
 #' @usage NULL
 dbListTables_PqConnection <- function(conn, ...) {
-  query <-
-    list_tables(
-      where_schema = "current",
-      order_by = "table_type, table_name"
-    )
+  query <- list_tables(order_by = "table_type, table_name")
 
   dbGetQuery(conn, query)[["table_name"]]
 }

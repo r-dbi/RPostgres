@@ -14,14 +14,11 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
     }
     query <- paste0(
       "SELECT ", null_varchar, " AS schema, table_name AS table FROM ( \n",
-        list_tables(
-          where_schema = "current",
-          order_by = "table_type, table_name"
-        ),
+        list_tables(order_by = "table_type, table_name"),
       ") as table_query \n",
       "UNION ALL\n",
       "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM ( \n",
-        list_tables(),
+        list_tables(where_schema = "true"),
       ") as schema_query;"
     )
   } else {
@@ -34,7 +31,7 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       schema_strings <- dbQuoteString(conn, schemas)
       where_schema <-
         paste0(
-          "AND table_schema IN (",
+          "table_schema IN (",
           paste(schema_strings, collapse = ", "),
           ")"
         )

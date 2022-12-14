@@ -129,17 +129,15 @@ list_tables <- function(where_schema = NULL, where_table = NULL, order_by = NULL
     "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
   )
 
-  if (!is.null(where_schema)) {
-    if (identical(where_schema, "current")) {
-      # `true` in `current_schemas(true)` is necessary to get temporary tables
-      query <- paste0(
-        query,
-        "  AND (table_schema = ANY(current_schemas(true))) \n",
-        "  AND (table_schema <> 'pg_catalog') \n"
-      )
-    } else {
-      query <- paste0(query, where_schema)
-    }
+  if (is.null(where_schema)) {
+    # `true` in `current_schemas(true)` is necessary to get temporary tables
+    query <- paste0(
+      query,
+      "  AND (table_schema = ANY(current_schemas(true))) \n",
+      "  AND (table_schema <> 'pg_catalog') \n"
+    )
+  } else {
+    query <- paste0(query, "  AND ", where_schema)
   }
 
   if (!is.null(where_table)) query <- paste0(query, where_table)
@@ -153,13 +151,13 @@ exists_table <- function(conn, id) {
   name <- id@name
   stopifnot("table" %in% names(name))
   table_name <- dbQuoteString(conn, name[["table"]])
-  where_table <- paste0("AND table_name = ", table_name, "\n")
+  where_table <- paste0("AND table_name = ", table_name, " \n")
 
   if ("schema" %in% names(name)) {
     schema_name <- dbQuoteString(conn, name[["schema"]])
-    where_schema <- paste0("AND table_schema = ", schema_name, "\n")
+    where_schema <- paste0("table_schema = ", schema_name, " \n")
   } else {
-    where_schema <- "current"
+    where_schema <- NULL
   }
   query <- paste0(
     "SELECT EXISTS ( \n",
