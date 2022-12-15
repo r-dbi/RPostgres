@@ -33,7 +33,7 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
         paste0(
           "table_schema IN (",
           paste(schema_strings, collapse = ", "),
-          ")"
+          ") \n"
         )
       query <- paste0(
         "SELECT table_schema AS schema, table_name AS table FROM ( \n",
