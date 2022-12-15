@@ -122,12 +122,21 @@ db_append_table <- function(conn, name, value, copy, warn) {
 
 list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
 
-  query <- paste0(
-    # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
-    "SELECT table_schema, table_name \n",
-    "FROM information_schema.tables \n",
-    "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
-  )
+  if (conn@system_catalogs) {
+    query <- paste0(
+      "SELECT table_schema, table_name \n",
+      "FROM ( ", list_tables_from_system_catalog(), ") AS schema_tables \n",
+      "WHERE TRUE \n"
+    )
+  } else {
+    query <- paste0(
+      # information_schema.table docs:
+      # https://www.postgresql.org/docs/current/infoschema-tables.html
+      "SELECT table_schema, table_name \n",
+      "FROM information_schema.tables \n",
+      "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
+    )
+  }
 
   if (is.null(where_schema)) {
     # `true` in `current_schemas(true)` is necessary to get temporary tables
@@ -145,6 +154,38 @@ list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by 
   if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
   query
+}
+
+list_tables_from_system_catalog <- function() {
+  # This imitates (parts of) information_schema.tables, but includes materialized views
+  paste0(
+    # pg_class vs. information_schema: https://stackoverflow.com/a/24089729
+    # pg_class docs: https://www.postgresql.org/docs/current/catalog-pg-class.html
+    "SELECT n.nspname AS table_schema, cl.relname AS table_name, \n",
+    "    CASE
+            WHEN (n.oid = pg_my_temp_schema()) THEN 'LOCAL TEMPORARY'
+            WHEN (cl.relkind IN ('r', 'p')) THEN 'BASE TABLE'
+            WHEN (cl.relkind = 'v') THEN 'VIEW'
+            WHEN (cl.relkind = 'f') THEN 'FOREIGN'
+            WHEN (cl.relkind = 'm') THEN 'MATVIEW'
+            ELSE NULL
+        END AS table_type \n",
+    "FROM pg_class AS cl \n",
+    "JOIN pg_namespace AS n ON cl.relnamespace = n.oid \n",
+    # include: r = ordinary table, v = view, m = materialized view,
+    #          f = foreign table, p = partitioned table
+    "WHERE (cl.relkind IN ('r', 'v', 'm', 'f', 'p')) \n",
+    # do not return individual table partitions
+    "  AND NOT cl.relispartition \n",
+    # do not return other people's temp schemas
+    "  AND (NOT pg_is_other_temp_schema(n.oid)) \n",
+    # Return only objects (relations) which the current user may access
+    # https://www.postgresql.org/docs/current/functions-info.html
+    "  AND (pg_has_role(cl.relowner, 'USAGE') \n",
+    "    OR has_table_privilege(cl.oid, 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER') \n",
+    "    OR has_any_column_privilege(cl.oid, 'SELECT, INSERT, UPDATE, REFERENCES') \n",
+    "  ) \n"
+  )
 }
 
 exists_table <- function(conn, id) {
