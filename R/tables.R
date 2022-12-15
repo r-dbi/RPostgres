@@ -209,6 +209,14 @@ exists_table <- function(conn, id) {
 }
 
 list_fields <- function(conn, id) {
+  if (conn@system_catalogs) {
+    list_fields_from_system_catalog(conn, id)
+  } else {
+    list_fields_from_info_schema(conn, id)
+  }
+}
+
+list_fields_from_info_schema <- function(conn, id) {
   name <- id@name
 
   is_redshift <- is(conn, "RedshiftConnection")
@@ -291,6 +299,29 @@ list_fields <- function(conn, id) {
   }
 
   fields
+}
+
+list_fields_from_system_catalog <- function(conn, id) {
+  if (exists_table(conn, id)) {
+    # we know from exists_table() that id@name["table"] exists
+    # and the user has access priviledges
+    tname_str <- stats::na.omit(id@name[c("schema", "table")])
+    tname_qstr <- dbQuoteString(conn, paste(tname_str, collapse = "."))
+    # cast to `regclass` resolves the table name according to the current
+    # `search_path` https://dba.stackexchange.com/a/75124
+    query <-
+      paste0(
+        "SELECT attname \n",
+        "FROM   pg_attribute \n",
+        "WHERE  attrelid = ", tname_qstr, "::regclass \n",
+        "  AND  attnum > 0 \n",
+        "  AND  NOT attisdropped \n",
+        "ORDER  BY attnum;"
+      )
+    dbGetQuery(conn, query)[[1]]
+  } else {
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+  }
 }
 
 find_temp_schema <- function(conn, fail_if_missing = TRUE) {
