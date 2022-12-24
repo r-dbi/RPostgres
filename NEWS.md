@@ -1,5 +1,23 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.4.9001 (2022-12-24)
+
+## Features
+
+- One-click setup for https://gitpod.io (@Antonov548, #407).
+
+- Use testthat edition 3 (#408).
+
+## Uncategorized
+
+- Harmonize yaml formatting.
+
+- Revert changes to matrix section.
+
+- Merge branch 'cran-1.4.4'.
+
+
+
 # RPostgres 1.4.4.9000 (2022-05-01)
 
 - Same as previous version.
