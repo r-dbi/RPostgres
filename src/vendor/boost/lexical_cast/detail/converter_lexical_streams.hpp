@@ -279,11 +279,7 @@ namespace boost {
                 using namespace std;
                 const double val_as_double = val;
                 finish = start +
-#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, CharacterBufferSize,
-#else
-                    sprintf(begin, 
-#endif
                     "%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val_as_double);
                 return finish > start;
             }
@@ -291,11 +287,7 @@ namespace boost {
             bool shl_real_type(double val, char* begin) {
                 using namespace std;
                 finish = start +
-#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, CharacterBufferSize,
-#else
-                    sprintf(begin, 
-#endif
                     "%.*g", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
                 return finish > start;
             }
@@ -304,11 +296,7 @@ namespace boost {
             bool shl_real_type(long double val, char* begin) {
                 using namespace std;
                 finish = start +
-#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, CharacterBufferSize,
-#else
-                    sprintf(begin, 
-#endif
                     "%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double>()), val );
                 return finish > start;
             }
