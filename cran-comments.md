@@ -1,17 +1,23 @@
-RPostgres 1.4.4
+RPostgres 1.4.5
 
 ## Cran Repository Policy
 
-- [x] Reviewed CRP last edited 2022-02-08.
+- [ ] Reviewed CRP last edited 2022-07-26.
+
+See changes at https://github.com/eddelbuettel/crp/compare/master@%7B2022-02-08%7D...master@%7B2022-07-26%7D
 
 ## R CMD check results
 
-- [x] Checked locally, R 4.1.3
-- [x] Checked on CI system, R 4.2.0
-- [x] Checked on win-builder, R devel
+- [x] Checked locally, R 4.2.2
+- [ ] Checked on CI system, R 4.2.2
+- [ ] Checked on win-builder, R devel
+
+Check the boxes above after successful execution and remove this line. Then run `fledge::release()`.
 
 ## Current CRAN check results
 
-- [x] Checked on 2022-05-01, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
-- [x] ERROR: r-devel-linux-x86_64-debian-gcc: Missing bit64 package on check system?
-- [x] NOTE: r-release-macos-arm64, r-release-macos-x86_64, r-oldrel-macos-arm64, r-oldrel-macos-x86_64, r-oldrel-windows-ix86+x86_64: Large binary.
+- [x] Checked on 2023-01-19, problems found: https://cran.r-project.org/web/checks/check_results_RPostgres.html
+- [ ] NOTE: r-release-macos-arm64, r-release-macos-x86_64, r-oldrel-macos-arm64, r-oldrel-macos-x86_64, r-oldrel-windows-ix86+x86_64
+- [ ] other_issue: NA
+
+Check results at: https://cran.r-project.org/web/checks/check_results_RPostgres.html
