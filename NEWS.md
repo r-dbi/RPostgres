@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.5 (2023-01-19)
+
+## Features
+
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
+
+
 # RPostgres 1.4.4.9002 (2022-12-30)
 
 - Internal changes only.
