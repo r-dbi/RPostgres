@@ -92,9 +92,6 @@ namespace container {
 
 #ifndef BOOST_CONTAINER_DOXYGEN_INVOKED
 
-template<class T1, class T2>
-struct pair;
-
 template<class T>
 class new_allocator;
 
@@ -188,6 +185,35 @@ template <class Key
          ,class Compare  = std::less<Key>
          ,class Allocator = void >
 class flat_multimap;
+
+//Experimental forward declarations, not implemented yet!
+template <class Key
+         ,class Hash //= hash<Key>,
+         ,class Pred = std::equal_to<Key>
+         ,class Compare  = std::less<Key>
+         ,class Allocator = void
+         ,class Options = void>
+class hash_set;
+
+template <class Key
+         ,class Compare  = std::less<Key>
+         ,class Allocator = void
+         ,class Options = void >
+class hash_multiset;
+
+template <class Key
+         ,class T
+         ,class Compare  = std::less<Key>
+         ,class Allocator = void
+         ,class Options = void >
+class hash_map;
+
+template <class Key
+         ,class T
+         ,class Compare  = std::less<Key>
+         ,class Allocator = void
+         ,class Options = void >
+class hash_multimap;
 
 #ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
 
@@ -382,6 +408,7 @@ struct dummy
 
 }  //detail_really_deep_namespace {
 
+typedef const std::piecewise_construct_t & piecewise_construct_t;
 
 #endif   //#ifndef BOOST_CONTAINER_DOXYGEN_INVOKED
 
