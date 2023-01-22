@@ -4,19 +4,19 @@
 
 
 [[cpp11::register]]
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool immediate) {
+cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnectionPtr> con, std::string sql, bool immediate) {
   (*con)->check_connection();
   DbResult* res = PqResult::create_and_send_query(*con, sql, immediate);
-  return XPtr<DbResult>(res, true);
+  return cpp11::external_pointer<DbResult>(res, true);
 }
 
 [[cpp11::register]]
-void result_release(XPtr<DbResult> res) {
+void result_release(cpp11::external_pointer<DbResult> res) {
   res.release();
 }
 
 [[cpp11::register]]
-bool result_valid(XPtr<DbResult> res_) {
+bool result_valid(cpp11::external_pointer<DbResult> res_) {
   DbResult* res = res_.get();
   return res != NULL && res->is_active();
 }

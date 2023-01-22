@@ -133,25 +133,25 @@ extern "C" SEXP _RPostgres_init_logging(SEXP log_level) {
   END_CPP11
 }
 // result.cpp
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool immediate);
+cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnectionPtr> con, std::string sql, bool immediate);
 extern "C" SEXP _RPostgres_result_create(SEXP con, SEXP sql, SEXP immediate) {
   BEGIN_CPP11
-    return cpp11::as_sexp(result_create(cpp11::as_cpp<cpp11::decay_t<XPtr<DbConnectionPtr>>>(con), cpp11::as_cpp<cpp11::decay_t<std::string>>(sql), cpp11::as_cpp<cpp11::decay_t<bool>>(immediate)));
+    return cpp11::as_sexp(result_create(cpp11::as_cpp<cpp11::decay_t<cpp11::external_pointer<DbConnectionPtr>>>(con), cpp11::as_cpp<cpp11::decay_t<std::string>>(sql), cpp11::as_cpp<cpp11::decay_t<bool>>(immediate)));
   END_CPP11
 }
 // result.cpp
-void result_release(XPtr<DbResult> res);
+void result_release(cpp11::external_pointer<DbResult> res);
 extern "C" SEXP _RPostgres_result_release(SEXP res) {
   BEGIN_CPP11
-    result_release(cpp11::as_cpp<cpp11::decay_t<XPtr<DbResult>>>(res));
+    result_release(cpp11::as_cpp<cpp11::decay_t<cpp11::external_pointer<DbResult>>>(res));
     return R_NilValue;
   END_CPP11
 }
 // result.cpp
-bool result_valid(XPtr<DbResult> res_);
+bool result_valid(cpp11::external_pointer<DbResult> res_);
 extern "C" SEXP _RPostgres_result_valid(SEXP res_) {
   BEGIN_CPP11
-    return cpp11::as_sexp(result_valid(cpp11::as_cpp<cpp11::decay_t<XPtr<DbResult>>>(res_)));
+    return cpp11::as_sexp(result_valid(cpp11::as_cpp<cpp11::decay_t<cpp11::external_pointer<DbResult>>>(res_)));
   END_CPP11
 }
 // result.cpp
