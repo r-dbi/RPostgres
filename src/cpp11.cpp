@@ -118,10 +118,10 @@ extern "C" SEXP _RPostgres_encode_data_frame(SEXP x) {
   END_CPP11
 }
 // encrypt.cpp
-String encrypt_password(String password, String user);
+cpp11::r_string encrypt_password(cpp11::r_string password, cpp11::r_string user);
 extern "C" SEXP _RPostgres_encrypt_password(SEXP password, SEXP user) {
   BEGIN_CPP11
-    return cpp11::as_sexp(encrypt_password(cpp11::as_cpp<cpp11::decay_t<String>>(password), cpp11::as_cpp<cpp11::decay_t<String>>(user)));
+    return cpp11::as_sexp(encrypt_password(cpp11::as_cpp<cpp11::decay_t<cpp11::r_string>>(password), cpp11::as_cpp<cpp11::decay_t<cpp11::r_string>>(user)));
   END_CPP11
 }
 // logging.cpp
