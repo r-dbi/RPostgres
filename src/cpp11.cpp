@@ -104,17 +104,17 @@ extern "C" SEXP _RPostgres_connection_set_temp_schema(SEXP con, SEXP temp_schema
   END_CPP11
 }
 // encode.cpp
-std::string encode_vector(RObject x);
+std::string encode_vector(cpp11::sexp x);
 extern "C" SEXP _RPostgres_encode_vector(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(encode_vector(cpp11::as_cpp<cpp11::decay_t<RObject>>(x)));
+    return cpp11::as_sexp(encode_vector(cpp11::as_cpp<cpp11::decay_t<cpp11::sexp>>(x)));
   END_CPP11
 }
 // encode.cpp
-std::string encode_data_frame(List x);
+std::string encode_data_frame(cpp11::list x);
 extern "C" SEXP _RPostgres_encode_data_frame(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(encode_data_frame(cpp11::as_cpp<cpp11::decay_t<List>>(x)));
+    return cpp11::as_sexp(encode_data_frame(cpp11::as_cpp<cpp11::decay_t<cpp11::list>>(x)));
   END_CPP11
 }
 // encrypt.cpp

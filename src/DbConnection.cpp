@@ -149,7 +149,7 @@ void DbConnection::copy_data(std::string sql, List df) {
   // of buffer. Sending data asynchronously appears to be no faster.
   for (int i = 0; i < n; ++i) {
     buffer.clear();
-    encode_row_in_buffer(df, i, buffer);
+    encode_row_in_buffer((SEXP)df, i, buffer);
 
     if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
       conn_stop("Failed to put data");
