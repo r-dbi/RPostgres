@@ -48,16 +48,16 @@ void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
 }
 
 [[cpp11::register]]
-List connection_info(DbConnection* con) {
-  return con->info();
+cpp11::list connection_info(DbConnection* con) {
+  return (SEXP)con->info();
 }
 
 // Quoting
 
 [[cpp11::register]]
-CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs) {
-  R_xlen_t n = xs.size();
-  CharacterVector output(n);
+cpp11::strings connection_quote_string(DbConnection* con, CharacterVector xs) {
+  const auto n = xs.size();
+  cpp11::writable::strings output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
     String x = xs[i];
@@ -68,13 +68,13 @@ CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs) {
 }
 
 [[cpp11::register]]
-CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector xs) {
-  R_xlen_t n = xs.size();
-  CharacterVector output(n);
+cpp11::strings connection_quote_identifier(DbConnection* con, cpp11::strings xs) {
+  const auto n = xs.size();
+  cpp11::writable::strings output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    String x = xs[i];
-    output[i] = con->quote_identifier(x);
+    const auto x = xs[i];
+    output[i] = con->quote_identifier((SEXP)x);
   }
 
   return output;
@@ -95,8 +95,8 @@ void connection_set_transacting(DbConnection* con, bool transacting) {
 // Specific functions
 
 [[cpp11::register]]
-void connection_copy_data(DbConnection* con, std::string sql, List df) {
-  return con->copy_data(sql, df);
+void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df) {
+  return con->copy_data(sql, (SEXP)df);
 }
 
 [[cpp11::register]]
@@ -106,10 +106,11 @@ List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
 
 // Temporary Schema
 [[cpp11::register]]
-CharacterVector connection_get_temp_schema(DbConnection* con) {
-  return con->get_temp_schema();
+cpp11::strings connection_get_temp_schema(DbConnection* con) {
+  return (SEXP)con->get_temp_schema();
 }
+
 [[cpp11::register]]
-void connection_set_temp_schema(DbConnection* con, CharacterVector temp_schema) {
-  con->set_temp_schema(temp_schema);
+void connection_set_temp_schema(DbConnection* con, cpp11::strings temp_schema) {
+  con->set_temp_schema((SEXP)temp_schema);
 }
