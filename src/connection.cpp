@@ -49,18 +49,18 @@ void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
 
 [[cpp11::register]]
 cpp11::list connection_info(DbConnection* con) {
-  return (SEXP)con->info();
+  return con->info();
 }
 
 // Quoting
 
 [[cpp11::register]]
-cpp11::strings connection_quote_string(DbConnection* con, CharacterVector xs) {
+cpp11::strings connection_quote_string(DbConnection* con, cpp11::strings xs) {
   const auto n = xs.size();
   cpp11::writable::strings output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    String x = xs[i];
+    auto x = xs[i];
     output[i] = con->quote_string(x);
   }
 
@@ -73,8 +73,8 @@ cpp11::strings connection_quote_identifier(DbConnection* con, cpp11::strings xs)
   cpp11::writable::strings output(n);
 
   for (R_xlen_t i = 0; i < n; ++i) {
-    const auto x = xs[i];
-    output[i] = con->quote_identifier((SEXP)x);
+    auto x = xs[i];
+    output[i] = con->quote_identifier(x);
   }
 
   return output;
@@ -96,21 +96,21 @@ void connection_set_transacting(DbConnection* con, bool transacting) {
 
 [[cpp11::register]]
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df) {
-  return con->copy_data(sql, (SEXP)df);
+  return con->copy_data(sql, df);
 }
 
 [[cpp11::register]]
-List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
+cpp11::list connection_wait_for_notify(DbConnection* con, int timeout_secs) {
   return con->wait_for_notify(timeout_secs);
 }
 
 // Temporary Schema
 [[cpp11::register]]
 cpp11::strings connection_get_temp_schema(DbConnection* con) {
-  return (SEXP)con->get_temp_schema();
+  return con->get_temp_schema();
 }
 
 [[cpp11::register]]
 void connection_set_temp_schema(DbConnection* con, cpp11::strings temp_schema) {
-  con->set_temp_schema((SEXP)temp_schema);
+  con->set_temp_schema(temp_schema);
 }

@@ -12,7 +12,7 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
   pCurrentResult_(NULL),
   transacting_(false),
   check_interrupts_(check_interrupts),
-  temp_schema_(CharacterVector::create(NA_STRING))
+  temp_schema_(cpp11::as_sexp(cpp11::r_string(NA_STRING)))
 {
   size_t n = keys.size();
   std::vector<const char*> c_keys(n + 1), c_values(n + 1);
@@ -128,7 +128,7 @@ bool DbConnection::has_query() {
   return pCurrentResult_ != NULL;
 }
 
-void DbConnection::copy_data(std::string sql, List df) {
+void DbConnection::copy_data(std::string sql, cpp11::list df) {
   LOG_DEBUG << sql;
 
   R_xlen_t p = df.size();
@@ -149,7 +149,7 @@ void DbConnection::copy_data(std::string sql, List df) {
   // of buffer. Sending data asynchronously appears to be no faster.
   for (int i = 0; i < n; ++i) {
     buffer.clear();
-    encode_row_in_buffer((SEXP)df, i, buffer);
+    encode_row_in_buffer(df, i, buffer);
 
     if (PQputCopyData(pConn_, buffer.data(), static_cast<int>(buffer.size())) != 1) {
       conn_stop("Failed to put data");
@@ -187,7 +187,8 @@ void DbConnection::check_connection() {
   conn_stop("Lost connection to database");
 }
 
-List DbConnection::info() {
+cpp11::list DbConnection::info() {
+  using namespace cpp11::literals;
   check_connection();
 
   const char* dbnm = PQdb(pConn_);
@@ -198,42 +199,44 @@ List DbConnection::info() {
   int sver = PQserverVersion(pConn_);
   int pid = PQbackendPID(pConn_);
   return
-    List::create(
-      _["dbname"] = dbnm == NULL ? "" : std::string(dbnm),
-      _["host"]   = host == NULL ? "" : std::string(host),
-      _["port"]   = port == NULL ? "" : std::string(port),
-      _["username"] = user == NULL ? "" : std::string(user),
-      _["protocol.version"]   = pver,
-      _["server.version"]     = sver,
-      _["db.version"]         = sver,
-      _["pid"]                = pid
-    );
+    cpp11::list({
+      "dbname"_nm = dbnm == NULL ? "" : std::string(dbnm),
+      "host"_nm   = host == NULL ? "" : std::string(host),
+      "port"_nm   = port == NULL ? "" : std::string(port),
+      "username"_nm = user == NULL ? "" : std::string(user),
+      "protocol.version"_nm   = pver,
+      "server.version"_nm     = sver,
+      "db.version"_nm         = sver,
+      "pid"_nm                = pid
+    });
 }
 
 bool DbConnection::is_check_interrupts() const {
   return check_interrupts_;
 }
 
-SEXP DbConnection::quote_string(const String& x) {
+SEXP DbConnection::quote_string(const cpp11::r_string& x) {
   // Returns a single CHRSXP
   check_connection();
 
   if (x == NA_STRING)
     return get_null_string();
 
-  char* pq_escaped = PQescapeLiteral(pConn_, x.get_cstring(), static_cast<size_t>(-1));
-  SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
+  const auto str = static_cast<std::string>(x);
+  char* pq_escaped = PQescapeLiteral(pConn_, str.c_str(), static_cast<size_t>(-1));
+  auto escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
   PQfreemem(pq_escaped);
 
   return escaped;
 }
 
-SEXP DbConnection::quote_identifier(const String& x) {
+SEXP DbConnection::quote_identifier(const cpp11::r_string& x) {
   // Returns a single CHRSXP
   check_connection();
 
-  char* pq_escaped = PQescapeIdentifier(pConn_, x.get_cstring(), static_cast<size_t>(-1));
-  SEXP escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
+  const auto str = static_cast<std::string>(x);
+  char* pq_escaped = PQescapeIdentifier(pConn_, str.c_str(), static_cast<size_t>(-1));
+  auto escaped = Rf_mkCharCE(pq_escaped, CE_UTF8);
   PQfreemem(pq_escaped);
 
   return escaped;
@@ -252,11 +255,11 @@ void DbConnection::set_transacting(bool transacting) {
   transacting_ = transacting;
 }
 
-CharacterVector DbConnection::get_temp_schema() const {
+cpp11::strings DbConnection::get_temp_schema() const {
   return temp_schema_;
 }
 
-void DbConnection::set_temp_schema(CharacterVector temp_schema) {
+void DbConnection::set_temp_schema(cpp11::strings temp_schema) {
   temp_schema_ = temp_schema;
 }
 
@@ -275,9 +278,10 @@ void DbConnection::cleanup_query() {
   finish_query(pConn_);
 }
 
-List DbConnection::wait_for_notify(int timeout_secs) {
+cpp11::list DbConnection::wait_for_notify(int timeout_secs) {
+  using namespace cpp11::literals;
   PGnotify   *notify;
-  List out;
+  cpp11::writable::list out;
   int socket = -1;
   fd_set input;
 
@@ -287,11 +291,11 @@ List DbConnection::wait_for_notify(int timeout_secs) {
       stop("Failed to consume input from the server");
     }
     if ((notify = PQnotifies(pConn_)) != NULL) {
-      out = Rcpp::List::create(
-        _["channel"] = CharacterVector::create(notify->relname),
-        _["pid"] = IntegerVector::create(notify->be_pid),
-        _["payload"] = CharacterVector::create(notify->extra)
-      );
+      out = cpp11::list({
+        "channel"_nm = cpp11::writable::strings({notify->relname}),
+        "pid"_nm = cpp11::writable::integers({notify->be_pid}),
+        "payload"_nm = cpp11::writable::strings({notify->extra})
+      });
       PQfreemem(notify);
       return out;
     }
@@ -316,6 +320,5 @@ List DbConnection::wait_for_notify(int timeout_secs) {
 }
 
 void DbConnection::process_notice(void* /*This*/, const char* message) {
-  Rcpp::CharacterVector msg(message);
-  Rcpp::message(msg);
+  cpp11::message(message);
 }

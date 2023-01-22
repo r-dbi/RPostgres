@@ -45,10 +45,10 @@ extern "C" SEXP _RPostgres_connection_info(SEXP con) {
   END_CPP11
 }
 // connection.cpp
-cpp11::strings connection_quote_string(DbConnection* con, CharacterVector xs);
+cpp11::strings connection_quote_string(DbConnection* con, cpp11::strings xs);
 extern "C" SEXP _RPostgres_connection_quote_string(SEXP con, SEXP xs) {
   BEGIN_CPP11
-    return cpp11::as_sexp(connection_quote_string(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<CharacterVector>>(xs)));
+    return cpp11::as_sexp(connection_quote_string(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<cpp11::strings>>(xs)));
   END_CPP11
 }
 // connection.cpp
@@ -82,7 +82,7 @@ extern "C" SEXP _RPostgres_connection_copy_data(SEXP con, SEXP sql, SEXP df) {
   END_CPP11
 }
 // connection.cpp
-List connection_wait_for_notify(DbConnection* con, int timeout_secs);
+cpp11::list connection_wait_for_notify(DbConnection* con, int timeout_secs);
 extern "C" SEXP _RPostgres_connection_wait_for_notify(SEXP con, SEXP timeout_secs) {
   BEGIN_CPP11
     return cpp11::as_sexp(connection_wait_for_notify(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<int>>(timeout_secs)));
