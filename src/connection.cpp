@@ -8,7 +8,7 @@ int client_version() {
 }
 
 [[cpp11::register]]
-XPtr<DbConnectionPtr> connection_create(
+cpp11::external_pointer<DbConnectionPtr> connection_create(
   std::vector<std::string> keys,
   std::vector<std::string> values,
   bool check_interrupts
@@ -19,17 +19,17 @@ XPtr<DbConnectionPtr> connection_create(
     new DbConnection(keys, values, check_interrupts)
   );
 
-  return XPtr<DbConnectionPtr>(pConn, true);
+  return cpp11::external_pointer<DbConnectionPtr>(pConn, true);
 }
 
 [[cpp11::register]]
-bool connection_valid(XPtr<DbConnectionPtr> con_) {
+bool connection_valid(cpp11::external_pointer<DbConnectionPtr> con_) {
   DbConnectionPtr* con = con_.get();
   return con;
 }
 
 [[cpp11::register]]
-void connection_release(XPtr<DbConnectionPtr> con_) {
+void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
   if (!connection_valid(con_)) {
     warning("Already disconnected");
     return;

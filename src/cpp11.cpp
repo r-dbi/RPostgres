@@ -16,24 +16,24 @@ extern "C" SEXP _RPostgres_client_version() {
   END_CPP11
 }
 // connection.cpp
-XPtr<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values, bool check_interrupts);
+cpp11::external_pointer<DbConnectionPtr> connection_create(std::vector<std::string> keys, std::vector<std::string> values, bool check_interrupts);
 extern "C" SEXP _RPostgres_connection_create(SEXP keys, SEXP values, SEXP check_interrupts) {
   BEGIN_CPP11
     return cpp11::as_sexp(connection_create(cpp11::as_cpp<cpp11::decay_t<std::vector<std::string>>>(keys), cpp11::as_cpp<cpp11::decay_t<std::vector<std::string>>>(values), cpp11::as_cpp<cpp11::decay_t<bool>>(check_interrupts)));
   END_CPP11
 }
 // connection.cpp
-bool connection_valid(XPtr<DbConnectionPtr> con_);
+bool connection_valid(cpp11::external_pointer<DbConnectionPtr> con_);
 extern "C" SEXP _RPostgres_connection_valid(SEXP con_) {
   BEGIN_CPP11
-    return cpp11::as_sexp(connection_valid(cpp11::as_cpp<cpp11::decay_t<XPtr<DbConnectionPtr>>>(con_)));
+    return cpp11::as_sexp(connection_valid(cpp11::as_cpp<cpp11::decay_t<cpp11::external_pointer<DbConnectionPtr>>>(con_)));
   END_CPP11
 }
 // connection.cpp
-void connection_release(XPtr<DbConnectionPtr> con_);
+void connection_release(cpp11::external_pointer<DbConnectionPtr> con_);
 extern "C" SEXP _RPostgres_connection_release(SEXP con_) {
   BEGIN_CPP11
-    connection_release(cpp11::as_cpp<cpp11::decay_t<XPtr<DbConnectionPtr>>>(con_));
+    connection_release(cpp11::as_cpp<cpp11::decay_t<cpp11::external_pointer<DbConnectionPtr>>>(con_));
     return R_NilValue;
   END_CPP11
 }
