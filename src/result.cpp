@@ -12,7 +12,7 @@ cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnec
 
 [[cpp11::register]]
 void result_release(cpp11::external_pointer<DbResult> res) {
-  res.release();
+  res.reset();
 }
 
 [[cpp11::register]]

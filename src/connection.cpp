@@ -44,7 +44,7 @@ void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
   }
 
   con->get()->disconnect();
-  con_.release();
+  con_.reset();
 }
 
 [[cpp11::register]]
