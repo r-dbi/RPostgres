@@ -1,7 +1,7 @@
 #include "pch.h"
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 String encrypt_password(String password, String user) {
   char* encrypted = PQencryptPassword(password.get_cstring(), user.get_cstring());
 

@@ -2,12 +2,12 @@
 #include "RPostgres_types.h"
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 int client_version() {
   return PQlibVersion();
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 XPtr<DbConnectionPtr> connection_create(
   std::vector<std::string> keys,
   std::vector<std::string> values,
@@ -22,13 +22,13 @@ XPtr<DbConnectionPtr> connection_create(
   return XPtr<DbConnectionPtr>(pConn, true);
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 bool connection_valid(XPtr<DbConnectionPtr> con_) {
   DbConnectionPtr* con = con_.get();
   return con;
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 void connection_release(XPtr<DbConnectionPtr> con_) {
   if (!connection_valid(con_)) {
     warning("Already disconnected");
@@ -47,14 +47,14 @@ void connection_release(XPtr<DbConnectionPtr> con_) {
   con_.release();
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 List connection_info(DbConnection* con) {
   return con->info();
 }
 
 // Quoting
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector output(n);
@@ -67,7 +67,7 @@ CharacterVector connection_quote_string(DbConnection* con, CharacterVector xs) {
   return output;
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector xs) {
   R_xlen_t n = xs.size();
   CharacterVector output(n);
@@ -82,48 +82,34 @@ CharacterVector connection_quote_identifier(DbConnection* con, CharacterVector x
 
 // Transactions
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 bool connection_is_transacting(DbConnection* con) {
   return con->is_transacting();
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 void connection_set_transacting(DbConnection* con, bool transacting) {
   con->set_transacting(transacting);
 }
 
 // Specific functions
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 void connection_copy_data(DbConnection* con, std::string sql, List df) {
   return con->copy_data(sql, df);
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 List connection_wait_for_notify(DbConnection* con, int timeout_secs) {
   return con->wait_for_notify(timeout_secs);
 }
 
 // Temporary Schema
-// [[Rcpp::export]]
+[[cpp11::register]]
 CharacterVector connection_get_temp_schema(DbConnection* con) {
   return con->get_temp_schema();
 }
-// [[Rcpp::export]]
+[[cpp11::register]]
 void connection_set_temp_schema(DbConnection* con, CharacterVector temp_schema) {
   con->set_temp_schema(temp_schema);
-}
-
-// as() override
-
-namespace Rcpp {
-
-template<>
-DbConnection* as(SEXP x) {
-  DbConnectionPtr* connection = (DbConnectionPtr*)(R_ExternalPtrAddr(x));
-  if (!connection)
-    stop("Invalid connection");
-  return connection->get();
-}
-
 }

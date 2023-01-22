@@ -2,7 +2,7 @@
 #include "encode.h"
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 std::string encode_vector(RObject x) {
   std::string buffer;
 
@@ -29,7 +29,7 @@ void encode_row_in_buffer(List x, int i, std::string& buffer,
   buffer.append(lineDelim);
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 std::string encode_data_frame(List x) {
   if (Rf_length(x) == 0)
     return ("");

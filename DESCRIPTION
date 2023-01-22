@@ -37,7 +37,8 @@ Suggests:
     testthat (>= 3.0.0)
 LinkingTo: 
     plogr (>= 0.2.0),
-    Rcpp
+    Rcpp,
+    cpp11
 VignetteBuilder:
     knitr
 Config/autostyle/scope: line_breaks
@@ -48,13 +49,13 @@ LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
-    (rpm)
+    (rpm), C++11
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
     'PqResult.R'
     'RPostgres-pkg.R'
-    'RcppExports.R'
+    'cpp11.R'
     'Redshift.R'
     'dbAppendTable_PqConnection.R'
     'dbBegin_PqConnection.R'
