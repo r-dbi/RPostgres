@@ -1,31 +1,27 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-# RPostgres 1.4.4.9002 (2022-12-30)
+# RPostgres 1.4.5.9001 (2023-01-22)
 
-- Internal changes only.
+- Merged cran-1.4.5 into main.
 
 
-# RPostgres 1.4.4.9001 (2022-12-24)
+
+# RPostgres 1.4.5.9000 (2023-01-19)
 
 ## Features
+
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
+
+
+# RPostgres 1.4.5 (2023-01-19)
+
+## Features
+
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
 
 - One-click setup for https://gitpod.io (@Antonov548, #407).
 
 - Use testthat edition 3 (#408).
-
-## Uncategorized
-
-- Harmonize yaml formatting.
-
-- Revert changes to matrix section.
-
-- Merge branch 'cran-1.4.4'.
-
-
-
-# RPostgres 1.4.4.9000 (2022-05-01)
-
-- Same as previous version.
 
 
 # RPostgres 1.4.4 (2022-05-01)
