@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.5.9002 (2023-01-24)
+
+- Internal changes only.
+
+
 # RPostgres 1.4.5.9001 (2023-01-22)
 
 - Merged cran-1.4.5 into main.
