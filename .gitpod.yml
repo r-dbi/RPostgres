@@ -48,6 +48,10 @@ tasks:
       # Install radian
       sudo pip install radian
 
+      sudo sh -c "apt-get install -y postgresql"
+      sudo sh -c "service postgresql start"
+      sudo -u postgres createuser
+
 vscode:
   extensions:
     - ms-vscode.cpptools
