@@ -302,7 +302,7 @@ cpp11::list DbConnection::wait_for_notify(int timeout_secs) {
 
     if (socket != -1) {
       // Socket open, so already been round once, give up.
-      return R_NilValue;
+      return cpp11::list();
     }
 
     // Open DB socket and wait for new data for at most (timeout_secs) seconds
