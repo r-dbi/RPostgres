@@ -119,8 +119,7 @@ check_tz <- function(timezone) {
 #' rp$wait()
 #' dbDisconnect(db_listen)
 postgresWaitForNotify <- function(conn, timeout = 1) {
-  out <- connection_wait_for_notify(conn@ptr, timeout)
-  if ('pid' %in% names(out)) out else NULL
+  connection_wait_for_notify(conn@ptr, timeout)
 }
 
 #' Return whether a transaction is ongoing
