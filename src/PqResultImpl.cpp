@@ -271,7 +271,7 @@ int PqResultImpl::n_rows_affected() {
   return rows_affected_;
 }
 
-void PqResultImpl::bind(const List& params) {
+void PqResultImpl::bind(const cpp11::list& params) {
   LOG_DEBUG << params.size();
 
   if (immediate_ && params.size() > 0) {
@@ -289,7 +289,7 @@ void PqResultImpl::bind(const List& params) {
 
   set_params(params);
 
-  if (params.length() > 0) {
+  if (params.size() > 0) {
     SEXP first_col = params[0];
     groups_ = Rf_length(first_col);
   }
@@ -304,14 +304,14 @@ void PqResultImpl::bind(const List& params) {
   after_bind(has_params);
 }
 
-List PqResultImpl::fetch(const int n_max) {
+cpp11::list PqResultImpl::fetch(const int n_max) {
   LOG_DEBUG << n_max;
 
   if (!ready_)
     stop("Query needs to be bound before fetching");
 
   int n = 0;
-  List out;
+  cpp11::list out;
 
   if (n_max != 0)
     out = fetch_rows(n_max, n);
@@ -321,22 +321,26 @@ List PqResultImpl::fetch(const int n_max) {
   return out;
 }
 
-List PqResultImpl::get_column_info() {
+cpp11::list PqResultImpl::get_column_info() {
+  using namespace cpp11::literals;
   peek_first_row();
 
-  CharacterVector names(cache.names_.begin(), cache.names_.end());
+  cpp11::writable::strings names(cache.names_.size());
+  auto it = cache.names_.begin();
+  for (int i = 0; i < names.size(); i++, it++)
+    names[i] = *it;
 
-  CharacterVector types(cache.ncols_);
+  cpp11::writable::strings types(cache.ncols_);
   for (size_t i = 0; i < cache.ncols_; i++) {
     types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  return Rcpp::List::create(
-    _["name"] = names,
-    _["type"] = types,
-    _[".oid"] = cache.oids_,
-    _[".known"] = cache.known_
-  );
+  return cpp11::list({
+    "name"_nm = names,
+    "type"_nm = types,
+    ".oid"_nm = cache.oids_,
+    ".known"_nm = cache.known_
+  });
 }
 
 
@@ -348,7 +352,7 @@ List PqResultImpl::get_column_info() {
 
 // Privates ////////////////////////////////////////////////////////////////////
 
-void PqResultImpl::set_params(const List& params) {
+void PqResultImpl::set_params(const cpp11::list& params) {
   params_ = params;
 }
 
@@ -370,7 +374,7 @@ bool PqResultImpl::bind_row() {
   std::vector<int> lengths(cache.nparams_);
   for (int i = 0; i < cache.nparams_; ++i) {
     if (TYPEOF(params_[i]) == VECSXP) {
-      List param(params_[i]);
+      cpp11::list param(params_[i]);
       if (!Rf_isNull(param[group_])) {
         Rbyte* param_value = RAW(param[group_]);
         c_params[i] = reinterpret_cast<const char*>(param_value);
@@ -420,7 +424,7 @@ void PqResultImpl::after_bind(bool params_have_rows) {
     step();
 }
 
-List PqResultImpl::fetch_rows(const int n_max, int& n) {
+cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   LOG_DEBUG << n_max << "/" << n;
 
   n = (n_max < 0) ? 100 : n_max;
@@ -442,7 +446,7 @@ List PqResultImpl::fetch_rows(const int n_max, int& n) {
   }
 
   LOG_VERBOSE << nrows_;
-  List ret = data.get_data();
+  cpp11::writable::list ret = (SEXP)data.get_data();
   add_oids(ret);
   return ret;
 }
@@ -542,14 +546,14 @@ bool PqResultImpl::step_done() {
   return more_params;
 }
 
-List PqResultImpl::peek_first_row() {
+cpp11::list PqResultImpl::peek_first_row() {
   PqDataFrame data(this, cache.names_, 1, cache.types_);
 
   if (!complete_)
     data.set_col_values();
   // Not calling data.advance(), remains a zero-row data frame
 
-  List ret = data.get_data();
+  cpp11::writable::list ret = (SEXP)data.get_data();
   add_oids(ret);
   return ret;
 }
@@ -559,14 +563,14 @@ void PqResultImpl::conn_stop(const char* msg) const {
 }
 
 void PqResultImpl::bind() {
-  bind(List());
+  bind(cpp11::list());
 }
 
-void PqResultImpl::add_oids(List& data) const {
-  data.attr("oids") = cache.oids_;
-  data.attr("known") = cache.known_;
+void PqResultImpl::add_oids(cpp11::writable::list& data) const {
+  data.attr("oids") = cpp11::as_sexp(cache.oids_);
+  data.attr("known") = cpp11::as_sexp(cache.known_);
 
-  LogicalVector is_without_tz = LogicalVector(cache.types_.size());
+  auto is_without_tz = cpp11::writable::logicals(cache.types_.size());
   for (size_t i = 0; i < cache.types_.size(); ++i) {
     bool set = (cache.types_[i] == DT_DATETIME);
     LOG_VERBOSE << "is_without_tz[" << i << "]: " << set;

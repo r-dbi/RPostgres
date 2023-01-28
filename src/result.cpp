@@ -22,12 +22,12 @@ bool result_valid(cpp11::external_pointer<DbResult> res_) {
 }
 
 [[cpp11::register]]
-List result_fetch(DbResult* res, const int n) {
+cpp11::list result_fetch(DbResult* res, const int n) {
   return res->fetch(n);
 }
 
 [[cpp11::register]]
-void result_bind(DbResult* res, List params) {
+void result_bind(DbResult* res, cpp11::list params) {
   res->bind(params);
 }
 
@@ -47,6 +47,6 @@ int result_rows_affected(DbResult* res) {
 }
 
 [[cpp11::register]]
-List result_column_info(DbResult* res) {
+cpp11::list result_column_info(DbResult* res) {
   return res->get_column_info();
 }
