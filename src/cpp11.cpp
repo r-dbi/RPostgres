@@ -2,9 +2,6 @@
 // clang-format off
 
 #include "RPostgres_types.h"
-#include <cpp11/R.hpp>
-#include <Rcpp.h>
-using namespace Rcpp;
 #include "cpp11/declarations.hpp"
 #include <R_ext/Visibility.h>
 
