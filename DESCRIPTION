@@ -26,6 +26,7 @@ Imports:
     hms (>= 1.0.0),
     lubridate,
     methods,
+    Rcpp (>= 1.0.7),
     withr
 Suggests: 
     callr,
@@ -36,6 +37,7 @@ Suggests:
     testthat (>= 3.0.0)
 LinkingTo: 
     plogr (>= 0.2.0),
+    Rcpp,
     cpp11
 VignetteBuilder:
     knitr
