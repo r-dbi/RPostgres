@@ -8,7 +8,7 @@
 class DbColumnDataSource;
 
 class DbColumnStorage {
-  Rcpp::RObject data;
+  cpp11::sexp data;
   int i;
   DATA_TYPE dt;
   const int n_max;

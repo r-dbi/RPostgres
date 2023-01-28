@@ -77,10 +77,10 @@ void PqResultImpl::_cache::set(PGresult* spec)
   if (initialized_ || new_names.size() == 0) {
     LOG_VERBOSE;
     if (names_.size() != 0 && new_names.size() != 0 && names_ != new_names) {
-      stop("Multiple queries must use the same column names.");
+      cpp11::stop("Multiple queries must use the same column names.");
     }
     if (oids_.size() != 0 && new_oids.size() != 0 && oids_ != new_oids) {
-      stop("Multiple queries must use the same column types.");
+      cpp11::stop("Multiple queries must use the same column types.");
     }
     return;
   }
@@ -275,16 +275,16 @@ void PqResultImpl::bind(const cpp11::list& params) {
   LOG_DEBUG << params.size();
 
   if (immediate_ && params.size() > 0) {
-    stop("Immediate query cannot be parameterized.");
+    cpp11::stop("Immediate query cannot be parameterized.");
   }
 
   if (params.size() != cache.nparams_) {
-    stop("Query requires %i params; %i supplied.",
+    cpp11::stop("Query requires %i params; %i supplied.",
          cache.nparams_, params.size());
   }
 
   if (params.size() == 0 && ready_) {
-    stop("Query does not require parameters.");
+    cpp11::stop("Query does not require parameters.");
   }
 
   set_params(params);
@@ -308,7 +308,7 @@ cpp11::list PqResultImpl::fetch(const int n_max) {
   LOG_DEBUG << n_max;
 
   if (!ready_)
-    stop("Query needs to be bound before fetching");
+    cpp11::stop("Query needs to be bound before fetching");
 
   int n = 0;
   cpp11::list out;
@@ -383,7 +383,7 @@ bool PqResultImpl::bind_row() {
       }
     }
     else {
-      CharacterVector param(params_[i]);
+      cpp11::strings param(params_[i]);
       if (param[group_] != NA_STRING) {
         c_params[i] = CHAR(param[group_]);
       }
@@ -432,7 +432,7 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
-    warning("Don't need to call dbFetch() for statements, only for queries");
+    cpp11::warning("Don't need to call dbFetch() for statements, only for queries");
   }
 
   while (!complete_) {
@@ -481,7 +481,7 @@ bool PqResultImpl::step_run() {
     if (!proceed) {
       pConnPtr_->cancel_query();
       complete_ = TRUE;
-      stop("Interrupted.");
+      cpp11::stop("Interrupted.");
     }
 
     need_cache_reset = true;
@@ -594,7 +594,7 @@ bool PqResultImpl::wait_for_data() {
 
   // update db connection state using data available on the socket
   if (!PQconsumeInput(pConn_)) {
-    stop("Failed to consume input from the server");
+    cpp11::stop("Failed to consume input from the server");
   }
 
   // check if PQgetResult will block before waiting
@@ -608,7 +608,7 @@ bool PqResultImpl::wait_for_data() {
 
   socket = PQsocket(pConn_);
   if (socket < 0) {
-    stop("Failed to get connection socket");
+    cpp11::stop("Failed to get connection socket");
   }
 
   do {
@@ -627,7 +627,7 @@ bool PqResultImpl::wait_for_data() {
       // timeout reached - check user interrupt
       try {
         // FIXME: Do we even need this?
-        checkUserInterrupt();
+        cpp11::check_user_interrupt();
       }
       catch (...) {
         LOG_DEBUG;
@@ -640,13 +640,13 @@ bool PqResultImpl::wait_for_data() {
         return false;
       } else {
         LOG_DEBUG;
-        stop("select() failed with error code %d", SOCKERR);
+        cpp11::stop("select() failed with error code %d", SOCKERR);
       }
     }
 
     // update db connection state using data available on the socket
     if (!PQconsumeInput(pConn_)) {
-      stop("Failed to consume input from the server");
+      cpp11::stop("Failed to consume input from the server");
     }
   } while (PQisBusy(pConn_)); // check if PQgetResult will still block
 

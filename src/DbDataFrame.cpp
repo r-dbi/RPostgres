@@ -33,7 +33,7 @@ bool DbDataFrame::advance() {
   ++i;
 
   if (i % 1024 == 0)
-    checkUserInterrupt();
+    cpp11::check_user_interrupt();
 
   return (n_max < 0 || i < n_max);
 }

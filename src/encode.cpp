@@ -96,7 +96,7 @@ void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
     }
   case STRSXP:
     {
-      RObject value = STRING_ELT(x, i);
+      cpp11::sexp value = STRING_ELT(x, i);
       if (value == NA_STRING) {
         buffer.append("\\N");
       } else {
@@ -106,8 +106,7 @@ void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
       break;
     }
   default:
-    stop("Don't know how to handle vector of type %s.",
-         Rf_type2char(TYPEOF(x)));
+    cpp11::stop(std::string("Don't know how to handle vector of type ") + Rf_type2char(TYPEOF(x)) + ".");
   }
 }
 

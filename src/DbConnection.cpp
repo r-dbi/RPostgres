@@ -29,7 +29,7 @@ DbConnection::DbConnection(std::vector<std::string> keys, std::vector<std::strin
   if (PQstatus(pConn_) != CONNECTION_OK) {
     std::string err = PQerrorMessage(pConn_);
     PQfinish(pConn_);
-    stop(err);
+    cpp11::stop(err);
   }
 
   PQsetClientEncoding(pConn_, "UTF-8");
@@ -64,7 +64,7 @@ void DbConnection::set_current_result(const DbResult* pResult) {
   // (even if (the new) pResult is NULL, we should try to reset the back-end.)
   if (pCurrentResult_ != NULL) {
     if (pResult != NULL) {
-      warning("Closing open result set, cancelling previous query");
+      cpp11::warning("Closing open result set, cancelling previous query");
     }
 
     cleanup_query();
@@ -98,14 +98,14 @@ void DbConnection::cancel_query() {
   //  * the connection is NULL or
   //  * the connection is invalid.
   PGcancel* cancel = PQgetCancel(pConn_);
-  if (cancel == NULL) stop("Connection error detected via PQgetCancel()");
+  if (cancel == NULL) cpp11::stop("Connection error detected via PQgetCancel()");
 
   LOG_DEBUG;
 
   // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
   if (!PQcancel(cancel, errbuf, sizeof(errbuf))) {
-    warning(errbuf);
+    cpp11::warning(errbuf);
   }
 
   // free up the data structure allocated by PQgetCancel().
@@ -173,7 +173,7 @@ void DbConnection::copy_data(std::string sql, cpp11::list df) {
 
 void DbConnection::check_connection() {
   if (!pConn_) {
-    stop("Disconnected");
+    cpp11::stop("Disconnected");
   }
 
   ConnStatusType status = PQstatus(pConn_);
@@ -243,7 +243,7 @@ SEXP DbConnection::quote_identifier(const cpp11::r_string& x) {
 }
 
 SEXP DbConnection::get_null_string() {
-  static RObject null = Rf_mkCharCE("NULL::text", CE_UTF8);
+  static cpp11::sexp null = Rf_mkCharCE("NULL::text", CE_UTF8);
   return null;
 }
 
@@ -268,7 +268,7 @@ void DbConnection::conn_stop(const char* msg) {
 }
 
 void DbConnection::conn_stop(PGconn* conn, const char* msg) {
-  stop("%s: %s", msg, PQerrorMessage(conn));
+  cpp11::stop("%s: %s", msg, PQerrorMessage(conn));
 }
 
 void DbConnection::cleanup_query() {
@@ -288,7 +288,7 @@ cpp11::list DbConnection::wait_for_notify(int timeout_secs) {
   while (TRUE) {
     // See if there's a notification waiting, if so return it
     if (!PQconsumeInput(pConn_)) {
-      stop("Failed to consume input from the server");
+      cpp11::stop("Failed to consume input from the server");
     }
     if ((notify = PQnotifies(pConn_)) != NULL) {
       out = cpp11::list({
@@ -307,14 +307,14 @@ cpp11::list DbConnection::wait_for_notify(int timeout_secs) {
 
     // Open DB socket and wait for new data for at most (timeout_secs) seconds
     if ((socket = PQsocket(pConn_)) < 0) {
-      stop("Failed to get connection socket");
+      cpp11::stop("Failed to get connection socket");
     }
     FD_ZERO(&input);
     FD_SET(socket, &input);
     timeval timeout = {0, 0};
     timeout.tv_sec = timeout_secs;
     if (select(socket + 1, &input, NULL, NULL, &timeout) < 0) {
-        stop("select() on the connection failed");
+        cpp11::stop("select() on the connection failed");
     }
   }
 }

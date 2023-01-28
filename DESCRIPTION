@@ -49,7 +49,7 @@ LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
-    (rpm), C++11
+    (rpm), C++17
 Collate: 
     'PqDriver.R'
     'PqConnection.R'

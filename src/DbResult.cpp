@@ -51,7 +51,7 @@ void DbResult::bind(const cpp11::list& params) {
 
 cpp11::list DbResult::fetch(const int n_max) {
   if (!is_active())
-    stop("Inactive result set");
+    cpp11::stop("Inactive result set");
 
   return impl->fetch(n_max);
 }
@@ -80,7 +80,7 @@ void DbResult::validate_params(const cpp11::list& params) const {
     for (int j = 1; j < params.size(); ++j) {
       SEXP col = params[j];
       if (Rf_length(col) != n)
-        stop("Parameter %i does not have length %d.", j + 1, n);
+        cpp11::stop("Parameter %i does not have length %d.", j + 1, n);
     }
   }
 }

@@ -3,9 +3,6 @@
 #include "DbColumnDataSource.h"
 #include "integer64.h"
 
-
-using namespace Rcpp;
-
 DbColumnStorage::DbColumnStorage(DATA_TYPE dt_, const R_xlen_t capacity_, const int n_max_,
                                  const DbColumnDataSource& source_)
   :
@@ -148,7 +145,7 @@ void DbColumnStorage::fetch_value() {
     break;
 
   default:
-    stop("NYI");
+    cpp11::stop("NYI");
   }
 }
 
@@ -180,7 +177,7 @@ SEXPTYPE DbColumnStorage::sexptype_from_datatype(DATA_TYPE dt) {
     return VECSXP;
 
   default:
-    stop("Unknown type %d", dt);
+    cpp11::stop("Unknown type %d", dt);
   }
 }
 
@@ -193,7 +190,7 @@ cpp11::sexp DbColumnStorage::class_from_datatype(DATA_TYPE dt) {
 
   case DT_DATETIME:
   case DT_DATETIMETZ:
-    return cpp11::strings({"POSIXct", "POSIXt"});
+    return cpp11::as_sexp({"POSIXct", "POSIXt"});
 
   default:
     return R_NilValue;
@@ -219,12 +216,12 @@ SEXP DbColumnStorage::set_attribs_from_datatype(SEXP x, DATA_TYPE dt) {
 }
 
 SEXP DbColumnStorage::new_blob(SEXP x) {
-  static Function new_blob = Function("new_blob", Rcpp::Environment::namespace_env("blob"));
+  static cpp11::function new_blob = cpp11::package("blob")["new_blob"];
   return new_blob(x);
 }
 
 SEXP DbColumnStorage::new_hms(SEXP x) {
-  static Function new_hms = Function("new_hms", Rcpp::Environment::namespace_env("hms"));
+  static cpp11::function new_hms = cpp11::package("hms")["new_hms"];
   return new_hms(x);
 }
 
@@ -259,7 +256,7 @@ void DbColumnStorage::fill_default_value(SEXP data, DATA_TYPE dt, R_xlen_t i) {
     break;
 
   case DT_UNKNOWN:
-    stop("Not setting value for unknown data type");
+    cpp11::stop("Not setting value for unknown data type");
   }
 }
 
@@ -332,7 +329,7 @@ void DbColumnStorage::copy_value(SEXP x, DATA_TYPE dt, const int tgt, const int 
       break;
 
     default:
-      stop("NYI: default");
+      cpp11::stop("NYI: default");
     }
   }
 }
