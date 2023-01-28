@@ -42,7 +42,7 @@ private:
   void fetch_value();
 
   // allocate()
-  static Rcpp::RObject class_from_datatype(DATA_TYPE dt);
+  static cpp11::sexp class_from_datatype(DATA_TYPE dt);
   static SEXP set_attribs_from_datatype(SEXP x, DATA_TYPE dt);
   static SEXP new_blob(SEXP x);
   static SEXP new_hms(SEXP x);
