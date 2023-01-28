@@ -187,9 +187,9 @@ SEXPTYPE DbColumnStorage::sexptype_from_datatype(DATA_TYPE dt) {
 cpp11::sexp DbColumnStorage::class_from_datatype(DATA_TYPE dt) {
   switch (dt) {
   case DT_INT64:
-    return cpp11::strings(cpp11::as_sexp("integer64"));
+    return cpp11::as_sexp("integer64");
   case DT_DATE:
-    return cpp11::strings(cpp11::as_sexp("Date"));
+    return cpp11::as_sexp("Date");
 
   case DT_DATETIME:
   case DT_DATETIMETZ:
