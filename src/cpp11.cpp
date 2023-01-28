@@ -155,17 +155,17 @@ extern "C" SEXP _RPostgres_result_valid(SEXP res_) {
   END_CPP11
 }
 // result.cpp
-List result_fetch(DbResult* res, const int n);
+cpp11::list result_fetch(DbResult* res, const int n);
 extern "C" SEXP _RPostgres_result_fetch(SEXP res, SEXP n) {
   BEGIN_CPP11
     return cpp11::as_sexp(result_fetch(cpp11::as_cpp<cpp11::decay_t<DbResult*>>(res), cpp11::as_cpp<cpp11::decay_t<const int>>(n)));
   END_CPP11
 }
 // result.cpp
-void result_bind(DbResult* res, List params);
+void result_bind(DbResult* res, cpp11::list params);
 extern "C" SEXP _RPostgres_result_bind(SEXP res, SEXP params) {
   BEGIN_CPP11
-    result_bind(cpp11::as_cpp<cpp11::decay_t<DbResult*>>(res), cpp11::as_cpp<cpp11::decay_t<List>>(params));
+    result_bind(cpp11::as_cpp<cpp11::decay_t<DbResult*>>(res), cpp11::as_cpp<cpp11::decay_t<cpp11::list>>(params));
     return R_NilValue;
   END_CPP11
 }
@@ -191,7 +191,7 @@ extern "C" SEXP _RPostgres_result_rows_affected(SEXP res) {
   END_CPP11
 }
 // result.cpp
-List result_column_info(DbResult* res);
+cpp11::list result_column_info(DbResult* res);
 extern "C" SEXP _RPostgres_result_column_info(SEXP res) {
   BEGIN_CPP11
     return cpp11::as_sexp(result_column_info(cpp11::as_cpp<cpp11::decay_t<DbResult*>>(res)));

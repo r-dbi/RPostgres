@@ -446,7 +446,7 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   }
 
   LOG_VERBOSE << nrows_;
-  cpp11::writable::list ret = (SEXP)data.get_data();
+  cpp11::writable::list ret = data.get_data();
   add_oids(ret);
   return ret;
 }
@@ -553,7 +553,7 @@ cpp11::list PqResultImpl::peek_first_row() {
     data.set_col_values();
   // Not calling data.advance(), remains a zero-row data frame
 
-  cpp11::writable::list ret = (SEXP)data.get_data();
+  cpp11::writable::list ret = data.get_data();
   add_oids(ret);
   return ret;
 }
