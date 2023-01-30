@@ -26,7 +26,6 @@ Imports:
     hms (>= 1.0.0),
     lubridate,
     methods,
-    Rcpp (>= 1.0.7),
     withr
 Suggests: 
     callr,
