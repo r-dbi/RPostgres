@@ -432,7 +432,7 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
-    cpp11::warning("Don't need to call dbFetch() for statements, only for queries");
+    cpp11::warning(std::string("Don't need to call dbFetch() for statements, only for queries"));
   }
 
   while (!complete_) {

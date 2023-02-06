@@ -64,7 +64,7 @@ void DbConnection::set_current_result(const DbResult* pResult) {
   // (even if (the new) pResult is NULL, we should try to reset the back-end.)
   if (pCurrentResult_ != NULL) {
     if (pResult != NULL) {
-      cpp11::warning("Closing open result set, cancelling previous query");
+      cpp11::warning(std::string("Closing open result set, cancelling previous query"));
     }
 
     cleanup_query();

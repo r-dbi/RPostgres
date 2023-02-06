@@ -31,14 +31,14 @@ bool connection_valid(cpp11::external_pointer<DbConnectionPtr> con_) {
 [[cpp11::register]]
 void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
   if (!connection_valid(con_)) {
-    cpp11::warning("Already disconnected");
+    cpp11::warning(std::string("Already disconnected"));
     return;
   }
 
   DbConnectionPtr* con = con_.get();
   if (con->get()->has_query()) {
-    cpp11::warning("There is a result object still in use.\n"
-      "The connection will be automatically released when it is closed");
+    cpp11::warning(std::string("There is a result object still in use.\n"
+      "The connection will be automatically released when it is closed"));
   }
 
   con->get()->disconnect();
