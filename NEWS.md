@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# RPostgres 1.4.5.9003 (2023-02-06)
+
+## Chore
+
+- Gitpod test database (@Antonov548, #423).
+
+
 # RPostgres 1.4.5.9002 (2023-01-24)
 
 - Internal changes only.

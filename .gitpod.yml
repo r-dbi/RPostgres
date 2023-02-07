@@ -2,7 +2,6 @@
 #
 # Call:
 # quote(cynkrathis::use_gitpod())
-image: gitpod/workspace-postgres
 
 tasks:
   - name: dependencies
@@ -48,6 +47,16 @@ tasks:
 
       # Install radian
       sudo pip install radian
+
+      ## Install Postgres server
+      sudo apt-get install -y postgresql
+
+      ## Start Postgres server
+      sudo service postgresql start
+
+      ## Configure test database
+      sudo sudo -u postgres createuser -s $USER
+      createdb ${USER}
 
 vscode:
   extensions:
