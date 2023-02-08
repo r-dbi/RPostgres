@@ -39,6 +39,7 @@ void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
   if (con->get()->has_query()) {
     cpp11::warning(std::string("There is a result object still in use.\n"
       "The connection will be automatically released when it is closed"));
+    return;
   }
 
   con->get()->disconnect();
