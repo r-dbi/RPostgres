@@ -2,8 +2,8 @@
 #include "encode.h"
 
 
-// [[Rcpp::export]]
-std::string encode_vector(RObject x) {
+[[cpp11::register]]
+std::string encode_vector(cpp11::sexp x) {
   std::string buffer;
 
   int n = Rf_length(x);
@@ -16,12 +16,12 @@ std::string encode_vector(RObject x) {
   return buffer;
 }
 
-void encode_row_in_buffer(List x, int i, std::string& buffer,
+void encode_row_in_buffer(cpp11::list x, int i, std::string& buffer,
                           std::string fieldDelim,
                           std::string lineDelim) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
-    RObject xj(x[j]);
+    auto xj(x[j]);
     encode_in_buffer(xj, i, buffer);
     if (j != p - 1)
       buffer.append(fieldDelim);
@@ -29,8 +29,8 @@ void encode_row_in_buffer(List x, int i, std::string& buffer,
   buffer.append(lineDelim);
 }
 
-// [[Rcpp::export]]
-std::string encode_data_frame(List x) {
+[[cpp11::register]]
+std::string encode_data_frame(cpp11::list x) {
   if (Rf_length(x) == 0)
     return ("");
   int n = Rf_length(x[0]);
@@ -48,7 +48,7 @@ std::string encode_data_frame(List x) {
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
 // License: GPL-2
 
-void encode_in_buffer(RObject x, int i, std::string& buffer) {
+void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
   switch (TYPEOF(x)) {
   case LGLSXP:
     {
@@ -96,7 +96,7 @@ void encode_in_buffer(RObject x, int i, std::string& buffer) {
     }
   case STRSXP:
     {
-      RObject value = STRING_ELT(x, i);
+      cpp11::sexp value = STRING_ELT(x, i);
       if (value == NA_STRING) {
         buffer.append("\\N");
       } else {
@@ -106,8 +106,7 @@ void encode_in_buffer(RObject x, int i, std::string& buffer) {
       break;
     }
   default:
-    stop("Don't know how to handle vector of type %s.",
-         Rf_type2char(TYPEOF(x)));
+    cpp11::stop(std::string("Don't know how to handle vector of type ") + Rf_type2char(TYPEOF(x)) + ".");
   }
 }
 

@@ -17,7 +17,7 @@ class DbConnection : boost::noncopyable {
   const DbResult* pCurrentResult_;
   bool transacting_;
   bool check_interrupts_;
-  CharacterVector temp_schema_;
+  cpp11::strings temp_schema_;
 
 public:
   DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
@@ -34,29 +34,29 @@ public:
   bool is_current_result(const DbResult* pResult);
   bool has_query();
 
-  void copy_data(std::string sql, List df);
+  void copy_data(std::string sql, cpp11::list df);
 
   void check_connection();
-  List info();
+  cpp11::list info();
 
   bool is_check_interrupts() const;
 
-  SEXP quote_string(const String& x);
-  SEXP quote_identifier(const String& x);
+  SEXP quote_string(const cpp11::r_string& x);
+  SEXP quote_identifier(const cpp11::r_string& x);
   static SEXP get_null_string();
 
   bool is_transacting() const;
   void set_transacting(bool transacting);
 
-  CharacterVector get_temp_schema() const;
-  void set_temp_schema(CharacterVector temp_schema);
+  cpp11::strings get_temp_schema() const;
+  void set_temp_schema(cpp11::strings temp_schema);
 
   void conn_stop(const char* msg);
   static void conn_stop(PGconn* conn, const char* msg);
 
   void cleanup_query();
   static void finish_query(PGconn* pConn);
-  List wait_for_notify(int timeout_secs);
+  cpp11::list wait_for_notify(int timeout_secs);
 
   void cancel_query();
 
