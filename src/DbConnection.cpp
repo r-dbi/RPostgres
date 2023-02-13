@@ -272,6 +272,10 @@ void DbConnection::conn_stop(PGconn* conn, const char* msg) {
 }
 
 void DbConnection::cleanup_query() {
+  if (!pConn_) {
+    return;
+  }
+
   if (pCurrentResult_ != NULL && !(pCurrentResult_->complete())) {
     cancel_query();
   }
