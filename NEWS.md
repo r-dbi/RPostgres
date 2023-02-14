@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9005 (2023-02-14)
+
+## Chore
+
+- Replace Rcpp by cpp11 (@Antonov548, #419).
+
+
 # RPostgres 1.4.5.9004 (2023-02-10)
 
 ## Testing
