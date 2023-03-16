@@ -64,3 +64,23 @@ test_that("unquoting identifier - Id", {
     Id(schema = 'Robert', table = 'Students;--')),
   list(Id(schema = 'Robert', table = 'Students;--')))
 })
+
+test_that("quoting text NULL (#393)", {
+  con <- postgresDefault()
+
+  dbExecute(con, "CREATE TEMPORARY TABLE null_text (col jsonb)")
+  on.exit(dbExecute(con, "DROP TABLE null_text"))
+
+  json <- c("{}", NA)
+  values_expr <- paste(
+    paste0("(", dbQuoteLiteral(con, json), ")"),
+    collapse = ", "
+  )
+  stmt <- paste0("INSERT INTO null_text (col) VALUES ", values_expr)
+
+  dbExecute(con, stmt)
+  expect_equal(
+    dbReadTable(con, "null_text")$col,
+    structure(c("{}", NA), class = "pq_jsonb")
+  )
+})
