@@ -243,7 +243,7 @@ SEXP DbConnection::quote_identifier(const cpp11::r_string& x) {
 }
 
 SEXP DbConnection::get_null_string() {
-  static cpp11::sexp null = Rf_mkCharCE("NULL::text", CE_UTF8);
+  static cpp11::sexp null = Rf_mkCharCE("NULL", CE_UTF8);
   return null;
 }
 
