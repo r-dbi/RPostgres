@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: Rcpp Interface to PostgreSQL
-Version: 1.4.4.9000
-Date: 2022-05-01
+Version: 1.4.5.9006
+Date: 2023-02-17
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
@@ -26,7 +26,6 @@ Imports:
     hms (>= 1.0.0),
     lubridate,
     methods,
-    Rcpp (>= 1.0.7),
     withr
 Suggests: 
     callr,
@@ -36,8 +35,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: 
-    plogr (>= 0.2.0),
-    Rcpp
+    cpp11,
+    plogr (>= 0.2.0)
 VignetteBuilder:
     knitr
 Config/autostyle/scope: line_breaks
@@ -46,16 +45,16 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
-SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
-    (rpm)
+RoxygenNote: 7.2.3
+SystemRequirements: 
+    libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
     'PqResult.R'
     'RPostgres-pkg.R'
-    'RcppExports.R'
     'Redshift.R'
+    'cpp11.R'
     'dbAppendTable_PqConnection.R'
     'dbBegin_PqConnection.R'
     'dbBind_PqResult.R'

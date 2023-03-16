@@ -1,8 +1,58 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.4.9000 (2022-05-01)
+# RPostgres 1.4.5.9006 (2023-02-17)
 
-- Same as previous version.
+- Internal changes only.
+
+
+# RPostgres 1.4.5.9005 (2023-02-14)
+
+## Chore
+
+- Replace Rcpp by cpp11 (@Antonov548, #419).
+
+
+# RPostgres 1.4.5.9004 (2023-02-10)
+
+## Testing
+
+- Close result set.
+
+
+# RPostgres 1.4.5.9003 (2023-02-06)
+
+## Chore
+
+- Gitpod test database (@Antonov548, #423).
+
+
+# RPostgres 1.4.5.9002 (2023-01-24)
+
+- Internal changes only.
+
+
+# RPostgres 1.4.5.9001 (2023-01-22)
+
+- Merged cran-1.4.5 into main.
+
+
+
+# RPostgres 1.4.5.9000 (2023-01-19)
+
+## Features
+
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
+
+
+# RPostgres 1.4.5 (2023-01-19)
+
+## Features
+
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
+
+- One-click setup for https://gitpod.io (@Antonov548, #407).
+
+- Use testthat edition 3 (#408).
 
 
 # RPostgres 1.4.4 (2022-05-01)

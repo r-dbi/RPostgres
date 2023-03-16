@@ -2,7 +2,6 @@
 #'
 #' @export
 #' @useDynLib RPostgres, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
 #' @import methods DBI
 Postgres <- function() {
   new("PqDriver")

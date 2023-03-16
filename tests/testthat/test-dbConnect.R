@@ -1,7 +1,7 @@
 test_that("querying closed connection throws error", {
   db <- postgresDefault()
   dbDisconnect(db)
-  expect_error(dbSendQuery(db, "select * from foo"), "not valid")
+  expect_error(dbSendQuery(db, "select * from foo"), "bad_weak_ptr")
 })
 
 test_that("warn if previous result set is invalidated", {
@@ -37,6 +37,8 @@ test_that("warning if close connection with open results", {
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
 
   expect_warning(dbDisconnect(con), "still in use")
+
+  dbClearResult(rs1)
 })
 
 test_that("passing other options parameters", {

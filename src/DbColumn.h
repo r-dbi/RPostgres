@@ -1,6 +1,7 @@
 #ifndef DB_COLUMN_H
 #define DB_COLUMN_H
 
+#include <set>
 
 #include "DbColumnDataType.h"
 #include "DbColumnDataSourceFactory.h"
@@ -25,7 +26,7 @@ public:
 public:
   void set_col_value();
   void finalize(const int n_);
-  void warn_type_conflicts(const String& name) const;
+  void warn_type_conflicts(const cpp11::r_string& name) const;
 
   operator SEXP() const;
   DATA_TYPE get_type() const;
