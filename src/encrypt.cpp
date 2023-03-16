@@ -1,12 +1,12 @@
 #include "pch.h"
 
 
-// [[Rcpp::export]]
-String encrypt_password(String password, String user) {
-  char* encrypted = PQencryptPassword(password.get_cstring(), user.get_cstring());
+[[cpp11::register]]
+std::string encrypt_password(cpp11::r_string password, cpp11::r_string user) {
+  const auto pass = static_cast<std::string>(password);
+  const auto u = static_cast<std::string>(user);
 
-  String copy(encrypted);
-  PQfreemem(encrypted);
-
-  return copy;
+  const char* encrypted = PQencryptPassword(pass.c_str(), u.c_str());
+  
+  return encrypted;
 }

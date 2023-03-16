@@ -23,11 +23,12 @@
 
 #include <boost/config.hpp>
 #include <boost/ref.hpp>
-#include <boost/mem_fn.hpp>
+#include <boost/bind/mem_fn.hpp>
 #include <boost/type.hpp>
 #include <boost/is_placeholder.hpp>
 #include <boost/bind/arg.hpp>
 #include <boost/bind/detail/result_traits.hpp>
+#include <boost/bind/std_placeholders.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/visit_each.hpp>
 #include <boost/core/enable_if.hpp>
@@ -843,7 +844,7 @@ public:
 
 // bind_t
 
-#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !(defined(BOOST_GCC) && BOOST_GCC < 40600)
 
 template< class A1 > class rrlist1
 {

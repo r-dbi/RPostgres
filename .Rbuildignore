@@ -26,3 +26,4 @@ windows
 ^\.gitpod\.yml$
 ^\.gitpod\.Dockerfile$
 ^CMakeLists\.txt$
+^vscode-install\.r$
