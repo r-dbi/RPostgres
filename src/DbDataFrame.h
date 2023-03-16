@@ -26,8 +26,8 @@ public:
   void set_col_values();
   bool advance();
 
-  List get_data();
-  List get_data(std::vector<DATA_TYPE>& types);
+  cpp11::list get_data();
+  cpp11::list get_data(std::vector<DATA_TYPE>& types);
   size_t get_ncols() const;
 
 private:

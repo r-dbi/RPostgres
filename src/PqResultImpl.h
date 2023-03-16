@@ -49,7 +49,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   bool data_ready_;
   int nrows_;
   int rows_affected_;
-  List params_;
+  cpp11::list params_;
   int group_, groups_;
   PGresult* pRes_;
 
@@ -66,28 +66,28 @@ public:
   bool complete() const;
   int n_rows_fetched();
   int n_rows_affected();
-  void bind(const List& params);
-  List fetch(const int n_max);
+  void bind(const cpp11::list& params);
+  cpp11::list fetch(const int n_max);
 
-  List get_column_info();
+  cpp11::list get_column_info();
 
 private:
-  void set_params(const List& params);
+  void set_params(const cpp11::list& params);
   bool bind_row();
   void after_bind(bool params_have_rows);
 
-  List fetch_rows(int n_max, int& n);
+  cpp11::list fetch_rows(int n_max, int& n);
   void step();
   bool step_run();
   bool step_done();
-  List peek_first_row();
+  cpp11::list peek_first_row();
 
 private:
   void conn_stop(const char* msg) const;
 
   void bind();
 
-  void add_oids(List& data) const;
+  void add_oids(cpp11::writable::list& data) const;
 
 public:
   // PqResultSource

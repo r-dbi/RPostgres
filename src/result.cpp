@@ -3,62 +3,50 @@
 #include "PqResult.h"
 
 
-// [[Rcpp::export]]
-XPtr<DbResult> result_create(XPtr<DbConnectionPtr> con, std::string sql, bool immediate) {
+[[cpp11::register]]
+cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnectionPtr> con, std::string sql, bool immediate) {
   (*con)->check_connection();
   DbResult* res = PqResult::create_and_send_query(*con, sql, immediate);
-  return XPtr<DbResult>(res, true);
+  return cpp11::external_pointer<DbResult>(res, true);
 }
 
-// [[Rcpp::export]]
-void result_release(XPtr<DbResult> res) {
-  res.release();
+[[cpp11::register]]
+void result_release(cpp11::external_pointer<DbResult> res) {
+  res.reset();
 }
 
-// [[Rcpp::export]]
-bool result_valid(XPtr<DbResult> res_) {
+[[cpp11::register]]
+bool result_valid(cpp11::external_pointer<DbResult> res_) {
   DbResult* res = res_.get();
   return res != NULL && res->is_active();
 }
 
-// [[Rcpp::export]]
-List result_fetch(DbResult* res, const int n) {
+[[cpp11::register]]
+cpp11::list result_fetch(DbResult* res, const int n) {
   return res->fetch(n);
 }
 
-// [[Rcpp::export]]
-void result_bind(DbResult* res, List params) {
+[[cpp11::register]]
+void result_bind(DbResult* res, cpp11::list params) {
   res->bind(params);
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 bool result_has_completed(DbResult* res) {
   return res->complete();
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 int result_rows_fetched(DbResult* res) {
   return res->n_rows_fetched();
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 int result_rows_affected(DbResult* res) {
   return res->n_rows_affected();
 }
 
-// [[Rcpp::export]]
-List result_column_info(DbResult* res) {
+[[cpp11::register]]
+cpp11::list result_column_info(DbResult* res) {
   return res->get_column_info();
-}
-
-namespace Rcpp {
-
-template<>
-DbResult* as(SEXP x) {
-  DbResult* result = (DbResult*)(R_ExternalPtrAddr(x));
-  if (!result)
-    stop("Invalid result set");
-  return result;
-}
-
 }

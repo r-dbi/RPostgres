@@ -22,12 +22,13 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       ") as schema_query;"
     )
   } else {
-    unquoted <- dbUnquoteIdentifier(conn, prefix)
-    is_prefix <- vlapply(unquoted, function(x) {
+    if (!is.list(prefix)) prefix <- list(prefix)
+    stopifnot("All prefix must be Id()" = vlapply(prefix, is, "Id"))
+    is_prefix <- vlapply(prefix, function(x) {
       "schema" %in% names(x@name) && !("table" %in% names(x@name))
     })
-    schemas <- vcapply(unquoted[is_prefix], function(x) x@name[["schema"]])
-    if (length(schemas) > 0) { # else query is NULL
+    schemas <- vcapply(prefix[is_prefix], function(x) x@name[["schema"]])
+    if (length(schemas) > 0) {
       schema_strings <- dbQuoteString(conn, schemas)
       where_schema <-
         paste0(

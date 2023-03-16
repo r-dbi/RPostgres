@@ -124,7 +124,7 @@ One lucky worker will get a row back, but thanks to ``FOR UPDATE``, the row is n
 For any other worker, as the row is now locked, they will skip over it (``SKIP LOCKED``) and find something else to do.
 If there are no other jobs available, then nothing will be returned.
 
-Using SKIP LOCKED is discussed in more detail [in this article](https://www.2ndquadrant.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/).
+Using SKIP LOCKED is discussed in more detail [in this article](https://www.enterprisedb.com/blog/what-skip-locked-postgresql-95).
 
 ```{r, echo = FALSE}
 if (!is.null(rs)) {
