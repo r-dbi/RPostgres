@@ -1,5 +1,20 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9007 (2023-03-17)
+
+## Bug fixes
+
+- Use `NULL` in favor of `NULL::text` when quoting strings and literals, to support JSON and other text-ish types. Fixes a regression introduced in #370 (#393, #425).
+
+## Features
+
+- Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
+
+## Breaking changes
+
+- Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
+
+
 # RPostgres 1.4.5.9006 (2023-02-17)
 
 - Internal changes only.
