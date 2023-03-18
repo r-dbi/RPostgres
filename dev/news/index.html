@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.5.9006</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.5.9007</span>
       </span>
     </div>
 
@@ -57,6 +57,21 @@
       <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.5.9007" id="rpostgres-1459007-2023-03-17">RPostgres 1.4.5.9007 (2023-03-17)<a class="anchor" aria-label="anchor" href="#rpostgres-1459007-2023-03-17"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-5-9007">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-5-9007"></a></h3>
+<ul><li>Use <code>NULL</code> in favor of <code>NULL::text</code> when quoting strings and literals, to support JSON and other text-ish types. Fixes a regression introduced in <a href="https://github.com/r-dbi/RPostgres/issues/370" class="external-link">#370</a> (<a href="https://github.com/r-dbi/RPostgres/issues/393" class="external-link">#393</a>, <a href="https://github.com/r-dbi/RPostgres/issues/425" class="external-link">#425</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="features-1-4-5-9007">Features<a class="anchor" aria-label="anchor" href="#features-1-4-5-9007"></a></h3>
+<ul><li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> only allows <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects as <code>prefix</code> argument (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/390" class="external-link">#390</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-1-4-5-9007">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-5-9007"></a></h3>
+<ul><li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> only allows <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects as <code>prefix</code> argument (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/390" class="external-link">#390</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.5.9006" id="rpostgres-1459006-2023-02-17">RPostgres 1.4.5.9006 (2023-02-17)<a class="anchor" aria-label="anchor" href="#rpostgres-1459006-2023-02-17"></a></h2>
 <ul><li>Internal changes only.</li>
