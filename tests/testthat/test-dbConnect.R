@@ -37,6 +37,8 @@ test_that("warning if close connection with open results", {
   rs1 <- dbSendQuery(con, "SELECT 1 + 1")
 
   expect_warning(dbDisconnect(con), "still in use")
+
+  dbClearResult(rs1)
 })
 
 test_that("passing other options parameters", {
