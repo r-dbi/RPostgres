@@ -7,6 +7,8 @@ Authors@R: c(
     person("Jeroen", "Ooms", role = "aut"),
     person("Kirill", "Müller", , "kirill@cynkra.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1416-3412")),
+    person("Michael", "Antonov", role = "aut"),
+    person("Mauricio", "Vargas Sepulveda", role = "ctb"),
     person("RStudio", role = "cph"),
     person("R Consortium", role = "fnd"),
     person("Tomoaki", "Nishiyama", role = "ctb",
