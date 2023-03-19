@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9008 (2023-03-19)
+
+## Chore
+
+- Avoid bashisms warning on Ubuntu 22.04 (@pachadotdev, #428).
+
+## readme
+
+- Rcpp -\> cpp11 (@pachadotdev, #427).
+
+
 # RPostgres 1.4.5.9007 (2023-03-17)
 
 ## Bug fixes
