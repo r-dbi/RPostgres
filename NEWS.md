@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9010 (2023-04-02)
+
+## Chore
+
+- Relicense as MIT (@pachadotdev, #312, #421).
+
+
 # RPostgres 1.4.5.9009 (2023-03-24)
 
 - Internal changes only.
