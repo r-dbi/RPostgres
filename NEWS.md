@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9011 (2023-04-12)
+
+## Chore
+
+- Tweak driver docs (@dpprdan, #433).
+
+
 # RPostgres 1.4.5.9010 (2023-04-02)
 
 ## Chore
