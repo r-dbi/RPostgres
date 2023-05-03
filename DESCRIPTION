@@ -12,7 +12,7 @@ Authors@R: c(
     person("Tomoaki", "Nishiyama", role = "ctb",
            comment = "Code for encoding vectors into strings derived from RPostgreSQL")
   )
-Description: Fully DBI-compliant Rcpp-backed interface to PostgreSQL
+Description: Fully DBI-compliant cpp11-backed interface to PostgreSQL
     <https://www.postgresql.org/>, an open-source relational database.
 License: MIT + file LICENSE
 URL: https://rpostgres.r-dbi.org, https://github.com/r-dbi/RPostgres
