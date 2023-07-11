@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9012 (2023-07-11)
+
+## Features
+
+- `dbQuoteLiteral()` correctly quotes 64-bit integers from the bit64 package (of class `"integer64"`) (@karawoo, #435, #436).
+
+
 # RPostgres 1.4.5.9011 (2023-04-12)
 
 ## Chore
