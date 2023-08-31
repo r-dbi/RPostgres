@@ -46,7 +46,7 @@ std::string encode_data_frame(cpp11::list x) {
 // =============================================================================
 // Derived from EncodeElementS in RPostgreSQL
 // Written by: tomoakin@kenroku.kanazawa-u.ac.jp
-// License: GPL-2
+// Original license: GPL-2
 
 void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
   switch (TYPEOF(x)) {
