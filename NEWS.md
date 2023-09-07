@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9013 (2023-09-07)
+
+## Chore
+
+- Tweak DESCRIPTION.
+
+
 # RPostgres 1.4.5.9012 (2023-07-11)
 
 ## Features
