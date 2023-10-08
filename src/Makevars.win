@@ -1,7 +1,6 @@
-VERSION = 13.2.0
-RWINLIB = ../windows/libpq-$(VERSION)
-PKG_CPPFLAGS = -I$(RWINLIB)/include -Ivendor -DSTRICT_R_HEADERS -DRCPP_DEFAULT_INCLUDE_CALL=false -DRCPP_USING_UTF8_ERROR_STRING -DBOOST_NO_AUTO_PTR
-PKG_LIBS = -L$(RWINLIB)/lib${R_ARCH}${CRT} \
+RWINLIB = ../windows/libpq
+PKG_CPPFLAGS = -I$(RWINLIB)/include -Ivendor -DRCPP_DEFAULT_INCLUDE_CALL=false -DRCPP_USING_UTF8_ERROR_STRING -DBOOST_NO_AUTO_PTR
+PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) -L$(RWINLIB)/lib \
 	-lpq -lpgport -lpgcommon -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
 
 $(SHLIB):
@@ -12,4 +11,4 @@ clean:
 	rm -f $(SHLIB) $(OBJECTS)
 
 winlibs:
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
