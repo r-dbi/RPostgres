@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.5.9015 (2023-10-10)
+
+## Chore
+
+- Suppress warning in gcc-12 (#443).
+
+- Windows: update to libpq-15.3 (#442).
+
+
 # RPostgres 1.4.5.9014 (2023-10-09)
 
 - Internal changes only.
