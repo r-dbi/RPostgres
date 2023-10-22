@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RPostgres</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
       </span>
     </div>
 
@@ -57,6 +57,41 @@
       <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.4.6" id="rpostgres-146-2023-10-22">RPostgres 1.4.6 (2023-10-22)<a class="anchor" aria-label="anchor" href="#rpostgres-146-2023-10-22"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-1-4-6">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-6"></a></h3>
+<ul><li>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> only allows <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects as <code>prefix</code> argument (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/390" class="external-link">#390</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-6"></a></h3>
+<ul><li>Use <code>NULL</code> in favor of <code>NULL::text</code> when quoting strings and literals, to support JSON and other text-ish types. Fixes a regression introduced in <a href="https://github.com/r-dbi/RPostgres/issues/370" class="external-link">#370</a> (<a href="https://github.com/r-dbi/RPostgres/issues/393" class="external-link">#393</a>, <a href="https://github.com/r-dbi/RPostgres/issues/425" class="external-link">#425</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="features-1-4-6">Features<a class="anchor" aria-label="anchor" href="#features-1-4-6"></a></h3>
+<ul><li><p><code><a href="https://dbi.r-dbi.org/reference/dbQuoteLiteral.html" class="external-link">dbQuoteLiteral()</a></code> correctly quotes 64-bit integers from the bit64 package (of class <code>"integer64"</code>) (<a href="https://github.com/karawoo" class="external-link">@karawoo</a>, <a href="https://github.com/r-dbi/RPostgres/issues/435" class="external-link">#435</a>, <a href="https://github.com/r-dbi/RPostgres/issues/436" class="external-link">#436</a>).</p></li>
+<li><p>Breaking change: <code><a href="https://dbi.r-dbi.org/reference/dbListObjects.html" class="external-link">dbListObjects()</a></code> only allows <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects as <code>prefix</code> argument (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/390" class="external-link">#390</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="libraries-1-4-6">Libraries<a class="anchor" aria-label="anchor" href="#libraries-1-4-6"></a></h3>
+<ul><li><p>Windows: update to libpq-15.3 (<a href="https://github.com/r-dbi/RPostgres/issues/442" class="external-link">#442</a>).</p></li>
+<li><p>Upgrade boost to 1.81.0-1 to fix sprintf warnings (<a href="https://github.com/r-dbi/RPostgres/issues/417" class="external-link">#417</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-4-6">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-6"></a></h3>
+<ul><li><p>Suppress warning in gcc-12 (<a href="https://github.com/r-dbi/RPostgres/issues/443" class="external-link">#443</a>).</p></li>
+<li><p>Tweak driver docs (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/433" class="external-link">#433</a>).</p></li>
+<li><p>Relicense as MIT.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-1-4-6">Testing<a class="anchor" aria-label="anchor" href="#testing-1-4-6"></a></h3>
+<ul><li>Close result set.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-1-4-6">Internal<a class="anchor" aria-label="anchor" href="#internal-1-4-6"></a></h3>
+<ul><li>Replace Rcpp by cpp11 (<a href="https://github.com/Antonov548" class="external-link">@Antonov548</a>, <a href="https://github.com/r-dbi/RPostgres/issues/419" class="external-link">#419</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.5" id="rpostgres-145-2023-01-19">RPostgres 1.4.5 (2023-01-19)<a class="anchor" aria-label="anchor" href="#rpostgres-145-2023-01-19"></a></h2>
 <div class="section level3">
