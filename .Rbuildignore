@@ -3,7 +3,6 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^src/Makevars$
-windows
 ^clion-test\.R$
 ^cran-comments\.md$
 ^src/.*\.d$
@@ -27,4 +26,4 @@ windows
 ^\.gitpod\.Dockerfile$
 ^CMakeLists\.txt$
 ^vscode-install\.r$
-^build$
+^vscode-.*build$
