@@ -2,10 +2,6 @@
 
 # RPostgres 1.4.6 (2023-10-22)
 
-## readme
-
-- Rcpp -\> cpp11 (@pachadotdev, #427).
-
 ## Breaking changes
 
 - Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
@@ -17,28 +13,30 @@
 ## Features
 
 - `dbQuoteLiteral()` correctly quotes 64-bit integers from the bit64 package (of class `"integer64"`) (@karawoo, #435, #436).
+
 - Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
+
+## Libraries
+
+- Windows: update to libpq-15.3 (#442).
+
 - Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
 
-## Chore
+## Documentation
 
 - Suppress warning in gcc-12 (#443).
-- Windows: update to libpq-15.3 (#442).
-- Tweak DESCRIPTION.
+
 - Tweak driver docs (@dpprdan, #433).
-- Relicense as MIT (@pachadotdev, #312, #421).
-- Avoid bashisms warning on Ubuntu 22.04 (@pachadotdev, #428).
-- Replace Rcpp by cpp11 (@Antonov548, #419).
-- Gitpod test database (@Antonov548, #423).
+
+- Relicense as MIT.
 
 ## Testing
 
 - Close result set.
 
-## Uncategorized
+## Internal
 
-- Internal changes only.
-- Merged cran-1.4.5 into main.
+- Replace Rcpp by cpp11 (@Antonov548, #419).
 
 
 # RPostgres 1.4.5 (2023-01-19)
