@@ -37,7 +37,7 @@ Suggests:
 LinkingTo: 
     cpp11,
     plogr (>= 0.2.0)
-VignetteBuilder:
+VignetteBuilder: 
     knitr
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
@@ -46,8 +46,8 @@ Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-SystemRequirements: 
-    libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
+    (rpm)
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
