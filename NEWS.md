@@ -1,64 +1,10 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.5.9015 (2023-10-10)
+# RPostgres 1.4.6 (2023-10-22)
 
-## Chore
+## Breaking changes
 
-- Suppress warning in gcc-12 (#443).
-
-- Windows: update to libpq-15.3 (#442).
-
-
-# RPostgres 1.4.5.9014 (2023-10-09)
-
-- Internal changes only.
-
-
-# RPostgres 1.4.5.9013 (2023-09-07)
-
-## Chore
-
-- Tweak DESCRIPTION.
-
-
-# RPostgres 1.4.5.9012 (2023-07-11)
-
-## Features
-
-- `dbQuoteLiteral()` correctly quotes 64-bit integers from the bit64 package (of class `"integer64"`) (@karawoo, #435, #436).
-
-
-# RPostgres 1.4.5.9011 (2023-04-12)
-
-## Chore
-
-- Tweak driver docs (@dpprdan, #433).
-
-
-# RPostgres 1.4.5.9010 (2023-04-02)
-
-## Chore
-
-- Relicense as MIT (@pachadotdev, #312, #421).
-
-
-# RPostgres 1.4.5.9009 (2023-03-24)
-
-- Internal changes only.
-
-
-# RPostgres 1.4.5.9008 (2023-03-19)
-
-## Chore
-
-- Avoid bashisms warning on Ubuntu 22.04 (@pachadotdev, #428).
-
-## readme
-
-- Rcpp -\> cpp11 (@pachadotdev, #427).
-
-
-# RPostgres 1.4.5.9007 (2023-03-17)
+- Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
 
 ## Bug fixes
 
@@ -66,55 +12,31 @@
 
 ## Features
 
-- Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
-
-## Breaking changes
+- `dbQuoteLiteral()` correctly quotes 64-bit integers from the bit64 package (of class `"integer64"`) (@karawoo, #435, #436).
 
 - Breaking change: `dbListObjects()` only allows `Id()` objects as `prefix` argument (@dpprdan, #390).
 
+## Libraries
 
-# RPostgres 1.4.5.9006 (2023-02-17)
+- Windows: update to libpq-15.3 (#442).
 
-- Internal changes only.
+- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
 
+## Documentation
 
-# RPostgres 1.4.5.9005 (2023-02-14)
+- Suppress warning in gcc-12 (#443).
 
-## Chore
+- Tweak driver docs (@dpprdan, #433).
 
-- Replace Rcpp by cpp11 (@Antonov548, #419).
-
-
-# RPostgres 1.4.5.9004 (2023-02-10)
+- Relicense as MIT.
 
 ## Testing
 
 - Close result set.
 
+## Internal
 
-# RPostgres 1.4.5.9003 (2023-02-06)
-
-## Chore
-
-- Gitpod test database (@Antonov548, #423).
-
-
-# RPostgres 1.4.5.9002 (2023-01-24)
-
-- Internal changes only.
-
-
-# RPostgres 1.4.5.9001 (2023-01-22)
-
-- Merged cran-1.4.5 into main.
-
-
-
-# RPostgres 1.4.5.9000 (2023-01-19)
-
-## Features
-
-- Upgrade boost to 1.81.0-1 to fix sprintf warnings (#417).
+- Replace Rcpp by cpp11 (@Antonov548, #419).
 
 
 # RPostgres 1.4.5 (2023-01-19)
