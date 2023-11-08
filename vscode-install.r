@@ -9,13 +9,22 @@ if (!require(cpp11)) install.packages("cpp11")
 
 # Run only when we want to update the vendored code
 
-vendor_dir <- "./inst/include/cpp11"
+vendor_dir <- "./src/vendor/cpp11"
 
 if (dir.exists(vendor_dir)) {
     unlink(vendor_dir, recursive = TRUE)
 }
 
-cpp11::cpp_vendor()
+cpp11::cpp_vendor(vendor_dir)
+
+try(dir.create(file.path(vendor_dir, "cpp11"), recursive = TRUE))
+
+for (f in finp) {
+    # remove inst/include/ for each file
+    file.rename(f, gsub("inst/include/", "", f))
+}
+
+unlink(file.path(vendor_dir, "inst"), recursive = TRUE)
 
 # Pacha's note: We need to touch the Makefile
 # the key line is PKG_CPPFLAGS += -I../inst/include
@@ -24,7 +33,7 @@ cpp11::cpp_vendor()
 makevars <- readLines("src/Makevars.in")
 
 # if the "PKG_CPPFLAGS ..." line does not end with
-vendor_line <- " -I../inst/include"
+vendor_line <- " -I../src/vendor/cpp11"
 
 # then add it at the end of the same line
 

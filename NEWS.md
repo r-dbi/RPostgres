@@ -1,11 +1,5 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.6.9002 (2023-11-08)
-
-- Following from #419 (@Antonov548), includes vendoring and portable Makefiles
-  (@pachadotdev, #450)
-
-
 # RPostgres 1.4.6.9001 (2023-10-28)
 
 - Merge branch 'cran-1.4.6'.
