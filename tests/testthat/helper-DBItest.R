@@ -1,6 +1,4 @@
-library(DBI)
-
-DBItest::make_context(
+if (rlang::is_installed("DBItest")) DBItest::make_context(
   Postgres(),
   NULL,
   name = "RPostgres",
