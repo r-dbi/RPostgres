@@ -27,3 +27,4 @@
 ^CMakeLists\.txt$
 ^vscode-install\.r$
 ^vscode-.*build$
+^\.aviator/config\.yml$
