@@ -19,6 +19,8 @@ cpp11::cpp_vendor(vendor_dir)
 
 try(dir.create(file.path(vendor_dir, "cpp11"), recursive = TRUE))
 
+finp <- list.files(file.path(vendor_dir, "inst/include"), recursive = TRUE, full.names = TRUE)
+
 for (f in finp) {
     # remove inst/include/ for each file
     file.rename(f, gsub("inst/include/", "", f))
