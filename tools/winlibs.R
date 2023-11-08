@@ -1,5 +1,5 @@
-if(!file.exists("../windows/libpq/include/libpq-fe.h")){
-  unlink("../windows", recursive = TRUE)
+if(!file.exists("../src/windows/libpq/include/libpq-fe.h")){
+  unlink("../src/windows", recursive = TRUE)
   url <- if(grepl("aarch", R.version$platform)){
     "https://github.com/r-windows/bundles/releases/download/libpq-15.3/libpq-15.3-clang-aarch64.tar.xz"
   } else if(grepl("clang", Sys.getenv('R_COMPILED_BY'))){
@@ -10,9 +10,9 @@ if(!file.exists("../windows/libpq/include/libpq-fe.h")){
     "https://github.com/rwinlib/libpq/archive/v13.2.0.tar.gz"
   }
   download.file(url, basename(url), quiet = TRUE)
-  dir.create("../windows", showWarnings = FALSE)
-  untar(basename(url), exdir = "../windows", tar = 'internal')
+  dir.create("../src/windows", showWarnings = FALSE)
+  untar(basename(url), exdir = "../src/windows", tar = 'internal')
   unlink(basename(url))
-  setwd("../windows")
+  setwd("../src/windows")
   file.rename(list.files(), 'libpq')
 }
