@@ -18,7 +18,7 @@ PKG_LIBS="-lpq"
 
 # Extra checks on MacOS for SSL support in libpq
 # command -v is probably fine: https://stackoverflow.com/a/677212/946850
-if [ `uname` = "Darwin" ] && [ `command -v pkg-config` ]; then
+if [ "`uname`" = Darwin ] && [ "`command -v pkg-config`" ]; then
   if pkg-config --atleast-version=12 libpq; then
     case "`pkg-config --libs --static libpq`" in
     *crypto*)
@@ -35,7 +35,7 @@ if [ `uname` = "Darwin" ] && [ `command -v pkg-config` ]; then
 fi
 
 # pkg-config values (if available)
-if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pkg-config` ]; then
+if [ -z "$FORCE_AUTOBREW" ] && [ "`command -v pkg-config`" ]; then
   PKGCONFIG_CFLAGS=`pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME}`
   PKGCONFIG_LIBS=`pkg-config --libs --silence-errors ${PKG_CONFIG_NAME}`
   PKGCONFIG_MODVERSION=`pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME}`
@@ -55,7 +55,7 @@ if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pkg-config` ]; then
 fi
 
 # pg_config values (if available)
-if [ -z "$FORCE_AUTOBREW" ] && [ `command -v pg_config` ]; then
+if [ -z "$FORCE_AUTOBREW" ] && [ "`command -v pg_config`" ]; then
   PG_INC_DIR=`pg_config --includedir`
   PG_LIB_DIR=`pg_config --libdir`
   PG_VERSION=`pg_config --version`

@@ -6,7 +6,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/RPostgres)](https://CRAN.R-project.org/package=RPostgres)
 <!-- badges: end -->
 
-RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and Rcpp. Compared to RPostgreSQL, it:
+RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and [cpp11](https://github.com/r-lib/cpp11). Compared to RPostgreSQL, it:
 
 * Has full support for parameterised queries via `dbSendQuery()`, and `dbBind()`.
 
