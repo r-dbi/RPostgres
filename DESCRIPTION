@@ -1,7 +1,7 @@
 Package: RPostgres
-Title: Rcpp Interface to PostgreSQL
-Version: 1.4.5.9006
-Date: 2023-02-17
+Title: C++ Interface to PostgreSQL
+Version: 1.4.6.9002
+Date: 2023-11-09
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
@@ -12,9 +12,9 @@ Authors@R: c(
     person("Tomoaki", "Nishiyama", role = "ctb",
            comment = "Code for encoding vectors into strings derived from RPostgreSQL")
   )
-Description: Fully DBI-compliant Rcpp-backed interface to PostgreSQL
+Description: Fully DBI-compliant C++-backed interface to PostgreSQL
     <https://www.postgresql.org/>, an open-source relational database.
-License: GPL-3
+License: MIT + file LICENSE
 URL: https://rpostgres.r-dbi.org, https://github.com/r-dbi/RPostgres
 BugReports: https://github.com/r-dbi/RPostgres/issues
 Depends: 
@@ -32,12 +32,13 @@ Suggests:
     covr,
     DBItest (>= 1.7.2.9001),
     knitr,
+    rlang,
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: 
     cpp11,
     plogr (>= 0.2.0)
-VignetteBuilder:
+VignetteBuilder: 
     knitr
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
@@ -46,8 +47,8 @@ Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-SystemRequirements: 
-    libpq >= 9.0: libpq-dev (deb) or postgresql-devel (rpm)
+SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
+    (rpm)
 Collate: 
     'PqDriver.R'
     'PqConnection.R'
