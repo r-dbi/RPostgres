@@ -1,5 +1,22 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9002 (2023-11-09)
+
+## Chore
+
+- Fix warning on Windows (#449).
+
+- Add Aviator configuration.
+
+## Documentation
+
+- No more Rcpp in DESCRIPTION (#446).
+
+## Testing
+
+- Fix tests if DBItest is not installed (#448).
+
+
 # RPostgres 1.4.6.9001 (2023-10-28)
 
 - Merge branch 'cran-1.4.6'.
