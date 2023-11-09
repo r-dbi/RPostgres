@@ -22,6 +22,10 @@ dbQuoteLiteral_PqConnection <- function(conn, x, ...) {
     ret <- paste0("'", as.character(hms::as_hms(x)), "'")
     ret[is.na(x)] <- "NULL"
     SQL(paste0(ret, "::interval"), names = names(ret))
+  } else if (inherits(x, "integer64")) {
+    ret <- as.character(x)
+    ret[is.na(x)] <- "NULL"
+    SQL(paste0(ret, "::int8"), names = names(ret))
   } else if (is.logical(x)) {
     ret <- as.character(x)
     ret[is.na(ret)] <- "NULL::bool"

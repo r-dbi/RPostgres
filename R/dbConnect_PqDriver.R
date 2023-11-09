@@ -6,16 +6,18 @@
 #'
 #' @description
 #' `DBI::dbConnect()` establishes a connection to a database.
-#' Set `drv = RPostgres::Postgres()` to connect to a SQL database
-#' using the \pkg{RPostgres} package.
+#' Set `drv = Postgres()` to connect to a PostgreSQL(-ish) database. Use `drv =
+#' Redshift()` instead to connect to an AWS Redshift cluster.
 #'
 #' Manually disconnecting a connection is not necessary with \pkg{RPostgres},
 #' but still recommended;
 #' if you delete the object containing the connection, it will be automatically
 #' disconnected during the next GC with a warning.
 #'
-#' @param drv Should be set to [RPostgres::Postgres()]
-#'   to use the \pkg{RPostgres} package.
+#' @param drv [DBI::DBIDriver-class]. Use [Postgres()] to connect to a
+#'   PostgreSQL(-ish) database or [Redshift()] to connect to an AWS Redshift
+#'   cluster. Use an existing [DBI::DBIConnection-class] object to clone an
+#'   existing connection.
 #' @param dbname Database name. If `NULL`, defaults to the user name.
 #'   Note that this argument can only contain the database name, it will not
 #'   be parsed as a connection string (internally, `expand_dbname` is set to

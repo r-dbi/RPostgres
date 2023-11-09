@@ -29,8 +29,10 @@ Postgres()
 \S4method{dbDisconnect}{PqConnection}(conn, ...)
 }
 \arguments{
-\item{drv}{Should be set to \code{\link[=Postgres]{Postgres()}}
-to use the \pkg{RPostgres} package.}
+\item{drv}{\link[DBI:DBIDriver-class]{DBI::DBIDriver}. Use \code{\link[=Postgres]{Postgres()}} to connect to a
+PostgreSQL(-ish) database or \code{\link[=Redshift]{Redshift()}} to connect to an AWS Redshift
+cluster. Use an existing \link[DBI:DBIConnection-class]{DBI::DBIConnection} object to clone an
+existing connection.}
 
 \item{dbname}{Database name. If \code{NULL}, defaults to the user name.
 Note that this argument can only contain the database name, it will not
@@ -76,8 +78,7 @@ This setting does not change the time values returned, only their display.}
 }
 \description{
 \code{DBI::dbConnect()} establishes a connection to a database.
-Set \code{drv = RPostgres::Postgres()} to connect to a SQL database
-using the \pkg{RPostgres} package.
+Set \code{drv = Postgres()} to connect to a PostgreSQL(-ish) database. Use \code{drv = Redshift()} instead to connect to an AWS Redshift cluster.
 
 Manually disconnecting a connection is not necessary with \pkg{RPostgres},
 but still recommended;
