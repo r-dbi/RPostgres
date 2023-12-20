@@ -29,3 +29,5 @@
 ^vscode-.*build$
 ^\.aviator/config\.yml$
 ^windows$
+^Dockerfile$
+^docker-compose\.yml$

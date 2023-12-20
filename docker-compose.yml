@@ -1,0 +1,29 @@
+# See .github/CONTRIBUTING.md for details.
+
+version: '3'
+volumes:
+  postgres-socket:
+    driver: local
+
+services:
+  # https://geshan.com.np/blog/2021/12/docker-postgres/
+  # https://community.home-assistant.io/t/timescaledb-postgres-using-a-unix-socket-in-docker-compose-as-ha-database/247136/2
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+    volumes:
+      - postgres-socket:/var/run/postgresql
+    ports:
+      - "5432:5432"
+
+  workspace:
+    container_name: workspace
+    image: ghcr.io/r-dbi/RPostgres:main
+    platform: linux/amd64
+    environment:
+      TESTTHAT_CPUS: 4
+    volumes:
+      - ${PWD}:/root/workspace
+      - postgres-socket:/var/run/postgresql
