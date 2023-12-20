@@ -13,6 +13,7 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: root
+      POSTGRES_PASSWORD: "YourStrong!Passw0rd"
     volumes:
       - postgres-socket:/var/run/postgresql
     ports:
@@ -20,7 +21,7 @@ services:
 
   workspace:
     container_name: workspace
-    image: ghcr.io/r-dbi/RPostgres:main
+    image: ghcr.io/r-dbi/rpostgres:main
     platform: linux/amd64
     environment:
       TESTTHAT_CPUS: 4
