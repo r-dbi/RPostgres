@@ -6,4 +6,4 @@ RUN mkdir -p /root/workspace
 
 COPY DESCRIPTION /root/workspace
 
-RUN R -q -e 'pak::pak()'
+RUN R -q -e 'pak::pak(dependencies = c("soft", "Config/Needs/build"))'
