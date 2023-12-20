@@ -47,6 +47,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      - name: Determine whether to use cache
+        id: check-cache
+        run: echo "::set-output name=use_cache::$(if [ '${{ github.event_name }}' == 'workflow_dispatch' ] || [ '${{ github.event_name }}' == 'schedule' ]; then echo 'false'; else echo 'true'; fi)"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@fdf7f43ecf7c1a5c7afe936410233728a8c2d9c2
         with:
@@ -56,3 +60,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          no-cache: ${{ steps.check-cache.outputs.use_cache }}
