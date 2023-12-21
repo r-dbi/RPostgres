@@ -22,7 +22,7 @@ Depends:
 Imports: 
     bit64,
     blob (>= 1.2.0),
-    DBI (>= 1.1.0),
+    DBI (>= 1.2.0),
     hms (>= 1.0.0),
     lubridate,
     methods,
@@ -30,7 +30,7 @@ Imports:
 Suggests: 
     callr,
     covr,
-    DBItest (>= 1.7.2.9001),
+    DBItest (>= 1.7.3.9016),
     knitr,
     rlang,
     rmarkdown,
