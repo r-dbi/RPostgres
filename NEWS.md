@@ -1,5 +1,26 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9003 (2023-12-21)
+
+## Chore
+
+- Define build-time dependencies.
+
+- Use cache-from to control ghcr cache.
+
+- Improve ghcr workflow.
+
+- Fix docker-compose file.
+
+- Fix typo in `configure`.
+
+- Add Docker setup.
+
+## Documentation
+
+- Typo r-lib -\> r-dbi (@dpprdan, #454).
+
+
 # RPostgres 1.4.6.9002 (2023-11-09)
 
 ## Chore
@@ -284,7 +305,7 @@
 - Make "typname" information available after `dbFetch()` and `dbGetQuery()`. Values of unknown type are returned as character vector of class `"pq_xxx"`, where `"xxx"` is the "typname" returned from PostgreSQL. In particular, `JSON` and `JSONB` values now have class `"pq_json"` and `"pq_jsonb"`, respectively. The return value of `dbColumnInfo()` gains new columns `".oid"` (`integer`), `". known"` (`logical`) and `".typname"` (`character`) (#114, @etiennebr).
 - Values of class `"integer64"` are now supported for `dbWriteTable()` and `dbBind()` (#178).
 - Schema support, as specified by DBI: `dbListObjects()`, `dbUnquoteIdentifier()` and `Id()`.
-- Names in the `x` argument to `dbQuoteIdentifier()` are preserved in the output (r-lib/DBI#173).
+- Names in the `x` argument to `dbQuoteIdentifier()` are preserved in the output (r-dbi/DBI#173).
 - All generics defined in DBI (e.g., `dbGetQuery()`) are now exported, even if the package doesn't provide a custom implementation (#168).
 - Replace non-portable `timegm()` with private implementation.
 - Correct reference to RPostgreSQL package (#165, @ClaytonJY).
