@@ -1,5 +1,26 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9003 (2023-12-21)
+
+## Chore
+
+- Define build-time dependencies.
+
+- Use cache-from to control ghcr cache.
+
+- Improve ghcr workflow.
+
+- Fix docker-compose file.
+
+- Fix typo in `configure`.
+
+- Add Docker setup.
+
+## Documentation
+
+- Typo r-lib -\> r-dbi (@dpprdan, #454).
+
+
 # RPostgres 1.4.6.9002 (2023-11-09)
 
 ## Chore
