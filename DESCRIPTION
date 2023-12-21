@@ -30,7 +30,7 @@ Imports:
 Suggests: 
     callr,
     covr,
-    DBItest (>= 1.7.3.9016),
+    DBItest (>= 1.7.3),
     knitr,
     rlang,
     rmarkdown,
@@ -106,3 +106,5 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
+Remotes:  
+    r-dbi/DBItest
