@@ -1,8 +1,7 @@
 url: https://rpostgres.r-dbi.org
 
 template:
-  params:
-    bootswatch: flatly # https://bootswatch.com/flatly/
+  package: dbitemplate
 
 home:
   links:
@@ -44,10 +43,6 @@ reference:
 
 development:
   mode: auto
-
-authors:
-  Kirill Müller:
-    href: https://krlmlr.info
 
 news:
   cran_dates: false
