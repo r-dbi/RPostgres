@@ -38,6 +38,8 @@ Suggests:
 LinkingTo: 
     cpp11,
     plogr (>= 0.2.0)
+Config/Needs/website: 
+    r-dbi/dbitemplate
 VignetteBuilder: 
     knitr
 Config/Needs/build: decor
