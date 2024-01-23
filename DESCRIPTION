@@ -106,5 +106,3 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
-Remotes:  
-    r-dbi/DBItest
