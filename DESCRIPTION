@@ -36,7 +36,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: 
-    cpp11,
     plogr (>= 0.2.0)
 VignetteBuilder: 
     knitr
