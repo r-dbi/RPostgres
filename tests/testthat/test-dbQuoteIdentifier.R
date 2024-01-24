@@ -16,13 +16,74 @@ test_that("quoting SQL", {
     "Robert'); DROP TABLE Students;--")
 })
 
-test_that("quoting Id", {
+test_that("quoting Id, table", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id(table = 'Students;--'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Students;--"')
+})
+
+test_that("quoting Id, table, unnamed", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id('Students;--'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Students;--"')
+})
+
+test_that("quoting Id, schema", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id(schema = 'Robert'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Robert"')
+})
+
+test_that("quoting Id, schema, unnamed", {
+  con <- postgresDefault()
+
+  quoted <- dbQuoteIdentifier(con, Id('Robert'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Robert"')
+})
+
+test_that("quoting Id, fully-qualified table", {
   con <- postgresDefault()
 
   quoted <- dbQuoteIdentifier(con, Id(schema = 'Robert', table = 'Students;--'))
   expect_s4_class(quoted, 'SQL')
-  expect_equal(as.character(quoted),
-    '"Robert"."Students;--"')
+  expect_equal(as.character(quoted), '"Robert"."Students;--"')
+})
+
+test_that("quoting Id, fully-qualified column, #263", {
+  con <- postgresDefault()
+
+  quoted <-
+    dbQuoteIdentifier(
+      con,
+      Id(schema = "Robert", table = "Students;--", column = "dormitory")
+    )
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Robert"."Students;--"."dormitory"')
+})
+
+test_that("quoting Id, column, unordered", {
+  con <- postgresDefault()
+
+  quoted <-
+    dbQuoteIdentifier(con, Id(column = "dormitory", table = 'Students;--'))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Students;--"."dormitory"')
+})
+
+test_that("quoting Id, fully-qualified column, unnamed", {
+  con <- postgresDefault()
+
+  quoted <-
+    dbQuoteIdentifier(con, Id('Robert', 'Students;--', "dormitory"))
+  expect_s4_class(quoted, 'SQL')
+  expect_equal(as.character(quoted), '"Robert"."Students;--"."dormitory"')
 })
 
 test_that("unquoting identifier - SQL with quotes", {
