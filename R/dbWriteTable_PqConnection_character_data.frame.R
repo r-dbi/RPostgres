@@ -44,20 +44,16 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
     })
   }
 
-  found <- dbExistsTable(conn, name)
-  if (found && !overwrite && !append) {
-    stop("Table ", name, " exists in database, and both overwrite and",
-      " append are FALSE",
-      call. = FALSE
-    )
-  }
-  if (found && overwrite) {
-    dbRemoveTable(conn, name)
+  if (overwrite) {
+    suppressMessages(dbRemoveTable(conn, name, temporary = temporary, fail_if_missing = FALSE))
+    found <- FALSE
+  } else {
+    found <- dbExistsTable(conn, name)
   }
 
   value <- sqlRownamesToColumn(value, row.names)
 
-  if (!found || overwrite) {
+  if (!found) {
     if (is.null(field.types)) {
       combined_field_types <- lapply(value, dbDataType, dbObj = conn)
     } else {

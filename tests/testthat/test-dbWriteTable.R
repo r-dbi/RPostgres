@@ -146,6 +146,25 @@ if (postgresHasDefault()) {
         })
       })
     })
+
+
+    describe("Name clashes", {
+      test_that("Can write to temporary table if permanent table exists (#402)", {
+        skip_on_cran()
+
+        dbWriteTable(con, "my_name_clash", data.frame(a = 1), overwrite = TRUE)
+        expect_equal(dbReadTable(con, "my_name_clash"), data.frame(a = 1))
+
+        dbWriteTable(con, "my_name_clash", data.frame(b = 2), overwrite = TRUE, temporary = TRUE)
+        expect_equal(dbReadTable(con, "my_name_clash"), data.frame(b = 2))
+
+        dbRemoveTable(con, "my_name_clash", temporary = TRUE)
+        expect_equal(dbReadTable(con, "my_name_clash"), data.frame(a = 1))
+
+        dbRemoveTable(con, "my_name_clash")
+        dbDisconnect(con)
+      })
+    })
   })
 
 }
