@@ -2,7 +2,7 @@
 #' @usage NULL
 dbListFields_PqConnection_character <- function(conn, name, ...) {
   quoted <- dbQuoteIdentifier(conn, name)
-  id <- dbUnquoteIdentifier(conn, quoted)[[1]]@name
+  id <- dbUnquoteIdentifier(conn, quoted)[[1]]
 
   list_fields(conn, id)
 }

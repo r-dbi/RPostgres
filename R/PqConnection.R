@@ -10,6 +10,7 @@ setClass("PqConnection",
   slots = list(
     ptr = "externalptr",
     bigint = "character",
+    system_catalogs = "logical",
     timezone = "character",
     timezone_out = "character",
     typnames = "data.frame"
