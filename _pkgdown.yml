@@ -1,8 +1,7 @@
 url: https://rpostgres.r-dbi.org
 
 template:
-  params:
-    bootswatch: flatly # https://bootswatch.com/flatly/
+  package: dbitemplate
 
 home:
   links:
