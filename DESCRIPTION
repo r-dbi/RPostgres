@@ -39,6 +39,8 @@ LinkingTo:
     plogr (>= 0.2.0)
 VignetteBuilder: 
     knitr
+Config/Needs/website: 
+    r-dbi/dbitemplate
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
 Config/testthat/edition: 3
