@@ -101,7 +101,6 @@ Collate:
     'dbWriteTable_PqConnection_character_data.frame.R'
     'default.R'
     'export.R'
-    'names.R'
     'quote.R'
     'show_PqConnection.R'
     'sqlData_PqConnection.R'
