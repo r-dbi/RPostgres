@@ -5,7 +5,7 @@ dbExistsTable_PqConnection_character <- function(conn, name, ...) {
   name <- dbQuoteIdentifier(conn, name)
 
   # Convert to identifier
-  id <- dbUnquoteIdentifier(conn, name)[[1]]@name
+  id <- dbUnquoteIdentifier(conn, name)[[1]]
   exists_table(conn, id)
 }
 

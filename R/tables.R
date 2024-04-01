@@ -121,9 +121,11 @@ db_append_table <- function(conn, name, value, copy, warn) {
 }
 
 exists_table <- function(conn, id) {
+  name <- id@name
+
   query <- paste0(
     "SELECT COUNT(*) FROM ",
-    find_table(conn, id)
+    find_table(conn, name)
   )
 
   dbGetQuery(conn, query)[[1]] >= 1

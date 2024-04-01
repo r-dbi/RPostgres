@@ -1,7 +1,7 @@
 #' @rdname postgres-tables
 #' @usage NULL
 dbExistsTable_PqConnection_Id <- function(conn, name, ...) {
-  exists_table(conn, id = name@name)
+  exists_table(conn, id = name)
 }
 
 #' @rdname postgres-tables
