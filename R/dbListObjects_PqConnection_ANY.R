@@ -14,11 +14,11 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
     }
     query <- paste0(
       "SELECT ", null_varchar, " AS schema, table_name AS table FROM ( \n",
-        list_tables(conn = conn, order_by = "table_type, table_name"),
+      list_tables(conn = conn, order_by = "table_type, table_name"),
       ") as table_query \n",
       "UNION ALL\n",
       "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM ( \n",
-        list_tables(conn = conn, where_schema = "true"),
+      list_tables(conn = conn, where_schema = "true"),
       ") as schema_query;"
     )
   } else {
@@ -38,11 +38,11 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
         )
       query <- paste0(
         "SELECT table_schema AS schema, table_name AS table FROM ( \n",
-          list_tables(
-            conn = conn,
-            where_schema = where_schema,
-            order_by = "table_type, table_name"
-          ),
+        list_tables(
+          conn = conn,
+          where_schema = where_schema,
+          order_by = "table_type, table_name"
+        ),
         ") as table_query"
       )
     }

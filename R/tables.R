@@ -185,7 +185,7 @@ list_fields <- function(conn, id) {
     # as there cannot be multiple tables with the same name in a single schema
     only_first <- FALSE
 
-  # or we have to look the table up in the schemas on the search path
+    # or we have to look the table up in the schemas on the search path
   } else if (is_redshift) {
     # A variant of the Postgres version that uses CTEs and generate_series()
     # instead of generate_subscripts(), the latter is not supported on Redshift
@@ -211,10 +211,10 @@ list_fields <- function(conn, id) {
     # How to unnest `current_schemas(true)` array with element number (works since v9.4):
     # https://stackoverflow.com/a/8767450/2114932
     query <- paste0(
-        "(",
-        "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
-        "WHERE table_schema != 'pg_catalog'",
-        ") schemas_on_path"
+      "(",
+      "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
+      "WHERE table_schema != 'pg_catalog'",
+      ") schemas_on_path"
     )
     only_first <- TRUE
   }
