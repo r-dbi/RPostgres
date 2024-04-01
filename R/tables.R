@@ -120,26 +120,72 @@ db_append_table <- function(conn, name, value, copy, warn) {
   nrow(value)
 }
 
-exists_table <- function(conn, id) {
-  name <- id@name
+list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
 
   query <- paste0(
-    "SELECT COUNT(*) FROM ",
-    find_table(conn, name)
+    # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
+    "SELECT table_schema, table_name \n",
+    "FROM information_schema.tables \n",
+    "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
   )
 
-  dbGetQuery(conn, query)[[1]] >= 1
+  if (is.null(where_schema)) {
+    # `true` in `current_schemas(true)` is necessary to get temporary tables
+    query <- paste0(
+      query,
+      "  AND (table_schema = ANY(current_schemas(true))) \n",
+      "  AND (table_schema <> 'pg_catalog') \n"
+    )
+  } else {
+    query <- paste0(query, "  AND ", where_schema)
+  }
+
+  if (!is.null(where_table)) query <- paste0(query, "  AND ", where_table)
+
+  if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
+
+  query
 }
 
-find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
+exists_table <- function(conn, id) {
+  name <- id@name
+  stopifnot("table" %in% names(name))
+  table_name <- dbQuoteString(conn, name[["table"]])
+  where_table <- paste0("table_name = ", table_name, " \n")
+
+  if ("schema" %in% names(name)) {
+    schema_name <- dbQuoteString(conn, name[["schema"]])
+    where_schema <- paste0("table_schema = ", schema_name, " \n")
+  } else {
+    where_schema <- NULL
+  }
+  query <- paste0(
+    "SELECT EXISTS ( \n",
+    list_tables(conn, where_schema = where_schema, where_table = where_table),
+    ")"
+  )
+  dbGetQuery(conn, query)[[1]]
+}
+
+list_fields <- function(conn, id) {
+  name <- id@name
+
   is_redshift <- is(conn, "RedshiftConnection")
 
-  if ("schema" %in% names(id)) {
+  # get relevant schema
+  if ("schema" %in% names(name)) {
+    # either the user provides the schema
     query <- paste0(
       "(SELECT 1 AS nr, ",
-      dbQuoteString(conn, id[["schema"]]), "::varchar",
+      dbQuoteString(conn, name[["schema"]]), "::varchar",
       " AS table_schema) t"
     )
+
+    # only_first not necessary,
+    # as there cannot be multiple tables with the same name in a single schema
+    only_first <- FALSE
+
+  # or we have to look the table up in the schemas on the search path
   } else if (is_redshift) {
     # A variant of the Postgres version that uses CTEs and generate_series()
     # instead of generate_subscripts(), the latter is not supported on Redshift
@@ -158,25 +204,31 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
     )
     only_first <- FALSE
   } else {
-    # https://stackoverflow.com/a/8767450/946850
+    # Get `current_schemas()` in search_path order
+    # so $user and temp tables take precedence over the public schema (by default)
+    # https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH
+    # https://www.postgresql.org/docs/current/runtime-config-client.html#GUC-SEARCH-PATH
+    # How to unnest `current_schemas(true)` array with element number (works since v9.4):
+    # https://stackoverflow.com/a/8767450/2114932
     query <- paste0(
-      "(SELECT nr, schemas[nr] AS table_schema FROM ",
-      "(SELECT *, generate_subscripts(schemas, 1) AS nr FROM ",
-      "(SELECT current_schemas(true) AS schemas) ",
-      "t) ",
-      "tt WHERE schemas[nr] <> 'pg_catalog') ",
-      "ttt"
+        "(",
+        "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
+        "WHERE table_schema != 'pg_catalog'",
+        ") schemas_on_path"
     )
+    only_first <- TRUE
   }
 
-  table <- dbQuoteString(conn, id[["table"]])
+  # join columns info
+  table <- dbQuoteString(conn, name[["table"]])
   query <- paste0(
     query, " ",
-    "INNER JOIN INFORMATION_SCHEMA.", inf_table, " USING (table_schema) ",
+    "INNER JOIN INFORMATION_SCHEMA.COLUMNS USING (table_schema) ",
     "WHERE table_name = ", table
   )
 
   if (only_first) {
+    # we can only detect duplicate table names after we know in which schemas they are
     # https://stackoverflow.com/a/31814584/946850
     query <- paste0(
       "(SELECT *, rank() OVER (ORDER BY nr) AS rnr ",
@@ -185,7 +237,19 @@ find_table <- function(conn, id, inf_table = "tables", only_first = FALSE) {
     )
   }
 
-  query
+  query <- paste0(
+    "SELECT column_name FROM ",
+    query, " ",
+    "ORDER BY ordinal_position"
+  )
+
+  fields <- dbGetQuery(conn, query)[[1]]
+
+  if (length(fields) == 0) {
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+  }
+
+  fields
 }
 
 find_temp_schema <- function(conn, fail_if_missing = TRUE) {
@@ -213,20 +277,4 @@ find_temp_schema <- function(conn, fail_if_missing = TRUE) {
     connection_set_temp_schema(conn@ptr, "pg_temp")
     return(connection_get_temp_schema(conn@ptr))
   }
-}
-
-list_fields <- function(conn, id) {
-  name <- id@name
-
-  query <- find_table(conn, name, "columns", only_first = TRUE)
-  query <- paste0(
-    "SELECT column_name FROM ",
-    query, " ",
-    "ORDER BY ordinal_position"
-  )
-  fields <- dbGetQuery(conn, query)[[1]]
-  if (length(fields) == 0) {
-    stop("Table ", dbQuoteIdentifier(conn, name), " not found.", call. = FALSE)
-  }
-  fields
 }
