@@ -216,7 +216,9 @@ find_temp_schema <- function(conn, fail_if_missing = TRUE) {
 }
 
 list_fields <- function(conn, id) {
-  query <- find_table(conn, id, "columns", only_first = TRUE)
+  name <- id@name
+
+  query <- find_table(conn, name, "columns", only_first = TRUE)
   query <- paste0(
     "SELECT column_name FROM ",
     query, " ",
@@ -224,7 +226,7 @@ list_fields <- function(conn, id) {
   )
   fields <- dbGetQuery(conn, query)[[1]]
   if (length(fields) == 0) {
-    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+    stop("Table ", dbQuoteIdentifier(conn, name), " not found.", call. = FALSE)
   }
   fields
 }
