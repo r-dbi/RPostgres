@@ -13,7 +13,7 @@ dbFetch_PqResult <- function(res, n = -1, ..., row.names = FALSE) {
   ret <- convert_bigint(ret, res@bigint)
   ret <- finalize_types(ret, res@conn)
   ret <- fix_timezone(ret, res@conn)
-  set_tidy_names(ret)
+  ret
 }
 
 #' @rdname postgres-query
