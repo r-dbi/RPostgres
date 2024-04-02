@@ -1,5 +1,40 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9006 (2024-04-02)
+
+## Bug fixes
+
+- `dbWriteTable()` correctly handles name clashes between temporary and permanent tables (#402, #431).
+
+- Fix `dbQuoteIdentifier()` for `Id()` objects to no longer rely on names (#460).
+
+## Features
+
+- Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
+
+## Chore
+
+- Refactor `dbListTables()` et al. (@dpprdan, #413).
+
+- Refactor `list_fields()` (#462).
+
+- Use `Id` in `exists_table()` (#461).
+
+- Add Aviator configuration.
+
+## Documentation
+
+- Use dbitemplate (@maelle, #456).
+
+## Testing
+
+- Test for columns in `dbQuoteIdentifier()` (@dpprdan, #263, #372).
+
+## Breaking changes
+
+- Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
+
+
 # RPostgres 1.4.6.9005 (2024-01-24)
 
 - Internal changes only.
