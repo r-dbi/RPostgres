@@ -2,6 +2,7 @@ url: https://rpostgres.r-dbi.org
 
 template:
   package: dbitemplate
+  bootstrap: 5
 
 home:
   links:
