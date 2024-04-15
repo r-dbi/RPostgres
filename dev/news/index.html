@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.6.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.6.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,37 @@
       <small>Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.6.9006" id="rpostgres-1469006-2024-04-02">RPostgres 1.4.6.9006 (2024-04-02)<a class="anchor" aria-label="anchor" href="#rpostgres-1469006-2024-04-02"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-6-9006">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-6-9006"></a></h3>
+<ul><li><p><code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> correctly handles name clashes between temporary and permanent tables (<a href="https://github.com/r-dbi/RPostgres/issues/402" class="external-link">#402</a>, <a href="https://github.com/r-dbi/RPostgres/issues/431" class="external-link">#431</a>).</p></li>
+<li><p>Fix <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> for <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects to no longer rely on names (<a href="https://github.com/r-dbi/RPostgres/issues/460" class="external-link">#460</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="features-1-4-6-9006">Features<a class="anchor" aria-label="anchor" href="#features-1-4-6-9006"></a></h3>
+<ul><li>Breaking change: Avoid appending a numeric suffix to duplicate column names (<a href="https://github.com/r-dbi/RPostgres/issues/463" class="external-link">#463</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="chore-1-4-6-9006">Chore<a class="anchor" aria-label="anchor" href="#chore-1-4-6-9006"></a></h3>
+<ul><li><p>Refactor <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables()</a></code> et al. (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/413" class="external-link">#413</a>).</p></li>
+<li><p>Refactor <code>list_fields()</code> (<a href="https://github.com/r-dbi/RPostgres/issues/462" class="external-link">#462</a>).</p></li>
+<li><p>Use <code>Id</code> in <code>exists_table()</code> (<a href="https://github.com/r-dbi/RPostgres/issues/461" class="external-link">#461</a>).</p></li>
+<li><p>Add Aviator configuration.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-4-6-9006">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-6-9006"></a></h3>
+<ul><li>Use dbitemplate (<a href="https://github.com/maelle" class="external-link">@maelle</a>, <a href="https://github.com/r-dbi/RPostgres/issues/456" class="external-link">#456</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-1-4-6-9006">Testing<a class="anchor" aria-label="anchor" href="#testing-1-4-6-9006"></a></h3>
+<ul><li>Test for columns in <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/263" class="external-link">#263</a>, <a href="https://github.com/r-dbi/RPostgres/issues/372" class="external-link">#372</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-1-4-6-9006">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-6-9006"></a></h3>
+<ul><li>Breaking change: Avoid appending a numeric suffix to duplicate column names (<a href="https://github.com/r-dbi/RPostgres/issues/463" class="external-link">#463</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.6.9005" id="rpostgres-1469005-2024-01-24">RPostgres 1.4.6.9005 (2024-01-24)<a class="anchor" aria-label="anchor" href="#rpostgres-1469005-2024-01-24"></a></h2>
 <ul><li>Internal changes only.</li>
@@ -402,7 +433,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.9000.</p>
 </div>
 
     </footer></div>
