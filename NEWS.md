@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9007 (2024-04-16)
+
+## Documentation
+
+- Set BS version explicitly for now (@maelle, #464).
+
+
 # RPostgres 1.4.6.9006 (2024-04-02)
 
 ## Bug fixes
