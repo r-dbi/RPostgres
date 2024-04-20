@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.6.9008 (2024-04-20)
+
+## Chore
+
+- Bump preferred libpq version on MacOS to 15 (#441, #465).
+
+
 # RPostgres 1.4.6.9007 (2024-04-16)
 
 ## Documentation
