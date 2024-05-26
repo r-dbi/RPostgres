@@ -2,7 +2,7 @@
 
 # RPostgres 1.4.7 (2024-05-26)
 
-## Breaking changes
+## Features
 
 - Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
 
@@ -11,41 +11,21 @@
 - `dbWriteTable()` correctly handles name clashes between temporary and permanent tables (#402, #431).
 - Fix `dbQuoteIdentifier()` for `Id()` objects to no longer rely on names (#460).
 
-## Features
-
-- Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
-
 ## Chore
 
 - Bump preferred libpq version on MacOS to 15 (#441, #465).
 - Refactor `dbListTables()` et al. (@dpprdan, #413).
 - Refactor `list_fields()` (#462).
 - Use `Id` in `exists_table()` (#461).
-- Add Aviator configuration.
-- Define build-time dependencies.
-- Use cache-from to control ghcr cache.
-- Improve ghcr workflow.
-- Fix docker-compose file.
-- Fix typo in `configure`.
-- Add Docker setup.
-- Fix warning on Windows (#449).
 
 ## Documentation
 
-- Set BS version explicitly for now (@maelle, #464).
 - Use dbitemplate (@maelle, #456).
-- Typo r-lib -\> r-dbi (@dpprdan, #454).
-- No more Rcpp in DESCRIPTION (#446).
 
 ## Testing
 
 - Test for columns in `dbQuoteIdentifier()` (@dpprdan, #263, #372).
 - Fix tests if DBItest is not installed (#448).
-
-## Uncategorized
-
-- Internal changes only.
-- Merge branch 'cran-1.4.6'.
 
 
 # RPostgres 1.4.6 (2023-10-22)
