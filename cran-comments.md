@@ -1,3 +1,5 @@
+Resubmission.
+
 RPostgres 1.4.7
 
 ## R CMD check results
