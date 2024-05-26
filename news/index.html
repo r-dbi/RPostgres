@@ -28,7 +28,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.7" id="rpostgres-147-2024-05-26">RPostgres 1.4.7 (2024-05-26)<a class="anchor" aria-label="anchor" href="#rpostgres-147-2024-05-26"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-1-4-7">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-7"></a></h3>
+<h3 id="features-1-4-7">Features<a class="anchor" aria-label="anchor" href="#features-1-4-7"></a></h3>
 <ul><li>Breaking change: Avoid appending a numeric suffix to duplicate column names (<a href="https://github.com/r-dbi/RPostgres/issues/463" class="external-link">#463</a>).</li>
 </ul></div>
 <div class="section level3">
@@ -38,40 +38,20 @@
 <li>Fix <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> for <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> objects to no longer rely on names (<a href="https://github.com/r-dbi/RPostgres/issues/460" class="external-link">#460</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="features-1-4-7">Features<a class="anchor" aria-label="anchor" href="#features-1-4-7"></a></h3>
-<ul><li>Breaking change: Avoid appending a numeric suffix to duplicate column names (<a href="https://github.com/r-dbi/RPostgres/issues/463" class="external-link">#463</a>).</li>
-</ul></div>
-<div class="section level3">
 <h3 id="chore-1-4-7">Chore<a class="anchor" aria-label="anchor" href="#chore-1-4-7"></a></h3>
 <ul><li>Bump preferred libpq version on MacOS to 15 (<a href="https://github.com/r-dbi/RPostgres/issues/441" class="external-link">#441</a>, <a href="https://github.com/r-dbi/RPostgres/issues/465" class="external-link">#465</a>).</li>
 <li>Refactor <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables()</a></code> et al. (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/413" class="external-link">#413</a>).</li>
 <li>Refactor <code>list_fields()</code> (<a href="https://github.com/r-dbi/RPostgres/issues/462" class="external-link">#462</a>).</li>
 <li>Use <code>Id</code> in <code>exists_table()</code> (<a href="https://github.com/r-dbi/RPostgres/issues/461" class="external-link">#461</a>).</li>
-<li>Add Aviator configuration.</li>
-<li>Define build-time dependencies.</li>
-<li>Use cache-from to control ghcr cache.</li>
-<li>Improve ghcr workflow.</li>
-<li>Fix docker-compose file.</li>
-<li>Fix typo in <code>configure</code>.</li>
-<li>Add Docker setup.</li>
-<li>Fix warning on Windows (<a href="https://github.com/r-dbi/RPostgres/issues/449" class="external-link">#449</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-1-4-7">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-7"></a></h3>
-<ul><li>Set BS version explicitly for now (<a href="https://github.com/maelle" class="external-link">@maelle</a>, <a href="https://github.com/r-dbi/RPostgres/issues/464" class="external-link">#464</a>).</li>
-<li>Use dbitemplate (<a href="https://github.com/maelle" class="external-link">@maelle</a>, <a href="https://github.com/r-dbi/RPostgres/issues/456" class="external-link">#456</a>).</li>
-<li>Typo r-lib -&gt; r-dbi (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/454" class="external-link">#454</a>).</li>
-<li>No more Rcpp in DESCRIPTION (<a href="https://github.com/r-dbi/RPostgres/issues/446" class="external-link">#446</a>).</li>
+<ul><li>Use dbitemplate (<a href="https://github.com/maelle" class="external-link">@maelle</a>, <a href="https://github.com/r-dbi/RPostgres/issues/456" class="external-link">#456</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="testing-1-4-7">Testing<a class="anchor" aria-label="anchor" href="#testing-1-4-7"></a></h3>
 <ul><li>Test for columns in <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code> (<a href="https://github.com/dpprdan" class="external-link">@dpprdan</a>, <a href="https://github.com/r-dbi/RPostgres/issues/263" class="external-link">#263</a>, <a href="https://github.com/r-dbi/RPostgres/issues/372" class="external-link">#372</a>).</li>
 <li>Fix tests if DBItest is not installed (<a href="https://github.com/r-dbi/RPostgres/issues/448" class="external-link">#448</a>).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="uncategorized-1-4-7">Uncategorized<a class="anchor" aria-label="anchor" href="#uncategorized-1-4-7"></a></h3>
-<ul><li>Internal changes only.</li>
-<li>Merge branch ‘cran-1.4.6’.</li>
 </ul></div>
 </div>
     <div class="section level2">
