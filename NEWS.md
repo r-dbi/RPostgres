@@ -1,25 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.6.9008 (2024-04-20)
+# RPostgres 1.4.7 (2024-05-26)
 
-## Chore
+## Breaking changes
 
-- Bump preferred libpq version on MacOS to 15 (#441, #465).
-
-
-# RPostgres 1.4.6.9007 (2024-04-16)
-
-## Documentation
-
-- Set BS version explicitly for now (@maelle, #464).
-
-
-# RPostgres 1.4.6.9006 (2024-04-02)
+- Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
 
 ## Bug fixes
 
 - `dbWriteTable()` correctly handles name clashes between temporary and permanent tables (#402, #431).
-
 - Fix `dbQuoteIdentifier()` for `Id()` objects to no longer rely on names (#460).
 
 ## Features
@@ -28,82 +17,34 @@
 
 ## Chore
 
+- Bump preferred libpq version on MacOS to 15 (#441, #465).
 - Refactor `dbListTables()` et al. (@dpprdan, #413).
-
 - Refactor `list_fields()` (#462).
-
 - Use `Id` in `exists_table()` (#461).
-
 - Add Aviator configuration.
-
-## Documentation
-
-- Use dbitemplate (@maelle, #456).
-
-## Testing
-
-- Test for columns in `dbQuoteIdentifier()` (@dpprdan, #263, #372).
-
-## Breaking changes
-
-- Breaking change: Avoid appending a numeric suffix to duplicate column names (#463).
-
-
-# RPostgres 1.4.6.9005 (2024-01-24)
-
-- Internal changes only.
-
-
-# RPostgres 1.4.6.9004 (2024-01-15)
-
-- Internal changes only.
-
-
-# RPostgres 1.4.6.9003 (2023-12-21)
-
-## Chore
-
 - Define build-time dependencies.
-
 - Use cache-from to control ghcr cache.
-
 - Improve ghcr workflow.
-
 - Fix docker-compose file.
-
 - Fix typo in `configure`.
-
 - Add Docker setup.
-
-## Documentation
-
-- Typo r-lib -\> r-dbi (@dpprdan, #454).
-
-
-# RPostgres 1.4.6.9002 (2023-11-09)
-
-## Chore
-
 - Fix warning on Windows (#449).
 
-- Add Aviator configuration.
-
 ## Documentation
 
+- Set BS version explicitly for now (@maelle, #464).
+- Use dbitemplate (@maelle, #456).
+- Typo r-lib -\> r-dbi (@dpprdan, #454).
 - No more Rcpp in DESCRIPTION (#446).
 
 ## Testing
 
+- Test for columns in `dbQuoteIdentifier()` (@dpprdan, #263, #372).
 - Fix tests if DBItest is not installed (#448).
 
+## Uncategorized
 
-# RPostgres 1.4.6.9001 (2023-10-28)
-
-- Merge branch 'cran-1.4.6'.
-
-
-# RPostgres 1.4.6.9000 (2023-10-27)
-
+- Internal changes only.
 - Merge branch 'cran-1.4.6'.
 
 
