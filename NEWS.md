@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9001 (2024-06-03)
+
+- Merge branch 'cran-1.4.7'.
+
+
 # RPostgres 1.4.7.9000 (2024-05-26)
 
 - Merge branch 'cran-1.4.7'.
