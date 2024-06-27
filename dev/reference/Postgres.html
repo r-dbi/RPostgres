@@ -11,12 +11,19 @@ but still recommended;
 if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9000</small>
+
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9001</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
@@ -28,14 +35,18 @@ disconnected during the next GC with a warning."><meta name="robots" content="no
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/r-dbi/RPostgres/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
+
       <h1>Postgres driver</h1>
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/PqDriver.R" class="external-link"><code>R/PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbConnect_PqDriver.R" class="external-link"><code>R/dbConnect_PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbDisconnect_PqConnection.R" class="external-link"><code>R/dbDisconnect_PqConnection.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/main/R/PqDriver.R" class="external-link"><code>R/PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/main/R/dbConnect_PqDriver.R" class="external-link"><code>R/dbConnect_PqDriver.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/main/R/dbDisconnect_PqConnection.R" class="external-link"><code>R/dbDisconnect_PqConnection.R</code></a></small>
       <div class="d-none name"><code>Postgres.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code> establishes a connection to a database.
 Set <code>drv = Postgres()</code> to connect to a PostgreSQL(-ish) database. Use <code>drv = Redshift()</code> instead to connect to an AWS Redshift cluster.</p>
@@ -44,6 +55,7 @@ but still recommended;
 if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Postgres</span><span class="op">(</span><span class="op">)</span></span>
@@ -67,56 +79,81 @@ disconnected during the next GC with a warning.</p>
 <span><span class="co"># S4 method for class 'PqConnection'</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-drv">drv<a class="anchor" aria-label="anchor" href="#arg-drv"></a></dt>
+
+
+<dl><dt id="arg-drv">drv<a class="anchor" aria-label="anchor" href="#arg-drv"></a></dt>
 <dd><p><a href="https://dbi.r-dbi.org/reference/DBIDriver-class.html" class="external-link">DBI::DBIDriver</a>. Use <code>Postgres()</code> to connect to a
 PostgreSQL(-ish) database or <code><a href="Redshift.html">Redshift()</a></code> to connect to an AWS Redshift
 cluster. Use an existing <a href="https://dbi.r-dbi.org/reference/DBIConnection-class.html" class="external-link">DBI::DBIConnection</a> object to clone an
 existing connection.</p></dd>
+
+
 <dt id="arg-dbname">dbname<a class="anchor" aria-label="anchor" href="#arg-dbname"></a></dt>
 <dd><p>Database name. If <code>NULL</code>, defaults to the user name.
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, <code>expand_dbname</code> is set to
 <code>false</code> in the call to
 <a href="https://www.postgresql.org/docs/current/libpq-connect.html" class="external-link"><code>PQconnectdbParams()</code></a>).</p></dd>
+
+
 <dt id="arg-host-port">host, port<a class="anchor" aria-label="anchor" href="#arg-host-port"></a></dt>
 <dd><p>Host and port. If <code>NULL</code>, will be retrieved from
 <code>PGHOST</code> and <code>PGPORT</code> env vars.</p></dd>
+
+
 <dt id="arg-user-password">user, password<a class="anchor" aria-label="anchor" href="#arg-user-password"></a></dt>
 <dd><p>User name and password. If <code>NULL</code>, will be
 retrieved from <code>PGUSER</code> and <code>PGPASSWORD</code> envvars, or from the
 appropriate line in <code>~/.pgpass</code>. See
 <a href="https://www.postgresql.org/docs/current/libpq-pgpass.html" class="external-link">https://www.postgresql.org/docs/current/libpq-pgpass.html</a> for
 more details.</p></dd>
+
+
 <dt id="arg-service">service<a class="anchor" aria-label="anchor" href="#arg-service"></a></dt>
 <dd><p>Name of service to connect as.  If <code>NULL</code>, will be
 ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
 file and used.  See <a href="https://www.postgresql.org/docs/current/libpq-pgservice.html" class="external-link">https://www.postgresql.org/docs/current/libpq-pgservice.html</a>
 for details on this file and syntax.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other name-value pairs that describe additional connection
 options as described at
 <a href="https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS" class="external-link">https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS</a></p></dd>
+
+
 <dt id="arg-bigint">bigint<a class="anchor" aria-label="anchor" href="#arg-bigint"></a></dt>
 <dd><p>The R type that 64-bit integer types should be mapped to,
 default is <a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a>, which allows the full range of 64 bit
 integers.</p></dd>
+
+
 <dt id="arg-check-interrupts">check_interrupts<a class="anchor" aria-label="anchor" href="#arg-check-interrupts"></a></dt>
 <dd><p>Should user interrupts be checked during the query execution (before
 first row of data is available)? Setting to <code>TRUE</code> allows interruption of queries
 running too long.</p></dd>
+
+
 <dt id="arg-timezone">timezone<a class="anchor" aria-label="anchor" href="#arg-timezone"></a></dt>
 <dd><p>Sets the timezone for the connection. The default is <code>"UTC"</code>.
 If <code>NULL</code> then no timezone is set, which defaults to the server's time zone.</p></dd>
+
+
 <dt id="arg-timezone-out">timezone_out<a class="anchor" aria-label="anchor" href="#arg-timezone-out"></a></dt>
 <dd><p>The time zone returned to R, defaults to <code>timezone</code>.
 If you want to display datetime values in the local timezone,
 set to <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">Sys.timezone()</a></code> or <code>""</code>.
 This setting does not change the time values returned, only their display.</p></dd>
+
+
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
 <dd><p>Connection to disconnect.</p></dd>
+
 </dl></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span></span>
@@ -127,12 +164,21 @@ This setting does not change the time values returned, only their display.</p></
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://github.com/jeroen" class="external-link">Jeroen Ooms</a>, <a href="https://krlmlr.info/" class="external-link">Kirill Müller</a>, R Consortium.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

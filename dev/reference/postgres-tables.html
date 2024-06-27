@@ -13,12 +13,19 @@ RPostgres does not use parameterised queries to insert rows because
 benchmarks revealed that this was considerably slower than using a single
 SQL string."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9000</small>
+
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9001</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
@@ -30,14 +37,18 @@ SQL string."><meta name="robots" content="noindex"></head><body>
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/r-dbi/RPostgres/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
+
       <h1>Convenience functions for reading/writing DBMS tables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbAppendTable_PqConnection.R" class="external-link"><code>R/dbAppendTable_PqConnection.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbExistsTable_PqConnection_Id.R" class="external-link"><code>R/dbExistsTable_PqConnection_Id.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/HEAD/R/dbExistsTable_PqConnection_character.R" class="external-link"><code>R/dbExistsTable_PqConnection_character.R</code></a>, and 9 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/main/R/dbAppendTable_PqConnection.R" class="external-link"><code>R/dbAppendTable_PqConnection.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/main/R/dbExistsTable_PqConnection_Id.R" class="external-link"><code>R/dbExistsTable_PqConnection_Id.R</code></a>, <a href="https://github.com/r-dbi/RPostgres/blob/main/R/dbExistsTable_PqConnection_character.R" class="external-link"><code>R/dbExistsTable_PqConnection_character.R</code></a>, and 9 more</small>
       <div class="d-none name"><code>postgres-tables.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> is overridden because <span class="pkg">RPostgres</span>
 uses placeholders of the form <code>$1</code>, <code>$2</code> etc. instead of <code>?</code>.</p>
@@ -47,6 +58,7 @@ create/overwrite a table and fill it with values.
 benchmarks revealed that this was considerably slower than using a single
 SQL string.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for class 'PqConnection'</span></span>
@@ -93,19 +105,28 @@ SQL string.</p>
 <span><span class="co"># S4 method for class 'PqConnection'</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/sqlData.html" class="external-link">sqlData</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">value</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
+
+
+<dl><dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
 <dd><p>a <a href="PqConnection-class.html">PqConnection</a> object, produced by
 <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code></p></dd>
+
+
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
 <dd><p>a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.
 Alternatively, pass a name quoted with <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>,
 an <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> object, or a string escaped with <code><a href="https://dbi.r-dbi.org/reference/SQL.html" class="external-link">SQL()</a></code>.</p></dd>
+
+
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
 <dd><p>A data.frame to write to the database.</p></dd>
+
+
 <dt id="arg-copy">copy<a class="anchor" aria-label="anchor" href="#arg-copy"></a></dt>
 <dd><p>If <code>TRUE</code>, serializes the data frame to a single string
 and uses <code>COPY name FROM stdin</code>. This is fast, but not supported by
@@ -113,8 +134,12 @@ all postgres servers (e.g. Amazon's Redshift). If <code>FALSE</code>, generates
 a single SQL string. This is slower, but always supported.
 The default maps to <code>TRUE</code> on connections established via <code><a href="Postgres.html">Postgres()</a></code>
 and to <code>FALSE</code> on connections established via <code><a href="Redshift.html">Redshift()</a></code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Ignored.</p></dd>
+
+
 <dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
 <dd><p>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.</p>
 <p>If <code>TRUE</code>, always translate row names to a column called "row_names".
@@ -123,34 +148,53 @@ rownames only if they're a character vector.</p>
 <p>A string is equivalent to <code>TRUE</code>, but allows you to override the
 default name.</p>
 <p>For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
 <dd><p>A fully qualified path in the database's namespace, or <code>NULL</code>.
 This argument will be processed with <code><a href="https://dbi.r-dbi.org/reference/dbUnquoteIdentifier.html" class="external-link">dbUnquoteIdentifier()</a></code>.
 If given the method will return all objects accessible through this prefix.</p></dd>
+
+
 <dt id="arg-check-names">check.names<a class="anchor" aria-label="anchor" href="#arg-check-names"></a></dt>
 <dd><p>If <code>TRUE</code>, the default, column names will be
 converted to valid R identifiers.</p></dd>
+
+
 <dt id="arg-temporary">temporary<a class="anchor" aria-label="anchor" href="#arg-temporary"></a></dt>
 <dd><p>If <code>TRUE</code>, only temporary tables are considered.</p></dd>
+
+
 <dt id="arg-fail-if-missing">fail_if_missing<a class="anchor" aria-label="anchor" href="#arg-fail-if-missing"></a></dt>
 <dd><p>If <code>FALSE</code>, <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code> succeeds if the
 table doesn't exist.</p></dd>
+
+
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
 <dd><p>a logical specifying whether to overwrite an existing table
 or not. Its default is <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg-append">append<a class="anchor" aria-label="anchor" href="#arg-append"></a></dt>
 <dd><p>a logical specifying whether to append to an existing table
 in the DBMS. Its default is <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg-field-types">field.types<a class="anchor" aria-label="anchor" href="#arg-field-types"></a></dt>
 <dd><p>character vector of named SQL field types where
 the names are the names of new table's columns.
 If missing, types are inferred with <code><a href="https://dbi.r-dbi.org/reference/dbDataType.html" class="external-link">DBI::dbDataType()</a></code>).
 The types can only be specified with <code>append = FALSE</code>.</p></dd>
+
+
 <dt id="arg-con">con<a class="anchor" aria-label="anchor" href="#arg-con"></a></dt>
 <dd><p>A database connection.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="schemas-catalogs-tablespaces">Schemas, catalogs, tablespaces<a class="anchor" aria-label="anchor" href="#schemas-catalogs-tablespaces"></a></h2>
+
+
 <p>Pass an identifier created with <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> as the <code>name</code> argument
 to specify the schema or catalog, e.g.
 <code>name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")</code> .
@@ -158,6 +202,7 @@ To specify the tablespace, use
 <code>dbExecute(conn, "SET default_tablespace TO my_tablespace")</code>
 before creating the table.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span></span>
@@ -216,12 +261,21 @@ before creating the table.</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://github.com/jeroen" class="external-link">Jeroen Ooms</a>, <a href="https://krlmlr.info/" class="external-link">Kirill Müller</a>, R Consortium.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 
