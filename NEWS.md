@@ -1,5 +1,26 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9002 (2024-06-28)
+
+## Chore
+
+- Auto-update from GitHub Actions.
+
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/9692464325
+
+## Continuous integration
+
+- Avoid checking bashisms on Windows.
+
+- Allow NOTEs on R-devel.
+
+- Better commit message.
+
+- Bump versions, better default, consume custom matrix.
+
+- Recent updates.
+
+
 # RPostgres 1.4.7.9001 (2024-06-03)
 
 - Merge branch 'cran-1.4.7'.
