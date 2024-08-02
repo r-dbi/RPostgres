@@ -1,5 +1,18 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9005 (2024-08-02)
+
+## Chore
+
+- Auto-update from GitHub Actions.
+
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/10200112323
+
+## Continuous integration
+
+- Use dev roxygen2 and decor.
+
+
 # RPostgres 1.4.7.9004 (2024-07-02)
 
 ## Continuous integration
