@@ -34,7 +34,7 @@ A boolean, indicating success or failure.
 end the transaction by either committing or rolling back the changes.
 }
 \examples{
-\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 dbWriteTable(con, "USarrests", datasets::USArrests, temporary = TRUE)
