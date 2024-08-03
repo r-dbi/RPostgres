@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9006 (2024-08-03)
+
+## Chore
+
+- Auto-update from GitHub Actions.
+
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/10224248168
+
+
 # RPostgres 1.4.7.9005 (2024-08-02)
 
 ## Chore
