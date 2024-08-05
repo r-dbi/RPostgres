@@ -13,7 +13,7 @@ fetches and clears for you."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@ default name.</p>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>A <a href="PqConnection-class.html">PqConnection</a> created by <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>.</p></dd>
+<dd><p>A <a href="PqConnection-class.html">PqConnection</a> created by <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code>.</p></dd>
 
 
 <dt id="arg-statement">statement<a class="anchor" aria-label="anchor" href="#arg-statement"></a></dt>
@@ -122,7 +122,7 @@ This allows to pass multiple statements and turns off the ability to pass parame
 
 <p>With <code>immediate = TRUE</code>, it is possible to pass multiple queries or statements,
 separated by semicolons.
-For multiple statements, the resulting value of <code><a href="https://dbi.r-dbi.org/reference/dbGetRowsAffected.html" class="external-link">dbGetRowsAffected()</a></code>
+For multiple statements, the resulting value of <code><a href="https://dbi.r-dbi.org/reference/dbGetRowsAffected.html" class="external-link">DBI::dbGetRowsAffected()</a></code>
 corresponds to the total number of affected rows.
 If multiple queries are used, all queries must return data with the same
 column names and types.
