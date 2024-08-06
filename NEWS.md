@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9007 (2024-08-06)
+
+## Continuous integration
+
+- Inline action.
+
+
 # RPostgres 1.4.7.9006 (2024-08-03)
 
 ## Chore
