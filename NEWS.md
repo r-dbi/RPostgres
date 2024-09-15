@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9011 (2024-09-15)
+
+## Continuous integration
+
+  - Install via R CMD INSTALL ., not pak (#471).
+    
+      - ci: Install via R CMD INSTALL ., not pak
+    
+      - ci: Bump version of upload-artifact action
+
+
 # RPostgres 1.4.7.9010 (2024-08-31)
 
 ## Continuous integration
