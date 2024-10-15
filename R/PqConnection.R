@@ -135,3 +135,65 @@ postgresWaitForNotify <- function(conn, timeout = 1) {
 postgresIsTransacting <- function(conn) {
   connection_is_transacting(conn@ptr)
 }
+
+
+#' Imports a large object from file
+#'
+#' Returns an object idenfier (Oid) for the imported large object
+#'
+#' @export
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
+#' @param filename A path to the large object to import
+#' @param oid The oid to write to. Defaults to 0 which assigns an unsed oid
+#' @return An integer, the identifier of the large object
+#' @examples
+#' con       <- postgresDefault()
+#' path_to_file <- 'my_image.png'
+#' dbWithTransaction(con, { 
+#'  oid <- postgresImportLargeObject(con, test_file_path)
+#' })
+postgresImportLargeObject <- function(conn, filename, oid = 0) {
+
+  if (!postgresIsTransacting(conn)) {
+    stopc("Cannot import a large object outside of a transaction")
+  }
+
+  if (oid <  0)     stopc("'oid' cannot be negative.")
+  if (is.null(oid) | is.na(oid)) stopc("'oid' cannot be NULL/NA")
+
+  connection_import_lo_from_file(conn@ptr, filename, oid)
+}
+
+#' Write to large object
+#'
+#' Writes a number of bytes from a raw vector to a large object.
+#'
+#' @export
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
+#' @param oid The oid to write to
+#' @param buf Buffer of bytes to write. A vector of type "raw".
+#' @param bytes_to_write Number of bytes to write from 'buf'
+#' @return The number of bytes written to large object
+#' @examples 
+#' con         <- postgresDefault()
+#' oid         <- dbGetQuery(con, "select lo_create(0) as oid")$oid[1]
+#' raw_data    <- serialize(mtcars,NULL)
+#' dbWithTransaction(con,{
+#'     bytes_written <- postgresWriteToLargeObject(con, oid, raw_data, length(raw_data))
+#' })
+#' bytes       <- dbGetQuery(con, "select lo_get($1) as lo_data", params=list(oid))$lo_data[1]
+#' mtcars_db   <- unserialize(unlist(bytes))
+postgresWriteToLargeObject <- function(conn, oid, buf, bytes_to_write) {
+
+  if (!postgresIsTransacting(conn)) {
+    stopc("Cannot write to a large object outside of a transaction")
+  }
+
+  if (oid <  0) stopc("'oid' cannot be negative.")
+  if (is.null(oid) | is.na(oid)) stopc("'oid' cannot be NULL/NA")
+  if (oid <= 0) stopc("'bytes_to_write' must be greater than zero.")
+
+  connection_write_to_lo(conn@ptr, oid, buf, bytes_to_write)
+}

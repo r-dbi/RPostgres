@@ -128,6 +128,34 @@ bool DbConnection::has_query() {
   return pCurrentResult_ != NULL;
 }
 
+
+int DbConnection::write_to_lo(int oid, const char *lo_buf, size_t bytes_to_write) {
+  int fd = lo_open(pConn_, oid, INV_READ|INV_WRITE);
+  if (fd < 0) {
+    cpp11::warning("Cannot access oid %d. No bytes written.", oid);
+    return(0);
+  }
+  int bytes_written = lo_write(pConn_, fd, lo_buf, bytes_to_write);
+  lo_close(pConn_,fd);
+  return(bytes_written);
+}
+
+int DbConnection::import_lo_from_file(std::string filename, int p_oid) {
+  
+  FILE* fd = fopen(filename.c_str(), "r");
+  if (fd == NULL) {
+    cpp11::warning("Unable to open file from path '%s'", filename.c_str());
+    return(0);
+  }
+  fclose(fd);
+
+  Oid lo_oid = lo_import_with_oid(pConn_, filename.c_str(), p_oid);
+  if (lo_oid == InvalidOid) {
+    return 0;
+  }
+  return(lo_oid);
+}
+
 void DbConnection::copy_data(std::string sql, cpp11::list df) {
   LOG_DEBUG << sql;
 

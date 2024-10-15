@@ -91,6 +91,16 @@ void connection_set_transacting(DbConnection* con, bool transacting) {
 }
 
 // Specific functions
+[[cpp11::register]]
+int connection_write_to_lo(DbConnection* con, int oid, cpp11::raws lo_buf_raw, size_t bytes_to_write) {
+  const char *lo_buf = (char*) RAW(lo_buf_raw);
+  return con->write_to_lo(oid, lo_buf, bytes_to_write);
+}
+
+[[cpp11::register]]
+int connection_import_lo_from_file(DbConnection* con, std::string filename, int oid) {
+  return con->import_lo_from_file(filename, oid);
+}
 
 [[cpp11::register]]
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df) {
