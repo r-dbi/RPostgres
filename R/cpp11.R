@@ -36,10 +36,6 @@ connection_set_transacting <- function(con, transacting) {
   invisible(.Call(`_RPostgres_connection_set_transacting`, con, transacting))
 }
 
-connection_write_to_lo <- function(con, oid, lo_buf_raw, bytes_to_write) {
-  .Call(`_RPostgres_connection_write_to_lo`, con, oid, lo_buf_raw, bytes_to_write)
-}
-
 connection_import_lo_from_file <- function(con, filename, oid) {
   .Call(`_RPostgres_connection_import_lo_from_file`, con, filename, oid)
 }

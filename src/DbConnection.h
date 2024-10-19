@@ -36,7 +36,6 @@ public:
 
   void copy_data(std::string sql, cpp11::list df);
   
-  int  write_to_lo(int oid, const char *lo_buf, size_t bytes_to_write);
   int  import_lo_from_file(std::string file_path, int p_oid);
   
 
