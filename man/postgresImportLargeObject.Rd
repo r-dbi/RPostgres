@@ -22,8 +22,9 @@ Returns an object idenfier (Oid) for the imported large object
 }
 \examples{
 con       <- postgresDefault()
-path_to_file <- 'my_image.png'
+filepath <- 'some_file.txt'
+file.create(filepath)
 dbWithTransaction(con, { 
- oid <- postgresImportLargeObject(con, test_file_path)
+ oid <- postgresImportLargeObject(con, filepath)
 })
 }

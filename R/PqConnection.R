@@ -149,9 +149,10 @@ postgresIsTransacting <- function(conn) {
 #' @return the identifier of the large object, an integer
 #' @examples
 #' con       <- postgresDefault()
-#' path_to_file <- 'my_image.png'
+#' filepath <- 'some_file.txt'
+#' file.create(filepath)
 #' dbWithTransaction(con, { 
-#'  oid <- postgresImportLargeObject(con, test_file_path)
+#'  oid <- postgresImportLargeObject(con, filepath)
 #' })
 postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
