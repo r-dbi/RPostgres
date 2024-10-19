@@ -144,23 +144,24 @@ postgresIsTransacting <- function(conn) {
 #' @export
 #' @param conn a [PqConnection-class] object, produced by
 #'   [DBI::dbConnect()]
-#' @param filename A path to the large object to import
-#' @param oid The oid to write to. Defaults to 0 which assigns an unsed oid
-#' @return An integer, the identifier of the large object
+#' @param filepath a path to the large object to import
+#' @param oid the oid to write to. Defaults to 0 which assigns an unused oid
+#' @return the identifier of the large object, an integer
 #' @examples
 #' con       <- postgresDefault()
 #' path_to_file <- 'my_image.png'
 #' dbWithTransaction(con, { 
 #'  oid <- postgresImportLargeObject(con, test_file_path)
 #' })
-postgresImportLargeObject <- function(conn, filename, oid = 0) {
+postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
   if (!postgresIsTransacting(conn)) {
     stopc("Cannot import a large object outside of a transaction")
   }
 
-  if (oid <  0)     stopc("'oid' cannot be negative.")
+  if (is.null(filepath)) stopc("'filepath' cannot be NULL")
+  if (oid <  0)     stopc("'oid' cannot be negative")
   if (is.null(oid) | is.na(oid)) stopc("'oid' cannot be NULL/NA")
 
-  connection_import_lo_from_file(conn@ptr, filename, oid)
+  connection_import_lo_from_file(conn@ptr, filepath, oid)
 }

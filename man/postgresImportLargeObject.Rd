@@ -4,15 +4,15 @@
 \alias{postgresImportLargeObject}
 \title{Imports a large object from file}
 \usage{
-postgresImportLargeObject(conn, filename, oid = 0)
+postgresImportLargeObject(conn, filepath = NULL, oid = 0)
 }
 \arguments{
 \item{conn}{a \linkS4class{PqConnection} object, produced by
 \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
-\item{filename}{A path to the large object to import}
+\item{filepath}{A path to the large object to import}
 
-\item{oid}{The oid to write to. Defaults to 0 which assigns an unsed oid}
+\item{oid}{The oid to write to. Defaults to 0 which assigns an unused oid}
 }
 \value{
 An integer, the identifier of the large object
