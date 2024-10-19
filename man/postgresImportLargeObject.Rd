@@ -10,12 +10,12 @@ postgresImportLargeObject(conn, filepath = NULL, oid = 0)
 \item{conn}{a \linkS4class{PqConnection} object, produced by
 \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
-\item{filepath}{A path to the large object to import}
+\item{filepath}{a path to the large object to import}
 
-\item{oid}{The oid to write to. Defaults to 0 which assigns an unused oid}
+\item{oid}{the oid to write to. Defaults to 0 which assigns an unused oid}
 }
 \value{
-An integer, the identifier of the large object
+the identifier of the large object, an integer
 }
 \description{
 Returns an object idenfier (Oid) for the imported large object

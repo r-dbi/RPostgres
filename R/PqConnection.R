@@ -162,6 +162,11 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
   if (is.null(filepath)) stopc("'filepath' cannot be NULL")
   if (oid <  0)     stopc("'oid' cannot be negative")
   if (is.null(oid) | is.na(oid)) stopc("'oid' cannot be NULL/NA")
+  if (file.access(filepath,4) == -1) stopc(paste0("Unable to read from filepath '",filepath,"'"))
 
-  connection_import_lo_from_file(conn@ptr, filepath, oid)
+
+  out_oid = connection_import_lo_from_file(conn@ptr, filepath, oid)
+  if (out_oid == 0) stopc("Import failed. Maybe you tried to write to an existing oid?")
+  return(out_oid)
+
 }

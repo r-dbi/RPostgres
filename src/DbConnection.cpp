@@ -129,18 +129,7 @@ bool DbConnection::has_query() {
 }
 
 int DbConnection::import_lo_from_file(std::string filename, int p_oid) {
-  
-  FILE* fd = fopen(filename.c_str(), "r");
-  if (fd == NULL) {
-    cpp11::warning("Unable to open file from path '%s'", filename.c_str());
-    return(0);
-  }
-  fclose(fd);
-
   Oid lo_oid = lo_import_with_oid(pConn_, filename.c_str(), p_oid);
-  if (lo_oid == InvalidOid) {
-    return 0;
-  }
   return(lo_oid);
 }
 
