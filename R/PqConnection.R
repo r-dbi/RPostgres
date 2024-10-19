@@ -148,12 +148,13 @@ postgresIsTransacting <- function(conn) {
 #' @param oid the oid to write to. Defaults to 0 which assigns an unused oid
 #' @return the identifier of the large object, an integer
 #' @examples
+#' \dontrun{
 #' con       <- postgresDefault()
-#' filepath <- 'some_file.txt'
-#' file.create(filepath)
+#' filepath <- 'your_image.png'
 #' dbWithTransaction(con, { 
 #'  oid <- postgresImportLargeObject(con, filepath)
 #' })
+#' }
 postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
   if (!postgresIsTransacting(conn)) {

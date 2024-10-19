@@ -21,10 +21,11 @@ the identifier of the large object, an integer
 Returns an object idenfier (Oid) for the imported large object
 }
 \examples{
+\dontrun{
 con       <- postgresDefault()
-filepath <- 'some_file.txt'
-file.create(filepath)
+filepath <- 'your_image.png'
 dbWithTransaction(con, { 
  oid <- postgresImportLargeObject(con, filepath)
 })
+}
 }
