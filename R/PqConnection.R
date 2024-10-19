@@ -162,7 +162,8 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
   if (is.null(filepath)) stopc("'filepath' cannot be NULL")
   if (oid <  0)     stopc("'oid' cannot be negative")
-  if (is.null(oid) | is.na(oid)) stopc("'oid' cannot be NULL/NA")
+  if (is.null(oid)) stopc("'oid' cannot be NULL")
+  if (is.na(oid)) stopc("'oid' cannot be NA")
   if (file.access(filepath,4) == -1) stopc(paste0("Unable to read from filepath '",filepath,"'"))
 
 
