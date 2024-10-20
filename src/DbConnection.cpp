@@ -128,8 +128,9 @@ bool DbConnection::has_query() {
   return pCurrentResult_ != NULL;
 }
 
-int DbConnection::import_lo_from_file(std::string filename, int p_oid) {
+Oid DbConnection::import_lo_from_file(std::string filename, Oid p_oid) {
   Oid lo_oid = lo_import_with_oid(pConn_, filename.c_str(), p_oid);
+  if (lo_oid == InvalidOid) cpp11::stop(PQerrorMessage(pConn_));
   return(lo_oid);
 }
 

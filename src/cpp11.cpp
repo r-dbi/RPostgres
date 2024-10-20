@@ -71,10 +71,10 @@ extern "C" SEXP _RPostgres_connection_set_transacting(SEXP con, SEXP transacting
   END_CPP11
 }
 // connection.cpp
-int connection_import_lo_from_file(DbConnection* con, std::string filename, int oid);
+Oid connection_import_lo_from_file(DbConnection* con, std::string filename, Oid oid);
 extern "C" SEXP _RPostgres_connection_import_lo_from_file(SEXP con, SEXP filename, SEXP oid) {
   BEGIN_CPP11
-    return cpp11::as_sexp(connection_import_lo_from_file(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<std::string>>(filename), cpp11::as_cpp<cpp11::decay_t<int>>(oid)));
+    return cpp11::as_sexp(connection_import_lo_from_file(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<std::string>>(filename), cpp11::as_cpp<cpp11::decay_t<Oid>>(oid)));
   END_CPP11
 }
 // connection.cpp

@@ -36,7 +36,7 @@ public:
 
   void copy_data(std::string sql, cpp11::list df);
   
-  int  import_lo_from_file(std::string file_path, int p_oid);
+  Oid import_lo_from_file(std::string file_path, Oid p_oid);
   
 
   void check_connection();
