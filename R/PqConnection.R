@@ -149,10 +149,10 @@ postgresIsTransacting <- function(conn) {
 #' @return the identifier of the large object, an integer
 #' @examples
 #' \dontrun{
-#' con       <- postgresDefault()
+#' con <- postgresDefault()
 #' filepath <- 'your_image.png'
 #' dbWithTransaction(con, { 
-#'  oid <- postgresImportLargeObject(con, filepath)
+#'   oid <- postgresImportLargeObject(con, filepath)
 #' })
 #' }
 postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
@@ -164,7 +164,7 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
   if (is.null(filepath)) stopc("'filepath' cannot be NULL")
   if (is.null(oid)) stopc("'oid' cannot be NULL")
   if (is.na(oid)) stopc("'oid' cannot be NA")
-  if (oid <  0) stopc("'oid' cannot be negative")
+  if (oid < 0) stopc("'oid' cannot be negative")
 
   connection_import_lo_from_file(conn@ptr, filepath, oid)
 }
