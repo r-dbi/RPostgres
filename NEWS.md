@@ -1,5 +1,20 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9012 (2024-10-28)
+
+## Continuous integration
+
+  - Import from actions-sync, check carefully (#474).
+
+  - Use pkgdown branch (#473).
+    
+      - ci: Use pkgdown branch
+    
+      - ci: Updates from duckdb
+    
+      - ci: Trigger run
+
+
 # RPostgres 1.4.7.9011 (2024-09-15)
 
 ## Continuous integration
