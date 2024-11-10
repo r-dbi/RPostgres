@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9013 (2024-11-10)
+
+## Continuous integration
+
+  - Latest changes (#475).
+
+
 # RPostgres 1.4.7.9012 (2024-10-28)
 
 ## Continuous integration
