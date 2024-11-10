@@ -1,5 +1,6 @@
 #include <cpp11.hpp>
 #include <libpq-fe.h>
+#include <libpq/libpq-fs.h>
 
 #include <plogr.h>
 
