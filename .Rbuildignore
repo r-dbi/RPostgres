@@ -27,7 +27,6 @@
 ^CMakeLists\.txt$
 ^vscode-install\.r$
 ^vscode-.*build$
-^\.aviator/config\.yml$
 ^windows$
 ^Dockerfile$
 ^docker-compose\.yml$
