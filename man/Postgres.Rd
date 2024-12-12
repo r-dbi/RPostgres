@@ -22,6 +22,7 @@ Postgres()
   ...,
   bigint = c("integer64", "integer", "numeric", "character"),
   check_interrupts = FALSE,
+  system_catalogs = TRUE,
   timezone = "UTC",
   timezone_out = NULL
 )
@@ -65,6 +66,12 @@ integers.}
 \item{check_interrupts}{Should user interrupts be checked during the query execution (before
 first row of data is available)? Setting to \code{TRUE} allows interruption of queries
 running too long.}
+
+\item{system_catalogs}{Should \verb{dbList*()} functions query the \href{https://www.postgresql.org/docs/current/catalogs.html}{\verb{system catalogs}} (\code{TRUE})
+or the
+\href{https://www.postgresql.org/docs/current/information-schema.html}{\code{information_schema}}?
+The \code{information_schema} does not contain PostgreSQL-specific information,
+in particular \href{https://www.postgresql.org/docs/current/sql-creatematerializedview.html}{Materialized Views}.}
 
 \item{timezone}{Sets the timezone for the connection. The default is \code{"UTC"}.
 If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
