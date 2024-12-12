@@ -41,6 +41,7 @@ reference:
   - '`RPostgres-package`'
   - postgresHasDefault
   - postgresWaitForNotify
+  - postgresImportLargeObject
 
 development:
   mode: auto
