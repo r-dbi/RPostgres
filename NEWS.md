@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9016 (2024-12-12)
+
+## Continuous integration
+
+- Avoid failure in fledge workflow if no changes (#479).
+
+- Remove Aviator.
+
+
 # RPostgres 1.4.7.9015 (2024-12-08)
 
 ## Continuous integration
