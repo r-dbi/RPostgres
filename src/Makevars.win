@@ -1,14 +1,24 @@
+PKG_CONFIG_NAME = libpq
+PKG_CONFIG ?= $(BINPREF)pkg-config
+PKG_LIBS := $(shell $(PKG_CONFIG) --libs $(PKG_CONFIG_NAME))
+EXTRA_CFLAGS = -DRCPP_DEFAULT_INCLUDE_CALL=false -DRCPP_USING_UTF8_ERROR_STRING -DBOOST_NO_AUTO_PTR
+
+ifneq ($(findstring ldap32,$(PKG_LIBS)),)
+$(info using $(PKG_CONFIG_NAME) from Rtools)
+PKG_CPPFLAGS := $(shell $(PKG_CONFIG) --cflags $(PKG_CONFIG_NAME)) $(EXTRA_CFLAGS)
+else
 RWINLIB = ../windows/libpq
-PKG_CPPFLAGS = -I$(RWINLIB)/include -Ivendor -DRCPP_DEFAULT_INCLUDE_CALL=false -DRCPP_USING_UTF8_ERROR_STRING -DBOOST_NO_AUTO_PTR
+PKG_CPPFLAGS = -I$(RWINLIB)/include -Ivendor $(EXTRA_CFLAGS)
 PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) -L$(RWINLIB)/lib \
 	-lpq -lpgport -lpgcommon -lssl -lcrypto -lwsock32 -lsecur32 -lws2_32 -lgdi32 -lcrypt32 -lwldap32
+endif
 
-$(SHLIB):
+all: $(SHLIB)
 
-$(OBJECTS): winlibs
+$(OBJECTS): $(RWINLIB)
+
+$(RWINLIB):
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
 
 clean:
 	rm -f $(SHLIB) $(OBJECTS)
-
-winlibs:
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
