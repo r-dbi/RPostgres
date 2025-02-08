@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9017 (2025-02-08)
+
+## Windows
+
+- Use libpq from Rtools if available (#486).
+
+
 # RPostgres 1.4.7.9016 (2024-12-12)
 
 ## Continuous integration
