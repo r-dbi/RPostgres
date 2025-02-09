@@ -91,6 +91,10 @@ void connection_set_transacting(DbConnection* con, bool transacting) {
 }
 
 // Specific functions
+[[cpp11::register]]
+Oid connection_import_lo_from_file(DbConnection* con, std::string filename, Oid oid) {
+  return con->import_lo_from_file(filename, oid);
+}
 
 [[cpp11::register]]
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df) {

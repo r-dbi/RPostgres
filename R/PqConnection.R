@@ -135,3 +135,36 @@ postgresWaitForNotify <- function(conn, timeout = 1) {
 postgresIsTransacting <- function(conn) {
   connection_is_transacting(conn@ptr)
 }
+
+
+#' Imports a large object from file
+#'
+#' Returns an object idenfier (Oid) for the imported large object
+#'
+#' @export
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
+#' @param filepath a path to the large object to import
+#' @param oid the oid to write to. Defaults to 0 which assigns an unused oid
+#' @return the identifier of the large object, an integer
+#' @examples
+#' \dontrun{
+#' con <- postgresDefault()
+#' filepath <- 'your_image.png'
+#' dbWithTransaction(con, { 
+#'   oid <- postgresImportLargeObject(con, filepath)
+#' })
+#' }
+postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
+
+  if (!postgresIsTransacting(conn)) {
+    stopc("Cannot import a large object outside of a transaction")
+  }
+
+  if (is.null(filepath)) stopc("'filepath' cannot be NULL")
+  if (is.null(oid)) stopc("'oid' cannot be NULL")
+  if (is.na(oid)) stopc("'oid' cannot be NA")
+  if (oid < 0) stopc("'oid' cannot be negative")
+
+  connection_import_lo_from_file(conn@ptr, filepath, oid)
+}
