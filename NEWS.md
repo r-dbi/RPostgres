@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9018 (2025-02-09)
+
+## Continuous integration
+
+- Test on older Windows versions.
+
+
 # RPostgres 1.4.7.9017 (2025-02-08)
 
 ## Windows
