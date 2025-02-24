@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9020 (2025-02-24)
+
+## Features
+
+- Importing large objects from client side (@toppyy, #376, #472).
+
+## Chore
+
+- IDE.
+
+
 # RPostgres 1.4.7.9019 (2025-02-20)
 
 ## Windows
