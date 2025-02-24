@@ -71,6 +71,13 @@ extern "C" SEXP _RPostgres_connection_set_transacting(SEXP con, SEXP transacting
   END_CPP11
 }
 // connection.cpp
+Oid connection_import_lo_from_file(DbConnection* con, std::string filename, Oid oid);
+extern "C" SEXP _RPostgres_connection_import_lo_from_file(SEXP con, SEXP filename, SEXP oid) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(connection_import_lo_from_file(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<std::string>>(filename), cpp11::as_cpp<cpp11::decay_t<Oid>>(oid)));
+  END_CPP11
+}
+// connection.cpp
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df);
 extern "C" SEXP _RPostgres_connection_copy_data(SEXP con, SEXP sql, SEXP df) {
   BEGIN_CPP11
@@ -197,32 +204,33 @@ extern "C" SEXP _RPostgres_result_column_info(SEXP res) {
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_RPostgres_client_version",              (DL_FUNC) &_RPostgres_client_version,              0},
-    {"_RPostgres_connection_copy_data",        (DL_FUNC) &_RPostgres_connection_copy_data,        3},
-    {"_RPostgres_connection_create",           (DL_FUNC) &_RPostgres_connection_create,           3},
-    {"_RPostgres_connection_get_temp_schema",  (DL_FUNC) &_RPostgres_connection_get_temp_schema,  1},
-    {"_RPostgres_connection_info",             (DL_FUNC) &_RPostgres_connection_info,             1},
-    {"_RPostgres_connection_is_transacting",   (DL_FUNC) &_RPostgres_connection_is_transacting,   1},
-    {"_RPostgres_connection_quote_identifier", (DL_FUNC) &_RPostgres_connection_quote_identifier, 2},
-    {"_RPostgres_connection_quote_string",     (DL_FUNC) &_RPostgres_connection_quote_string,     2},
-    {"_RPostgres_connection_release",          (DL_FUNC) &_RPostgres_connection_release,          1},
-    {"_RPostgres_connection_set_temp_schema",  (DL_FUNC) &_RPostgres_connection_set_temp_schema,  2},
-    {"_RPostgres_connection_set_transacting",  (DL_FUNC) &_RPostgres_connection_set_transacting,  2},
-    {"_RPostgres_connection_valid",            (DL_FUNC) &_RPostgres_connection_valid,            1},
-    {"_RPostgres_connection_wait_for_notify",  (DL_FUNC) &_RPostgres_connection_wait_for_notify,  2},
-    {"_RPostgres_encode_data_frame",           (DL_FUNC) &_RPostgres_encode_data_frame,           1},
-    {"_RPostgres_encode_vector",               (DL_FUNC) &_RPostgres_encode_vector,               1},
-    {"_RPostgres_encrypt_password",            (DL_FUNC) &_RPostgres_encrypt_password,            2},
-    {"_RPostgres_init_logging",                (DL_FUNC) &_RPostgres_init_logging,                1},
-    {"_RPostgres_result_bind",                 (DL_FUNC) &_RPostgres_result_bind,                 2},
-    {"_RPostgres_result_column_info",          (DL_FUNC) &_RPostgres_result_column_info,          1},
-    {"_RPostgres_result_create",               (DL_FUNC) &_RPostgres_result_create,               3},
-    {"_RPostgres_result_fetch",                (DL_FUNC) &_RPostgres_result_fetch,                2},
-    {"_RPostgres_result_has_completed",        (DL_FUNC) &_RPostgres_result_has_completed,        1},
-    {"_RPostgres_result_release",              (DL_FUNC) &_RPostgres_result_release,              1},
-    {"_RPostgres_result_rows_affected",        (DL_FUNC) &_RPostgres_result_rows_affected,        1},
-    {"_RPostgres_result_rows_fetched",         (DL_FUNC) &_RPostgres_result_rows_fetched,         1},
-    {"_RPostgres_result_valid",                (DL_FUNC) &_RPostgres_result_valid,                1},
+    {"_RPostgres_client_version",                 (DL_FUNC) &_RPostgres_client_version,                 0},
+    {"_RPostgres_connection_copy_data",           (DL_FUNC) &_RPostgres_connection_copy_data,           3},
+    {"_RPostgres_connection_create",              (DL_FUNC) &_RPostgres_connection_create,              3},
+    {"_RPostgres_connection_get_temp_schema",     (DL_FUNC) &_RPostgres_connection_get_temp_schema,     1},
+    {"_RPostgres_connection_import_lo_from_file", (DL_FUNC) &_RPostgres_connection_import_lo_from_file, 3},
+    {"_RPostgres_connection_info",                (DL_FUNC) &_RPostgres_connection_info,                1},
+    {"_RPostgres_connection_is_transacting",      (DL_FUNC) &_RPostgres_connection_is_transacting,      1},
+    {"_RPostgres_connection_quote_identifier",    (DL_FUNC) &_RPostgres_connection_quote_identifier,    2},
+    {"_RPostgres_connection_quote_string",        (DL_FUNC) &_RPostgres_connection_quote_string,        2},
+    {"_RPostgres_connection_release",             (DL_FUNC) &_RPostgres_connection_release,             1},
+    {"_RPostgres_connection_set_temp_schema",     (DL_FUNC) &_RPostgres_connection_set_temp_schema,     2},
+    {"_RPostgres_connection_set_transacting",     (DL_FUNC) &_RPostgres_connection_set_transacting,     2},
+    {"_RPostgres_connection_valid",               (DL_FUNC) &_RPostgres_connection_valid,               1},
+    {"_RPostgres_connection_wait_for_notify",     (DL_FUNC) &_RPostgres_connection_wait_for_notify,     2},
+    {"_RPostgres_encode_data_frame",              (DL_FUNC) &_RPostgres_encode_data_frame,              1},
+    {"_RPostgres_encode_vector",                  (DL_FUNC) &_RPostgres_encode_vector,                  1},
+    {"_RPostgres_encrypt_password",               (DL_FUNC) &_RPostgres_encrypt_password,               2},
+    {"_RPostgres_init_logging",                   (DL_FUNC) &_RPostgres_init_logging,                   1},
+    {"_RPostgres_result_bind",                    (DL_FUNC) &_RPostgres_result_bind,                    2},
+    {"_RPostgres_result_column_info",             (DL_FUNC) &_RPostgres_result_column_info,             1},
+    {"_RPostgres_result_create",                  (DL_FUNC) &_RPostgres_result_create,                  3},
+    {"_RPostgres_result_fetch",                   (DL_FUNC) &_RPostgres_result_fetch,                   2},
+    {"_RPostgres_result_has_completed",           (DL_FUNC) &_RPostgres_result_has_completed,           1},
+    {"_RPostgres_result_release",                 (DL_FUNC) &_RPostgres_result_release,                 1},
+    {"_RPostgres_result_rows_affected",           (DL_FUNC) &_RPostgres_result_rows_affected,           1},
+    {"_RPostgres_result_rows_fetched",            (DL_FUNC) &_RPostgres_result_rows_fetched,            1},
+    {"_RPostgres_result_valid",                   (DL_FUNC) &_RPostgres_result_valid,                   1},
     {NULL, NULL, 0}
 };
 }
