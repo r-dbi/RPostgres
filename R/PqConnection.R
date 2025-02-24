@@ -151,7 +151,7 @@ postgresIsTransacting <- function(conn) {
 #' \dontrun{
 #' con <- postgresDefault()
 #' filepath <- 'your_image.png'
-#' dbWithTransaction(con, { 
+#' dbWithTransaction(con, {
 #'   oid <- postgresImportLargeObject(con, filepath)
 #' })
 #' }
