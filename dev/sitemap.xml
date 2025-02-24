@@ -21,6 +21,7 @@
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgres-tables.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgres-transactions.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresHasDefault.html</loc></url>
+<url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresImportLargeObject.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresIsTransacting.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresWaitForNotify.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/quote.html</loc></url>

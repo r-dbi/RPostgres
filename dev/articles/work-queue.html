@@ -280,7 +280,7 @@ for us:</p>
 <span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM sqroot_vignette_example ORDER BY in_val"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   in_val  out_val</span></span>
-<span><span class="co">#&gt; 1      7       NA</span></span>
+<span><span class="co">#&gt; 1      7 2.645751</span></span>
 <span><span class="co">#&gt; 2      8 2.828427</span></span>
 <span><span class="co">#&gt; 3      9 3.000000</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html" class="external-link">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span> ; <span class="va">rs</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
@@ -298,11 +298,11 @@ for us:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Not sqroot-ing as another worker got there first</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sqroot-ing 7 ... </span></span>
 <span><span class="co">#&gt; Sqroot-ing 8 ... </span></span>
 <span><span class="co">#&gt; Sqroot-ing 9 ... </span></span>
-<span><span class="co">#&gt; Shutting down.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">outputs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sqroot-ing 7 ...</span></span></code></pre></div>
+<span><span class="co">#&gt; Shutting down.</span></span></code></pre></div>
 <p>Notice that the work has been shared between the 2 workers. If these
 2 weren’t enough, we could happily add more to keep the system
 going.</p>
