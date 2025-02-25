@@ -122,12 +122,21 @@ db_append_table <- function(conn, name, value, copy, warn) {
 
 list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by = NULL) {
 
-  query <- paste0(
-    # information_schema.table docs: https://www.postgresql.org/docs/current/infoschema-tables.html
-    "SELECT table_schema, table_name \n",
-    "FROM information_schema.tables \n",
-    "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
-  )
+  if (conn@system_catalogs) {
+    query <- paste0(
+      "SELECT table_schema, table_name \n",
+      "FROM ( ", list_tables_from_system_catalog(), ") AS schema_tables \n",
+      "WHERE TRUE \n"
+    )
+  } else {
+    query <- paste0(
+      # information_schema.table docs:
+      # https://www.postgresql.org/docs/current/infoschema-tables.html
+      "SELECT table_schema, table_name \n",
+      "FROM information_schema.tables \n",
+      "WHERE TRUE \n" # dummy clause to be able to add additional ones with `AND`
+    )
+  }
 
   if (is.null(where_schema)) {
     # `true` in `current_schemas(true)` is necessary to get temporary tables
@@ -145,6 +154,38 @@ list_tables <- function(conn, where_schema = NULL, where_table = NULL, order_by 
   if (!is.null(order_by)) query <- paste0(query, "ORDER BY ", order_by)
 
   query
+}
+
+list_tables_from_system_catalog <- function() {
+  # This imitates (parts of) information_schema.tables, but includes materialized views
+  paste0(
+    # pg_class vs. information_schema: https://stackoverflow.com/a/24089729
+    # pg_class docs: https://www.postgresql.org/docs/current/catalog-pg-class.html
+    "SELECT n.nspname AS table_schema, cl.relname AS table_name, \n",
+    "    CASE
+            WHEN (n.oid = pg_my_temp_schema()) THEN 'LOCAL TEMPORARY'
+            WHEN (cl.relkind IN ('r', 'p')) THEN 'BASE TABLE'
+            WHEN (cl.relkind = 'v') THEN 'VIEW'
+            WHEN (cl.relkind = 'f') THEN 'FOREIGN'
+            WHEN (cl.relkind = 'm') THEN 'MATVIEW'
+            ELSE NULL
+        END AS table_type \n",
+    "FROM pg_class AS cl \n",
+    "JOIN pg_namespace AS n ON cl.relnamespace = n.oid \n",
+    # include: r = ordinary table, v = view, m = materialized view,
+    #          f = foreign table, p = partitioned table
+    "WHERE (cl.relkind IN ('r', 'v', 'm', 'f', 'p')) \n",
+    # do not return individual table partitions
+    "  AND NOT cl.relispartition \n",
+    # do not return other people's temp schemas
+    "  AND (NOT pg_is_other_temp_schema(n.oid)) \n",
+    # Return only objects (relations) which the current user may access
+    # https://www.postgresql.org/docs/current/functions-info.html
+    "  AND (pg_has_role(cl.relowner, 'USAGE') \n",
+    "    OR has_table_privilege(cl.oid, 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER') \n",
+    "    OR has_any_column_privilege(cl.oid, 'SELECT, INSERT, UPDATE, REFERENCES') \n",
+    "  ) \n"
+  )
 }
 
 exists_table <- function(conn, id) {
@@ -168,6 +209,14 @@ exists_table <- function(conn, id) {
 }
 
 list_fields <- function(conn, id) {
+  if (conn@system_catalogs) {
+    list_fields_from_system_catalog(conn, id)
+  } else {
+    list_fields_from_info_schema(conn, id)
+  }
+}
+
+list_fields_from_info_schema <- function(conn, id) {
   name <- id@name
 
   is_redshift <- is(conn, "RedshiftConnection")
@@ -185,7 +234,7 @@ list_fields <- function(conn, id) {
     # as there cannot be multiple tables with the same name in a single schema
     only_first <- FALSE
 
-    # or we have to look the table up in the schemas on the search path
+  # or we have to look the table up in the schemas on the search path
   } else if (is_redshift) {
     # A variant of the Postgres version that uses CTEs and generate_series()
     # instead of generate_subscripts(), the latter is not supported on Redshift
@@ -211,10 +260,10 @@ list_fields <- function(conn, id) {
     # How to unnest `current_schemas(true)` array with element number (works since v9.4):
     # https://stackoverflow.com/a/8767450/2114932
     query <- paste0(
-      "(",
-      "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
-      "WHERE table_schema != 'pg_catalog'",
-      ") schemas_on_path"
+        "(",
+        "SELECT * FROM unnest(current_schemas(true)) WITH ORDINALITY AS tbl(table_schema, nr) \n",
+        "WHERE table_schema != 'pg_catalog'",
+        ") schemas_on_path"
     )
     only_first <- TRUE
   }
@@ -250,6 +299,29 @@ list_fields <- function(conn, id) {
   }
 
   fields
+}
+
+list_fields_from_system_catalog <- function(conn, id) {
+  if (exists_table(conn, id)) {
+    # we know from exists_table() that id@name["table"] exists
+    # and the user has access priviledges
+    tname_str <- stats::na.omit(id@name[c("schema", "table")])
+    tname_qstr <- dbQuoteString(conn, paste(tname_str, collapse = "."))
+    # cast to `regclass` resolves the table name according to the current
+    # `search_path` https://dba.stackexchange.com/a/75124
+    query <-
+      paste0(
+        "SELECT attname \n",
+        "FROM   pg_attribute \n",
+        "WHERE  attrelid = ", tname_qstr, "::regclass \n",
+        "  AND  attnum > 0 \n",
+        "  AND  NOT attisdropped \n",
+        "ORDER  BY attnum;"
+      )
+    dbGetQuery(conn, query)[[1]]
+  } else {
+    stop("Table ", dbQuoteIdentifier(conn, id), " not found.", call. = FALSE)
+  }
 }
 
 find_temp_schema <- function(conn, fail_if_missing = TRUE) {
