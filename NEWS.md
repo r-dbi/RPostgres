@@ -1,6 +1,6 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.7.9900 (2025-02-24)
+# RPostgres 1.4.8 (2025-02-25)
 
 ## Windows
 
