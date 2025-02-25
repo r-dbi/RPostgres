@@ -1,6 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.7.9020 (2025-02-24)
+# RPostgres 1.4.7.9900 (2025-02-24)
+
+## Windows
+
+- Update libpq fallback library (#489).
+
+- Use libpq from Rtools if available (#486).
 
 ## Features
 
@@ -10,169 +16,63 @@
 
 - IDE.
 
+- Auto-update from GitHub Actions.
 
-# RPostgres 1.4.7.9019 (2025-02-20)
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/10425486593
 
-## Windows
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/10224248168
 
-- Update libpq fallback library (#489).
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/10200112323
 
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/9728443553
 
-# RPostgres 1.4.7.9018 (2025-02-09)
+  Run: https://github.com/r-dbi/RPostgres/actions/runs/9692464325
 
 ## Continuous integration
 
 - Test on older Windows versions.
 
-
-# RPostgres 1.4.7.9017 (2025-02-08)
-
-## Windows
-
-- Use libpq from Rtools if available (#486).
-
-
-# RPostgres 1.4.7.9016 (2024-12-12)
-
-## Continuous integration
-
 - Avoid failure in fledge workflow if no changes (#479).
 
 - Remove Aviator.
 
-
-# RPostgres 1.4.7.9015 (2024-12-08)
-
-## Continuous integration
-
 - Fetch tags for fledge workflow to avoid unnecessary NEWS entries (#478).
-
-
-# RPostgres 1.4.7.9014 (2024-12-07)
-
-## Continuous integration
 
 - Use stable pak (#477).
 
+- Latest changes (#475).
 
-# RPostgres 1.4.7.9013 (2024-11-10)
+- Import from actions-sync, check carefully (#474).
 
-## Continuous integration
+- Use pkgdown branch (#473).
 
-  - Latest changes (#475).
+  - ci: Use pkgdown branch
 
+  - ci: Updates from duckdb
 
-# RPostgres 1.4.7.9012 (2024-10-28)
+  - ci: Trigger run
 
-## Continuous integration
+- Install via R CMD INSTALL ., not pak (#471).
 
-  - Import from actions-sync, check carefully (#474).
+  - ci: Install via R CMD INSTALL ., not pak
 
-  - Use pkgdown branch (#473).
-    
-      - ci: Use pkgdown branch
-    
-      - ci: Updates from duckdb
-    
-      - ci: Trigger run
+  - ci: Bump version of upload-artifact action
 
+- Install local package for pkgdown builds.
 
-# RPostgres 1.4.7.9011 (2024-09-15)
+- Improve support for protected branches with fledge.
 
-## Continuous integration
-
-  - Install via R CMD INSTALL ., not pak (#471).
-    
-      - ci: Install via R CMD INSTALL ., not pak
-    
-      - ci: Bump version of upload-artifact action
-
-
-# RPostgres 1.4.7.9010 (2024-08-31)
-
-## Continuous integration
-
-  - Install local package for pkgdown builds.
-
-  - Improve support for protected branches with fledge.
-
-  - Improve support for protected branches, without fledge.
-
-
-# RPostgres 1.4.7.9009 (2024-08-17)
-
-## Chore
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10425486593
-
-## Continuous integration
+- Improve support for protected branches, without fledge.
 
 - Sync with latest developments.
 
-
-# RPostgres 1.4.7.9008 (2024-08-10)
-
-## Continuous integration
-
 - Use v2 instead of master.
-
-
-# RPostgres 1.4.7.9007 (2024-08-06)
-
-## Continuous integration
 
 - Inline action.
 
-
-# RPostgres 1.4.7.9006 (2024-08-03)
-
-## Chore
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10224248168
-
-
-# RPostgres 1.4.7.9005 (2024-08-02)
-
-## Chore
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10200112323
-
-## Continuous integration
-
 - Use dev roxygen2 and decor.
 
-
-# RPostgres 1.4.7.9004 (2024-07-02)
-
-## Continuous integration
-
 - Fix on Windows, tweak lock workflow.
-
-
-# RPostgres 1.4.7.9003 (2024-07-01)
-
-## Chore
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/9728443553
-
-
-# RPostgres 1.4.7.9002 (2024-06-28)
-
-## Chore
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/9692464325
-
-## Continuous integration
 
 - Avoid checking bashisms on Windows.
 
@@ -184,13 +84,7 @@
 
 - Recent updates.
 
-
-# RPostgres 1.4.7.9001 (2024-06-03)
-
-- Merge branch 'cran-1.4.7'.
-
-
-# RPostgres 1.4.7.9000 (2024-05-26)
+## Uncategorized
 
 - Merge branch 'cran-1.4.7'.
 

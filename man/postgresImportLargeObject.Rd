@@ -22,10 +22,10 @@ Returns an object idenfier (Oid) for the imported large object
 }
 \examples{
 \dontrun{
-con       <- postgresDefault()
+con <- postgresDefault()
 filepath <- 'your_image.png'
-dbWithTransaction(con, { 
- oid <- postgresImportLargeObject(con, filepath)
+dbWithTransaction(con, {
+  oid <- postgresImportLargeObject(con, filepath)
 })
 }
 }
