@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Imports a large object from file</h1>
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/cran-1.4.7.9900/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/main/R/PqConnection.R" class="external-link"><code>R/PqConnection.R</code></a></small>
       <div class="d-none name"><code>postgresImportLargeObject.Rd</code></div>
     </div>
 
@@ -71,10 +71,10 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">con</span>       <span class="op">&lt;-</span> <span class="fu"><a href="postgresHasDefault.html">postgresDefault</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="postgresHasDefault.html">postgresDefault</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="st">'your_image.png'</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWithTransaction.html" class="external-link">dbWithTransaction</a></span><span class="op">(</span><span class="va">con</span>, <span class="op">{</span> </span></span>
-<span class="r-in"><span> <span class="va">oid</span> <span class="op">&lt;-</span> <span class="fu">postgresImportLargeObject</span><span class="op">(</span><span class="va">con</span>, <span class="va">filepath</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWithTransaction.html" class="external-link">dbWithTransaction</a></span><span class="op">(</span><span class="va">con</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">oid</span> <span class="op">&lt;-</span> <span class="fu">postgresImportLargeObject</span><span class="op">(</span><span class="va">con</span>, <span class="va">filepath</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
