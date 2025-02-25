@@ -4,89 +4,11 @@
 
 ## Windows
 
-- Update libpq fallback library (#489).
-
-- Use libpq from Rtools if available (#486).
+- Use libpq from Rtools if available (#486), update libpq fallback library (#489).
 
 ## Features
 
-- Importing large objects from client side (@toppyy, #376, #472).
-
-## Chore
-
-- IDE.
-
-- Auto-update from GitHub Actions.
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10425486593
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10224248168
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/10200112323
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/9728443553
-
-  Run: https://github.com/r-dbi/RPostgres/actions/runs/9692464325
-
-## Continuous integration
-
-- Test on older Windows versions.
-
-- Avoid failure in fledge workflow if no changes (#479).
-
-- Remove Aviator.
-
-- Fetch tags for fledge workflow to avoid unnecessary NEWS entries (#478).
-
-- Use stable pak (#477).
-
-- Latest changes (#475).
-
-- Import from actions-sync, check carefully (#474).
-
-- Use pkgdown branch (#473).
-
-  - ci: Use pkgdown branch
-
-  - ci: Updates from duckdb
-
-  - ci: Trigger run
-
-- Install via R CMD INSTALL ., not pak (#471).
-
-  - ci: Install via R CMD INSTALL ., not pak
-
-  - ci: Bump version of upload-artifact action
-
-- Install local package for pkgdown builds.
-
-- Improve support for protected branches with fledge.
-
-- Improve support for protected branches, without fledge.
-
-- Sync with latest developments.
-
-- Use v2 instead of master.
-
-- Inline action.
-
-- Use dev roxygen2 and decor.
-
-- Fix on Windows, tweak lock workflow.
-
-- Avoid checking bashisms on Windows.
-
-- Allow NOTEs on R-devel.
-
-- Better commit message.
-
-- Bump versions, better default, consume custom matrix.
-
-- Recent updates.
-
-## Uncategorized
-
-- Merge branch 'cran-1.4.7'.
+- New `postgresImportLargeObject()` for importing large objects from client side (@toppyy, #376, #472).
 
 
 # RPostgres 1.4.7 (2024-05-26)
