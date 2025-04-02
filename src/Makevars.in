@@ -4,3 +4,8 @@ PKG_CFLAGS=$(C_VISIBILITY)
 PKG_CXXFLAGS=$(CXX_VISIBILITY)
 
 PKG_LIBS=@libs@
+
+all: cleanup
+
+cleanup: $(SHLIB)
+	@rm -Rf ../.deps
