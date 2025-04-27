@@ -3,7 +3,7 @@ pkgdown: 2.1.1.9000
 pkgdown_sha: 2f04495db2502e7a621ffcb38d823c30a952b84a
 articles:
   work-queue: work-queue.html
-last_built: 2025-04-27T11:10Z
+last_built: 2025-04-27T15:55Z
 urls:
   reference: https://rpostgres.r-dbi.org/reference
   article: https://rpostgres.r-dbi.org/articles
