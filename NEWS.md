@@ -1,5 +1,24 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9901 (2025-04-30)
+
+## Continuous integration
+
+- Permissions, better tests for missing suggests, lints (#504).
+
+- Only fail covr builds if token is given (#501).
+
+- Always use `_R_CHECK_FORCE_SUGGESTS_=false` (#500).
+
+- Correct installation of xml2 (#497).
+
+- Explain (#495).
+
+- Add xml2 for covr, print testthat results (#494).
+
+- Sync (#493).
+
+
 # RPostgres 1.4.7.9900 (2025-02-24)
 
 ## Windows
