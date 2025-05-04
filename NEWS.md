@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9902 (2025-05-04)
+
+## Continuous integration
+
+- Enhance permissions for workflow (#506).
+
+
 # RPostgres 1.4.7.9901 (2025-04-30)
 
 ## Continuous integration
