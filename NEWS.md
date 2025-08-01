@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9903 (2025-08-01)
+
+## Continuous integration
+
+- Format with air, check detritus, better handling of `extra-packages` (#510).
+
+
 # RPostgres 1.4.7.9902 (2025-05-04)
 
 ## Continuous integration
