@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9904 (2025-08-05)
+
+## Continuous integration
+
+- Cleanup and fix macOS (#512).
+
+
 # RPostgres 1.4.7.9903 (2025-08-01)
 
 ## Continuous integration
