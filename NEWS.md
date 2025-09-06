@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.7.9906 (2025-09-06)
+
+## Continuous integration
+
+- Use reviewdog for external PRs (#517).
+
+
 # RPostgres 1.4.7.9905 (2025-09-05)
 
 ## Chore
