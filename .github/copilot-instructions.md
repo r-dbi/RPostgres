@@ -27,6 +27,8 @@ curl -Ls https://github.com/r-lib/rig/releases/download/latest/\
 rig-linux-latest.tar.gz | sudo tar xz -C /usr/local
 # Install latest R version
 sudo rig add release
+# Ensure R and tools are in PATH
+sudo rig system make-links
 ```
 
 Set up PostgreSQL for testing:
@@ -44,8 +46,7 @@ sudo -u postgres createdb testdb
 Install essential R packages using pak:
 
 ```bash
-R -e "install.packages('pak', repos = 'https://r-lib.github.io/p/pak/stable/')"
-R -e "pak::pak(c('DBI', 'testthat', 'devtools'))"
+R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown"))'
 ```
 
 ### Environment Variables for Testing
@@ -72,8 +73,17 @@ R CMD build .
 Install the built package:
 
 ```bash
-sudo R CMD INSTALL RPostgres_*.tar.gz
-# Takes ~25 seconds with C++ compilation. NEVER CANCEL. Set timeout to 60+ seconds.
+UserNM=true R CMD INSTALL .
+# Takes ~30 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
+```
+
+Run lightweight tests (for quick iteration):
+
+```bash
+# Must set PostgreSQL environment variables first!
+export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb
+R -q -e 'testthat::test_local()'
+# Takes ~30 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 ```
 
 Run comprehensive package check:
@@ -88,7 +98,7 @@ R CMD check RPostgres_*.tar.gz --no-manual
 Update documentation (requires devtools):
 
 ```bash
-R -e "library(devtools); document()"
+R -q -e 'devtools::document()'
 # Takes ~20 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 ```
 
@@ -111,9 +121,11 @@ dbDisconnect(con)
 ### Required Testing Before Committing
 
 1. ALWAYS build and install the package successfully
-2. ALWAYS run R CMD check with PostgreSQL environment variables set
-3. ALWAYS test basic database connectivity and operations
-4. Run `devtools::document()` if you modified any roxygen comments in R files
+2. ALWAYS run `testthat::test_local()` for quick iteration testing
+3. ALWAYS run R CMD check with PostgreSQL environment variables set for
+   comprehensive testing
+4. ALWAYS test basic database connectivity and operations
+5. Run `devtools::document()` if you modified any roxygen comments in R files
 
 ## Build System Details
 
