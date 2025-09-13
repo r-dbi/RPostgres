@@ -23,8 +23,7 @@ Install R using rig (R Installation and Management):
 
 ```bash
 # Install rig
-curl -Ls https://github.com/r-lib/rig/releases/download/latest/\
-rig-linux-latest.tar.gz | sudo tar xz -C /usr/local
+curl -Ls https://github.com/r-lib/rig/releases/download/latest/rig-linux-latest.tar.gz | sudo tar xz -C /usr/local
 # Install latest R version
 sudo rig add release
 # Ensure R and tools are in PATH
@@ -46,7 +45,7 @@ sudo -u postgres createdb testdb
 Install essential R packages using pak:
 
 ```bash
-R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown", "rcmdcheck"))'
+R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown"))'
 ```
 
 ### Environment Variables for Testing
@@ -55,22 +54,13 @@ Always set these PostgreSQL environment variables before running tests:
 
 ```bash
 export PGHOST=localhost
-export PGPORT=5432  
+export PGPORT=5432
 export PGUSER=runner
 export PGPASSWORD=test123
 export PGDATABASE=testdb
 ```
 
 ### Core Development Commands
-
-Build and check the package using rcmdcheck:
-
-```bash
-# Must set PostgreSQL environment variables first!
-export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb
-R -q -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
-# Takes ~100 seconds. NEVER CANCEL. Set timeout to 180+ seconds.
-```
 
 Install the package for development:
 
@@ -88,12 +78,12 @@ R -q -e 'testthat::test_local()'
 # Takes ~30 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 ```
 
-Run comprehensive package check:
+Build and check the package using rcmdcheck:
 
 ```bash
 # Must set PostgreSQL environment variables first!
-export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb
-R -q -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
+export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb _R_CHECK_PKG_SIZES_=FALSE
+R -q -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "note")'
 # Takes ~100 seconds. NEVER CANCEL. Set timeout to 180+ seconds.
 ```
 
@@ -183,7 +173,7 @@ RPostgres/
 ### Key Source Files
 
 - `R/PqConnection.R`: Main connection class
-- `R/PqResult.R`: Result set handling  
+- `R/PqResult.R`: Result set handling
 - `R/default.R`: Default connection helpers (`postgresDefault()`)
 - `src/connection.cpp`: C++ connection implementation
 - `src/result.cpp`: C++ result set implementation
@@ -220,7 +210,7 @@ docker-compose up -d postgres
 ### Common Build Issues
 
 - **"libpq-fe.h not found"**: Install `libpq-dev` package
-- **"pkg-config not found"**: Install `pkg-config` package  
+- **"pkg-config not found"**: Install `pkg-config` package
 - **PostgreSQL connection fails**: Check PostgreSQL service is running and
   environment variables are set
 - **Roxygen version mismatch**: Update roxygen2 or ignore warning for
@@ -236,7 +226,7 @@ docker-compose up -d postgres
 ### Performance Notes
 
 - C++ compilation is CPU-intensive, takes 20-25 seconds
-- Full rcmdcheck takes ~100 seconds due to comprehensive test suite  
+- Full rcmdcheck takes ~100 seconds due to comprehensive test suite
 - Documentation generation rebuilds package, takes ~20 seconds
 - pkgdown site building takes ~60 seconds
 - Network access may be limited in CI environments
