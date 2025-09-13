@@ -46,7 +46,7 @@ sudo -u postgres createdb testdb
 Install essential R packages using pak:
 
 ```bash
-R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown"))'
+R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown", "rcmdcheck"))'
 ```
 
 ### Environment Variables for Testing
@@ -63,14 +63,16 @@ export PGDATABASE=testdb
 
 ### Core Development Commands
 
-Build the package:
+Build and check the package using rcmdcheck:
 
 ```bash
-R CMD build .
-# Takes ~30 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
+# Must set PostgreSQL environment variables first!
+export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb
+R -q -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
+# Takes ~100 seconds. NEVER CANCEL. Set timeout to 180+ seconds.
 ```
 
-Install the built package:
+Install the package for development:
 
 ```bash
 UserNM=true R CMD INSTALL .
@@ -91,8 +93,15 @@ Run comprehensive package check:
 ```bash
 # Must set PostgreSQL environment variables first!
 export PGHOST=localhost PGPORT=5432 PGUSER=runner PGPASSWORD=test123 PGDATABASE=testdb
-R CMD check RPostgres_*.tar.gz --no-manual
+R -q -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
 # Takes ~100 seconds. NEVER CANCEL. Set timeout to 180+ seconds.
+```
+
+Test pkgdown documentation build:
+
+```bash
+R -q -e 'pkgdown::build_site(preview = FALSE)'
+# Takes ~60 seconds. NEVER CANCEL. Set timeout to 120+ seconds.
 ```
 
 Update documentation (requires devtools):
@@ -122,10 +131,11 @@ dbDisconnect(con)
 
 1. ALWAYS build and install the package successfully
 2. ALWAYS run `testthat::test_local()` for quick iteration testing
-3. ALWAYS run R CMD check with PostgreSQL environment variables set for
-   comprehensive testing
-4. ALWAYS test basic database connectivity and operations
-5. Run `devtools::document()` if you modified any roxygen comments in R files
+3. ALWAYS run `rcmdcheck::rcmdcheck()` with PostgreSQL environment variables
+   set for comprehensive testing
+4. ALWAYS test `pkgdown::build_site()` to ensure documentation builds correctly
+5. ALWAYS test basic database connectivity and operations
+6. Run `devtools::document()` if you modified any roxygen comments in R files
 
 ## Build System Details
 
@@ -226,8 +236,9 @@ docker-compose up -d postgres
 ### Performance Notes
 
 - C++ compilation is CPU-intensive, takes 20-25 seconds
-- Full R CMD check takes ~100 seconds due to comprehensive test suite  
+- Full rcmdcheck takes ~100 seconds due to comprehensive test suite  
 - Documentation generation rebuilds package, takes ~20 seconds
+- pkgdown site building takes ~60 seconds
 - Network access may be limited in CI environments
 
 ## Critical Reminders
@@ -235,8 +246,8 @@ docker-compose up -d postgres
 - **NEVER CANCEL builds or long-running commands** - C++ compilation may take
   25+ seconds, tests may take 100+ seconds
 - **ALWAYS set PostgreSQL environment variables** before running tests or
-  R CMD check
+  rcmdcheck
 - **ALWAYS test database connectivity** after making changes to C++ code
-- Set timeouts of 180+ seconds for R CMD check, 60+ seconds for builds and
-  documentation
+- Set timeouts of 180+ seconds for rcmdcheck, 120+ seconds for pkgdown builds,
+  60+ seconds for builds and documentation
 - Use `sudo` for package installation when needed for system library access
