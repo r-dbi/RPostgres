@@ -134,6 +134,12 @@ Oid DbConnection::import_lo_from_file(std::string filename, Oid p_oid) {
   return(lo_oid);
 }
 
+int DbConnection::export_lo_to_file(Oid p_oid, std::string filename) {
+  int result = lo_export(pConn_, p_oid, filename.c_str());
+  if (result != 1) cpp11::stop(PQerrorMessage(pConn_));
+  return(result);
+}
+
 void DbConnection::copy_data(std::string sql, cpp11::list df) {
   LOG_DEBUG << sql;
 

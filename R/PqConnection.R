@@ -168,3 +168,40 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
   connection_import_lo_from_file(conn@ptr, filepath, oid)
 }
+
+#' Exports a large object to file
+#'
+#' Exports a large object from the database to a file on disk
+#'
+#' @export
+#' @param conn a [PqConnection-class] object, produced by
+#'   [DBI::dbConnect()]
+#' @param oid the object identifier (Oid) of the large object to export
+#' @param filepath a path where the large object should be exported
+#' @return 1 on success (invisibly), or stops with an error
+#' @examples
+#' \dontrun{
+#' con <- postgresDefault()
+#' filepath <- 'your_image.png'
+#' dbWithTransaction(con, {
+#'   oid <- postgresImportLargeObject(con, filepath)
+#' })
+#' # Later, export the large object back to a file
+#' dbWithTransaction(con, {
+#'   postgresExportLargeObject(con, oid, 'exported_image.png')
+#' })
+#' }
+postgresExportLargeObject <- function(conn, oid, filepath = NULL) {
+
+  if (!postgresIsTransacting(conn)) {
+    stopc("Cannot export a large object outside of a transaction")
+  }
+
+  if (is.null(oid)) stopc("'oid' cannot be NULL")
+  if (is.na(oid)) stopc("'oid' cannot be NA")
+  if (oid < 0) stopc("'oid' cannot be negative")
+  if (is.null(filepath)) stopc("'filepath' cannot be NULL")
+
+  result <- connection_export_lo_to_file(conn@ptr, oid, filepath)
+  invisible(result)
+}
