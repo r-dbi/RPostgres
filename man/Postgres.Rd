@@ -86,7 +86,7 @@ if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.
 }
 \examples{
-\dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
 # Pass more arguments as necessary to dbConnect()
 con <- dbConnect(RPostgres::Postgres())

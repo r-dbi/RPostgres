@@ -15,6 +15,6 @@ A boolean, indicating if a transaction is ongoing.
 }
 \description{
 Detect whether the transaction is active for the given connection. A
-transaction might be started with \code{\link[DBI:transactions]{DBI::dbBegin()}} or wrapped within
+transaction might be started with \code{\link[=dbBegin]{dbBegin()}} or wrapped within
 \code{\link[DBI:dbWithTransaction]{DBI::dbWithTransaction()}}.
 }

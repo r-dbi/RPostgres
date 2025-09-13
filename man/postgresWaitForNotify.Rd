@@ -26,7 +26,7 @@ Once you subscribe to notifications with LISTEN, use this to wait for
 responses on each channel.
 }
 \examples{
-\dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
 library(callr)
 

@@ -51,7 +51,7 @@ default name.
 
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
-\item{conn}{A \linkS4class{PqConnection} created by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.}
+\item{conn}{A \linkS4class{PqConnection} created by \code{\link[=dbConnect]{dbConnect()}}.}
 
 \item{statement}{An SQL string to execute.}
 
@@ -68,7 +68,7 @@ fetches and clears for you.
 
 With \code{immediate = TRUE}, it is possible to pass multiple queries or statements,
 separated by semicolons.
-For multiple statements, the resulting value of \code{\link[DBI:dbGetRowsAffected]{DBI::dbGetRowsAffected()}}
+For multiple statements, the resulting value of \code{\link[=dbGetRowsAffected]{dbGetRowsAffected()}}
 corresponds to the total number of affected rows.
 If multiple queries are used, all queries must return data with the same
 column names and types.
@@ -76,7 +76,7 @@ Queries and statements can be mixed.
 }
 
 \examples{
-\dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
 db <- dbConnect(RPostgres::Postgres())
 dbWriteTable(db, "usarrests", datasets::USArrests, temporary = TRUE)

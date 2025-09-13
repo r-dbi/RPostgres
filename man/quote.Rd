@@ -50,7 +50,7 @@ If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs
 at most one \code{table} component and at most one \code{schema} component.
 }
 \examples{
-\dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
+\dontshow{if (postgresHasDefault()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(DBI)
 con <- dbConnect(RPostgres::Postgres())
 
