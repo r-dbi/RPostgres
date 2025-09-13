@@ -2,7 +2,11 @@
 #' @usage NULL
 dbColumnInfo_PqResult <- function(res, ...) {
   rci <- result_column_info(res@ptr)
-  rci <- cbind(rci, .typname = type_lookup(rci[[".oid"]], res@conn), stringsAsFactors = FALSE)
+  rci <- cbind(
+    rci,
+    .typname = type_lookup(rci[[".oid"]], res@conn),
+    stringsAsFactors = FALSE
+  )
   rci
 }
 

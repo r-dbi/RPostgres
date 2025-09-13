@@ -6,4 +6,8 @@ dbExistsTable_PqConnection_Id <- function(conn, name, ...) {
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbExistsTable", c("PqConnection", "Id"), dbExistsTable_PqConnection_Id)
+setMethod(
+  "dbExistsTable",
+  c("PqConnection", "Id"),
+  dbExistsTable_PqConnection_Id
+)

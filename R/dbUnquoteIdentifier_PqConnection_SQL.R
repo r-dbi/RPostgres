@@ -5,9 +5,14 @@ dbUnquoteIdentifier_PqConnection_SQL <- function(conn, x, ...) {
 
   rx <- paste0(
     "^",
-    "(?:|(?:|", id_rx, "[.])",
-    id_rx, "[.])",
-    "(?:|", id_rx, ")",
+    "(?:|(?:|",
+    id_rx,
+    "[.])",
+    id_rx,
+    "[.])",
+    "(?:|",
+    id_rx,
+    ")",
     "$"
   )
 
@@ -29,4 +34,8 @@ dbUnquoteIdentifier_PqConnection_SQL <- function(conn, x, ...) {
 
 #' @rdname quote
 #' @export
-setMethod("dbUnquoteIdentifier", c("PqConnection", "SQL"), dbUnquoteIdentifier_PqConnection_SQL)
+setMethod(
+  "dbUnquoteIdentifier",
+  c("PqConnection", "SQL"),
+  dbUnquoteIdentifier_PqConnection_SQL
+)

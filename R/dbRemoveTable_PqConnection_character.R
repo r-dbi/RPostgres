@@ -3,7 +3,13 @@
 #' @param fail_if_missing If `FALSE`, `dbRemoveTable()` succeeds if the
 #'   table doesn't exist.
 #' @usage NULL
-dbRemoveTable_PqConnection_character <- function(conn, name, ..., temporary = FALSE, fail_if_missing = TRUE) {
+dbRemoveTable_PqConnection_character <- function(
+  conn,
+  name,
+  ...,
+  temporary = FALSE,
+  fail_if_missing = TRUE
+) {
   name <- dbQuoteIdentifier(conn, name)
   if (fail_if_missing) {
     extra <- ""
@@ -12,7 +18,9 @@ dbRemoveTable_PqConnection_character <- function(conn, name, ..., temporary = FA
   }
   if (temporary) {
     temp_schema <- find_temp_schema(conn, fail_if_missing)
-    if (is.null(temp_schema)) return(invisible(TRUE))
+    if (is.null(temp_schema)) {
+      return(invisible(TRUE))
+    }
     extra <- paste0(extra, temp_schema, ".")
   }
   dbExecute(conn, paste0("DROP TABLE ", extra, name))
@@ -21,4 +29,8 @@ dbRemoveTable_PqConnection_character <- function(conn, name, ..., temporary = FA
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbRemoveTable", c("PqConnection", "character"), dbRemoveTable_PqConnection_character)
+setMethod(
+  "dbRemoveTable",
+  c("PqConnection", "character"),
+  dbRemoveTable_PqConnection_character
+)

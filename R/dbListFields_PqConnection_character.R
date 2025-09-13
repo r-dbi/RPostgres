@@ -9,4 +9,8 @@ dbListFields_PqConnection_character <- function(conn, name, ...) {
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbListFields", c("PqConnection", "character"), dbListFields_PqConnection_character)
+setMethod(
+  "dbListFields",
+  c("PqConnection", "character"),
+  dbListFields_PqConnection_character
+)

@@ -5,7 +5,8 @@ NULL
 #'
 #' @keywords internal
 #' @export
-setClass("PqConnection",
+setClass(
+  "PqConnection",
   contains = "DBIConnection",
   slots = list(
     ptr = "externalptr",
@@ -38,12 +39,23 @@ format.PqConnection <- function(x, ...) {
 }
 
 get_data_type <- function(obj) {
-  if (is.factor(obj)) return("TEXT")
-  if (inherits(obj, "POSIXt")) return("TIMESTAMPTZ")
-  if (inherits(obj, "Date")) return("DATE")
-  if (inherits(obj, "difftime")) return("TIME")
-  if (inherits(obj, "integer64")) return("BIGINT")
-  switch(typeof(obj),
+  if (is.factor(obj)) {
+    return("TEXT")
+  }
+  if (inherits(obj, "POSIXt")) {
+    return("TIMESTAMPTZ")
+  }
+  if (inherits(obj, "Date")) {
+    return("DATE")
+  }
+  if (inherits(obj, "difftime")) {
+    return("TIME")
+  }
+  if (inherits(obj, "integer64")) {
+    return("BIGINT")
+  }
+  switch(
+    typeof(obj),
     integer = "INTEGER",
     double = "DOUBLE PRECISION",
     character = "TEXT",
@@ -64,9 +76,13 @@ check_tz <- function(timezone) {
     },
     error = function(e) {
       warning(
-        "Invalid time zone '", timezone, "', ",
+        "Invalid time zone '",
+        timezone,
+        "', ",
         "falling back to local time.\n",
-        "Set the `", arg_name, "` argument to a valid time zone.\n",
+        "Set the `",
+        arg_name,
+        "` argument to a valid time zone.\n",
         conditionMessage(e),
         call. = FALSE
       )
@@ -157,15 +173,22 @@ postgresIsTransacting <- function(conn) {
 #' })
 #' }
 postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
-
   if (!postgresIsTransacting(conn)) {
     stopc("Cannot import a large object outside of a transaction")
   }
 
-  if (is.null(filepath)) stopc("'filepath' cannot be NULL")
-  if (is.null(oid)) stopc("'oid' cannot be NULL")
-  if (is.na(oid)) stopc("'oid' cannot be NA")
-  if (oid < 0) stopc("'oid' cannot be negative")
+  if (is.null(filepath)) {
+    stopc("'filepath' cannot be NULL")
+  }
+  if (is.null(oid)) {
+    stopc("'oid' cannot be NULL")
+  }
+  if (is.na(oid)) {
+    stopc("'oid' cannot be NA")
+  }
+  if (oid < 0) {
+    stopc("'oid' cannot be negative")
+  }
 
   connection_import_lo_from_file(conn@ptr, filepath, oid)
 }
@@ -197,14 +220,19 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 #' })
 #' }
 postgresExportLargeObject <- function(conn, oid, filepath) {
-
   if (!postgresIsTransacting(conn)) {
     stopc("Cannot export a large object outside of a transaction")
   }
 
-  if (is.null(oid)) stopc("'oid' cannot be NULL")
-  if (is.na(oid)) stopc("'oid' cannot be NA")
-  if (oid < 0) stopc("'oid' cannot be negative")
+  if (is.null(oid)) {
+    stopc("'oid' cannot be NULL")
+  }
+  if (is.na(oid)) {
+    stopc("'oid' cannot be NA")
+  }
+  if (oid < 0) {
+    stopc("'oid' cannot be negative")
+  }
 
   connection_export_lo_to_file(conn@ptr, oid, filepath)
   invisible()

@@ -29,7 +29,8 @@ postgresHasDefault <- function(...) {
         "point to your database."
       )
       FALSE
-    })
+    }
+  )
 }
 
 #' @description
@@ -45,7 +46,8 @@ postgresDefault <- function(...) {
     },
     error = function(...) {
       testthat::skip("Test database not available")
-    })
+    }
+  )
 }
 
 connect_default <- function(...) {
