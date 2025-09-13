@@ -48,6 +48,21 @@ Install essential R packages using pak:
 R -q -e 'pak::pak(); pak::pak(c("devtools", "r-lib/roxygen2", "r-lib/pkgdown"))'
 ```
 
+Install air for code formatting:
+
+```bash
+curl -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh
+```
+
+### Code Formatting
+
+Format code using air:
+
+```bash
+air format .
+# Formats all supported files in the current directory and subdirectories
+```
+
 ### Environment Variables for Testing
 
 Always set these PostgreSQL environment variables before running tests:
@@ -119,13 +134,14 @@ dbDisconnect(con)
 
 ### Required Testing Before Committing
 
-1. ALWAYS build and install the package successfully
-2. ALWAYS run `testthat::test_local()` for quick iteration testing
-3. ALWAYS run `rcmdcheck::rcmdcheck()` with PostgreSQL environment variables
+1. ALWAYS run `air format .` to format code before committing
+2. ALWAYS build and install the package successfully
+3. ALWAYS run `testthat::test_local()` for quick iteration testing
+4. ALWAYS run `rcmdcheck::rcmdcheck()` with PostgreSQL environment variables
    set for comprehensive testing
-4. ALWAYS test `pkgdown::build_site()` to ensure documentation builds correctly
-5. ALWAYS test basic database connectivity and operations
-6. Run `devtools::document()` if you modified any roxygen comments in R files
+5. ALWAYS test `pkgdown::build_site()` to ensure documentation builds correctly
+6. ALWAYS test basic database connectivity and operations
+7. Run `devtools::document()` if you modified any roxygen comments in R files
 
 ## Build System Details
 
