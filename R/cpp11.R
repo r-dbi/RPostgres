@@ -40,6 +40,10 @@ connection_import_lo_from_file <- function(con, filename, oid) {
   .Call(`_RPostgres_connection_import_lo_from_file`, con, filename, oid)
 }
 
+connection_export_lo_to_file <- function(con, oid, filename) {
+  invisible(.Call(`_RPostgres_connection_export_lo_to_file`, con, oid, filename))
+}
+
 connection_copy_data <- function(con, sql, df) {
   invisible(.Call(`_RPostgres_connection_copy_data`, con, sql, df))
 }
