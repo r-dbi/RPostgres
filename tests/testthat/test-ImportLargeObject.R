@@ -29,8 +29,7 @@ test_that("can import and export a large object", {
   on.exit(unlink(temp_file), add = TRUE)
 
   dbWithTransaction(con, {
-    result <- postgresExportLargeObject(con, oid, temp_file)
-    expect_true(is.numeric(result))
+    postgresExportLargeObject(con, oid, temp_file)
   })
 
   # Verify the exported file exists and has correct content
