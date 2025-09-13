@@ -57,24 +57,52 @@
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 #' @usage NULL
-dbConnect_PqDriver <- function(drv, dbname = NULL,
-                               host = NULL, port = NULL, password = NULL, user = NULL, service = NULL, ...,
-                               bigint = c("integer64", "integer", "numeric", "character"),
-                               check_interrupts = FALSE, timezone = "UTC", timezone_out = NULL) {
+dbConnect_PqDriver <- function(
+  drv,
+  dbname = NULL,
+  host = NULL,
+  port = NULL,
+  password = NULL,
+  user = NULL,
+  service = NULL,
+  ...,
+  bigint = c("integer64", "integer", "numeric", "character"),
+  check_interrupts = FALSE,
+  timezone = "UTC",
+  timezone_out = NULL
+) {
   opts <- unlist(list(
-    dbname = dbname, user = user, password = password,
-    host = host, port = as.character(port), service = service, client_encoding = "utf8", ...
+    dbname = dbname,
+    user = user,
+    password = password,
+    host = host,
+    port = as.character(port),
+    service = service,
+    client_encoding = "utf8",
+    ...
   ))
   if (!is.character(opts)) {
     stop("All options should be strings", call. = FALSE)
   }
   bigint <- match.arg(bigint)
-  stopifnot(is.logical(check_interrupts), all(!is.na(check_interrupts)), length(check_interrupts) == 1)
+  stopifnot(
+    is.logical(check_interrupts),
+    all(!is.na(check_interrupts)),
+    length(check_interrupts) == 1
+  )
   if (!is.null(timezone)) {
-    stopifnot(is.character(timezone), all(!is.na(timezone)), length(timezone) == 1)
+    stopifnot(
+      is.character(timezone),
+      all(!is.na(timezone)),
+      length(timezone) == 1
+    )
   }
   if (!is.null(timezone_out)) {
-    stopifnot(is.character(timezone_out), all(!is.na(timezone_out)), length(timezone_out) == 1)
+    stopifnot(
+      is.character(timezone_out),
+      all(!is.na(timezone_out)),
+      length(timezone_out) == 1
+    )
   }
 
   if (length(opts) == 0) {
@@ -84,8 +112,12 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
   }
 
   # timezone is set later
-  conn <- new("PqConnection",
-    ptr = ptr, bigint = bigint, timezone = character(), typnames = data.frame()
+  conn <- new(
+    "PqConnection",
+    ptr = ptr,
+    bigint = bigint,
+    timezone = character(),
+    typnames = data.frame()
   )
   on.exit(dbDisconnect(conn))
 
@@ -94,7 +126,11 @@ dbConnect_PqDriver <- function(drv, dbname = NULL,
 
   if (!is.null(timezone)) {
     # Side effect: check if time zone valid
-    dbExecute(conn, paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)), immediate = TRUE)
+    dbExecute(
+      conn,
+      paste0("SET TIMEZONE = ", dbQuoteString(conn, timezone)),
+      immediate = TRUE
+    )
   } else {
     timezone <- dbGetQuery(conn, "SHOW timezone", immediate = TRUE)[[1]]
   }

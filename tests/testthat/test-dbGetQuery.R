@@ -7,8 +7,10 @@ test_that("special characters work", {
   dbExecute(con, "INSERT INTO test1 VALUES ('\\u00e5')")
 
   expect_equal(dbGetQuery(con, "SELECT * FROM test1")$x, angstrom)
-  expect_equal(dbGetQuery(con, "SELECT * FROM test1 WHERE x = '\\u00e5'")$x,
-    angstrom)
+  expect_equal(
+    dbGetQuery(con, "SELECT * FROM test1 WHERE x = '\\u00e5'")$x,
+    angstrom
+  )
 })
 
 
@@ -16,8 +18,13 @@ test_that("special characters work", {
 test_that("JSONB format is recognized", {
   con <- postgresDefault()
 
-  n_json <- dbGetQuery(con, "SELECT count(*) FROM pg_type WHERE typname = 'jsonb' AND typtype = 'b'")[[1]]
-  if (as.integer(n_json) == 0) skip("No jsonb type installed")
+  n_json <- dbGetQuery(
+    con,
+    "SELECT count(*) FROM pg_type WHERE typname = 'jsonb' AND typtype = 'b'"
+  )[[1]]
+  if (as.integer(n_json) == 0) {
+    skip("No jsonb type installed")
+  }
 
   jsonb <- '{\"name\": \"mike\"}'
 
@@ -25,7 +32,10 @@ test_that("JSONB format is recognized", {
   dbExecute(con, paste0("INSERT INTO test2(data) values ('", jsonb, "');"))
 
   expect_warning(
-    expect_equal(dbGetQuery(con, "SELECT * FROM test2")$data, structure(jsonb, class = "pq_jsonb")),
+    expect_equal(
+      dbGetQuery(con, "SELECT * FROM test2")$data,
+      structure(jsonb, class = "pq_jsonb")
+    ),
     NA
   )
 
@@ -36,15 +46,21 @@ test_that("JSONB format is recognized", {
 test_that("uuid format is recognized", {
   con <- postgresDefault()
 
-  dbExecute(con, "CREATE TEMPORARY TABLE fuutab
+  dbExecute(
+    con,
+    "CREATE TEMPORARY TABLE fuutab
     (
     fuu UUID,
     name VARCHAR(255) NOT NULL
-    );")
+    );"
+  )
 
   uuid <- "c44352c0-72bd-11e5-a7f3-0002a5d5c51b"
 
-  dbExecute(con, paste0("INSERT INTO fuutab(fuu, name) values ('", uuid, "', 'bob');"))
+  dbExecute(
+    con,
+    paste0("INSERT INTO fuutab(fuu, name) values ('", uuid, "', 'bob');")
+  )
 
   expect_warning(
     expect_equal(dbGetQuery(con, "SELECT * FROM fuutab")$fuu, uuid),

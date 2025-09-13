@@ -6,4 +6,8 @@ dbQuoteString_PqConnection_SQL <- function(conn, x, ...) {
 
 #' @rdname quote
 #' @export
-setMethod("dbQuoteString", c("PqConnection", "SQL"), dbQuoteString_PqConnection_SQL)
+setMethod(
+  "dbQuoteString",
+  c("PqConnection", "SQL"),
+  dbQuoteString_PqConnection_SQL
+)

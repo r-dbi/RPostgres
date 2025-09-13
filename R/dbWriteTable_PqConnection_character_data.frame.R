@@ -1,9 +1,24 @@
 #' @rdname postgres-tables
 #' @usage NULL
-dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
-                                                           field.types = NULL, temporary = FALSE, copy = NULL) {
-  if (is.null(row.names)) row.names <- FALSE
-  if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L) {
+dbWriteTable_PqConnection_character_data.frame <- function(
+  conn,
+  name,
+  value,
+  ...,
+  row.names = FALSE,
+  overwrite = FALSE,
+  append = FALSE,
+  field.types = NULL,
+  temporary = FALSE,
+  copy = NULL
+) {
+  if (is.null(row.names)) {
+    row.names <- FALSE
+  }
+  if (
+    (!is.logical(row.names) && !is.character(row.names)) ||
+      length(row.names) != 1L
+  ) {
     stopc("`row.names` must be a logical scalar or a string")
   }
   if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite)) {
@@ -18,8 +33,15 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
   if (overwrite && append) {
     stopc("overwrite and append cannot both be TRUE")
   }
-  if (!is.null(field.types) && !(is.character(field.types) && !is.null(names(field.types)) && !anyDuplicated(names(field.types)))) {
-    stopc("`field.types` must be a named character vector with unique names, or NULL")
+  if (
+    !is.null(field.types) &&
+      !(is.character(field.types) &&
+        !is.null(names(field.types)) &&
+        !anyDuplicated(names(field.types)))
+  ) {
+    stopc(
+      "`field.types` must be a named character vector with unique names, or NULL"
+    )
   }
   if (append && !is.null(field.types)) {
     stopc("Cannot specify `field.types` with `append = TRUE`")
@@ -45,12 +67,21 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
   }
 
   if (overwrite) {
-    suppressMessages(dbRemoveTable(conn, name, temporary = temporary, fail_if_missing = FALSE))
+    suppressMessages(dbRemoveTable(
+      conn,
+      name,
+      temporary = temporary,
+      fail_if_missing = FALSE
+    ))
     found <- FALSE
   } else {
     found <- dbExistsTable(conn, name)
     if (found && !append) {
-      stopc("Table ", name, " exists in database, and both overwrite and append are FALSE")
+      stopc(
+        "Table ",
+        name,
+        " exists in database, and both overwrite and append are FALSE"
+      )
     }
   }
 
@@ -66,7 +97,11 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
       stopifnot(!any(is.na(field_types_idx)))
       combined_field_types[field_types_idx] <- field.types
       values_idx <- setdiff(seq_along(value), field_types_idx)
-      combined_field_types[values_idx] <- lapply(value[values_idx], dbDataType, dbObj = conn)
+      combined_field_types[values_idx] <- lapply(
+        value[values_idx],
+        dbDataType,
+        dbObj = conn
+      )
     }
 
     dbCreateTable(
@@ -94,4 +129,8 @@ dbWriteTable_PqConnection_character_data.frame <- function(conn, name, value, ..
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbWriteTable", c("PqConnection", "character", "data.frame"), dbWriteTable_PqConnection_character_data.frame)
+setMethod(
+  "dbWriteTable",
+  c("PqConnection", "character", "data.frame"),
+  dbWriteTable_PqConnection_character_data.frame
+)

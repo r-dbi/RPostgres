@@ -6,4 +6,8 @@ dbQuoteIdentifier_PqConnection_Id <- function(conn, x, ...) {
 
 #' @rdname quote
 #' @export
-setMethod("dbQuoteIdentifier", c("PqConnection", "Id"), dbQuoteIdentifier_PqConnection_Id)
+setMethod(
+  "dbQuoteIdentifier",
+  c("PqConnection", "Id"),
+  dbQuoteIdentifier_PqConnection_Id
+)

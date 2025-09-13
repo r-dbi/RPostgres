@@ -11,12 +11,19 @@
 #' Queries and statements can be mixed.
 #' @rdname postgres-query
 #' @usage NULL
-dbSendQuery_PqConnection <- function(conn, statement, params = NULL, ..., immediate = FALSE) {
+dbSendQuery_PqConnection <- function(
+  conn,
+  statement,
+  params = NULL,
+  ...,
+  immediate = FALSE
+) {
   stopifnot(is.character(statement))
 
   statement <- enc2utf8(statement)
 
-  rs <- new("PqResult",
+  rs <- new(
+    "PqResult",
     conn = conn,
     ptr = result_create(conn@ptr, statement, immediate),
     sql = statement,
