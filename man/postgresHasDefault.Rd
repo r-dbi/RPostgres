@@ -10,7 +10,7 @@ postgresHasDefault(...)
 postgresDefault(...)
 }
 \arguments{
-\item{...}{Additional arguments passed on to \code{\link[=dbConnect]{dbConnect()}}}
+\item{...}{Additional arguments passed on to \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 }
 \description{
 RPostgres examples and tests connect to a default database via
