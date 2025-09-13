@@ -7,7 +7,7 @@ runs:
     # https://github.com/ankane/setup-mariadb/issues/2
     - uses: ankane/setup-postgres@v1
       with:
-        postgres-version: ${{ matrix.pg-version || 14 }}
+        postgres-version: ${{ matrix.pg-version || 17 }}
 
     - name: Create database
       if: runner.os != 'Windows'
