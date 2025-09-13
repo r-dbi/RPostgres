@@ -4,7 +4,9 @@ dbBind_PqResult <- function(res, params, ...) {
   if (!is.null(names(params))) {
     stopc("`params` must not be named.")
   }
-  if (!is.list(params)) params <- as.list(params)
+  if (!is.list(params)) {
+    params <- as.list(params)
+  }
 
   params <- factor_to_string(params, warn = TRUE)
   params <- fix_posixt(params, res@conn@timezone)

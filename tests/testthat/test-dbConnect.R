@@ -46,14 +46,20 @@ test_that("passing other options parameters", {
   on.exit(dbDisconnect(con))
 
   pid <- dbGetInfo(con)$pid
-  r <- dbGetQuery(con, "SELECT application_name FROM pg_stat_activity WHERE pid=$1",
-    list(pid))
+  r <- dbGetQuery(
+    con,
+    "SELECT application_name FROM pg_stat_activity WHERE pid=$1",
+    list(pid)
+  )
   expect_identical(r$application_name, "apple")
 })
 
 test_that("error if passing unkown parameters", {
   skip_on_cran()
-  expect_error(dbConnect(Postgres(), fruit = "apple"), 'invalid connection option "fruit"')
+  expect_error(
+    dbConnect(Postgres(), fruit = "apple"),
+    'invalid connection option "fruit"'
+  )
 })
 
 test_that("NOTICEs are captured as messages", {
@@ -63,12 +69,15 @@ test_that("NOTICEs are captured as messages", {
   on.exit(dbDisconnect(con))
 
   expect_message(
-    DBI::dbExecute(con, "
+    DBI::dbExecute(
+      con,
+      "
     DO language plpgsql $$
       BEGIN
         RAISE NOTICE 'hello, world!';
       END
-    $$;"),
+    $$;"
+    ),
     "hello, world"
   )
 })

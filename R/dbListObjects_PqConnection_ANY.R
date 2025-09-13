@@ -13,16 +13,22 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
       null_varchar <- "NULL::text"
     }
     query <- paste0(
-      "SELECT ", null_varchar, " AS schema, table_name AS table FROM ( \n",
+      "SELECT ",
+      null_varchar,
+      " AS schema, table_name AS table FROM ( \n",
       list_tables(conn = conn, order_by = "table_type, table_name"),
       ") as table_query \n",
       "UNION ALL\n",
-      "SELECT DISTINCT table_schema AS schema, ", null_varchar, " AS table FROM ( \n",
+      "SELECT DISTINCT table_schema AS schema, ",
+      null_varchar,
+      " AS table FROM ( \n",
       list_tables(conn = conn, where_schema = "true"),
       ") as schema_query;"
     )
   } else {
-    if (!is.list(prefix)) prefix <- list(prefix)
+    if (!is.list(prefix)) {
+      prefix <- list(prefix)
+    }
     stopifnot("All prefix must be Id()" = vlapply(prefix, is, "Id"))
     is_prefix <- vlapply(prefix, function(x) {
       "schema" %in% names(x@name) && !("table" %in% names(x@name))
@@ -49,7 +55,11 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
   }
 
   if (is.null(query)) {
-    res <- data.frame(schema = character(), table = character(), stringsAsFactors = FALSE)
+    res <- data.frame(
+      schema = character(),
+      table = character(),
+      stringsAsFactors = FALSE
+    )
   } else {
     res <- dbGetQuery(conn, query)
   }
@@ -67,4 +77,8 @@ dbListObjects_PqConnection_ANY <- function(conn, prefix = NULL, ...) {
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbListObjects", c("PqConnection", "ANY"), dbListObjects_PqConnection_ANY)
+setMethod(
+  "dbListObjects",
+  c("PqConnection", "ANY"),
+  dbListObjects_PqConnection_ANY
+)

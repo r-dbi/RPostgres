@@ -12,4 +12,8 @@ dbExistsTable_PqConnection_character <- function(conn, name, ...) {
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbExistsTable", c("PqConnection", "character"), dbExistsTable_PqConnection_character)
+setMethod(
+  "dbExistsTable",
+  c("PqConnection", "character"),
+  dbExistsTable_PqConnection_character
+)

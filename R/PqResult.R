@@ -3,7 +3,8 @@
 #' @keywords internal
 #' @include PqConnection.R
 #' @export
-setClass("PqResult",
+setClass(
+  "PqResult",
   contains = "DBIResult",
   slots = list(
     conn = "PqConnection",
@@ -50,11 +51,16 @@ setClass("PqResult",
 NULL
 
 convert_bigint <- function(df, bigint) {
-  if (bigint == "integer64") return(df)
+  if (bigint == "integer64") {
+    return(df)
+  }
   is_int64 <- which(vlapply(df, inherits, "integer64"))
-  if (length(is_int64) == 0) return(df)
+  if (length(is_int64) == 0) {
+    return(df)
+  }
 
-  as_bigint <- switch(bigint,
+  as_bigint <- switch(
+    bigint,
     integer = as.integer,
     numeric = as.numeric,
     character = as.character
@@ -91,7 +97,11 @@ fix_timezone <- function(ret, conn) {
 
   is_datetime <- which(vapply(ret, inherits, "POSIXt", FUN.VALUE = logical(1)))
   if (length(is_datetime) > 0) {
-    ret[is_datetime] <- lapply(ret[is_datetime], lubridate::with_tz, conn@timezone_out)
+    ret[is_datetime] <- lapply(
+      ret[is_datetime],
+      lubridate::with_tz,
+      conn@timezone_out
+    )
   }
 
   attr(ret, "without_tz") <- NULL
@@ -160,17 +170,29 @@ fix_numeric <- function(value) {
 
   value[is_numeric] <- lapply(
     value[is_numeric],
-    function(x) format_keep_na(x, digits = 17, decimal.mark = ".", scientific = FALSE, na.encode = FALSE, trim = TRUE)
+    function(x) {
+      format_keep_na(
+        x,
+        digits = 17,
+        decimal.mark = ".",
+        scientific = FALSE,
+        na.encode = FALSE,
+        trim = TRUE
+      )
+    }
   )
   value
 }
 
 prepare_for_binding <- function(value) {
   is_list <- vlapply(value, is.list)
-  value[!is_list] <- lapply(value[!is_list], function(x) enc2utf8(as.character(x)))
+  value[!is_list] <- lapply(value[!is_list], function(x) {
+    enc2utf8(as.character(x))
+  })
   value[is_list] <- lapply(value[is_list], vcapply, function(x) {
-    if (is.null(x)) NA_character_
-    else if (is.raw(x)) {
+    if (is.null(x)) {
+      NA_character_
+    } else if (is.raw(x)) {
       paste(sprintf("\\%.3o", as.integer(x)), collapse = "")
     } else {
       stop("Lists must contain raw vectors or NULL", call. = FALSE)

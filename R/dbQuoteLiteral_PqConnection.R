@@ -42,9 +42,11 @@ dbQuoteLiteral_PqConnection <- function(conn, x, ...) {
     blob_data <- vcapply(
       x,
       function(x) {
-        if (is.null(x)) "NULL::bytea"
-        else if (is.raw(x)) paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
-        else {
+        if (is.null(x)) {
+          "NULL::bytea"
+        } else if (is.raw(x)) {
+          paste0("E'\\\\x", paste(format(x), collapse = ""), "'")
+        } else {
           stopc("Lists must contain raw vectors or NULL")
         }
       }
@@ -53,7 +55,12 @@ dbQuoteLiteral_PqConnection <- function(conn, x, ...) {
   } else if (is.character(x)) {
     dbQuoteString(conn, x)
   } else {
-    stopc("Can't convert value of class ", class(x)[[1]], " to SQL.", call. = FALSE)
+    stopc(
+      "Can't convert value of class ",
+      class(x)[[1]],
+      " to SQL.",
+      call. = FALSE
+    )
   }
 }
 

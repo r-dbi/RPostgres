@@ -2,9 +2,20 @@
 #'   converted to valid R identifiers.
 #' @rdname postgres-tables
 #' @usage NULL
-dbReadTable_PqConnection_character <- function(conn, name, ..., check.names = TRUE, row.names = FALSE) {
-  if (is.null(row.names)) row.names <- FALSE
-  if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L) {
+dbReadTable_PqConnection_character <- function(
+  conn,
+  name,
+  ...,
+  check.names = TRUE,
+  row.names = FALSE
+) {
+  if (is.null(row.names)) {
+    row.names <- FALSE
+  }
+  if (
+    (!is.logical(row.names) && !is.character(row.names)) ||
+      length(row.names) != 1L
+  ) {
     stopc("`row.names` must be a logical scalar or a string")
   }
 
@@ -24,4 +35,8 @@ dbReadTable_PqConnection_character <- function(conn, name, ..., check.names = TR
 
 #' @rdname postgres-tables
 #' @export
-setMethod("dbReadTable", c("PqConnection", "character"), dbReadTable_PqConnection_character)
+setMethod(
+  "dbReadTable",
+  c("PqConnection", "character"),
+  dbReadTable_PqConnection_character
+)
