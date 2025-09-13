@@ -139,7 +139,8 @@ postgresIsTransacting <- function(conn) {
 
 #' Imports a large object from file
 #'
-#' Returns an object idenfier (Oid) for the imported large object
+#' Returns an object identifier (Oid) for the imported large object.
+#' This function must be called within a transaction.
 #'
 #' @export
 #' @param conn a [PqConnection-class] object, produced by
@@ -172,16 +173,17 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 #' Exports a large object to file
 #'
 #' Exports a large object from the database to a file on disk. This function
-#' uses PostgreSQL's `lo_export` function which efficiently streams the data
+#' uses PostgreSQL's `lo_export()` function which efficiently streams the data
 #' directly to disk without loading it into memory, making it suitable for
 #' very large objects (GB+) that would cause memory issues with `lo_get()`.
+#' This function must be called within a transaction.
 #'
 #' @export
 #' @param conn a [PqConnection-class] object, produced by
 #'   [DBI::dbConnect()]
 #' @param oid the object identifier (Oid) of the large object to export
 #' @param filepath a path where the large object should be exported
-#' @return 1 on success (invisibly), or stops with an error
+#' @return invisible NULL on success, or stops with an error
 #' @examples
 #' \dontrun{
 #' con <- postgresDefault()
@@ -194,7 +196,7 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 #'   postgresExportLargeObject(con, oid, 'exported_image.png')
 #' })
 #' }
-postgresExportLargeObject <- function(conn, oid, filepath = NULL) {
+postgresExportLargeObject <- function(conn, oid, filepath) {
 
   if (!postgresIsTransacting(conn)) {
     stopc("Cannot export a large object outside of a transaction")
@@ -203,8 +205,7 @@ postgresExportLargeObject <- function(conn, oid, filepath = NULL) {
   if (is.null(oid)) stopc("'oid' cannot be NULL")
   if (is.na(oid)) stopc("'oid' cannot be NA")
   if (oid < 0) stopc("'oid' cannot be negative")
-  if (is.null(filepath)) stopc("'filepath' cannot be NULL")
 
-  result <- connection_export_lo_to_file(conn@ptr, oid, filepath)
-  invisible(result)
+  connection_export_lo_to_file(conn@ptr, oid, filepath)
+  invisible()
 }

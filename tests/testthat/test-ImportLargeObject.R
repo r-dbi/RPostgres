@@ -2,7 +2,7 @@
 test_that("can import and read a large object", {
   con       <- postgresDefault()
   on.exit(dbDisconnect(con))
-  test_file_path <- paste0(test_path(), '/data/large_object.txt')
+  test_file_path <- file.path(test_path(), 'data', 'large_object.txt')
   dbWithTransaction(con, {
     oid <- postgresImportLargeObject(con, test_file_path)
   })
@@ -16,7 +16,7 @@ test_that("can import and read a large object", {
 test_that("can import and export a large object", {
   con <- postgresDefault()
   on.exit(dbDisconnect(con))
-  test_file_path <- paste0(test_path(), '/data/large_object.txt')
+  test_file_path <- file.path(test_path(), 'data', 'large_object.txt')
   
   # Import the large object
   oid <- dbWithTransaction(con, {
@@ -47,7 +47,7 @@ test_that("can import and export a large object", {
 test_that("importing to an existing oid throws error", {
   con       <- postgresDefault()
   on.exit(dbDisconnect(con))
-  test_file_path <- paste0(test_path(), '/data/large_object.txt')
+  test_file_path <- file.path(test_path(), 'data', 'large_object.txt')
   oid <- 1234
   dbWithTransaction(con, {
     oid <- postgresImportLargeObject(con, test_file_path, oid)
@@ -65,7 +65,7 @@ test_that("importing to an existing oid throws error", {
 test_that("import from a non-existing path throws error", {
   con       <- postgresDefault()
   on.exit(dbDisconnect(con))
-  test_file_path <- paste0(test_path(), '/data/large_object_that_does_not_exist.txt')
+  test_file_path <- file.path(test_path(), 'data', 'large_object_that_does_not_exist.txt')
   expect_error(
     dbWithTransaction(con, {
       oid <- postgresImportLargeObject(con, test_file_path)
@@ -116,18 +116,6 @@ test_that("export with negative oid throws error", {
       postgresExportLargeObject(con, -1, tempfile())
     }),
     "'oid' cannot be negative"
-  )
-})
-
-
-test_that("export with NULL filepath throws error", {
-  con <- postgresDefault()
-  on.exit(dbDisconnect(con))
-  expect_error(
-    dbWithTransaction(con, {
-      postgresExportLargeObject(con, 12345, NULL)
-    }),
-    "'filepath' cannot be NULL"
   )
 })
 

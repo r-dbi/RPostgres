@@ -4,7 +4,7 @@
 \alias{postgresExportLargeObject}
 \title{Exports a large object to file}
 \usage{
-postgresExportLargeObject(conn, oid, filepath = NULL)
+postgresExportLargeObject(conn, oid, filepath)
 }
 \arguments{
 \item{conn}{a \linkS4class{PqConnection} object, produced by
@@ -15,13 +15,14 @@ postgresExportLargeObject(conn, oid, filepath = NULL)
 \item{filepath}{a path where the large object should be exported}
 }
 \value{
-1 on success (invisibly), or stops with an error
+invisible NULL on success, or stops with an error
 }
 \description{
 Exports a large object from the database to a file on disk. This function
-uses PostgreSQL's \code{lo_export} function which efficiently streams the data
+uses PostgreSQL's \code{lo_export()} function which efficiently streams the data
 directly to disk without loading it into memory, making it suitable for
 very large objects (GB+) that would cause memory issues with \code{lo_get()}.
+This function must be called within a transaction.
 }
 \examples{
 \dontrun{
