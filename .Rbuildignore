@@ -29,3 +29,4 @@
 ^windows$
 ^Dockerfile$
 ^docker-compose\.yml$
+^air\.toml$
