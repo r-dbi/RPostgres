@@ -90,7 +90,7 @@ test_that("export with NULL oid throws error", {
     dbWithTransaction(con, {
       postgresExportLargeObject(con, NULL, tempfile())
     }),
-    '"oid" cannot be NULL'
+    "'oid' cannot be NULL"
   )
 })
 
@@ -102,7 +102,7 @@ test_that("export with NA oid throws error", {
     dbWithTransaction(con, {
       postgresExportLargeObject(con, NA, tempfile())
     }),
-    '"oid" cannot be NA'
+    "'oid' cannot be NA"
   )
 })
 
@@ -114,7 +114,7 @@ test_that("export with negative oid throws error", {
     dbWithTransaction(con, {
       postgresExportLargeObject(con, -1, tempfile())
     }),
-    '"oid" cannot be negative'
+    "'oid' cannot be negative"
   )
 })
 
