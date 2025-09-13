@@ -171,7 +171,10 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
 #' Exports a large object to file
 #'
-#' Exports a large object from the database to a file on disk
+#' Exports a large object from the database to a file on disk. This function
+#' uses PostgreSQL's `lo_export` function which efficiently streams the data
+#' directly to disk without loading it into memory, making it suitable for
+#' very large objects (GB+) that would cause memory issues with `lo_get()`.
 #'
 #' @export
 #' @param conn a [PqConnection-class] object, produced by
