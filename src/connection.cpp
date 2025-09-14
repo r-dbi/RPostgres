@@ -97,6 +97,11 @@ Oid connection_import_lo_from_file(DbConnection* con, std::string filename, Oid 
 }
 
 [[cpp11::register]]
+void connection_export_lo_to_file(DbConnection* con, Oid oid, std::string filename) {
+  con->export_lo_to_file(oid, filename);
+}
+
+[[cpp11::register]]
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df) {
   return con->copy_data(sql, df);
 }

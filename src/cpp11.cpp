@@ -78,6 +78,14 @@ extern "C" SEXP _RPostgres_connection_import_lo_from_file(SEXP con, SEXP filenam
   END_CPP11
 }
 // connection.cpp
+void connection_export_lo_to_file(DbConnection* con, Oid oid, std::string filename);
+extern "C" SEXP _RPostgres_connection_export_lo_to_file(SEXP con, SEXP oid, SEXP filename) {
+  BEGIN_CPP11
+    connection_export_lo_to_file(cpp11::as_cpp<cpp11::decay_t<DbConnection*>>(con), cpp11::as_cpp<cpp11::decay_t<Oid>>(oid), cpp11::as_cpp<cpp11::decay_t<std::string>>(filename));
+    return R_NilValue;
+  END_CPP11
+}
+// connection.cpp
 void connection_copy_data(DbConnection* con, std::string sql, cpp11::list df);
 extern "C" SEXP _RPostgres_connection_copy_data(SEXP con, SEXP sql, SEXP df) {
   BEGIN_CPP11
@@ -207,6 +215,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_client_version",                 (DL_FUNC) &_RPostgres_client_version,                 0},
     {"_RPostgres_connection_copy_data",           (DL_FUNC) &_RPostgres_connection_copy_data,           3},
     {"_RPostgres_connection_create",              (DL_FUNC) &_RPostgres_connection_create,              3},
+    {"_RPostgres_connection_export_lo_to_file",   (DL_FUNC) &_RPostgres_connection_export_lo_to_file,   3},
     {"_RPostgres_connection_get_temp_schema",     (DL_FUNC) &_RPostgres_connection_get_temp_schema,     1},
     {"_RPostgres_connection_import_lo_from_file", (DL_FUNC) &_RPostgres_connection_import_lo_from_file, 3},
     {"_RPostgres_connection_info",                (DL_FUNC) &_RPostgres_connection_info,                1},

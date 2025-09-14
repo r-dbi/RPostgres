@@ -42,6 +42,7 @@ reference:
   - postgresHasDefault
   - postgresWaitForNotify
   - postgresImportLargeObject
+  - postgresExportLargeObject
 
 development:
   mode: auto
