@@ -1,5 +1,42 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9000 (2025-09-14)
+
+## Chore
+
+- Auto-update from GitHub Actions (#515).
+
+## Continuous integration
+
+- Default to PostgreSQL 17.
+
+- Use reviewdog for external PRs (#517).
+
+- Cleanup and fix macOS (#512).
+
+- Format with air, check detritus, better handling of `extra-packages` (#510).
+
+- Enhance permissions for workflow (#506).
+
+- Permissions, better tests for missing suggests, lints (#504).
+
+- Only fail covr builds if token is given (#501).
+
+- Always use `_R_CHECK_FORCE_SUGGESTS_=false` (#500).
+
+- Correct installation of xml2 (#497).
+
+- Explain (#495).
+
+- Add xml2 for covr, print testthat results (#494).
+
+- Sync (#493).
+
+## Documentation
+
+- Add comprehensive GitHub Copilot instructions (#522).
+
+
 # RPostgres 1.4.8 (2025-02-25)
 
 ## Windows
