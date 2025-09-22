@@ -18,7 +18,8 @@ postgresImportLargeObject(conn, filepath = NULL, oid = 0)
 the identifier of the large object, an integer
 }
 \description{
-Returns an object idenfier (Oid) for the imported large object
+Returns an object identifier (Oid) for the imported large object.
+This function must be called within a transaction.
 }
 \examples{
 \dontrun{
