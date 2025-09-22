@@ -17,7 +17,7 @@ disconnected during the next GC with a warning."><meta name="robots" content="no
 
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7.9905</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.8.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ disconnected during the next GC with a warning."><meta name="robots" content="no
     </div>
 
     <div class="ref-description section level2">
-    <p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code> establishes a connection to a database.
+    <p><code><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">DBI::dbConnect()</a></code> establishes a connection to a database.
 Set <code>drv = Postgres()</code> to connect to a PostgreSQL(-ish) database. Use <code>drv = Redshift()</code> instead to connect to an AWS Redshift cluster.</p>
 <p>Manually disconnecting a connection is not necessary with <span class="pkg">RPostgres</span>,
 but still recommended;
@@ -61,7 +61,7 @@ disconnected during the next GC with a warning.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Postgres</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'PqDriver'</span></span>
-<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span></span>
 <span>  <span class="va">drv</span>,</span>
 <span>  dbname <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  host <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -77,7 +77,7 @@ disconnected during the next GC with a warning.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'PqConnection'</span></span>
-<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,9 +85,9 @@ disconnected during the next GC with a warning.</p>
 
 
 <dl><dt id="arg-drv">drv<a class="anchor" aria-label="anchor" href="#arg-drv"></a></dt>
-<dd><p><a href="https://dbi.r-dbi.org/reference/DBIDriver-class.html" class="external-link">DBI::DBIDriver</a>. Use <code>Postgres()</code> to connect to a
+<dd><p><a href="https://rdrr.io/pkg/DBI/man/DBIDriver-class.html" class="external-link">DBI::DBIDriver</a>. Use <code>Postgres()</code> to connect to a
 PostgreSQL(-ish) database or <code><a href="Redshift.html">Redshift()</a></code> to connect to an AWS Redshift
-cluster. Use an existing <a href="https://dbi.r-dbi.org/reference/DBIConnection-class.html" class="external-link">DBI::DBIConnection</a> object to clone an
+cluster. Use an existing <a href="https://rdrr.io/pkg/DBI/man/DBIConnection-class.html" class="external-link">DBI::DBIConnection</a> object to clone an
 existing connection.</p></dd>
 
 
@@ -158,8 +158,8 @@ This setting does not change the time values returned, only their display.</p></
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Pass more arguments as necessary to dbConnect()</span></span></span>
-<span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu">Postgres</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu">Postgres</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

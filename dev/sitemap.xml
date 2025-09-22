@@ -7,6 +7,7 @@
 <url><loc>https://rpostgres.r-dbi.org/dev/articles/index.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/articles/work-queue.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/authors.html</loc></url>
+<url><loc>https://rpostgres.r-dbi.org/dev/copilot-instructions.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/index.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/news/index.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/Postgres.html</loc></url>
@@ -20,6 +21,7 @@
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgres-query.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgres-tables.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgres-transactions.html</loc></url>
+<url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresExportLargeObject.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresHasDefault.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresImportLargeObject.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/dev/reference/postgresIsTransacting.html</loc></url>
