@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9001 (2025-09-23)
+
+## Features
+
+- New `postgresExportLargeObject()` function for exporting large objects to files (#519, #520).
+
+## Chore
+
+- Auto-update from GitHub Actions (#524).
+
+
 # RPostgres 1.4.8.9000 (2025-09-14)
 
 ## Chore
