@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RPostgres</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.8.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.8.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,12 +83,12 @@ track of the results in a table:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"DROP TABLE IF EXISTS sqroot_vignette_example;"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"DROP TABLE IF EXISTS sqroot_vignette_example;"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NOTICE:  table "sqroot_vignette_example" does not exist, skipping</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
 <span><span class="st">    CREATE TABLE sqroot_vignette_example (</span></span>
 <span><span class="st">        in_val INTEGER PRIMARY KEY,</span></span>
 <span><span class="st">        out_val DOUBLE PRECISION NULL</span></span>
@@ -110,8 +110,8 @@ architecture.</p>
 <p>We tell Postgres that we are interested in receiving messages using
 <code>LISTEN</code>. For example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"LISTEN grapevine"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"LISTEN grapevine"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>…in this case, “grapevine” is arbitrary, we don’t need to create
 channels ahead of time. To make sure we have something to receive, we
@@ -123,9 +123,9 @@ finish:</p>
 <code class="sourceCode R"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">callr</span><span class="fu">::</span><span class="fu"><a href="https://callr.r-lib.org/reference/r_bg.html" class="external-link">r_bg</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.3</span><span class="op">)</span></span>
-<span>  <span class="va">db_notify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_notify</span>, <span class="st">"NOTIFY grapevine, 'psst'"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">db_notify</span><span class="op">)</span></span>
+<span>  <span class="va">db_notify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_notify</span>, <span class="st">"NOTIFY grapevine, 'psst'"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">db_notify</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we should wait for any incoming messages. To do this, use
 <code>postgresWaitForNotify</code>. The payload will contain the message
@@ -148,7 +148,7 @@ the work? This is done using <code>SKIP LOCKED</code>.</p>
 <p>We notify all workers that the input <code>99</code> is ready for
 processing. After receiving this, they all do the following:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
+<code class="sourceCode R"><span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
 <span><span class="st">    SELECT in_val</span></span>
 <span><span class="st">      FROM sqroot_vignette_example</span></span>
 <span><span class="st">     WHERE in_val = $1</span></span>
@@ -172,17 +172,17 @@ several servers):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">worker</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
-<span>  <span class="va">db_worker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">db_worker</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"LISTEN sqroot"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"LISTEN sqroot_shutdown"</span><span class="op">)</span></span>
+<span>  <span class="va">db_worker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">db_worker</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"LISTEN sqroot"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"LISTEN sqroot_shutdown"</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="kw">while</span> <span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Wait for new work to do</span></span>
 <span>    <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/postgresWaitForNotify.html">postgresWaitForNotify</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="fl">60</span><span class="op">)</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="co"># If nothing to do, send notifications of any not up-to-date work</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
+<span>      <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
 <span><span class="st">                SELECT pg_notify('sqroot', in_val::TEXT)</span></span>
 <span><span class="st">                  FROM sqroot_vignette_example</span></span>
 <span><span class="st">                 WHERE out_val IS NULL</span></span>
@@ -199,17 +199,17 @@ several servers):</p>
 <span>    <span class="va">in_val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strtoi.html" class="external-link">strtoi</a></span><span class="op">(</span><span class="va">n</span><span class="op">$</span><span class="va">payload</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>      <span class="op">{</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbWithTransaction.html" class="external-link">dbWithTransaction</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWithTransaction.html" class="external-link">dbWithTransaction</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="op">{</span></span>
 <span>          <span class="co"># Try and fetch the item we got notified about</span></span>
-<span>          <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
+<span>          <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
 <span><span class="st">                    SELECT in_val</span></span>
 <span><span class="st">                      FROM sqroot_vignette_example</span></span>
 <span><span class="st">                     WHERE out_val IS NULL -- if another worker already finished, don't reprocess</span></span>
 <span><span class="st">                       AND in_val = $1</span></span>
 <span><span class="st">                       FOR UPDATE SKIP LOCKED -- Don't let another worker work on this at the same time</span></span>
 <span><span class="st">                "</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span><span class="op">)</span></span>
-<span>          <span class="va">in_val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbFetch.html" class="external-link">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbClearResult.html" class="external-link">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
+<span>          <span class="va">in_val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span></span>
+<span>          <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html" class="external-link">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
 <span></span>
 <span>          <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>            <span class="co"># Actually do the sqrt</span></span>
@@ -218,7 +218,7 @@ several servers):</p>
 <span>            <span class="va">out_val</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span></span>
 <span></span>
 <span>            <span class="co"># Update the datbase with the result</span></span>
-<span>            <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
+<span>            <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">db_worker</span>, <span class="st">"</span></span>
 <span><span class="st">                      UPDATE sqroot_vignette_example</span></span>
 <span><span class="st">                         SET out_val = $1</span></span>
 <span><span class="st">                       WHERE in_val = $2</span></span>
@@ -256,13 +256,13 @@ will, then fill in the square root.</li>
 <p>Now our client can add some values to our table and notify the
 workers that there’s something to do:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RPostgres</span><span class="fu">::</span><span class="fu"><a href="../reference/Postgres.html">Postgres</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">add_sqroot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
 <span><span class="st">        INSERT INTO sqroot_vignette_example (in_val) VALUES ($1)</span></span>
 <span><span class="st">    "</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
+<span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"</span></span>
 <span><span class="st">        SELECT pg_notify('sqroot', $1)</span></span>
 <span><span class="st">    "</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">in_val</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -277,16 +277,16 @@ workers that there’s something to do:</p>
 for us:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
-<span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM sqroot_vignette_example ORDER BY in_val"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbFetch.html" class="external-link">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
+<span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM sqroot_vignette_example ORDER BY in_val"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbFetch.html" class="external-link">dbFetch</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   in_val  out_val</span></span>
 <span><span class="co">#&gt; 1      7 2.645751</span></span>
 <span><span class="co">#&gt; 2      8 2.828427</span></span>
 <span><span class="co">#&gt; 3      9 3.000000</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbClearResult.html" class="external-link">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span> ; <span class="va">rs</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbClearResult.html" class="external-link">dbClearResult</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span> ; <span class="va">rs</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>Finally, we can use <code>NOTIFY</code> to stop all the workers:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/DBI/man/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"NOTIFY sqroot_shutdown, ''"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"NOTIFY sqroot_shutdown, ''"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>And see what messages were printed as they run:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -322,7 +322,7 @@ going.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
     </footer>
