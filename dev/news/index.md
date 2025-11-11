@@ -1,5 +1,12 @@
 # Changelog
 
+## RPostgres 1.4.8.9003 (2025-11-11)
+
+### Continuous integration
+
+- Use workflows for fledge
+  ([\#531](https://github.com/r-dbi/RPostgres/issues/531)).
+
 ## RPostgres 1.4.8.9002 (2025-11-08)
 
 ### Continuous integration
