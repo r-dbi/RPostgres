@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9003 (2025-11-11)
+
+## Continuous integration
+
+- Use workflows for fledge (#531).
+
+
 # RPostgres 1.4.8.9002 (2025-11-08)
 
 ## Continuous integration
