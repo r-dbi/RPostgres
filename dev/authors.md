@@ -23,13 +23,13 @@ Source:
 [`DESCRIPTION`](https://github.com/r-dbi/RPostgres/blob/main/DESCRIPTION)
 
 Wickham H, Ooms J, Müller K (2025). *RPostgres: C++ Interface to
-PostgreSQL*. R package version 1.4.8.9003,
+PostgreSQL*. R package version 1.4.8.9004,
 <https://rpostgres.r-dbi.org>.
 
     @Manual{,
       title = {RPostgres: C++ Interface to PostgreSQL},
       author = {Hadley Wickham and Jeroen Ooms and Kirill Müller},
       year = {2025},
-      note = {R package version 1.4.8.9003},
+      note = {R package version 1.4.8.9004},
       url = {https://rpostgres.r-dbi.org},
     }
