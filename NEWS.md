@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9005 (2025-11-17)
+
+## Continuous integration
+
+- Install binaries from r-universe for dev workflow (#536).
+
+
 # RPostgres 1.4.8.9004 (2025-11-12)
 
 ## Continuous integration
