@@ -29,7 +29,7 @@ void DbColumn::finalize(const int n_) {
   n = n_;
 }
 
-void DbColumn::warn_type_conflicts(const cpp11::r_string& name) const {
+void DbColumn::warn_type_conflicts(const cpp4r::r_string& name) const {
   std::set<DATA_TYPE> my_data_types_seen = data_types_seen;
   DATA_TYPE dt = get_last_storage()->get_data_type();
 
@@ -64,7 +64,7 @@ void DbColumn::warn_type_conflicts(const cpp11::r_string& name) const {
     ss << format_data_type(*it);
   }
 
-  cpp11::warning(ss.str());
+  cpp4r::warning(ss.str());
 }
 
 DbColumn::operator SEXP() const {

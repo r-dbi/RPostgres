@@ -1,7 +1,7 @@
 Package: RPostgres
 Title: C++ Interface to PostgreSQL
-Version: 1.4.8.9005
-Date: 2025-11-17
+Version: 1.4.8.9006
+Date: 2025-12-17
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Jeroen", "Ooms", role = "aut"),
@@ -36,7 +36,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: 
-    cpp11,
+    cpp4r,
     plogr (>= 0.2.0)
 Config/Needs/website: 
     r-dbi/dbitemplate
@@ -49,7 +49,7 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3.9000
+RoxygenNote: 7.3.3
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
     (rpm)
 Collate: 
@@ -58,7 +58,7 @@ Collate:
     'PqResult.R'
     'RPostgres-pkg.R'
     'Redshift.R'
-    'cpp11.R'
+    'cpp4r.R'
     'dbAppendTable_PqConnection.R'
     'dbBegin_PqConnection.R'
     'dbBind_PqResult.R'

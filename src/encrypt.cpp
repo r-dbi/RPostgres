@@ -1,8 +1,8 @@
 #include "pch.h"
 
 
-[[cpp11::register]]
-std::string encrypt_password(cpp11::r_string password, cpp11::r_string user) {
+[[cpp4r::register]]
+std::string encrypt_password(cpp4r::r_string password, cpp4r::r_string user) {
   const auto pass = static_cast<std::string>(password);
   const auto u = static_cast<std::string>(user);
 
