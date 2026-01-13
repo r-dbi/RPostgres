@@ -1,5 +1,12 @@
 # Changelog
 
+## RPostgres 1.4.8.9005 (2025-11-17)
+
+### Continuous integration
+
+- Install binaries from r-universe for dev workflow
+  ([\#536](https://github.com/r-dbi/RPostgres/issues/536)).
+
 ## RPostgres 1.4.8.9004 (2025-11-12)
 
 ### Continuous integration
