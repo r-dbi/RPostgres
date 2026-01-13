@@ -37,7 +37,7 @@ add_library(RPostgres
   PqUtils.h
   RPostgres-init.c
   RPostgres_types.h
-  cpp11.cpp
+  cpp4r.cpp
   connection.cpp
   encode.cpp
   encode.h

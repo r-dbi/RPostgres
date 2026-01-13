@@ -33,18 +33,18 @@ bool DbDataFrame::advance() {
   ++i;
 
   if (i % 1024 == 0)
-    cpp11::check_user_interrupt();
+    cpp4r::check_user_interrupt();
 
   return (n_max < 0 || i < n_max);
 }
 
-cpp11::list DbDataFrame::get_data() {
+cpp4r::list DbDataFrame::get_data() {
   // Throws away new data types
   std::vector<DATA_TYPE> types_;
   return get_data(types_);
 }
 
-cpp11::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
+cpp4r::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   // Trim back to what we actually used
   finalize_cols();
 
@@ -53,21 +53,21 @@ cpp11::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
 
   boost::for_each(data, names, boost::bind(&DbColumn::warn_type_conflicts, _1, _2));
 
-  cpp11::writable::list out(data.size());
+  cpp4r::writable::list out(data.size());
   auto it = data.begin();
   for (int i = 0; i < data.size(); i++) {
     out[i] = *it;
     it++;
   }
-  auto names_utf8 = static_cast<cpp11::writable::strings>(cpp11::as_sexp(names));
+  auto names_utf8 = static_cast<cpp4r::writable::strings>(cpp4r::as_sexp(names));
   for (int j = 0; j < names_utf8.size(); ++j) {
-    const auto name = static_cast<cpp11::r_string>(names_utf8[j]);
+    const auto name = static_cast<cpp4r::r_string>(names_utf8[j]);
     const auto name_str = static_cast<std::string>(name);
     names_utf8[j] = Rf_mkCharCE(name_str.c_str(), CE_UTF8);
   }
   out.attr("names") = names_utf8;
   out.attr("class") = "data.frame";
-  out.attr("row.names") = cpp11::integers({NA_INTEGER, -i});
+  out.attr("row.names") = cpp4r::integers({NA_INTEGER, -i});
   return out;
 }
 
