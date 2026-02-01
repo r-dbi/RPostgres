@@ -2,9 +2,12 @@
 #include "RPostgres_types.h"
 #include "PqResult.h"
 
-
 [[cpp11::register]]
-cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnectionPtr> con, std::string sql, bool immediate) {
+cpp11::external_pointer<DbResult> result_create(
+  cpp11::external_pointer<DbConnectionPtr> con,
+  std::string sql,
+  bool immediate
+) {
   (*con)->check_connection();
   DbResult* res = PqResult::create_and_send_query(*con, sql, immediate);
   return cpp11::external_pointer<DbResult>(res, true);

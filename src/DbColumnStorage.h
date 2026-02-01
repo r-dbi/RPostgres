@@ -1,9 +1,7 @@
 #ifndef DB_COLUMNSTORAGE_H
 #define DB_COLUMNSTORAGE_H
 
-
 #include "DbColumnDataType.h"
-
 
 class DbColumnDataSource;
 
@@ -15,7 +13,12 @@ class DbColumnStorage {
   const DbColumnDataSource& source;
 
 public:
-  DbColumnStorage(DATA_TYPE dt_, const R_xlen_t capacity_, const int n_max_, const DbColumnDataSource& source_);
+  DbColumnStorage(
+    DATA_TYPE dt_,
+    const R_xlen_t capacity_,
+    const int n_max_,
+    const DbColumnDataSource& source_
+  );
   ~DbColumnStorage();
 
 public:
@@ -52,5 +55,4 @@ private:
   void copy_value(SEXP x, DATA_TYPE dt, const int tgt, const int src) const;
 };
 
-
-#endif // DB_COLUMNSTORAGE_H
+#endif  // DB_COLUMNSTORAGE_H

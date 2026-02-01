@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "encode.h"
 
-
 [[cpp11::register]]
 std::string encode_vector(cpp11::sexp x) {
   std::string buffer;
@@ -9,30 +8,37 @@ std::string encode_vector(cpp11::sexp x) {
   int n = Rf_length(x);
   for (int i = 0; i < n; ++i) {
     encode_in_buffer(x, i, buffer);
-    if (i != n - 1)
+    if (i != n - 1) {
       buffer.push_back('\n');
+    }
   }
 
   return buffer;
 }
 
-void encode_row_in_buffer(cpp11::list x, int i, std::string& buffer,
-                          std::string fieldDelim,
-                          std::string lineDelim) {
+void encode_row_in_buffer(
+  cpp11::list x,
+  int i,
+  std::string& buffer,
+  std::string fieldDelim,
+  std::string lineDelim
+) {
   int p = Rf_length(x);
   for (int j = 0; j < p; ++j) {
     auto xj(x[j]);
     encode_in_buffer(xj, i, buffer);
-    if (j != p - 1)
+    if (j != p - 1) {
       buffer.append(fieldDelim);
+    }
   }
   buffer.append(lineDelim);
 }
 
 [[cpp11::register]]
 std::string encode_data_frame(cpp11::list x) {
-  if (Rf_length(x) == 0)
+  if (Rf_length(x) == 0) {
     return ("");
+  }
   int n = Rf_length(x[0]);
 
   std::string buffer;
@@ -88,7 +94,7 @@ void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
           buffer.append("-Infinity");
         }
       } else {
-        char buf[17 + 1 + 1 + 4 + 1]; // minus + decimal + exponent + \0
+        char buf[17 + 1 + 1 + 4 + 1];  // minus + decimal + exponent + \0
         snprintf(buf, sizeof(buf), "%.17g", value);
         buffer.append(buf);
       }
@@ -106,10 +112,12 @@ void encode_in_buffer(cpp11::sexp x, int i, std::string& buffer) {
       break;
     }
   default:
-    cpp11::stop(std::string("Don't know how to handle vector of type ") + Rf_type2char(TYPEOF(x)) + ".");
+    cpp11::stop(
+      std::string("Don't know how to handle vector of type ") +
+      Rf_type2char(TYPEOF(x)) + "."
+    );
   }
 }
-
 
 // Escape postgresql special characters
 // https://www.postgresql.org/docs/current/sql-copy.html

@@ -20,7 +20,12 @@ private:
   std::set<DATA_TYPE> data_types_seen;
 
 public:
-  DbColumn(DATA_TYPE dt_, const int n_max_, DbColumnDataSourceFactory* factory, const int j);
+  DbColumn(
+    DATA_TYPE dt_,
+    const int n_max_,
+    DbColumnDataSourceFactory* factory,
+    const int j
+  );
   ~DbColumn();
 
 public:
@@ -37,5 +42,4 @@ private:
   const DbColumnStorage* get_last_storage() const;
 };
 
-
-#endif // DB_COLUMN_H
+#endif  // DB_COLUMN_H

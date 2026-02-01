@@ -7,12 +7,13 @@
 #include <boost/bind.hpp>
 #include <boost/range/algorithm_ext/for_each.hpp>
 
-DbDataFrame::DbDataFrame(DbColumnDataSourceFactory* factory_, std::vector<std::string> names_, const int n_max_,
-                         const std::vector<DATA_TYPE>& types_)
-  : n_max(n_max_),
-    i(0),
-    names(names_)
-{
+DbDataFrame::DbDataFrame(
+  DbColumnDataSourceFactory* factory_,
+  std::vector<std::string> names_,
+  const int n_max_,
+  const std::vector<DATA_TYPE>& types_
+)
+    : n_max(n_max_), i(0), names(names_) {
   factory.reset(factory_);
 
   data.reserve(types_.size());
@@ -22,18 +23,22 @@ DbDataFrame::DbDataFrame(DbColumnDataSourceFactory* factory_, std::vector<std::s
   }
 }
 
-DbDataFrame::~DbDataFrame() {
-}
+DbDataFrame::~DbDataFrame() {}
 
 void DbDataFrame::set_col_values() {
-  std::for_each(data.begin(), data.end(), boost::bind(&DbColumn::set_col_value, _1));
+  std::for_each(
+    data.begin(),
+    data.end(),
+    boost::bind(&DbColumn::set_col_value, _1)
+  );
 }
 
 bool DbDataFrame::advance() {
   ++i;
 
-  if (i % 1024 == 0)
+  if (i % 1024 == 0) {
     cpp11::check_user_interrupt();
+  }
 
   return (n_max < 0 || i < n_max);
 }
@@ -49,9 +54,18 @@ cpp11::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   finalize_cols();
 
   types_.clear();
-  std::transform(data.begin(), data.end(), std::back_inserter(types_), boost::mem_fn(&DbColumn::get_type));
+  std::transform(
+    data.begin(),
+    data.end(),
+    std::back_inserter(types_),
+    boost::mem_fn(&DbColumn::get_type)
+  );
 
-  boost::for_each(data, names, boost::bind(&DbColumn::warn_type_conflicts, _1, _2));
+  boost::for_each(
+    data,
+    names,
+    boost::bind(&DbColumn::warn_type_conflicts, _1, _2)
+  );
 
   cpp11::writable::list out(data.size());
   auto it = data.begin();
@@ -59,7 +73,8 @@ cpp11::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
     out[i] = *it;
     it++;
   }
-  auto names_utf8 = static_cast<cpp11::writable::strings>(cpp11::as_sexp(names));
+  auto names_utf8 =
+    static_cast<cpp11::writable::strings>(cpp11::as_sexp(names));
   for (int j = 0; j < names_utf8.size(); ++j) {
     const auto name = static_cast<cpp11::r_string>(names_utf8[j]);
     const auto name_str = static_cast<std::string>(name);
@@ -67,7 +82,7 @@ cpp11::list DbDataFrame::get_data(std::vector<DATA_TYPE>& types_) {
   }
   out.attr("names") = names_utf8;
   out.attr("class") = "data.frame";
-  out.attr("row.names") = cpp11::integers({NA_INTEGER, -i});
+  out.attr("row.names") = cpp11::integers({ NA_INTEGER, -i });
   return out;
 }
 
@@ -76,5 +91,9 @@ size_t DbDataFrame::get_ncols() const {
 }
 
 void DbDataFrame::finalize_cols() {
-  std::for_each(data.begin(), data.end(), boost::bind(&DbColumn::finalize, _1, i));
+  std::for_each(
+    data.begin(),
+    data.end(),
+    boost::bind(&DbColumn::finalize, _1, i)
+  );
 }

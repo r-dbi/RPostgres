@@ -33,4 +33,4 @@ protected:
   int get_j() const;
 };
 
-#endif //DB_COLUMNDATASOURCE_H
+#endif  // DB_COLUMNDATASOURCE_H

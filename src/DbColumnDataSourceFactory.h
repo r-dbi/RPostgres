@@ -14,4 +14,4 @@ public:
   virtual DbColumnDataSource* create(const int j) = 0;
 };
 
-#endif //DB_COLUMNDATASOURCEFACTORY_H
+#endif  // DB_COLUMNDATASOURCEFACTORY_H

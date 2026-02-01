@@ -7,30 +7,32 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
-#define SOCKERR WSAGetLastError()
+#define SOCKERR      WSAGetLastError()
 #define SOCKET_EINTR WSAEINTR
 #else
 #include <errno.h>
-#define SOCKERR errno
+#define SOCKERR      errno
 #define SOCKET_EINTR EINTR
 #endif
 
-PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate) :
-  pConnPtr_(pConn),
-  pConn_(pConn->conn()),
-  sql_(sql),
-  immediate_(immediate),
-  pSpec_(NULL),
-  complete_(false),
-  ready_(false),
-  data_ready_(false),
-  nrows_(0),
-  rows_affected_(0),
-  group_(0),
-  groups_(0),
-  pRes_(NULL)
-{
-
+PqResultImpl::PqResultImpl(
+  const DbConnectionPtr& pConn,
+  const std::string& sql,
+  bool immediate
+)
+    : pConnPtr_(pConn),
+      pConn_(pConn->conn()),
+      sql_(sql),
+      immediate_(immediate),
+      pSpec_(NULL),
+      complete_(false),
+      ready_(false),
+      data_ready_(false),
+      nrows_(0),
+      rows_affected_(0),
+      group_(0),
+      groups_(0),
+      pRes_(NULL) {
   LOG_DEBUG << sql;
 
   prepare();
@@ -48,24 +50,20 @@ PqResultImpl::PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql,
 
 PqResultImpl::~PqResultImpl() {
   try {
-    if (pSpec_) PQclear(pSpec_);
+    if (pSpec_) {
+      PQclear(pSpec_);
+    }
   } catch (...) {}
-  if (pRes_) PQclear(pRes_);
+  if (pRes_) {
+    PQclear(pRes_);
+  }
 }
-
-
 
 // Cache ///////////////////////////////////////////////////////////////////////
 
-PqResultImpl::_cache::_cache() :
-  initialized_(false),
-  ncols_(0),
-  nparams_(0)
-{
-}
+PqResultImpl::_cache::_cache() : initialized_(false), ncols_(0), nparams_(0) {}
 
-void PqResultImpl::_cache::set(PGresult* spec)
-{
+void PqResultImpl::_cache::set(PGresult* spec) {
   // always: should be fast
   if (nparams_ == 0) {
     nparams_ = PQnparams(spec);
@@ -99,8 +97,9 @@ void PqResultImpl::_cache::set(PGresult* spec)
   }
 }
 
-
-std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) {
+std::vector<std::string> PqResultImpl::_cache::get_column_names(
+  PGresult* spec
+) {
   std::vector<std::string> names;
   int ncols_ = PQnfields(spec);
   names.reserve(ncols_);
@@ -115,58 +114,58 @@ std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec) 
 DATA_TYPE PqResultImpl::_cache::get_column_type_from_oid(const Oid type) {
   // SELECT oid, typname FROM pg_type WHERE typtype = 'b'
   switch (type) {
-  case 20: // BIGINT
+  case 20:  // BIGINT
     return DT_INT64;
     break;
 
-  case 21: // SMALLINT
-  case 23: // INTEGER
-  case 26: // OID
+  case 21:  // SMALLINT
+  case 23:  // INTEGER
+  case 26:  // OID
     return DT_INT;
     break;
 
-  case 1700: // DECIMAL
-  case 701: // FLOAT8
-  case 700: // FLOAT
-  case 790: // MONEY
+  case 1700:  // DECIMAL
+  case 701:   // FLOAT8
+  case 700:   // FLOAT
+  case 790:   // MONEY
     return DT_REAL;
     break;
 
-  case 18: // CHAR
-  case 19: // NAME
-  case 25: // TEXT
-  case 1042: // CHAR
-  case 1043: // VARCHAR
+  case 18:    // CHAR
+  case 19:    // NAME
+  case 25:    // TEXT
+  case 1042:  // CHAR
+  case 1043:  // VARCHAR
     return DT_STRING;
     break;
-  case 1082: // DATE
+  case 1082:  // DATE
     return DT_DATE;
     break;
-  case 1083: // TIME
-  case 1266: // TIMETZOID
+  case 1083:  // TIME
+  case 1266:  // TIMETZOID
     return DT_TIME;
     break;
-  case 1114: // TIMESTAMP
+  case 1114:  // TIMESTAMP
     return DT_DATETIME;
     break;
-  case 1184: // TIMESTAMPTZOID
+  case 1184:  // TIMESTAMPTZOID
     return DT_DATETIMETZ;
     break;
-  case 1186: // INTERVAL
-  case 2950: // UUID
+  case 1186:  // INTERVAL
+  case 2950:  // UUID
     return DT_STRING;
     break;
 
-  case 16: // BOOL
+  case 16:  // BOOL
     return DT_BOOL;
     break;
 
-  case 17: // BYTEA
-  case 2278: // NULL
+  case 17:    // BYTEA
+  case 2278:  // NULL
     return DT_BLOB;
     break;
 
-  case 705: // UNKNOWN
+  case 705:  // UNKNOWN
     return DT_STRING;
     break;
 
@@ -186,7 +185,10 @@ std::vector<Oid> PqResultImpl::_cache::get_column_oids(PGresult* spec) {
   return oids;
 }
 
-std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(const std::vector<Oid>& oids, const std::vector<std::string>& names) {
+std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(
+  const std::vector<Oid>& oids,
+  const std::vector<std::string>& names
+) {
   std::vector<DATA_TYPE> types;
   size_t ncols_ = oids.size();
   types.reserve(ncols_);
@@ -206,7 +208,9 @@ std::vector<DATA_TYPE> PqResultImpl::_cache::get_column_types(const std::vector<
   return types;
 }
 
-std::vector<bool> PqResultImpl::_cache::get_column_known(const std::vector<Oid>& oids) {
+std::vector<bool> PqResultImpl::_cache::get_column_known(
+  const std::vector<Oid>& oids
+) {
   std::vector<bool> known;
   size_t ncols_ = oids.size();
   known.reserve(ncols_);
@@ -253,8 +257,6 @@ void PqResultImpl::init(bool params_have_rows) {
   complete_ = !params_have_rows;
 }
 
-
-
 // Publics /////////////////////////////////////////////////////////////////////
 
 bool PqResultImpl::complete() const {
@@ -266,8 +268,12 @@ int PqResultImpl::n_rows_fetched() {
 }
 
 int PqResultImpl::n_rows_affected() {
-  if (!ready_) return NA_INTEGER;
-  if (cache.ncols_ > 0) return 0;
+  if (!ready_) {
+    return NA_INTEGER;
+  }
+  if (cache.ncols_ > 0) {
+    return 0;
+  }
   return rows_affected_;
 }
 
@@ -279,8 +285,11 @@ void PqResultImpl::bind(const cpp11::list& params) {
   }
 
   if (params.size() != cache.nparams_) {
-    cpp11::stop("Query requires %i params; %i supplied.",
-         cache.nparams_, params.size());
+    cpp11::stop(
+      "Query requires %i params; %i supplied.",
+      cache.nparams_,
+      params.size()
+    );
   }
 
   if (params.size() == 0 && ready_) {
@@ -292,8 +301,7 @@ void PqResultImpl::bind(const cpp11::list& params) {
   if (params.size() > 0) {
     SEXP first_col = params[0];
     groups_ = Rf_length(first_col);
-  }
-  else {
+  } else {
     groups_ = 1;
   }
   group_ = 0;
@@ -307,16 +315,18 @@ void PqResultImpl::bind(const cpp11::list& params) {
 cpp11::list PqResultImpl::fetch(const int n_max) {
   LOG_DEBUG << n_max;
 
-  if (!ready_)
+  if (!ready_) {
     cpp11::stop("Query needs to be bound before fetching");
+  }
 
   int n = 0;
   cpp11::list out;
 
-  if (n_max != 0)
+  if (n_max != 0) {
     out = fetch_rows(n_max, n);
-  else
+  } else {
     out = peek_first_row();
+  }
 
   return out;
 }
@@ -327,28 +337,25 @@ cpp11::list PqResultImpl::get_column_info() {
 
   cpp11::writable::strings names(cache.names_.size());
   auto it = cache.names_.begin();
-  for (int i = 0; i < names.size(); i++, it++)
+  for (int i = 0; i < names.size(); i++, it++) {
     names[i] = *it;
+  }
 
   cpp11::writable::strings types(cache.ncols_);
   for (size_t i = 0; i < cache.ncols_; i++) {
-    types[i] = Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
+    types[i] =
+      Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  return cpp11::list({
-    "name"_nm = names,
-    "type"_nm = types,
-    ".oid"_nm = cache.oids_,
-    ".known"_nm = cache.known_
-  });
+  return cpp11::list(
+    { "name"_nm = names,
+      "type"_nm = types,
+      ".oid"_nm = cache.oids_,
+      ".known"_nm = cache.known_ }
+  );
 }
 
-
-
 // Publics (custom) ////////////////////////////////////////////////////////////
-
-
-
 
 // Privates ////////////////////////////////////////////////////////////////////
 
@@ -381,8 +388,7 @@ bool PqResultImpl::bind_row() {
         formats[i] = 1;
         lengths[i] = Rf_length(param[group_]);
       }
-    }
-    else {
+    } else {
       cpp11::strings param(params_[i]);
       if (param[group_] != NA_STRING) {
         c_params[i] = CHAR(param[group_]);
@@ -399,29 +405,34 @@ bool PqResultImpl::bind_row() {
     if (!success) {
       conn_stop("Failed to send query");
     }
-  }
-  else {
+  } else {
     int success = PQsendQueryPrepared(
-      pConn_, "", cache.nparams_,
+      pConn_,
+      "",
+      cache.nparams_,
       cache.nparams_ ? &c_params[0] : NULL,
       cache.nparams_ ? &lengths[0] : NULL,
       cache.nparams_ ? &formats[0] : NULL,
-      0);
+      0
+    );
 
-    if (!success)
+    if (!success) {
       conn_stop("Failed to set query parameters");
+    }
   }
 
-  if (!PQsetSingleRowMode(pConn_))
+  if (!PQsetSingleRowMode(pConn_)) {
     conn_stop("Failed to set single row mode");
+  }
 
   return true;
 }
 
 void PqResultImpl::after_bind(bool params_have_rows) {
   init(params_have_rows);
-  if (params_have_rows)
+  if (params_have_rows) {
     step();
+  }
 }
 
 cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
@@ -432,7 +443,11 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
-    cpp11::warning(std::string("Don't need to call dbFetch() for statements, only for queries"));
+    cpp11::warning(
+      std::string(
+        "Don't need to call dbFetch() for statements, only for queries"
+      )
+    );
   }
 
   while (!complete_) {
@@ -441,8 +456,9 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
     data.set_col_values();
     step();
     nrows_++;
-    if (!data.advance())
+    if (!data.advance()) {
       break;
+    }
   }
 
   LOG_VERBOSE << nrows_;
@@ -539,8 +555,9 @@ bool PqResultImpl::step_done() {
 
   bool more_params = bind_row();
 
-  if (!more_params)
+  if (!more_params) {
     complete_ = true;
+  }
 
   LOG_VERBOSE << "group: " << group_ << ", more_params: " << more_params;
   return more_params;
@@ -549,8 +566,9 @@ bool PqResultImpl::step_done() {
 cpp11::list PqResultImpl::peek_first_row() {
   PqDataFrame data(this, cache.names_, 1, cache.types_);
 
-  if (!complete_)
+  if (!complete_) {
     data.set_col_values();
+  }
   // Not calling data.advance(), remains a zero-row data frame
 
   cpp11::writable::list ret = data.get_data();
@@ -589,8 +607,9 @@ PGresult* PqResultImpl::get_result() {
 bool PqResultImpl::wait_for_data() {
   LOG_DEBUG << pConnPtr_->is_check_interrupts();
 
-  if (!pConnPtr_->is_check_interrupts())
+  if (!pConnPtr_->is_check_interrupts()) {
     return true;
+  }
 
   // update db connection state using data available on the socket
   if (!PQconsumeInput(pConn_)) {
@@ -615,7 +634,7 @@ bool PqResultImpl::wait_for_data() {
     LOG_DEBUG;
 
     // wait for any traffic on the db connection socket but no longer than 1s
-    timeval timeout = {0, 0};
+    timeval timeout = { 0, 0 };
     timeout.tv_sec = 1;
     FD_SET(socket, &input);
 
@@ -628,8 +647,7 @@ bool PqResultImpl::wait_for_data() {
       try {
         // FIXME: Do we even need this?
         cpp11::check_user_interrupt();
-      }
-      catch (...) {
+      } catch (...) {
         LOG_DEBUG;
         return false;
       }
@@ -648,7 +666,7 @@ bool PqResultImpl::wait_for_data() {
     if (!PQconsumeInput(pConn_)) {
       cpp11::stop("Failed to consume input from the server");
     }
-  } while (PQisBusy(pConn_)); // check if PQgetResult will still block
+  } while (PQisBusy(pConn_));  // check if PQgetResult will still block
 
   return true;
 }

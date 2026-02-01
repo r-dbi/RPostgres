@@ -20,8 +20,11 @@ class DbConnection : boost::noncopyable {
   cpp11::strings temp_schema_;
 
 public:
-  DbConnection(std::vector<std::string> keys, std::vector<std::string> values,
-    bool check_interrupts);
+  DbConnection(
+    std::vector<std::string> keys,
+    std::vector<std::string> values,
+    bool check_interrupts
+  );
   virtual ~DbConnection();
 
 public:
@@ -35,10 +38,9 @@ public:
   bool has_query();
 
   void copy_data(std::string sql, cpp11::list df);
-  
+
   Oid import_lo_from_file(std::string file_path, Oid p_oid);
   void export_lo_to_file(Oid p_oid, std::string file_path);
-  
 
   void check_connection();
   cpp11::list info();

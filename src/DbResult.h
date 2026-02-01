@@ -7,7 +7,6 @@
 
 #include "DbResultImplDecl.h"
 
-
 class DbConnection;
 typedef boost::shared_ptr<DbConnection> DbConnectionPtr;
 
@@ -42,4 +41,4 @@ private:
   void validate_params(const cpp11::list& params) const;
 };
 
-#endif // __RDBI_DB_RESULT__
+#endif  // __RDBI_DB_RESULT__
