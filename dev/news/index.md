@@ -1,5 +1,14 @@
 # Changelog
 
+## RPostgres 1.4.8.9006 (2026-01-14)
+
+### Continuous integration
+
+- Tweaks ([\#541](https://github.com/r-dbi/RPostgres/issues/541)).
+
+- Test all R versions on branches that start with cran-
+  ([\#540](https://github.com/r-dbi/RPostgres/issues/540)).
+
 ## RPostgres 1.4.8.9005 (2025-11-17)
 
 ### Continuous integration
