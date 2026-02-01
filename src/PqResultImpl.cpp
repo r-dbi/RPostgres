@@ -97,8 +97,7 @@ void PqResultImpl::_cache::set(PGresult* spec) {
   }
 }
 
-std::vector<std::string> PqResultImpl::_cache::get_column_names(
-  PGresult* spec
+std::vector<std::string> PqResultImpl::_cache::get_column_names(PGresult* spec
 ) {
   std::vector<std::string> names;
   int ncols_ = PQnfields(spec);
@@ -347,12 +346,10 @@ cpp11::list PqResultImpl::get_column_info() {
       Rf_type2char(DbColumnStorage::sexptype_from_datatype(cache.types_[i]));
   }
 
-  return cpp11::list(
-    { "name"_nm = names,
-      "type"_nm = types,
-      ".oid"_nm = cache.oids_,
-      ".known"_nm = cache.known_ }
-  );
+  return cpp11::list({ "name"_nm = names,
+                       "type"_nm = types,
+                       ".oid"_nm = cache.oids_,
+                       ".known"_nm = cache.known_ });
 }
 
 // Publics (custom) ////////////////////////////////////////////////////////////
@@ -443,11 +440,9 @@ cpp11::list PqResultImpl::fetch_rows(const int n_max, int& n) {
   PqDataFrame data(this, cache.names_, n_max, cache.types_);
 
   if (complete_ && data.get_ncols() == 0) {
-    cpp11::warning(
-      std::string(
-        "Don't need to call dbFetch() for statements, only for queries"
-      )
-    );
+    cpp11::warning(std::string(
+      "Don't need to call dbFetch() for statements, only for queries"
+    ));
   }
 
   while (!complete_) {
