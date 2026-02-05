@@ -40,15 +40,12 @@ DbConnection::DbConnection(
 }
 
 DbConnection::~DbConnection() {
-  LOG_VERBOSE;
   disconnect();
 }
 
 void DbConnection::disconnect() {
   try {
-    LOG_VERBOSE;
     PQfinish(pConn_);
-    LOG_VERBOSE;
     pConn_ = NULL;
   } catch (...) {}
 }
@@ -93,8 +90,6 @@ void DbConnection::reset_current_result(const DbResult* pResult) {
  * https://www.postgresql.org/docs/current/libpq-cancel.html
  **/
 void DbConnection::cancel_query() {
-  LOG_DEBUG;
-
   check_connection();
 
   // first allocate a 'cancel command' data structure.
@@ -105,8 +100,6 @@ void DbConnection::cancel_query() {
   if (cancel == NULL) {
     cpp11::stop(std::string("Connection error detected via PQgetCancel()"));
   }
-
-  LOG_DEBUG;
 
   // PQcancel() actually issues the cancel command to the backend.
   char errbuf[256];
@@ -150,8 +143,6 @@ void DbConnection::export_lo_to_file(Oid p_oid, std::string filename) {
 }
 
 void DbConnection::copy_data(std::string sql, cpp11::list df) {
-  LOG_DEBUG << sql;
-
   R_xlen_t p = df.size();
   if (p == 0) {
     return;

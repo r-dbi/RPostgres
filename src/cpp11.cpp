@@ -136,14 +136,6 @@ extern "C" SEXP _RPostgres_encrypt_password(SEXP password, SEXP user) {
     return cpp11::as_sexp(encrypt_password(cpp11::as_cpp<cpp11::decay_t<cpp11::r_string>>(password), cpp11::as_cpp<cpp11::decay_t<cpp11::r_string>>(user)));
   END_CPP11
 }
-// logging.cpp
-void init_logging(const std::string& log_level);
-extern "C" SEXP _RPostgres_init_logging(SEXP log_level) {
-  BEGIN_CPP11
-    init_logging(cpp11::as_cpp<cpp11::decay_t<const std::string&>>(log_level));
-    return R_NilValue;
-  END_CPP11
-}
 // result.cpp
 cpp11::external_pointer<DbResult> result_create(cpp11::external_pointer<DbConnectionPtr> con, std::string sql, bool immediate);
 extern "C" SEXP _RPostgres_result_create(SEXP con, SEXP sql, SEXP immediate) {
@@ -230,7 +222,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RPostgres_encode_data_frame",              (DL_FUNC) &_RPostgres_encode_data_frame,              1},
     {"_RPostgres_encode_vector",                  (DL_FUNC) &_RPostgres_encode_vector,                  1},
     {"_RPostgres_encrypt_password",               (DL_FUNC) &_RPostgres_encrypt_password,               2},
-    {"_RPostgres_init_logging",                   (DL_FUNC) &_RPostgres_init_logging,                   1},
     {"_RPostgres_result_bind",                    (DL_FUNC) &_RPostgres_result_bind,                    2},
     {"_RPostgres_result_column_info",             (DL_FUNC) &_RPostgres_result_column_info,             1},
     {"_RPostgres_result_create",                  (DL_FUNC) &_RPostgres_result_create,                  3},

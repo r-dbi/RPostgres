@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <sstream>
 #include "DbColumn.h"
 #include "DbColumnDataSource.h"
 #include "DbColumnStorage.h"
