@@ -1,65 +1,6 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.8.9008 (2026-02-05)
-
-## Chore
-
-- Remove plogr (#545).
-
-## Continuous integration
-
-- Use clang-format-21.
-
-
-# RPostgres 1.4.8.9007 (2026-02-02)
-
-## Chore
-
-- Build-ignore.
-
-- Auto-update from GitHub Actions (#543).
-
-- Format C++ code with clang-format.
-
-
-# RPostgres 1.4.8.9006 (2026-01-14)
-
-## Continuous integration
-
-- Tweaks (#541).
-
-- Test all R versions on branches that start with cran- (#540).
-
-
-# RPostgres 1.4.8.9005 (2025-11-17)
-
-## Continuous integration
-
-- Install binaries from r-universe for dev workflow (#536).
-
-
-# RPostgres 1.4.8.9004 (2025-11-12)
-
-## Continuous integration
-
-- Fix reviewdog and add commenting workflow (#534).
-
-
-# RPostgres 1.4.8.9003 (2025-11-11)
-
-## Continuous integration
-
-- Use workflows for fledge (#531).
-
-
-# RPostgres 1.4.8.9002 (2025-11-08)
-
-## Continuous integration
-
-- Sync (#529).
-
-
-# RPostgres 1.4.8.9001 (2025-09-23)
+# RPostgres 1.4.9 (2026-02-05)
 
 ## Features
 
@@ -67,40 +8,9 @@
 
 ## Chore
 
-- Auto-update from GitHub Actions (#524).
+- Remove plogr (#545).
 
-
-# RPostgres 1.4.8.9000 (2025-09-14)
-
-## Chore
-
-- Auto-update from GitHub Actions (#515).
-
-## Continuous integration
-
-- Default to PostgreSQL 17.
-
-- Use reviewdog for external PRs (#517).
-
-- Cleanup and fix macOS (#512).
-
-- Format with air, check detritus, better handling of `extra-packages` (#510).
-
-- Enhance permissions for workflow (#506).
-
-- Permissions, better tests for missing suggests, lints (#504).
-
-- Only fail covr builds if token is given (#501).
-
-- Always use `_R_CHECK_FORCE_SUGGESTS_=false` (#500).
-
-- Correct installation of xml2 (#497).
-
-- Explain (#495).
-
-- Add xml2 for covr, print testthat results (#494).
-
-- Sync (#493).
+- Format C++ code with clang-format.
 
 ## Documentation
 
@@ -245,7 +155,7 @@
 
 ## Bug fixes
 
-- Avoid crash by dereferencing 0-size vector (#343). 
+- Avoid crash by dereferencing 0-size vector (#343).
 
 
 # RPostgres 1.4.0 (2021-09-25)
@@ -268,7 +178,7 @@
 
 - Skip timestamp tests on i386 (#318).
 - `dbSendQuery()` and `dbQuoteLiteral()` use single dispatch (#320).
-- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329). 
+- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329).
 
 ## Documentation
 
