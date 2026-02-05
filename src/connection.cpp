@@ -12,8 +12,6 @@ cpp11::external_pointer<DbConnectionPtr> connection_create(
   std::vector<std::string> values,
   bool check_interrupts
 ) {
-  LOG_VERBOSE;
-
   DbConnectionPtr* pConn =
     new DbConnectionPtr(new DbConnection(keys, values, check_interrupts));
 

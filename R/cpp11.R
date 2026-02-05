@@ -72,10 +72,6 @@ encrypt_password <- function(password, user) {
   .Call(`_RPostgres_encrypt_password`, password, user)
 }
 
-init_logging <- function(log_level) {
-  invisible(.Call(`_RPostgres_init_logging`, log_level))
-}
-
 result_create <- function(con, sql, immediate) {
   .Call(`_RPostgres_result_create`, con, sql, immediate)
 }
