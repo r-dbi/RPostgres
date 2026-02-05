@@ -39,7 +39,10 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
     static std::vector<std::string> get_column_names(PGresult* spec);
     static DATA_TYPE get_column_type_from_oid(const Oid type);
     static std::vector<Oid> get_column_oids(PGresult* spec);
-    static std::vector<DATA_TYPE> get_column_types(const std::vector<Oid>& oids, const std::vector<std::string>& names);
+    static std::vector<DATA_TYPE> get_column_types(
+      const std::vector<Oid>& oids,
+      const std::vector<std::string>& names
+    );
     static std::vector<bool> get_column_known(const std::vector<Oid>& oids);
   } cache;
 
@@ -54,7 +57,11 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
   PGresult* pRes_;
 
 public:
-  PqResultImpl(const DbConnectionPtr& pConn, const std::string& sql, bool immediate);
+  PqResultImpl(
+    const DbConnectionPtr& pConn,
+    const std::string& sql,
+    bool immediate
+  );
   ~PqResultImpl();
 
 private:
@@ -62,7 +69,7 @@ private:
   void init(bool params_have_rows);
 
 public:
-  void close() {} // FIXME
+  void close() {}  // FIXME
   bool complete() const;
   int n_rows_fetched();
   int n_rows_affected();
@@ -97,4 +104,4 @@ private:
   bool wait_for_data();
 };
 
-#endif //RPOSTGRES_PQRESULTIMPL_H
+#endif  // RPOSTGRES_PQRESULTIMPL_H

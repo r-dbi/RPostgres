@@ -16,10 +16,12 @@ class DbDataFrame {
   std::vector<std::string> names;
 
 public:
-  DbDataFrame(DbColumnDataSourceFactory* factory,
-              std::vector<std::string> names,
-              const int n_max_,
-              const std::vector<DATA_TYPE>& types);
+  DbDataFrame(
+    DbColumnDataSourceFactory* factory,
+    std::vector<std::string> names,
+    const int n_max_,
+    const std::vector<DATA_TYPE>& types
+  );
   virtual ~DbDataFrame();
 
 public:
@@ -34,5 +36,4 @@ private:
   void finalize_cols();
 };
 
-
-#endif //DB_DATAFRAME_H
+#endif  // DB_DATAFRAME_H

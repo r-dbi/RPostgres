@@ -9,21 +9,27 @@
 namespace cpp11 {
 
 template <typename T>
-enable_if_t<std::is_same<decay_t<T>, DbConnection*>::value, decay_t<T>> as_cpp(SEXP from) {
+enable_if_t<std::is_same<decay_t<T>, DbConnection*>::value, decay_t<T>> as_cpp(
+  SEXP from
+) {
   DbConnectionPtr* connection = (DbConnectionPtr*)(R_ExternalPtrAddr(from));
-  if (!connection)
+  if (!connection) {
     stop("Invalid connection");
+  }
   return connection->get();
 }
 
 template <typename T>
-enable_if_t<std::is_same<decay_t<T>, DbResult*>::value, decay_t<T>> as_cpp(SEXP from) {
+enable_if_t<std::is_same<decay_t<T>, DbResult*>::value, decay_t<T>> as_cpp(
+  SEXP from
+) {
   DbResult* result = (DbResult*)(R_ExternalPtrAddr(from));
-  if (!result)
+  if (!result) {
     stop("Invalid result set");
+  }
   return result;
 }
 
-}
+}  // namespace cpp11
 
 #endif

@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "RPostgres_types.h"
 
-
 [[cpp11::register]]
 int client_version() {
   return PQlibVersion();
@@ -15,9 +14,8 @@ cpp11::external_pointer<DbConnectionPtr> connection_create(
 ) {
   LOG_VERBOSE;
 
-  DbConnectionPtr* pConn = new DbConnectionPtr(
-    new DbConnection(keys, values, check_interrupts)
-  );
+  DbConnectionPtr* pConn =
+    new DbConnectionPtr(new DbConnection(keys, values, check_interrupts));
 
   return cpp11::external_pointer<DbConnectionPtr>(pConn, true);
 }
@@ -37,8 +35,12 @@ void connection_release(cpp11::external_pointer<DbConnectionPtr> con_) {
 
   DbConnectionPtr* con = con_.get();
   if (con->get()->has_query()) {
-    cpp11::warning(std::string("There is a result object still in use.\n"
-      "The connection will be automatically released when it is closed"));
+    cpp11::warning(
+      std::string(
+        "There is a result object still in use.\n"
+        "The connection will be automatically released when it is closed"
+      )
+    );
   }
 
   con->get()->disconnect();
@@ -66,7 +68,10 @@ cpp11::strings connection_quote_string(DbConnection* con, cpp11::strings xs) {
 }
 
 [[cpp11::register]]
-cpp11::strings connection_quote_identifier(DbConnection* con, cpp11::strings xs) {
+cpp11::strings connection_quote_identifier(
+  DbConnection* con,
+  cpp11::strings xs
+) {
   const auto n = xs.size();
   cpp11::writable::strings output(n);
 
@@ -92,12 +97,20 @@ void connection_set_transacting(DbConnection* con, bool transacting) {
 
 // Specific functions
 [[cpp11::register]]
-Oid connection_import_lo_from_file(DbConnection* con, std::string filename, Oid oid) {
+Oid connection_import_lo_from_file(
+  DbConnection* con,
+  std::string filename,
+  Oid oid
+) {
   return con->import_lo_from_file(filename, oid);
 }
 
 [[cpp11::register]]
-void connection_export_lo_to_file(DbConnection* con, Oid oid, std::string filename) {
+void connection_export_lo_to_file(
+  DbConnection* con,
+  Oid oid,
+  std::string filename
+) {
   con->export_lo_to_file(oid, filename);
 }
 

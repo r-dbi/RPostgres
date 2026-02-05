@@ -9,4 +9,4 @@ inline int64_t* INTEGER64(SEXP x) {
   return reinterpret_cast<int64_t*>(REAL(x));
 }
 
-#endif // RPOSTGRES_INTEGER64_H
+#endif  // RPOSTGRES_INTEGER64_H

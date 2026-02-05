@@ -15,13 +15,13 @@
 // call WSAStartup() so resources will not be freed when the last database
 // connection is closed.
 
-void R_init_mypackage(DllInfo *info) {
+void R_init_mypackage(DllInfo* info) {
 #ifdef _WIN32
   WSAStartup(MAKEWORD(1, 0), NULL);
 #endif
 }
 
-void R_unload_mylib(DllInfo *info) {
+void R_unload_mylib(DllInfo* info) {
 #ifdef _WIN32
   WSACleanup();
 #endif

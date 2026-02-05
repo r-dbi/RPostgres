@@ -1,5 +1,25 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9007 (2026-02-02)
+
+## Chore
+
+- Build-ignore.
+
+- Auto-update from GitHub Actions (#543).
+
+- Format C++ code with clang-format.
+
+
+# RPostgres 1.4.8.9006 (2026-01-14)
+
+## Continuous integration
+
+- Tweaks (#541).
+
+- Test all R versions on branches that start with cran- (#540).
+
+
 # RPostgres 1.4.8.9005 (2025-11-17)
 
 ## Continuous integration

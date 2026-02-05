@@ -3,18 +3,20 @@
 #include "DbColumnDataSource.h"
 #include "DbColumnStorage.h"
 
-
-DbColumn::DbColumn(DATA_TYPE dt, const int n_max_, DbColumnDataSourceFactory* factory, const int j)
-  : source(factory->create(j)),
-    n(0)
-{
-  if (dt == DT_BOOL)
+DbColumn::DbColumn(
+  DATA_TYPE dt,
+  const int n_max_,
+  DbColumnDataSourceFactory* factory,
+  const int j
+)
+    : source(factory->create(j)), n(0) {
+  if (dt == DT_BOOL) {
     dt = DT_UNKNOWN;
+  }
   storage.push_back(new DbColumnStorage(dt, 0, n_max_, *source));
 }
 
-DbColumn::~DbColumn() {
-}
+DbColumn::~DbColumn() {}
 
 void DbColumn::set_col_value() {
   DbColumnStorage* last = get_last_storage();
@@ -22,7 +24,9 @@ void DbColumn::set_col_value() {
   data_types_seen.insert(dt);
 
   DbColumnStorage* next = last->append_col();
-  if (last != next) storage.push_back(next);
+  if (last != next) {
+    storage.push_back(next);
+  }
 }
 
 void DbColumn::finalize(const int n_) {
@@ -50,17 +54,24 @@ void DbColumn::warn_type_conflicts(const cpp11::r_string& name) const {
   my_data_types_seen.erase(DT_BOOL);
   my_data_types_seen.erase(dt);
 
-  if (my_data_types_seen.size() == 0) return;
+  if (my_data_types_seen.size() == 0) {
+    return;
+  }
 
   std::stringstream ss;
-  ss << "Column `" << static_cast<std::string>(name) << "`: " <<
-     "mixed type, first seen values of type " << format_data_type(dt) << ", " <<
-     "coercing other values of type ";
+  ss << "Column `" << static_cast<std::string>(name)
+     << "`: " << "mixed type, first seen values of type "
+     << format_data_type(dt) << ", " << "coercing other values of type ";
 
   bool first = true;
-  for (std::set<DATA_TYPE>::const_iterator it = my_data_types_seen.begin(); it != my_data_types_seen.end(); ++it) {
-    if (!first) ss << ", ";
-    else first = false;
+  for (std::set<DATA_TYPE>::const_iterator it = my_data_types_seen.begin();
+       it != my_data_types_seen.end();
+       ++it) {
+    if (!first) {
+      ss << ", ";
+    } else {
+      first = false;
+    }
     ss << format_data_type(*it);
   }
 

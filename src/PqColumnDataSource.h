@@ -11,7 +11,11 @@ class PqColumnDataSource : public DbColumnDataSource {
   const DATA_TYPE dt;
 
 public:
-  PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j);
+  PqColumnDataSource(
+    PqResultSource* result_source_,
+    const DATA_TYPE dt_,
+    const int j
+  );
   virtual ~PqColumnDataSource();
 
 public:
@@ -37,4 +41,4 @@ private:
   const char* get_result_value() const;
 };
 
-#endif //RPOSTGRES_PQCOLUMNDATASOURCE_H
+#endif  // RPOSTGRES_PQCOLUMNDATASOURCE_H

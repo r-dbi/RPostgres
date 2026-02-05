@@ -4,15 +4,14 @@
 #include "PqResultSource.h"
 #include "PqUtils.h"
 
-PqColumnDataSource::PqColumnDataSource(PqResultSource* result_source_, const DATA_TYPE dt_, const int j) :
-  DbColumnDataSource(j),
-  result_source(result_source_),
-  dt(dt_)
-{
-}
+PqColumnDataSource::PqColumnDataSource(
+  PqResultSource* result_source_,
+  const DATA_TYPE dt_,
+  const int j
+)
+    : DbColumnDataSource(j), result_source(result_source_), dt(dt_) {}
 
-PqColumnDataSource::~PqColumnDataSource() {
-}
+PqColumnDataSource::~PqColumnDataSource() {}
 
 DATA_TYPE PqColumnDataSource::get_data_type() const {
   return dt;
@@ -32,7 +31,6 @@ int PqColumnDataSource::fetch_bool() const {
   return (strcmp(get_result_value(), "t") == 0);
 }
 
-
 int PqColumnDataSource::fetch_int() const {
   LOG_VERBOSE << get_result_value();
   return atoi(get_result_value());
@@ -51,16 +49,13 @@ double PqColumnDataSource::fetch_real() const {
   if (strcmp(value, "-Infinity") == 0) {
     LOG_VERBOSE;
     return -INFINITY;
-  }
-  else if (strcmp(value, "Infinity") == 0) {
+  } else if (strcmp(value, "Infinity") == 0) {
     LOG_VERBOSE;
     return INFINITY;
-  }
-  else if (strcmp(value, "NaN") == 0) {
+  } else if (strcmp(value, "NaN") == 0) {
     LOG_VERBOSE;
     return NAN;
-  }
-  else {
+  } else {
     LOG_VERBOSE;
     return atof(value);
   }
@@ -76,7 +71,8 @@ SEXP PqColumnDataSource::fetch_blob() const {
   const void* val = get_result_value();
 
   size_t to_length = 0;
-  unsigned char* unescaped_blob = PQunescapeBytea(static_cast<const unsigned char*>(val), &to_length);
+  unsigned char* unescaped_blob =
+    PQunescapeBytea(static_cast<const unsigned char*>(val), &to_length);
 
   SEXP bytes = Rf_allocVector(RAWSXP, static_cast<R_xlen_t>(to_length));
   memcpy(RAW(bytes), unescaped_blob, to_length);

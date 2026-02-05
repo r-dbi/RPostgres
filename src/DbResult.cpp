@@ -3,13 +3,9 @@
 #include "DbConnection.h"
 #include "DbResultImpl.h"
 
-
-
 // Construction ////////////////////////////////////////////////////////////////
 
-DbResult::DbResult(const DbConnectionPtr& pConn) :
-  pConn_(pConn)
-{
+DbResult::DbResult(const DbConnectionPtr& pConn) : pConn_(pConn) {
   pConn_->check_connection();
 
   // subclass constructor can throw, the destructor will remove the
@@ -24,7 +20,6 @@ DbResult::~DbResult() {
     }
   } catch (...) {}
 }
-
 
 // Publics /////////////////////////////////////////////////////////////////////
 
@@ -50,8 +45,9 @@ void DbResult::bind(const cpp11::list& params) {
 }
 
 cpp11::list DbResult::fetch(const int n_max) {
-  if (!is_active())
+  if (!is_active()) {
     cpp11::stop("Inactive result set");
+  }
 
   return impl->fetch(n_max);
 }
@@ -59,7 +55,7 @@ cpp11::list DbResult::fetch(const int n_max) {
 cpp11::list DbResult::get_column_info() {
   cpp11::writable::list out = impl->get_column_info();
 
-  out.attr("row.names") = cpp11::integers({NA_INTEGER, -Rf_length(out[0])});
+  out.attr("row.names") = cpp11::integers({ NA_INTEGER, -Rf_length(out[0]) });
   out.attr("class") = "data.frame";
 
   return out;
@@ -67,7 +63,9 @@ cpp11::list DbResult::get_column_info() {
 
 void DbResult::close() {
   // Called from destructor
-  if (impl) impl->close();
+  if (impl) {
+    impl->close();
+  }
 }
 
 // Privates ///////////////////////////////////////////////////////////////////
@@ -79,8 +77,9 @@ void DbResult::validate_params(const cpp11::list& params) const {
 
     for (int j = 1; j < params.size(); ++j) {
       SEXP col = params[j];
-      if (Rf_length(col) != n)
+      if (Rf_length(col) != n) {
         cpp11::stop("Parameter %i does not have length %d.", j + 1, n);
+      }
     }
   }
 }

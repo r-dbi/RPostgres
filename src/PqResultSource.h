@@ -10,4 +10,4 @@ public:
   virtual PGresult* get_result() = 0;
 };
 
-#endif //RPOSTGRES_PQRESULTSOURCE_H
+#endif  // RPOSTGRES_PQRESULTSOURCE_H
