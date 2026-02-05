@@ -1,5 +1,16 @@
 # Changelog
 
+## RPostgres 1.4.8.9007 (2026-02-02)
+
+### Chore
+
+- Build-ignore.
+
+- Auto-update from GitHub Actions
+  ([\#543](https://github.com/r-dbi/RPostgres/issues/543)).
+
+- Format C++ code with clang-format.
+
 ## RPostgres 1.4.8.9006 (2026-01-14)
 
 ### Continuous integration
