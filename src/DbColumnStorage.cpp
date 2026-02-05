@@ -65,7 +65,8 @@ R_xlen_t DbColumnStorage::get_capacity() const {
   return Rf_xlength(data);
 }
 
-R_xlen_t DbColumnStorage::get_new_capacity(const R_xlen_t desired_capacity
+R_xlen_t DbColumnStorage::get_new_capacity(
+  const R_xlen_t desired_capacity
 ) const {
   if (n_max < 0) {
     const R_xlen_t MIN_DATA_CAPACITY = 100;

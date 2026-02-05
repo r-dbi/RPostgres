@@ -223,14 +223,16 @@ cpp11::list DbConnection::info() {
   int pver = PQprotocolVersion(pConn_);
   int sver = PQserverVersion(pConn_);
   int pid = PQbackendPID(pConn_);
-  return cpp11::list({ "dbname"_nm = dbnm == NULL ? "" : std::string(dbnm),
-                       "host"_nm = host == NULL ? "" : std::string(host),
-                       "port"_nm = port == NULL ? "" : std::string(port),
-                       "username"_nm = user == NULL ? "" : std::string(user),
-                       "protocol.version"_nm = pver,
-                       "server.version"_nm = sver,
-                       "db.version"_nm = sver,
-                       "pid"_nm = pid });
+  return cpp11::list(
+    { "dbname"_nm = dbnm == NULL ? "" : std::string(dbnm),
+      "host"_nm = host == NULL ? "" : std::string(host),
+      "port"_nm = port == NULL ? "" : std::string(port),
+      "username"_nm = user == NULL ? "" : std::string(user),
+      "protocol.version"_nm = pver,
+      "server.version"_nm = sver,
+      "db.version"_nm = sver,
+      "pid"_nm = pid }
+  );
 }
 
 bool DbConnection::is_check_interrupts() const {
