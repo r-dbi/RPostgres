@@ -1,65 +1,6 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# RPostgres 1.4.8.9008 (2026-02-05)
-
-## Chore
-
-- Remove plogr (#545).
-
-## Continuous integration
-
-- Use clang-format-21.
-
-
-# RPostgres 1.4.8.9007 (2026-02-02)
-
-## Chore
-
-- Build-ignore.
-
-- Auto-update from GitHub Actions (#543).
-
-- Format C++ code with clang-format.
-
-
-# RPostgres 1.4.8.9006 (2026-01-14)
-
-## Continuous integration
-
-- Tweaks (#541).
-
-- Test all R versions on branches that start with cran- (#540).
-
-
-# RPostgres 1.4.8.9005 (2025-11-17)
-
-## Continuous integration
-
-- Install binaries from r-universe for dev workflow (#536).
-
-
-# RPostgres 1.4.8.9004 (2025-11-12)
-
-## Continuous integration
-
-- Fix reviewdog and add commenting workflow (#534).
-
-
-# RPostgres 1.4.8.9003 (2025-11-11)
-
-## Continuous integration
-
-- Use workflows for fledge (#531).
-
-
-# RPostgres 1.4.8.9002 (2025-11-08)
-
-## Continuous integration
-
-- Sync (#529).
-
-
-# RPostgres 1.4.8.9001 (2025-09-23)
+# RPostgres 1.4.9 (2026-02-05)
 
 ## Features
 
@@ -67,16 +8,33 @@
 
 ## Chore
 
+- Remove plogr (#545).
+
+- Build-ignore.
+
+- Auto-update from GitHub Actions (#543).
+
+- Format C++ code with clang-format.
+
 - Auto-update from GitHub Actions (#524).
-
-
-# RPostgres 1.4.8.9000 (2025-09-14)
-
-## Chore
 
 - Auto-update from GitHub Actions (#515).
 
 ## Continuous integration
+
+- Use clang-format-21.
+
+- Tweaks (#541).
+
+- Test all R versions on branches that start with cran- (#540).
+
+- Install binaries from r-universe for dev workflow (#536).
+
+- Fix reviewdog and add commenting workflow (#534).
+
+- Use workflows for fledge (#531).
+
+- Sync (#529).
 
 - Default to PostgreSQL 17.
 
