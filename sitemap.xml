@@ -22,6 +22,7 @@
 <url><loc>https://rpostgres.r-dbi.org/reference/postgres-query.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/reference/postgres-tables.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/reference/postgres-transactions.html</loc></url>
+<url><loc>https://rpostgres.r-dbi.org/reference/postgresExportLargeObject.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/reference/postgresHasDefault.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/reference/postgresImportLargeObject.html</loc></url>
 <url><loc>https://rpostgres.r-dbi.org/reference/postgresIsTransacting.html</loc></url>
