@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.8.9008 (2026-02-05)
+
+## Chore
+
+- Remove plogr (#545).
+
+## Continuous integration
+
+- Use clang-format-21.
+
+
 # RPostgres 1.4.8.9007 (2026-02-02)
 
 ## Chore
