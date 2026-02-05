@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>RPostgres Development Instructions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/cran-1.4.9/.github/copilot-instructions.md" class="external-link"><code>.github/copilot-instructions.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-dbi/RPostgres/blob/main/.github/copilot-instructions.md" class="external-link"><code>.github/copilot-instructions.md</code></a></small>
     </div>
 
 <div id="rpostgres-development-instructions" class="section level1">
@@ -124,7 +124,7 @@
 <ol style="list-style-type: decimal"><li>ALWAYS run <code>air format .</code> to format code before committing</li>
 <li>ALWAYS build and install the package successfully</li>
 <li>ALWAYS run <code><a href="https://testthat.r-lib.org/reference/test_package.html" class="external-link">testthat::test_local()</a></code> for quick iteration testing</li>
-<li>ALWAYS run <code>rcmdcheck::rcmdcheck()</code> with PostgreSQL environment variables set for comprehensive testing</li>
+<li>ALWAYS run <code><a href="http://r-lib.github.io/rcmdcheck/reference/rcmdcheck.html" class="external-link">rcmdcheck::rcmdcheck()</a></code> with PostgreSQL environment variables set for comprehensive testing</li>
 <li>ALWAYS test <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> to ensure documentation builds correctly</li>
 <li>ALWAYS test basic database connectivity and operations</li>
 <li>Run <code>devtools::document()</code> if you modified any roxygen comments in R files</li>
