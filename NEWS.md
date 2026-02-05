@@ -10,55 +10,7 @@
 
 - Remove plogr (#545).
 
-- Build-ignore.
-
-- Auto-update from GitHub Actions (#543).
-
 - Format C++ code with clang-format.
-
-- Auto-update from GitHub Actions (#524).
-
-- Auto-update from GitHub Actions (#515).
-
-## Continuous integration
-
-- Use clang-format-21.
-
-- Tweaks (#541).
-
-- Test all R versions on branches that start with cran- (#540).
-
-- Install binaries from r-universe for dev workflow (#536).
-
-- Fix reviewdog and add commenting workflow (#534).
-
-- Use workflows for fledge (#531).
-
-- Sync (#529).
-
-- Default to PostgreSQL 17.
-
-- Use reviewdog for external PRs (#517).
-
-- Cleanup and fix macOS (#512).
-
-- Format with air, check detritus, better handling of `extra-packages` (#510).
-
-- Enhance permissions for workflow (#506).
-
-- Permissions, better tests for missing suggests, lints (#504).
-
-- Only fail covr builds if token is given (#501).
-
-- Always use `_R_CHECK_FORCE_SUGGESTS_=false` (#500).
-
-- Correct installation of xml2 (#497).
-
-- Explain (#495).
-
-- Add xml2 for covr, print testthat results (#494).
-
-- Sync (#493).
 
 ## Documentation
 
@@ -203,7 +155,7 @@
 
 ## Bug fixes
 
-- Avoid crash by dereferencing 0-size vector (#343). 
+- Avoid crash by dereferencing 0-size vector (#343).
 
 
 # RPostgres 1.4.0 (2021-09-25)
@@ -226,7 +178,7 @@
 
 - Skip timestamp tests on i386 (#318).
 - `dbSendQuery()` and `dbQuoteLiteral()` use single dispatch (#320).
-- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329). 
+- `dbWriteTable()` and `dbAppendTable()` default to `copy = NULL`, this translates to `TRUE` for `Postgres()` and `FALSE` for `Redshift()` connections (#329).
 
 ## Documentation
 
