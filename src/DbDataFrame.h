@@ -1,7 +1,6 @@
 #ifndef DB_DATAFRAME_H
 #define DB_DATAFRAME_H
 
-#include <vector>
 #include <boost/container/stable_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "DbColumnDataType.h"
