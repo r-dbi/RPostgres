@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.9.9000 (2026-02-06)
+
+## fledge
+
+- CRAN release v1.4.9 (#546).
+
+
 # RPostgres 1.4.9 (2026-02-05)
 
 ## Features
