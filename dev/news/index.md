@@ -1,63 +1,13 @@
 # Changelog
 
-## RPostgres 1.4.8.9008 (2026-02-05)
+## RPostgres 1.4.9.9000 (2026-02-06)
 
-### Chore
+### fledge
 
-- Remove plogr ([\#545](https://github.com/r-dbi/RPostgres/issues/545)).
+- CRAN release v1.4.9
+  ([\#546](https://github.com/r-dbi/RPostgres/issues/546)).
 
-### Continuous integration
-
-- Use clang-format-21.
-
-## RPostgres 1.4.8.9007 (2026-02-02)
-
-### Chore
-
-- Build-ignore.
-
-- Auto-update from GitHub Actions
-  ([\#543](https://github.com/r-dbi/RPostgres/issues/543)).
-
-- Format C++ code with clang-format.
-
-## RPostgres 1.4.8.9006 (2026-01-14)
-
-### Continuous integration
-
-- Tweaks ([\#541](https://github.com/r-dbi/RPostgres/issues/541)).
-
-- Test all R versions on branches that start with cran-
-  ([\#540](https://github.com/r-dbi/RPostgres/issues/540)).
-
-## RPostgres 1.4.8.9005 (2025-11-17)
-
-### Continuous integration
-
-- Install binaries from r-universe for dev workflow
-  ([\#536](https://github.com/r-dbi/RPostgres/issues/536)).
-
-## RPostgres 1.4.8.9004 (2025-11-12)
-
-### Continuous integration
-
-- Fix reviewdog and add commenting workflow
-  ([\#534](https://github.com/r-dbi/RPostgres/issues/534)).
-
-## RPostgres 1.4.8.9003 (2025-11-11)
-
-### Continuous integration
-
-- Use workflows for fledge
-  ([\#531](https://github.com/r-dbi/RPostgres/issues/531)).
-
-## RPostgres 1.4.8.9002 (2025-11-08)
-
-### Continuous integration
-
-- Sync ([\#529](https://github.com/r-dbi/RPostgres/issues/529)).
-
-## RPostgres 1.4.8.9001 (2025-09-23)
+## RPostgres 1.4.9 (2026-02-05)
 
 ### Features
 
@@ -69,50 +19,9 @@
 
 ### Chore
 
-- Auto-update from GitHub Actions
-  ([\#524](https://github.com/r-dbi/RPostgres/issues/524)).
+- Remove plogr ([\#545](https://github.com/r-dbi/RPostgres/issues/545)).
 
-## RPostgres 1.4.8.9000 (2025-09-14)
-
-### Chore
-
-- Auto-update from GitHub Actions
-  ([\#515](https://github.com/r-dbi/RPostgres/issues/515)).
-
-### Continuous integration
-
-- Default to PostgreSQL 17.
-
-- Use reviewdog for external PRs
-  ([\#517](https://github.com/r-dbi/RPostgres/issues/517)).
-
-- Cleanup and fix macOS
-  ([\#512](https://github.com/r-dbi/RPostgres/issues/512)).
-
-- Format with air, check detritus, better handling of `extra-packages`
-  ([\#510](https://github.com/r-dbi/RPostgres/issues/510)).
-
-- Enhance permissions for workflow
-  ([\#506](https://github.com/r-dbi/RPostgres/issues/506)).
-
-- Permissions, better tests for missing suggests, lints
-  ([\#504](https://github.com/r-dbi/RPostgres/issues/504)).
-
-- Only fail covr builds if token is given
-  ([\#501](https://github.com/r-dbi/RPostgres/issues/501)).
-
-- Always use `_R_CHECK_FORCE_SUGGESTS_=false`
-  ([\#500](https://github.com/r-dbi/RPostgres/issues/500)).
-
-- Correct installation of xml2
-  ([\#497](https://github.com/r-dbi/RPostgres/issues/497)).
-
-- Explain ([\#495](https://github.com/r-dbi/RPostgres/issues/495)).
-
-- Add xml2 for covr, print testthat results
-  ([\#494](https://github.com/r-dbi/RPostgres/issues/494)).
-
-- Sync ([\#493](https://github.com/r-dbi/RPostgres/issues/493)).
+- Format C++ code with clang-format.
 
 ### Documentation
 
