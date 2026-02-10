@@ -13,6 +13,7 @@
 #include <errno.h>
 #define SOCKERR      errno
 #define SOCKET_EINTR EINTR
+#include <sys/select.h>
 #endif
 
 PqResultImpl::PqResultImpl(
