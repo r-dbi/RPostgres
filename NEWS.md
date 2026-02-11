@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.9.9001 (2026-02-11)
+
+## Bug fixes
+
+- Fix compilation on Alpine Linux and other variants.
+
+
 # RPostgres 1.4.9.9000 (2026-02-06)
 
 ## fledge
