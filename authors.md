@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/r-dbi/RPostgres/blob/cran-1.4.10/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-dbi/RPostgres/blob/main/DESCRIPTION)
 
 Wickham H, Ooms J, Müller K (2026). *RPostgres: C++ Interface to
 PostgreSQL*. R package version 1.4.10, <https://rpostgres.r-dbi.org>.

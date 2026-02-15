@@ -139,8 +139,9 @@ dbDisconnect(con)
 3.  ALWAYS run
     [`testthat::test_local()`](https://testthat.r-lib.org/reference/test_package.html)
     for quick iteration testing
-4.  ALWAYS run `rcmdcheck::rcmdcheck()` with PostgreSQL environment
-    variables set for comprehensive testing
+4.  ALWAYS run
+    [`rcmdcheck::rcmdcheck()`](http://r-lib.github.io/rcmdcheck/reference/rcmdcheck.md)
+    with PostgreSQL environment variables set for comprehensive testing
 5.  ALWAYS test
     [`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html)
     to ensure documentation builds correctly
