@@ -109,7 +109,7 @@ will skip over it (`SKIP LOCKED`) and find something else to do. If
 there are no other jobs available, then nothing will be returned.
 
 Using SKIP LOCKED is discussed in more detail [in this
-article](https://www.cybertec-postgresql.com/en/skip-locked-one-of-my-favorite-9-5-features/).
+article](https://www.enterprisedb.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/).
 
 ## Implementing our worker
 

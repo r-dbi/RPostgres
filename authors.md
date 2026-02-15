@@ -20,15 +20,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/r-dbi/RPostgres/blob/cran-1.4.9/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-dbi/RPostgres/blob/cran-1.4.10/DESCRIPTION)
 
 Wickham H, Ooms J, Müller K (2026). *RPostgres: C++ Interface to
-PostgreSQL*. R package version 1.4.9, <https://rpostgres.r-dbi.org>.
+PostgreSQL*. R package version 1.4.10, <https://rpostgres.r-dbi.org>.
 
     @Manual{,
       title = {RPostgres: C++ Interface to PostgreSQL},
       author = {Hadley Wickham and Jeroen Ooms and Kirill Müller},
       year = {2026},
-      note = {R package version 1.4.9},
+      note = {R package version 1.4.10},
       url = {https://rpostgres.r-dbi.org},
     }
