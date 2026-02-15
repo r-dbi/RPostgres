@@ -1,4 +1,4 @@
-RPostgres 1.4.9
+RPostgres 1.4.10
 
 ## Cran Repository Policy
 
