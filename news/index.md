@@ -2,11 +2,6 @@
 
 ## RPostgres 1.4.10 (2026-02-15)
 
-### fledge
-
-- CRAN release v1.4.9
-  ([\#546](https://github.com/r-dbi/RPostgres/issues/546)).
-
 ### Bug fixes
 
 - Fix compilation on Alpine Linux and other variants.
