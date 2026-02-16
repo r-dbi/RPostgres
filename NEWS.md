@@ -1,5 +1,18 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9000 (2026-02-16)
+
+- Merge tag 'v1.4.9'.
+
+- New `postgresExportLargeObject()` function for exporting large objects to files (#519, #520).
+
+- Remove plogr (#545).
+
+- Format C++ code with clang-format.
+
+- Add comprehensive GitHub Copilot instructions (#522).
+
+
 # RPostgres 1.4.10 (2026-02-15)
 
 ## Bug fixes
