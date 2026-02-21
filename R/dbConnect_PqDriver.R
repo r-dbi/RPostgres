@@ -18,27 +18,21 @@
 #'   PostgreSQL(-ish) database or [Redshift()] to connect to an AWS Redshift
 #'   cluster. Use an existing [DBI::DBIConnection-class] object to clone an
 #'   existing connection.
-#' @param dbname Database name. If `NULL`, will be
-#'   retrieved from the `PGDATABASE` env var, or defaults to the user name.
+#' @param dbname Database name. If `NULL`, defaults to the user name.
 #'   Note that this argument can only contain the database name, it will not
 #'   be parsed as a connection string (internally, `expand_dbname` is set to
 #'   `false` in the call to
 #'   [`PQconnectdbParams()`](https://www.postgresql.org/docs/current/libpq-connect.html)).
 #' @param user,password User name and password. If `NULL`, will be
 #'   retrieved from `PGUSER` and `PGPASSWORD` envvars, or from the
-#'   appropriate line in `~/.pgpass`. If `PGUSER` is not set,
-#'   defaults to the operating system user name.
-#'   See <https://www.postgresql.org/docs/current/libpq-pgpass.html> for
+#'   appropriate line in `~/.pgpass`. See
+#'   <https://www.postgresql.org/docs/current/libpq-pgpass.html> for
 #'   more details.
 #' @param host,port Host and port. If `NULL`, will be retrieved from
-#'   `PGHOST` and `PGPORT` env vars. If those are not set either,
-#'   defaults to a local Unix-domain socket connection and port `5432`,
-#'   as documented in
-#'   [libpq connection parameter docs](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS).
+#'   `PGHOST` and `PGPORT` env vars.
 #' @param service Name of service to connect as.  If `NULL`, will be
-#'   retrieved from `PGSERVICE` env var.  If defined, connection parameters
-#'   will be loaded from the pg_service.conf file and used.  See
-#'   <https://www.postgresql.org/docs/current/libpq-pgservice.html>
+#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
+#'   file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html>
 #'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
