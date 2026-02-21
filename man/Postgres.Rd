@@ -34,24 +34,30 @@ PostgreSQL(-ish) database or \code{\link[=Redshift]{Redshift()}} to connect to a
 cluster. Use an existing \link[DBI:DBIConnection-class]{DBI::DBIConnection} object to clone an
 existing connection.}
 
-\item{dbname}{Database name. If \code{NULL}, defaults to the user name.
+\item{dbname}{Database name. If \code{NULL}, will be
+retrieved from the \code{PGDATABASE} env var, or defaults to the user name.
 Note that this argument can only contain the database name, it will not
 be parsed as a connection string (internally, \code{expand_dbname} is set to
 \code{false} in the call to
 \href{https://www.postgresql.org/docs/current/libpq-connect.html}{\code{PQconnectdbParams()}}).}
 
 \item{host, port}{Host and port. If \code{NULL}, will be retrieved from
-\code{PGHOST} and \code{PGPORT} env vars.}
+\code{PGHOST} and \code{PGPORT} env vars. If those are not set either,
+defaults to a local Unix-domain socket connection and port \code{5432},
+as documented in
+\href{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}{libpq connection parameter docs}.}
 
 \item{user, password}{User name and password. If \code{NULL}, will be
 retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the
-appropriate line in \verb{~/.pgpass}. See
-\url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for
+appropriate line in \verb{~/.pgpass}. If \code{PGUSER} is not set,
+defaults to the operating system user name.
+See \url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for
 more details.}
 
 \item{service}{Name of service to connect as.  If \code{NULL}, will be
-ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-file and used.  See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html}
+retrieved from \code{PGSERVICE} env var.  If defined, connection parameters
+will be loaded from the pg_service.conf file and used.  See
+\url{https://www.postgresql.org/docs/current/libpq-pgservice.html}
 for details on this file and syntax.}
 
 \item{...}{Other name-value pairs that describe additional connection
