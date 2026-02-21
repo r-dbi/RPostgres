@@ -24,9 +24,11 @@ postgresHasDefault <- function(...) {
     error = function(...) {
       message(
         "Could not initialise default postgres database. If postgres is running\n",
-        "check that the environment variables PGHOST, PGPORT, \n",
-        "PGUSER, PGPASSWORD, and PGDATABASE, are defined and\n",
-        "point to your database."
+        "check that the connection works with default libpq settings.\n",
+        "The default connection uses the PGHOST, PGPORT, PGUSER, PGPASSWORD,\n",
+        "and PGDATABASE environment variables. If unset, libpq defaults are\n",
+        "used (local connection, port 5432, OS user name).\n",
+        "See https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS"
       )
       FALSE
     }
