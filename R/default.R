@@ -27,7 +27,7 @@ postgresHasDefault <- function(...) {
         "check that the connection works with default libpq settings.\n",
         "The default connection uses the PGHOST, PGPORT, PGUSER, PGPASSWORD,\n",
         "and PGDATABASE environment variables. If unset, libpq defaults are\n",
-        "used (local socket, port 5432, OS user name).\n",
+        "used (local connection, port 5432, OS user name).\n",
         "See https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS"
       )
       FALSE
