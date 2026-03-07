@@ -73,8 +73,8 @@
 \item{name}{a character string specifying a table name. Names will be
 automatically quoted so you can use any sequence of characters, not
 just any valid bare table name.
-Alternatively, pass a name quoted with \code{\link[DBI:dbQuoteIdentifier]{DBI::dbQuoteIdentifier()}},
-an \code{\link[=Id]{Id()}} object, or a string escaped with \code{\link[DBI:SQL]{DBI::SQL()}}.}
+Alternatively, pass a name quoted with \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}},
+an \code{\link[=Id]{Id()}} object, or a string escaped with \code{\link[DBI:SQL]{SQL()}}.}
 
 \item{value}{A data.frame to write to the database.}
 
@@ -124,10 +124,10 @@ The types can only be specified with \code{append = FALSE}.}
 \item{con}{A database connection.}
 }
 \description{
-\code{\link[DBI:dbAppendTable]{DBI::dbAppendTable()}} is overridden because \pkg{RPostgres}
+\code{\link[DBI:dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres}
 uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
 
-\code{\link[DBI:dbWriteTable]{DBI::dbWriteTable()}} executes several SQL statements that
+\code{\link[DBI:dbWriteTable]{dbWriteTable()}} executes several SQL statements that
 create/overwrite a table and fill it with values.
 \pkg{RPostgres} does not use parameterised queries to insert rows because
 benchmarks revealed that this was considerably slower than using a single
