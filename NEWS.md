@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9001 (2026-03-08)
+
+## Chore
+
+- Auto-update from GitHub Actions (#554).
+
+
 # RPostgres 1.4.10.9000 (2026-02-16)
 
 - Merge tag 'v1.4.9'.
