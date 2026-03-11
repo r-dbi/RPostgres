@@ -59,7 +59,7 @@ options as described at
 \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
-default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
+default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 
 \item{check_interrupts}{Should user interrupts be checked during the query execution (before
