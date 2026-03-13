@@ -38,7 +38,7 @@
 \S4method{dbUnquoteIdentifier}{PqConnection,SQL}(conn, x, ...)
 }
 \arguments{
-\item{conn}{A \linkS4class{PqConnection} created by \code{dbConnect()}}
+\item{conn}{A \link[=PqConnection-class]{PqConnection} created by \code{dbConnect()}}
 
 \item{x}{A character vector to be quoted.}
 

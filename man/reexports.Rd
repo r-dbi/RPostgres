@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{DBI}{\code{\link[DBI:Id]{Id}()}}
+  \item{DBI}{\code{\link[DBI:Id]{Id()}}}
 }}
 
