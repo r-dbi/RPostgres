@@ -27,7 +27,7 @@
 \S4method{dbSendQuery}{PqConnection}(conn, statement, params = NULL, ..., immediate = FALSE)
 }
 \arguments{
-\item{res}{Code a \linkS4class{PqResult} produced by
+\item{res}{Code a \link[=PqResult-class]{PqResult} produced by
 \code{\link[DBI:dbSendQuery]{DBI::dbSendQuery()}}.}
 
 \item{params}{A list of query parameters to be substituted into
@@ -51,7 +51,7 @@ default name.
 
 For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 
-\item{conn}{A \linkS4class{PqConnection} created by \code{\link[DBI:dbConnect]{dbConnect()}}.}
+\item{conn}{A \link[=PqConnection-class]{PqConnection} created by \code{\link[DBI:dbConnect]{dbConnect()}}.}
 
 \item{statement}{An SQL string to execute.}
 

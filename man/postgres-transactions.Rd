@@ -18,7 +18,7 @@
 \S4method{dbRollback}{PqConnection}(conn, ..., name = NULL)
 }
 \arguments{
-\item{conn}{a \linkS4class{PqConnection} object, produced by
+\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by
 \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{...}{Unused, for extensibility.}
