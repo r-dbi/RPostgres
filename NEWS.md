@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9002 (2026-03-13)
+
+## Chore
+
+- Auto-update from GitHub Actions (#558).
+
+- Auto-update from GitHub Actions (#556).
+
+
 # RPostgres 1.4.10.9001 (2026-03-08)
 
 ## Chore
