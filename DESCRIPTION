@@ -48,7 +48,6 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3.9000
 SystemRequirements: libpq >= 9.0: libpq-dev (deb) or postgresql-devel
     (rpm)
 Collate: 
@@ -106,3 +105,4 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
+Config/roxygen2/version: 8.0.0.9000
