@@ -62,7 +62,7 @@ PqResultImpl::~PqResultImpl() {
 
 PqResultImpl::_cache::_cache() : initialized_(false), ncols_(0), nparams_(0) {}
 
-void PqResultImpl::_cache::set(PGresult* spec) {
+void PqResultImpl::_cache::set(PGresult* spec, bool enforce_result) {
   // always: should be fast
   if (nparams_ == 0) {
     nparams_ = PQnparams(spec);
@@ -81,7 +81,7 @@ void PqResultImpl::_cache::set(PGresult* spec) {
     return;
   }
 
-  initialized_ = true;
+  initialized_ = enforce_result;
   names_ = new_names;
   oids_ = new_oids;
   types_ = get_column_types(oids_, names_);
@@ -239,7 +239,7 @@ void PqResultImpl::prepare() {
   }
 
   pSpec_ = spec;
-  cache.set(spec);
+  cache.set(spec, false);
 }
 
 void PqResultImpl::init(bool params_have_rows) {
@@ -497,7 +497,7 @@ bool PqResultImpl::step_run() {
   }
 
   if (need_cache_reset) {
-    cache.set(pRes_);
+    cache.set(pRes_, true);
   }
 
   if (status == PGRES_SINGLE_TUPLE) {
