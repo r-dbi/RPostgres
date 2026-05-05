@@ -20,6 +20,7 @@ Compared to RPostgreSQL, it:
 ## Installation
 
 ``` r
+
 # Install the latest RPostgres release from CRAN:
 install.packages("RPostgres")
 
@@ -36,6 +37,7 @@ and best practices in this ecosystem.
 ## Basic usage
 
 ``` r
+
 library(DBI)
 # Connect to the default postgres database
 con <- dbConnect(RPostgres::Postgres())
@@ -68,6 +70,7 @@ dbDisconnect(con)
 ## Connecting to a specific Postgres instance
 
 ``` r
+
 library(DBI)
 # Connect to a specific postgres database i.e. Heroku
 con <- dbConnect(RPostgres::Postgres(),dbname = 'DATABASE_NAME', 

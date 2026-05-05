@@ -22,7 +22,7 @@ postgresDefault(...)
 - ...:
 
   Additional arguments passed on to
-  [`DBI::dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html)
+  [`dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html)
 
 ## Examples
 

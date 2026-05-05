@@ -16,6 +16,7 @@ In this example, our work will be generating square roots. We’ll keep
 track of the results in a table:
 
 ``` r
+
 library(DBI)
 
 con <- dbConnect(RPostgres::Postgres())
@@ -48,6 +49,7 @@ We tell Postgres that we are interested in receiving messages using
 `LISTEN`. For example:
 
 ``` r
+
 con <- dbConnect(RPostgres::Postgres())
 dbExecute(con, "LISTEN grapevine")
 #> [1] 0
@@ -61,6 +63,7 @@ be part of another R script, maybe on another computer. This will wait a
 bit, and use `NOTIFY` to send a message, then finish:
 
 ``` r
+
 rp <- callr::r_bg(function() {
   library(DBI)
   Sys.sleep(0.3)
@@ -75,6 +78,7 @@ Finally, we should wait for any incoming messages. To do this, use
 other R process:
 
 ``` r
+
 # Sleep until we get the message
 n <- NULL
 while (is.null(n)) {
@@ -94,6 +98,7 @@ We notify all workers that the input `99` is ready for processing. After
 receiving this, they all do the following:
 
 ``` r
+
 rs <- dbSendQuery(con, "
     SELECT in_val
       FROM sqroot_vignette_example
@@ -109,7 +114,7 @@ will skip over it (`SKIP LOCKED`) and find something else to do. If
 there are no other jobs available, then nothing will be returned.
 
 Using SKIP LOCKED is discussed in more detail [in this
-article](https://www.enterprisedb.com/en/blog/what-is-select-skip-locked-for-in-postgresql-9-5/).
+article](https://www.cybertec-postgresql.com/en/skip-locked-one-of-my-favorite-9-5-features/).
 
 ## Implementing our worker
 
@@ -118,6 +123,7 @@ worker as a function (again, this would be running as a script on
 several servers):
 
 ``` r
+
 worker <- function() {
   library(DBI)
   db_worker <- dbConnect(RPostgres::Postgres())
@@ -199,6 +205,7 @@ indefinitely.
 Let’s use callr again to start 2 workers:
 
 ``` r
+
 stdout_1 <- tempfile()
 stdout_2 <- tempfile()
 rp <- callr::r_bg(worker, stdout = stdout_1, stderr = stdout_1)
@@ -210,6 +217,7 @@ Now our client can add some values to our table and notify the workers
 that there’s something to do:
 
 ``` r
+
 con <- dbConnect(RPostgres::Postgres())
 
 add_sqroot <- function(in_val) {
@@ -233,11 +241,12 @@ add_sqroot(9)
 us:
 
 ``` r
+
 Sys.sleep(3)
 rs <- dbSendQuery(con, "SELECT * FROM sqroot_vignette_example ORDER BY in_val")
 dbFetch(rs)
 #>   in_val  out_val
-#> 1      7 2.645751
+#> 1      7       NA
 #> 2      8 2.828427
 #> 3      9 3.000000
 dbClearResult(rs) ; rs <- NULL
@@ -246,6 +255,7 @@ dbClearResult(rs) ; rs <- NULL
 Finally, we can use `NOTIFY` to stop all the workers:
 
 ``` r
+
 dbExecute(con, "NOTIFY sqroot_shutdown, ''")
 #> [1] 0
 ```
@@ -253,6 +263,7 @@ dbExecute(con, "NOTIFY sqroot_shutdown, ''")
 And see what messages were printed as they run:
 
 ``` r
+
 # We can't control which worker will process the first entry,
 # so we sort the results so the vignette output stays the same.
 outputs <- sort(c(
@@ -262,13 +273,10 @@ outputs <- sort(c(
 writeLines(outputs[[1]])
 #> Not sqroot-ing as another worker got there first
 #> Sqroot-ing 8 ... 
-#> Not sqroot-ing as another worker got there first
-#> Shutting down.
-writeLines(outputs[[2]])
-#> Sqroot-ing 7 ... 
-#> Not sqroot-ing as another worker got there first
 #> Sqroot-ing 9 ... 
 #> Shutting down.
+writeLines(outputs[[2]])
+#> Sqroot-ing 7 ...
 ```
 
 Notice that the work has been shared between the 2 workers. If these 2

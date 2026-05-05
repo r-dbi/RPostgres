@@ -1,10 +1,10 @@
 # Convenience functions for reading/writing DBMS tables
 
-[`DBI::dbAppendTable()`](https://dbi.r-dbi.org/reference/dbAppendTable.html)
+[`dbAppendTable()`](https://dbi.r-dbi.org/reference/dbAppendTable.html)
 is overridden because RPostgres uses placeholders of the form `$1`, `$2`
 etc. instead of `?`.
 
-[`DBI::dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
+[`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
 executes several SQL statements that create/overwrite a table and fill
 it with values. RPostgres does not use parameterised queries to insert
 rows because benchmarks revealed that this was considerably slower than
@@ -72,10 +72,10 @@ sqlData(con, value, row.names = FALSE, ...)
   a character string specifying a table name. Names will be
   automatically quoted so you can use any sequence of characters, not
   just any valid bare table name. Alternatively, pass a name quoted with
-  [`DBI::dbQuoteIdentifier()`](https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html),
+  [`dbQuoteIdentifier()`](https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html),
   an [`Id()`](https://dbi.r-dbi.org/reference/Id.html) object, or a
   string escaped with
-  [`DBI::SQL()`](https://dbi.r-dbi.org/reference/SQL.html).
+  [`SQL()`](https://dbi.r-dbi.org/reference/SQL.html).
 
 - value:
 

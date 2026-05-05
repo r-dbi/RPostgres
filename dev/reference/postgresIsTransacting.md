@@ -2,7 +2,7 @@
 
 Detect whether the transaction is active for the given connection. A
 transaction might be started with
-[`DBI::dbBegin()`](https://dbi.r-dbi.org/reference/transactions.html) or
+[`dbBegin()`](https://dbi.r-dbi.org/reference/transactions.html) or
 wrapped within
 [`DBI::dbWithTransaction()`](https://dbi.r-dbi.org/reference/dbWithTransaction.html).
 

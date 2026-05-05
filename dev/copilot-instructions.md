@@ -123,6 +123,7 @@ R -q -e 'devtools::document()'
 Always test database connectivity after making changes:
 
 ``` r
+
 library(RPostgres)
 con <- dbConnect(Postgres(), host='localhost', dbname='testdb', user='runner', password='test123')
 dbListTables(con)

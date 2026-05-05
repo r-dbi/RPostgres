@@ -70,7 +70,7 @@ dbSendQuery(conn, statement, params = NULL, ..., immediate = FALSE)
   A
   [PqConnection](https://rpostgres.r-dbi.org/dev/reference/PqConnection-class.md)
   created by
-  [`DBI::dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html).
+  [`dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html).
 
 - statement:
 
@@ -87,7 +87,7 @@ dbSendQuery(conn, statement, params = NULL, ..., immediate = FALSE)
 With `immediate = TRUE`, it is possible to pass multiple queries or
 statements, separated by semicolons. For multiple statements, the
 resulting value of
-[`DBI::dbGetRowsAffected()`](https://dbi.r-dbi.org/reference/dbGetRowsAffected.html)
+[`dbGetRowsAffected()`](https://dbi.r-dbi.org/reference/dbGetRowsAffected.html)
 corresponds to the total number of affected rows. If multiple queries
 are used, all queries must return data with the same column names and
 types. Queries and statements can be mixed.

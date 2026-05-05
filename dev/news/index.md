@@ -1,11 +1,65 @@
 # Changelog
 
-## RPostgres 1.4.9.9000 (2026-02-06)
+## RPostgres 1.4.10.9005 (2026-05-05)
 
-### fledge
+### Chore
 
-- CRAN release v1.4.9
-  ([\#546](https://github.com/r-dbi/RPostgres/issues/546)).
+- Auto-update from GitHub Actions
+  ([\#565](https://github.com/r-dbi/RPostgres/issues/565)).
+
+## RPostgres 1.4.10.9004 (2026-03-22)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#562](https://github.com/r-dbi/RPostgres/issues/562)).
+
+## RPostgres 1.4.10.9003 (2026-03-14)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#560](https://github.com/r-dbi/RPostgres/issues/560)).
+
+## RPostgres 1.4.10.9002 (2026-03-13)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#558](https://github.com/r-dbi/RPostgres/issues/558)).
+
+- Auto-update from GitHub Actions
+  ([\#556](https://github.com/r-dbi/RPostgres/issues/556)).
+
+## RPostgres 1.4.10.9001 (2026-03-08)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#554](https://github.com/r-dbi/RPostgres/issues/554)).
+
+## RPostgres 1.4.10.9000 (2026-02-16)
+
+- Merge tag ‘v1.4.9’.
+
+- New
+  [`postgresExportLargeObject()`](https://rpostgres.r-dbi.org/dev/reference/postgresExportLargeObject.md)
+  function for exporting large objects to files
+  ([\#519](https://github.com/r-dbi/RPostgres/issues/519),
+  [\#520](https://github.com/r-dbi/RPostgres/issues/520)).
+
+- Remove plogr ([\#545](https://github.com/r-dbi/RPostgres/issues/545)).
+
+- Format C++ code with clang-format.
+
+- Add comprehensive GitHub Copilot instructions
+  ([\#522](https://github.com/r-dbi/RPostgres/issues/522)).
+
+## RPostgres 1.4.10 (2026-02-15)
+
+### Bug fixes
+
+- Fix compilation on Alpine Linux and other variants.
 
 ## RPostgres 1.4.9 (2026-02-05)
 

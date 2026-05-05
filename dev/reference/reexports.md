@@ -5,4 +5,4 @@ to see their documentation.
 
 - DBI:
 
-  [`Id`](https://dbi.r-dbi.org/reference/Id.html)
+  [`Id()`](https://dbi.r-dbi.org/reference/Id.html)
