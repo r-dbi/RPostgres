@@ -1,5 +1,17 @@
 # Changelog
 
+## RPostgres 1.4.10.9006 (2026-05-06)
+
+### Continuous integration
+
+- Cosmetics.
+
+- Bump action versions.
+
+- Align fledge workflow.
+
+- Harmonize.
+
 ## RPostgres 1.4.10.9005 (2026-05-05)
 
 ### Chore
