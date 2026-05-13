@@ -31,3 +31,4 @@
 ^docker-compose\.yml$
 ^air\.toml$
 ^\.clang-format$
+^\.ccache$
