@@ -1,5 +1,10 @@
 # Changelog
 
+## RPostgres 1.4.10.9008 (2026-05-16)
+
+- Ci: Unify fledge.yaml across cynkratemplate and fledge
+  ([\#86](https://github.com/r-dbi/RPostgres/issues/86)).
+
 ## RPostgres 1.4.10.9007 (2026-05-13)
 
 ### Chore
