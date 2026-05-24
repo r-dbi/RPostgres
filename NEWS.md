@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9009 (2026-05-24)
+
+## Continuous integration
+
+- Update ccache-action reference.
+
+- Bump action version.
+
+
 # RPostgres 1.4.10.9008 (2026-05-16)
 
 - Ci: Unify fledge.yaml across cynkratemplate and fledge (#86).
