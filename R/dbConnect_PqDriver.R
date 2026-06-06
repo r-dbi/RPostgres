@@ -34,8 +34,8 @@
 #'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
 #'   file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html>
 #'   for details on this file and syntax.
-#' @param ... Other name-value pairs that describe additional connection
-#'   options as described at
+#' @param ... Other name-value pairs passed on to libpq as additional connection
+#'   options. This includes options such as `sslmode` and `sslrootcert`; see
 #'   <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
@@ -50,10 +50,31 @@
 #'   set to [Sys.timezone()] or `""`.
 #'   This setting does not change the time values returned, only their display.
 #' @param conn Connection to disconnect.
+#'
+#' @section Additional connection options:
+#' Arguments passed through `...` are forwarded to libpq's connection parameter
+#' list. This is useful for options that are not formal arguments to
+#' `dbConnect()`, for example SSL settings required by some hosted PostgreSQL
+#' providers:
+#'
+#' ```
+#' dbConnect(
+#'   RPostgres::Postgres(),
+#'   host = "example.com",
+#'   dbname = "postgres",
+#'   user = "postgres",
+#'   password = password,
+#'   sslmode = "require",
+#'   sslrootcert = "/path/to/root.crt"
+#' )
+#' ```
+#'
 #' @rdname Postgres
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
-#' # Pass more arguments as necessary to dbConnect()
+#' # Pass more arguments as necessary to dbConnect().
+#' # For example, use sslmode = "require" and sslrootcert = "/path/to/root.crt"
+#' # for hosts that require SSL parameters.
 #' con <- dbConnect(RPostgres::Postgres())
 #' dbDisconnect(con)
 #' @usage NULL

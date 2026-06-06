@@ -51,8 +51,8 @@ ignored.  Otherwise, connection parameters will be loaded from the pg_service.co
 file and used.  See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html}
 for details on this file and syntax.}
 
-\item{...}{Other name-value pairs that describe additional connection
-options as described at
+\item{...}{Other name-value pairs passed on to libpq as additional connection
+options. This includes options such as \code{sslmode} and \code{sslrootcert}; see
 \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,

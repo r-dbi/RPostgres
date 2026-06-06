@@ -54,8 +54,8 @@ ignored.  Otherwise, connection parameters will be loaded from the pg_service.co
 file and used.  See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html}
 for details on this file and syntax.}
 
-\item{...}{Other name-value pairs that describe additional connection
-options as described at
+\item{...}{Other name-value pairs passed on to libpq as additional connection
+options. This includes options such as \code{sslmode} and \code{sslrootcert}; see
 \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
@@ -85,10 +85,31 @@ but still recommended;
 if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.
 }
+\section{Additional connection options}{
+
+Arguments passed through \code{...} are forwarded to libpq's connection parameter
+list. This is useful for options that are not formal arguments to
+\code{dbConnect()}, for example SSL settings required by some hosted PostgreSQL
+providers:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{dbConnect(
+  RPostgres::Postgres(),
+  host = "example.com",
+  dbname = "postgres",
+  user = "postgres",
+  password = password,
+  sslmode = "require",
+  sslrootcert = "/path/to/root.crt"
+)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
 library(DBI)
-# Pass more arguments as necessary to dbConnect()
+# Pass more arguments as necessary to dbConnect().
+# For example, use sslmode = "require" and sslrootcert = "/path/to/root.crt"
+# for hosts that require SSL parameters.
 con <- dbConnect(RPostgres::Postgres())
 dbDisconnect(con)
 \dontshow{\}) # examplesIf}
