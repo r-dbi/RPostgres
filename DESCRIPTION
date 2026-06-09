@@ -101,6 +101,7 @@ Collate:
     'export.R'
     'quote.R'
     'show_PqConnection.R'
+    'signal_pq_error.R'
     'sqlData_PqConnection.R'
     'tables.R'
     'transactions.R'
