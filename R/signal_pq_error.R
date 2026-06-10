@@ -1,11 +1,12 @@
 #' RPostgres error conditions
 #'
 #' @description
-#' When a server-side error occurs, RPostgres raises a classed condition that
-#' carries PostgreSQL's `SQLSTATE` code and the diagnostic fields reported by
-#' `libpq`. The class vector of the condition is
-#' `c("RPostgres_error_<SQLSTATE>", "RPostgres_error", "error", "condition")`,
-#' so handlers can dispatch on a specific code or on all RPostgres errors.
+#' When a server-side error occurs, RPostgres raises a classed [rlang::abort()]
+#' condition that carries PostgreSQL's `SQLSTATE` code and the diagnostic fields
+#' reported by `libpq`. The class vector of the condition is
+#' `c("RPostgres_error_<SQLSTATE>", "RPostgres_error", "rlang_error", "error",
+#' "condition")`, so handlers can dispatch on a specific code or on all RPostgres
+#' errors.
 #'
 #' The following fields are attached to the condition object (any of them may be
 #' `NULL` if `libpq` did not supply a value): `sqlstate`, `hint`, `detail`,
@@ -34,13 +35,18 @@
 #' @name RPostgres-conditions
 NULL
 
-# Build a classed condition carrying libpq diagnostic fields and signal it.
+# Build a classed rlang error carrying libpq diagnostic fields and signal it.
 # Called from C++ via cpp11::package("RPostgres")[["signal_pq_error"]].
 # `fields` is a named list; any element may be NULL (absent libpq field).
+#
+# The error is raised with `call = NULL` because, when invoked from C++, this
+# helper runs detached from the R call stack (cpp11 evaluates it in the global
+# environment). The user-facing call is restored by `rethrow()`, which wraps the
+# cpp11 entry points; see `R/rethrow.R`.
 signal_pq_error <- function(message, fields = list()) {
   sqlstate <- fields$sqlstate
 
-  # errorCondition() appends "error" and "condition" itself.
+  # rlang::abort() appends "rlang_error", "error", and "condition" itself.
   classes <- c(
     if (!is.null(sqlstate) && nzchar(sqlstate)) {
       paste0("RPostgres_error_", sqlstate)
@@ -48,11 +54,12 @@ signal_pq_error <- function(message, fields = list()) {
     "RPostgres_error"
   )
 
-  cnd <- errorCondition(
-    message = message,
+  # NULL fields are dropped by rlang::abort().
+  rlang::abort(
+    message,
     class = classes,
     call = NULL,
-    sqlstate = fields$sqlstate,
+    sqlstate = sqlstate,
     hint = fields$hint,
     detail = fields$detail,
     context = fields$context,
@@ -62,6 +69,4 @@ signal_pq_error <- function(message, fields = list()) {
     constraint = fields$constraint,
     schema = fields$schema
   )
-
-  stop(cnd)
 }

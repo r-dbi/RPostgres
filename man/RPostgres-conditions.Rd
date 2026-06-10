@@ -4,11 +4,11 @@
 \alias{RPostgres-conditions}
 \title{RPostgres error conditions}
 \description{
-When a server-side error occurs, RPostgres raises a classed condition that
-carries PostgreSQL's \code{SQLSTATE} code and the diagnostic fields reported by
-\code{libpq}. The class vector of the condition is
-\code{c("RPostgres_error_<SQLSTATE>", "RPostgres_error", "error", "condition")},
-so handlers can dispatch on a specific code or on all RPostgres errors.
+When a server-side error occurs, RPostgres raises a classed \code{\link[rlang:abort]{rlang::abort()}}
+condition that carries PostgreSQL's \code{SQLSTATE} code and the diagnostic fields
+reported by \code{libpq}. The class vector of the condition is
+\code{c("RPostgres_error_<SQLSTATE>", "RPostgres_error", "rlang_error", "error", "condition")}, so handlers can dispatch on a specific code or on all RPostgres
+errors.
 
 The following fields are attached to the condition object (any of them may be
 \code{NULL} if \code{libpq} did not supply a value): \code{sqlstate}, \code{hint}, \code{detail},
