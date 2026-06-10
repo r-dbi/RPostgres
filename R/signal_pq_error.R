@@ -42,7 +42,9 @@ signal_pq_error <- function(message, fields = list()) {
 
   # errorCondition() appends "error" and "condition" itself.
   classes <- c(
-    if (!is.null(sqlstate) && nzchar(sqlstate)) paste0("RPostgres_error_", sqlstate),
+    if (!is.null(sqlstate) && nzchar(sqlstate)) {
+      paste0("RPostgres_error_", sqlstate)
+    },
     "RPostgres_error"
   )
 
