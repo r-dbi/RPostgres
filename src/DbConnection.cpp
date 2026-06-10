@@ -293,7 +293,8 @@ void DbConnection::conn_stop(PGconn* conn, const char* msg) {
 }
 
 void DbConnection::result_stop(PGresult* res, const char* msg, PGconn* conn) {
-  // Backward-compatible message: prefer the result-specific text when available.
+  // Backward-compatible message: prefer the result-specific text when
+  // available.
   const char* res_msg = res ? PQresultErrorMessage(res) : NULL;
   std::string full = std::string(msg) + " : " +
                      (res_msg && *res_msg ? res_msg : PQerrorMessage(conn));
