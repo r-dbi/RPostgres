@@ -45,7 +45,7 @@ test_that("check_interrupts = TRUE interrupts immediately (#336)", {
   expect_equal(session$poll_process(2000), "ready")
   session$read()
 
-  queryStatus = session$run(function() {
+  queryStatus <- session$run(function() {
     dbGetQuery(
       .GlobalEnv$checkConn,
       "SELECT state FROM pg_stat_activity WHERE pid = $1",
