@@ -66,7 +66,10 @@ test_that("search_path option exposes schema tables via dbListTables", {
       if (dbIsValid(con)) {
         quoted_schema <- as.character(dbQuoteIdentifier(con, schema))
         try(
-          dbExecute(con, paste0("DROP SCHEMA IF EXISTS ", quoted_schema, " CASCADE")),
+          dbExecute(
+            con,
+            paste0("DROP SCHEMA IF EXISTS ", quoted_schema, " CASCADE")
+          ),
           silent = TRUE
         )
         dbDisconnect(con)
