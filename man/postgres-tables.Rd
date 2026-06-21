@@ -139,6 +139,10 @@ SQL string.
 Pass an identifier created with \code{\link[=Id]{Id()}} as the \code{name} argument
 to specify the schema or catalog, e.g.
 \code{name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")} .
+To list objects in a specific schema without changing the connection
+defaults, use \code{\link[DBI:dbListObjects]{dbListObjects()}} with \code{Id(schema = "my_schema")}.
+To make \code{\link[DBI:dbListTables]{dbListTables()}} use a schema by default for a connection, set
+\code{options = "-c search_path=my_schema"} in \code{\link[DBI:dbConnect]{dbConnect()}}.
 To specify the tablespace, use
 \code{dbExecute(conn, "SET default_tablespace TO my_tablespace")}
 before creating the table.
@@ -158,6 +162,19 @@ dbExistsTable(con, "mtcars")
 # A zero row data frame just creates a table definition.
 dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 dbReadTable(con, "mtcars2")
+
+schema <- "rpostgres_example"
+dbExecute(con, paste0("DROP SCHEMA IF EXISTS ", dbQuoteIdentifier(con, schema), " CASCADE"))
+dbExecute(con, paste0("CREATE SCHEMA ", dbQuoteIdentifier(con, schema)))
+dbWriteTable(con, Id(schema = schema, table = "schema_demo"), iris[1:3, ], overwrite = TRUE)
+
+dbListObjects(con, Id(schema = schema))
+
+con2 <- dbConnect(RPostgres::Postgres(), options = paste0("-c search_path=", schema))
+dbListTables(con2)
+dbDisconnect(con2)
+
+dbExecute(con, paste0("DROP SCHEMA ", dbQuoteIdentifier(con, schema), " CASCADE"))
 
 dbDisconnect(con)
 \dontshow{\}) # examplesIf}
