@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9010 (2026-06-21)
+
+## Chore
+
+- Auto-update from GitHub Actions (#582).
+
+
 # RPostgres 1.4.10.9009 (2026-05-24)
 
 ## Continuous integration
