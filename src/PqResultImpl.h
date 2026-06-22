@@ -91,6 +91,7 @@ private:
 
 private:
   void conn_stop(const char* msg) const;
+  void result_stop(PGresult* res, const char* msg) const;
 
   void bind();
 

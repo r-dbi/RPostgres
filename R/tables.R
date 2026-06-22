@@ -119,7 +119,7 @@ db_append_table <- function(conn, name, value, copy, warn) {
       ")",
       " FROM STDIN"
     )
-    connection_copy_data(conn@ptr, sql, value)
+    rethrow(connection_copy_data(conn@ptr, sql, value))
   } else {
     sql <- sqlAppendTable(conn, name, value, row.names = FALSE)
     dbExecute(conn, sql)

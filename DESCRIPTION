@@ -26,13 +26,13 @@ Imports:
     hms (>= 1.0.0),
     lubridate,
     methods,
+    rlang,
     withr
-Suggests: 
+Suggests:
     callr,
     covr,
     DBItest (>= 1.7.3),
     knitr,
-    rlang,
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo: 
@@ -100,7 +100,9 @@ Collate:
     'default.R'
     'export.R'
     'quote.R'
+    'rethrow.R'
     'show_PqConnection.R'
+    'signal_pq_error.R'
     'sqlData_PqConnection.R'
     'tables.R'
     'transactions.R'
