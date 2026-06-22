@@ -36,7 +36,10 @@
 #'   for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection
 #'   options as described at
-#'   <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
+#'   <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>.
+#'   For example, set `options = "-c search_path=myschema"` to make
+#'   [dbListTables()] and unqualified reads and writes use `myschema`
+#'   by default for that connection.
 #' @param bigint The R type that 64-bit integer types should be mapped to,
 #'   default is [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
@@ -50,11 +53,34 @@
 #'   set to [Sys.timezone()] or `""`.
 #'   This setting does not change the time values returned, only their display.
 #' @param conn Connection to disconnect.
+#' @section Additional connection options:
+#' Use `...` for libpq parameters that are not formal arguments to
+#' `dbConnect()`. Besides SSL settings, this can be useful for session options
+#' such as `search_path`:
+#'
+#' ```
+#' dbConnect(
+#'   RPostgres::Postgres(),
+#'   options = "-c search_path=analytics"
+#' )
+#' ```
+#'
 #' @rdname Postgres
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
 #' # Pass more arguments as necessary to dbConnect()
 #' con <- dbConnect(RPostgres::Postgres())
+#'
+#' schema <- "rpostgres_example"
+#' dbExecute(con, paste0("DROP SCHEMA IF EXISTS ", dbQuoteIdentifier(con, schema), " CASCADE"))
+#' dbExecute(con, paste0("CREATE SCHEMA ", dbQuoteIdentifier(con, schema)))
+#' dbWriteTable(con, Id(schema = schema, table = "schema_demo"), iris[1:3, ], overwrite = TRUE)
+#'
+#' con2 <- dbConnect(RPostgres::Postgres(), options = paste0("-c search_path=", schema))
+#' dbListTables(con2)
+#' dbDisconnect(con2)
+#'
+#' dbExecute(con, paste0("DROP SCHEMA ", dbQuoteIdentifier(con, schema), " CASCADE"))
 #' dbDisconnect(con)
 #' @usage NULL
 dbConnect_PqDriver <- function(
