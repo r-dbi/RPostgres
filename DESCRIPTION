@@ -32,6 +32,7 @@ Suggests:
     covr,
     DBItest (>= 1.7.3),
     knitr,
+    purrr,
     rlang,
     rmarkdown,
     testthat (>= 3.0.0)
