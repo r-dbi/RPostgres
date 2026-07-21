@@ -20,7 +20,6 @@
 ^\.vscode$
 ^\.deps$
 ^autobrew$
-^cleanup$
 ^CRAN-SUBMISSION$
 ^\.gitpod\.yml$
 ^\.gitpod\.Dockerfile$
