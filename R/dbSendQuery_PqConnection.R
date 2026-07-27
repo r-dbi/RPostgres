@@ -25,7 +25,7 @@ dbSendQuery_PqConnection <- function(
   rs <- new(
     "PqResult",
     conn = conn,
-    ptr = result_create(conn@ptr, statement, immediate),
+    ptr = rethrow(result_create(conn@ptr, statement, immediate)),
     sql = statement,
     bigint = conn@bigint
   )
