@@ -7,3 +7,16 @@ runs:
       run: |
         echo '_R_CHECK_PKG_SIZES_=FALSE' | tee -a $GITHUB_ENV
       shell: bash
+
+    - name: Install legacy time zone data (Linux)
+      # Ubuntu 26.04 no longer ships the backward-compatibility zone names
+      # (PST8PDT, EST5EDT, US/Pacific, ...) in `tzdata`;
+      # they moved to the separate `tzdata-legacy` package.
+      # DBItest exercises PST8PDT,
+      # and without the package `lubridate::with_tz()` warns
+      # "Unrecognized time zone", which fails the round-trip timestamp tests.
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tzdata-legacy
+      shell: bash
