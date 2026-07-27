@@ -1,5 +1,20 @@
 # Changelog
 
+## RPostgres 1.4.10.9010 (2026-06-21)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#582](https://github.com/r-dbi/RPostgres/issues/582)).
+
+## RPostgres 1.4.10.9009 (2026-05-24)
+
+### Continuous integration
+
+- Update ccache-action reference.
+
+- Bump action version.
+
 ## RPostgres 1.4.10.9008 (2026-05-16)
 
 - Ci: Unify fledge.yaml across cynkratemplate and fledge
