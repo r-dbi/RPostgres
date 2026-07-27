@@ -5,6 +5,11 @@ runs:
   steps:
     # Must happen after installing system dependencies,
     # https://github.com/ankane/setup-mariadb/issues/2
+    #
+    # Postgres 17 is the one version ankane/setup-postgres offers on every
+    # runner image in the matrix: ubuntu-26.04 (where 18 is the default) and
+    # ubuntu-26.04-arm support 14-18, but windows-latest (windows-2025)
+    # supports 17 only.
     - uses: ankane/setup-postgres@v1
       with:
         postgres-version: ${{ matrix.pg-version || 17 }}
