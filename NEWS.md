@@ -1,5 +1,34 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9011 (2026-07-28)
+
+## Bug fixes
+
+### ci
+
+- Emit empty package matrix when there are no (rev)deps.
+
+## Continuous integration
+
+- Remove stale workflow.
+
+- Install `tzdata-legacy` on Ubuntu 26.04 (#593).
+
+- Lock down `format-suggest` egress (audit → block).
+
+- Run on Ubuntu 26.04.
+
+- Align workflows with template.
+
+## Uncategorized
+
+- Ci: Apply matrix `env` vars in the workflow, not in custom actions (#95).
+
+- Ci: Link the responsible workflow run in snapshot update PRs (#96).
+
+- Ci: Harden `format-suggest` against `pull_request_target` pwn requests (#93).
+
+
 # RPostgres 1.4.10.9010 (2026-06-21)
 
 ## Chore
