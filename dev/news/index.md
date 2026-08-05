@@ -1,5 +1,27 @@
 # Changelog
 
+## RPostgres 1.4.10.9012 (2026-08-05)
+
+### Chore
+
+- Auto-update from GitHub Actions
+  ([\#595](https://github.com/r-dbi/RPostgres/issues/595)).
+
+### Continuous integration
+
+- Remove unused pr-commands workflow.
+
+### Uncategorized
+
+- Ci: Give every workflow and job an explicit `permissions` block
+  ([\#103](https://github.com/r-dbi/RPostgres/issues/103)).
+
+- Ci: Pass workflow context through the environment, not into script
+  text ([\#102](https://github.com/r-dbi/RPostgres/issues/102)).
+
+- Ci: Add a Windows arm64 (`windows-11-arm`) check on R-release
+  ([\#99](https://github.com/r-dbi/RPostgres/issues/99)).
+
 ## RPostgres 1.4.10.9011 (2026-07-28)
 
 ### Bug fixes
