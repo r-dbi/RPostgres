@@ -1,5 +1,24 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9012 (2026-08-05)
+
+## Chore
+
+- Auto-update from GitHub Actions (#595).
+
+## Continuous integration
+
+- Remove unused pr-commands workflow.
+
+## Uncategorized
+
+- Ci: Give every workflow and job an explicit `permissions` block (#103).
+
+- Ci: Pass workflow context through the environment, not into script text (#102).
+
+- Ci: Add a Windows arm64 (`windows-11-arm`) check on R-release (#99).
+
+
 # RPostgres 1.4.10.9011 (2026-07-28)
 
 ## Bug fixes
