@@ -10,6 +10,10 @@
 #' Pass an identifier created with [Id()] as the `name` argument
 #' to specify the schema or catalog, e.g.
 #' `name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")` .
+#' To list objects in a specific schema without changing the connection
+#' defaults, use [dbListObjects()] with `Id(schema = "my_schema")`.
+#' To make [dbListTables()] use a schema by default for a connection, set
+#' `options = "-c search_path=my_schema"` in [dbConnect()].
 #' To specify the tablespace, use
 #' `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
 #' before creating the table.
@@ -51,6 +55,19 @@
 #' # A zero row data frame just creates a table definition.
 #' dbWriteTable(con, "mtcars2", mtcars[0, ], temporary = TRUE)
 #' dbReadTable(con, "mtcars2")
+#'
+#' schema <- "rpostgres_example"
+#' dbExecute(con, paste0("DROP SCHEMA IF EXISTS ", dbQuoteIdentifier(con, schema), " CASCADE"))
+#' dbExecute(con, paste0("CREATE SCHEMA ", dbQuoteIdentifier(con, schema)))
+#' dbWriteTable(con, Id(schema = schema, table = "schema_demo"), iris[1:3, ], overwrite = TRUE)
+#'
+#' dbListObjects(con, Id(schema = schema))
+#'
+#' con2 <- dbConnect(RPostgres::Postgres(), options = paste0("-c search_path=", schema))
+#' dbListTables(con2)
+#' dbDisconnect(con2)
+#'
+#' dbExecute(con, paste0("DROP SCHEMA ", dbQuoteIdentifier(con, schema), " CASCADE"))
 #'
 #' dbDisconnect(con)
 #' @name postgres-tables
