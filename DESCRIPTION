@@ -45,6 +45,12 @@ Config/Needs/build: decor
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
 Config/testthat/edition: 3
+Config/gha/filter: os != "windows-11-arm"
+Config/comment/gha/filter: No PostgreSQL server exists for ARM64 Windows, and
+    the DBItest suite needs a live one -- it connects in
+    tests/testthat/helper-DBItest.R and has no path that skips when the server
+    is absent. ankane/setup-postgres gives up on that runner in about a second.
+    Drop this filter once PostgreSQL publishes an ARM64 Windows server.
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
