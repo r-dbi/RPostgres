@@ -1,5 +1,13 @@
 # Changelog
 
+## RPostgres 1.4.10.9015 (2026-09-05)
+
+### Bug fixes
+
+#### ci
+
+- Backport kit fixes from `rigraph`, `duckdb-r` and `dm`.
+
 ## RPostgres 1.4.10.9014 (2026-08-08)
 
 ### Continuous integration

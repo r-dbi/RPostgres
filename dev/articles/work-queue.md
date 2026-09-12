@@ -246,7 +246,7 @@ Sys.sleep(3)
 rs <- dbSendQuery(con, "SELECT * FROM sqroot_vignette_example ORDER BY in_val")
 dbFetch(rs)
 #>   in_val  out_val
-#> 1      7       NA
+#> 1      7 2.645751
 #> 2      8 2.828427
 #> 3      9 3.000000
 dbClearResult(rs) ; rs <- NULL
@@ -273,10 +273,12 @@ outputs <- sort(c(
 writeLines(outputs[[1]])
 #> Not sqroot-ing as another worker got there first
 #> Sqroot-ing 8 ... 
+#> Not sqroot-ing as another worker got there first
+writeLines(outputs[[2]])
+#> Sqroot-ing 7 ... 
+#> Not sqroot-ing as another worker got there first
 #> Sqroot-ing 9 ... 
 #> Shutting down.
-writeLines(outputs[[2]])
-#> Sqroot-ing 7 ...
 ```
 
 Notice that the work has been shared between the 2 workers. If these 2
