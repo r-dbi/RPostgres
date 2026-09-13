@@ -24,7 +24,7 @@ RPostgres is an DBI-compliant interface to the postgres database. It's a ground-
 # Install the latest RPostgres release from CRAN:
 install.packages("RPostgres")
 
-# Or the the development version from GitHub:
+# Or the development version from GitHub:
 # install.packages("remotes")
 remotes::install_github("r-dbi/RPostgres")
 ```
