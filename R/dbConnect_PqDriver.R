@@ -26,10 +26,7 @@
 #'   See <https://www.postgresql.org/docs/current/libpq-pgpass.html> for more details.
 #' @param host,port Host and port.
 #'   If `NULL`, will be retrieved from `PGHOST` and `PGPORT` env vars.
-#' @param service Name of service to connect as.  If `NULL`, will be
-#'   ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf
-#'   file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html>
-#'   for details on this file and syntax.
+#' @param service Name of service to connect as.  If `NULL`, will be ignored.  Otherwise, connection parameters will be loaded from the pg_service.conf file and used.  See <https://www.postgresql.org/docs/current/libpq-pgservice.html> for details on this file and syntax.
 #' @param ... Other name-value pairs that describe additional connection options
 #'   as described at <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>
 #' @param bigint The R type that 64-bit integer types should be mapped to,
