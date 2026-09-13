@@ -32,3 +32,5 @@
 ^air\.toml$
 ^\.clang-format$
 ^\.ccache$
+^index\.md$
+^README\.Rmd$
