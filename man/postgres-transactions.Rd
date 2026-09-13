@@ -29,7 +29,7 @@ A boolean, indicating success or failure.
 }
 \description{
 \code{dbBegin()} starts a transaction.
-\code{dbCommit()} and \code{dbRollback()} end the transaction by either committing or rolling back the changes.
+ \code{dbCommit()} and \code{dbRollback()} end the transaction by either committing or rolling back the changes.
 }
 \examples{
 \dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
