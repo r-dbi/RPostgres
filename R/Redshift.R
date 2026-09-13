@@ -1,8 +1,8 @@
 #' Redshift driver/connection
 #'
 #' Use `drv = Redshift()` instead of `drv = Postgres()` to connect to an AWS Redshift cluster.
-#'  All methods in \pkg{RPostgres} and downstream packages can be called on such connections.
-#'  Some have different behavior for Redshift connections, to ensure better interoperability.
+#' All methods in \pkg{RPostgres} and downstream packages can be called on such connections.
+#' Some have different behavior for Redshift connections, to ensure better interoperability.
 #'
 #' @inheritParams Postgres
 #' @export

@@ -5,12 +5,12 @@
 #' because benchmarks revealed that this was considerably slower than using a single SQL string.
 #'
 #' @section Schemas, catalogs, tablespaces:
-#'  Pass an identifier created with [Id()] as the `name` argument
-#'  to specify the schema or catalog, e.g.
-#'  `name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")` .
-#'  To specify the tablespace, use
-#'  `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
-#'  before creating the table.
+#' Pass an identifier created with [Id()] as the `name` argument
+#' to specify the schema or catalog, e.g.
+#' `name = Id(catalog = "my_catalog", schema = "my_schema", table = "my_table")` .
+#' To specify the tablespace, use
+#' `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
+#' before creating the table.
 #'
 #' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
 #' @param name a character string specifying a table name.

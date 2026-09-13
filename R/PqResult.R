@@ -17,9 +17,9 @@ setClass(
 #' Execute a SQL statement on a database connection
 #'
 #' To retrieve results a chunk at a time, use `dbSendQuery()`,
-#'  `dbFetch()`, then `dbClearResult()`.
-#'  Alternatively, if you want all the results (and they'll fit in memory) use `dbGetQuery()` which sends,
-#'  fetches and clears for you.
+#' `dbFetch()`, then `dbClearResult()`.
+#' Alternatively, if you want all the results (and they'll fit in memory) use `dbGetQuery()` which sends,
+#' fetches and clears for you.
 #'
 #' @param conn A [PqConnection-class] created by [dbConnect()].
 #' @param statement An SQL string to execute.
