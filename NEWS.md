@@ -1,5 +1,24 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9016 (2026-09-13)
+
+## Bug fixes
+
+### ci
+
+- Drop the ARM64 Windows entry, which has no PostgreSQL server (#601).
+
+## Features
+
+### ci
+
+- Align the `revdep2`, `revdep4` and `revdepx` subsystems with `rigraph`.
+
+## Uncategorized
+
+- Perf(revdepx): Compile the revdeps' checks through ccache.
+
+
 # RPostgres 1.4.10.9015 (2026-09-05)
 
 ## Bug fixes
