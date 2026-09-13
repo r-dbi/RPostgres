@@ -1,10 +1,8 @@
 #' Convenience functions for reading/writing DBMS tables
 #'
-#' @description [dbWriteTable()] executes several SQL statements that
-#' create/overwrite a table and fill it with values.
-#' \pkg{RPostgres} does not use parameterised queries to insert rows because
-#' benchmarks revealed that this was considerably slower than using a single
-#' SQL string.
+#' @description [dbWriteTable()] executes several SQL statements that create/overwrite a table and fill it with values.
+#' \pkg{RPostgres} does not use parameterised queries to insert rows
+#' because benchmarks revealed that this was considerably slower than using a single SQL string.
 #'
 #' @section Schemas, catalogs, tablespaces:
 #' Pass an identifier created with [Id()] as the `name` argument
@@ -14,29 +12,25 @@
 #' `dbExecute(conn, "SET default_tablespace TO my_tablespace")`
 #' before creating the table.
 #'
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
-#' @param name a character string specifying a table name. Names will be
-#'   automatically quoted so you can use any sequence of characters, not
-#'   just any valid bare table name.
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
+#' @param name a character string specifying a table name.
+#'   Names will be automatically quoted so you can use any sequence of characters, not just any valid bare table name.
 #'   Alternatively, pass a name quoted with [dbQuoteIdentifier()],
 #'   an [Id()] object, or a string escaped with [SQL()].
 #' @param value A data.frame to write to the database.
 #' @inheritParams DBI::sqlCreateTable
-#' @param overwrite a logical specifying whether to overwrite an existing table
-#'   or not. Its default is `FALSE`.
-#' @param append a logical specifying whether to append to an existing table
-#'   in the DBMS. Its default is `FALSE`.
-#' @param field.types character vector of named SQL field types where
-#'   the names are the names of new table's columns.
+#' @param overwrite a logical specifying whether to overwrite an existing table or not.
+#'   Its default is `FALSE`.
+#' @param append a logical specifying whether to append to an existing table in the DBMS.
+#'   Its default is `FALSE`.
+#' @param field.types character vector of named SQL field types where the names are the names of new table's columns.
 #'   If missing, types are inferred with [DBI::dbDataType()]).
 #'   The types can only be specified with `append = FALSE`.
-#' @param copy If `TRUE`, serializes the data frame to a single string
-#'   and uses `COPY name FROM stdin`. This is fast, but not supported by
-#'   all postgres servers (e.g. Amazon's Redshift). If `FALSE`, generates
-#'   a single SQL string. This is slower, but always supported.
-#'   The default maps to `TRUE` on connections established via [Postgres()]
-#'   and to `FALSE` on connections established via [Redshift()].
+#' @param copy If `TRUE`, serializes the data frame to a single string and uses `COPY name FROM stdin`.
+#'   This is fast, but not supported by all postgres servers (e.g. Amazon's Redshift).
+#'   If `FALSE`, generates a single SQL string.
+#'   This is slower, but always supported.
+#'   The default maps to `TRUE` on connections established via [Postgres()] and to `FALSE` on connections established via [Redshift()].
 #'
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
@@ -204,8 +198,8 @@ list_fields <- function(conn, id) {
 
     # or we have to look the table up in the schemas on the search path
   } else if (is_redshift) {
-    # A variant of the Postgres version that uses CTEs and generate_series()
-    # instead of generate_subscripts(), the latter is not supported on Redshift
+    # A variant of the Postgres version that uses CTEs and generate_series() instead of generate_subscripts(),
+    # the latter is not supported on Redshift
     query <- paste0(
       "(WITH ",
       " n_schemas AS (",
@@ -221,8 +215,7 @@ list_fields <- function(conn, id) {
     )
     only_first <- FALSE
   } else {
-    # Get `current_schemas()` in search_path order
-    # so $user and temp tables take precedence over the public schema (by default)
+    # Get `current_schemas()` in search_path order so $user and temp tables take precedence over the public schema (by default)
     # https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH
     # https://www.postgresql.org/docs/current/runtime-config-client.html#GUC-SEARCH-PATH
     # How to unnest `current_schemas(true)` array with element number (works since v9.4):

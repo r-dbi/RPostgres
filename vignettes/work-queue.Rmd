@@ -25,12 +25,14 @@ Imagine you have an R process that is relatively intensive, based on user input.
 
 To keep things as fast as possible, you may want to use several servers to all process incoming requests for square roots.
 However, to do this you need to co-ordinate between all of your servers (or workers).
-How do you decide which server works on what? What if one server dies mid-way?
+How do you decide which server works on what?
+What if one server dies mid-way?
 To decide this, we need a work queue, also known as a job queue or task queue.
 This document will show show you how to build a work queue system using R and PostgreSQL that would ordinarily require an external tool,
 like [RabbitMQ](https://www.rabbitmq.com/).
 
-In this example, our work will be generating square roots. We'll keep track of the results in a table:
+In this example, our work will be generating square roots.
+We'll keep track of the results in a table:
 
 ```{r}
 library(DBI)
@@ -68,7 +70,8 @@ if (!is.null(rp)) {
 The Postgres ``LISTEN`` and ``NOTIFY`` commands allow you to send and receive messages between clients connected to a PostgreSQL database.
 This is known as a publish/subscribe architecture.
 
-We tell Postgres that we are interested in receiving messages using ``LISTEN``. For example:
+We tell Postgres that we are interested in receiving messages using ``LISTEN``.
+For example:
 
 ```{r}
 con <- dbConnect(RPostgres::Postgres())
@@ -90,7 +93,8 @@ rp <- callr::r_bg(function() {
 })
 ```
 
-Finally, we should wait for any incoming messages. To do this, use ``postgresWaitForNotify``.
+Finally, we should wait for any incoming messages.
+To do this, use ``postgresWaitForNotify``.
 The payload will contain the message from the other R process:
 
 ```{r}
