@@ -1,6 +1,6 @@
 Package: RPostgres
 Title: C++ Interface to PostgreSQL
-Version: 1.4.10.9016
+Version: 1.4.10.9017
 Date: 2026-09-13
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
