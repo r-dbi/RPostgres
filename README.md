@@ -20,6 +20,32 @@ Compared to RPostgreSQL, it:
 
 * A simplified build process that relies on system libpq.
 
+## Goals and non-goals
+
+RPostgres aims to:
+
+- implement the [DBI specification](https://dbi.r-dbi.org/articles/spec.html) for PostgreSQL,
+  and to keep proving it by running the `DBItest` suite as part of its own tests
+- support parameterised queries through `dbSendQuery()` and `dbBind()`,
+  so that values never have to be pasted into the SQL string
+- map PostgreSQL types to the R types that fit them best:
+  64-bit integers via `bit64`, `bytea` via `blob`, and date-time columns with an explicit time zone
+- reach the PostgreSQL features that DBI has no generic for,
+  such as `LISTEN`/`NOTIFY` through `postgresWaitForNotify()` and large objects through `postgresImportLargeObject()`
+- serve AWS Redshift clusters through `Redshift()`, with the behaviour of individual methods adjusted where that cluster differs
+
+It is explicitly not trying to:
+
+- define what the database interface looks like:
+  the generics, their semantics and the specification are DBI's, this package supplies the PostgreSQL implementation
+- translate R code into SQL: queries are handed to `dbSendQuery()` and friends as SQL strings
+- bundle a client library: no `libpq` source ships with the package,
+  the build links the one the platform provides and downloads a prebuilt binary where it does not
+- reproduce the full driver/connection/result generality the original DBI design imagined:
+  a driver has no real state and a PostgreSQL connection can only have one result set,
+  so the driver class is a dummy used for dispatch and connection and result share one external pointer
+- offer the whole specification on Redshift, where BLOBs are not supported
+
 ## Installation
 ```R
 # Install the latest RPostgres release from CRAN:
