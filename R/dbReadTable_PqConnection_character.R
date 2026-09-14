@@ -1,5 +1,4 @@
-#' @param check.names If `TRUE`, the default, column names will be
-#'   converted to valid R identifiers.
+#' @param check.names If `TRUE`, the default, column names will be converted to valid R identifiers.
 #' @rdname postgres-tables
 #' @usage NULL
 dbReadTable_PqConnection_character <- function(

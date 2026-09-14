@@ -93,13 +93,12 @@ check_tz <- function(timezone) {
 
 #' Wait for and return any notifications that return within timeout
 #'
-#' Once you subscribe to notifications with LISTEN, use this to wait for
-#' responses on each channel.
+#' Once you subscribe to notifications with LISTEN, use this to wait for responses on each channel.
 #'
 #' @export
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
-#' @param timeout How long to wait, in seconds. Default 1
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
+#' @param timeout How long to wait, in seconds.
+#'   Default 1
 #' @return If a notification was available, a list of:
 #' \describe{
 #'   \item{channel}{Name of channel}
@@ -141,12 +140,10 @@ postgresWaitForNotify <- function(conn, timeout = 1) {
 
 #' Return whether a transaction is ongoing
 #'
-#' Detect whether the transaction is active for the given connection. A
-#' transaction might be started with [dbBegin()] or wrapped within
-#' [DBI::dbWithTransaction()].
+#' Detect whether the transaction is active for the given connection.
+#' A transaction might be started with [dbBegin()] or wrapped within [DBI::dbWithTransaction()].
 #' @export
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
 #' @return A boolean, indicating if a transaction is ongoing.
 postgresIsTransacting <- function(conn) {
   connection_is_transacting(conn@ptr)
@@ -159,10 +156,10 @@ postgresIsTransacting <- function(conn) {
 #' This function must be called within a transaction.
 #'
 #' @export
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
 #' @param filepath a path to the large object to import
-#' @param oid the oid to write to. Defaults to 0 which assigns an unused oid
+#' @param oid the oid to write to.
+#'   Defaults to 0 which assigns an unused oid
 #' @return the identifier of the large object, an integer
 #' @examples
 #' \dontrun{
@@ -195,15 +192,14 @@ postgresImportLargeObject <- function(conn, filepath = NULL, oid = 0) {
 
 #' Exports a large object to file
 #'
-#' Exports a large object from the database to a file on disk. This function
-#' uses PostgreSQL's `lo_export()` function which efficiently streams the data
-#' directly to disk without loading it into memory, making it suitable for
-#' very large objects (GB+) that would cause memory issues with `lo_get()`.
+#' Exports a large object from the database to a file on disk.
+#' This function uses PostgreSQL's `lo_export()` function
+#' which efficiently streams the data directly to disk without loading it into memory,
+#' making it suitable for very large objects (GB+) that would cause memory issues with `lo_get()`.
 #' This function must be called within a transaction.
 #'
 #' @export
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
 #' @param oid the object identifier (Oid) of the large object to export
 #' @param filepath a path where the large object should be exported
 #' @return invisible NULL on success, or stops with an error

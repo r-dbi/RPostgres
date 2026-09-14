@@ -18,20 +18,18 @@
 \S4method{dbRollback}{PqConnection}(conn, ..., name = NULL)
 }
 \arguments{
-\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by
-\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
+\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{...}{Unused, for extensibility.}
 
-\item{name}{If provided, uses the \code{SAVEPOINT} SQL syntax
-to establish, remove (commit) or undo a ßsavepoint.}
+\item{name}{If provided, uses the \code{SAVEPOINT} SQL syntax to establish, remove (commit) or undo a ßsavepoint.}
 }
 \value{
 A boolean, indicating success or failure.
 }
 \description{
-\code{dbBegin()} starts a transaction. \code{dbCommit()} and \code{dbRollback()}
-end the transaction by either committing or rolling back the changes.
+\code{dbBegin()} starts a transaction.
+\code{dbCommit()} and \code{dbRollback()} end the transaction by either committing or rolling back the changes.
 }
 \examples{
 \dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}

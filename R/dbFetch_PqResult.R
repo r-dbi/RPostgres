@@ -1,6 +1,6 @@
-#' @param res Code a [PqResult-class] produced by
-#'   [DBI::dbSendQuery()].
-#' @param n Number of rows to return. If less than zero returns all rows.
+#' @param res Code a [PqResult-class] produced by [DBI::dbSendQuery()].
+#' @param n Number of rows to return.
+#'   If less than zero returns all rows.
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @rdname postgres-query
 #' @usage NULL

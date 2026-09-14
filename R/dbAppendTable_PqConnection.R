@@ -1,5 +1,4 @@
-#' @description [dbAppendTable()] is overridden because \pkg{RPostgres}
-#' uses placeholders of the form `$1`, `$2` etc. instead of `?`.
+#' @description [dbAppendTable()] is overridden because \pkg{RPostgres} uses placeholders of the form `$1`, `$2` etc. instead of `?`.
 #' @name postgres-tables
 #' @usage NULL
 dbAppendTable_PqConnection <- function(
