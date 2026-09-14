@@ -56,7 +56,10 @@ for details on this file and syntax.}
 
 \item{...}{Other name-value pairs that describe additional connection
 options as described at
-\url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
+\url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}.
+For example, set \code{options = "-c search_path=myschema"} to make
+\code{\link[DBI:dbListTables]{dbListTables()}} and unqualified reads and writes use \code{myschema}
+by default for that connection.}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
 default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
@@ -85,11 +88,35 @@ but still recommended;
 if you delete the object containing the connection, it will be automatically
 disconnected during the next GC with a warning.
 }
+\section{Additional connection options}{
+
+Use \code{...} for libpq parameters that are not formal arguments to
+\code{dbConnect()}. Besides SSL settings, this can be useful for session options
+such as \code{search_path}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{dbConnect(
+  RPostgres::Postgres(),
+  options = "-c search_path=analytics"
+)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
 library(DBI)
 # Pass more arguments as necessary to dbConnect()
 con <- dbConnect(RPostgres::Postgres())
+
+schema <- "rpostgres_example"
+dbExecute(con, paste0("DROP SCHEMA IF EXISTS ", dbQuoteIdentifier(con, schema), " CASCADE"))
+dbExecute(con, paste0("CREATE SCHEMA ", dbQuoteIdentifier(con, schema)))
+dbWriteTable(con, Id(schema = schema, table = "schema_demo"), iris[1:3, ], overwrite = TRUE)
+
+con2 <- dbConnect(RPostgres::Postgres(), options = paste0("-c search_path=", schema))
+dbListTables(con2)
+dbDisconnect(con2)
+
+dbExecute(con, paste0("DROP SCHEMA ", dbQuoteIdentifier(con, schema), " CASCADE"))
 dbDisconnect(con)
 \dontshow{\}) # examplesIf}
 }
