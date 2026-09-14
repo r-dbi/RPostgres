@@ -25,8 +25,8 @@ Compared to RPostgreSQL, it:
 install.packages("RPostgres")
 
 # Or the the development version from GitHub:
-# install.packages("remotes")
-remotes::install_github("r-dbi/RPostgres")
+# install.packages("pak")
+pak::pak("r-dbi/RPostgres")
 ```
 
 Discussions associated with DBI and related database packages take place
