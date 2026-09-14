@@ -25,8 +25,8 @@ RPostgres is an DBI-compliant interface to the postgres database. It's a ground-
 install.packages("RPostgres")
 
 # Or the the development version from GitHub:
-# install.packages("remotes")
-remotes::install_github("r-dbi/RPostgres")
+# install.packages("pak")
+pak::pak("r-dbi/RPostgres")
 ```
 
 Discussions associated with DBI and related database packages take place on [R-SIG-DB](https://stat.ethz.ch/mailman/listinfo/r-sig-db). 
