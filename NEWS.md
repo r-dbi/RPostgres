@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9018 (2026-09-15)
+
+## Documentation
+
+- Break lines at meaning boundaries (#606).
+
+- Point the coverage badge at the branch that exists (#599, #605).
+
+- Use `pak::pak()` for the development install (#602).
+
+
 # RPostgres 1.4.10.9017 (2026-09-13)
 
 ## Chore
