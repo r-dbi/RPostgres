@@ -10,7 +10,7 @@ postgresWaitForNotify(conn, timeout = 1)
 \item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{timeout}{How long to wait, in seconds.
-Default 1}
+ Default 1}
 }
 \value{
 If a notification was available, a list of:

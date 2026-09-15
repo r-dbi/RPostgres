@@ -18,10 +18,10 @@ invisible NULL on success, or stops with an error
 }
 \description{
 Exports a large object from the database to a file on disk.
-This function uses PostgreSQL's \code{lo_export()} function
+ This function uses PostgreSQL's \code{lo_export()} function
 which efficiently streams the data directly to disk without loading it into memory,
 making it suitable for very large objects (GB+) that would cause memory issues with \code{lo_get()}.
-This function must be called within a transaction.
+ This function must be called within a transaction.
 }
 \examples{
 \dontrun{

@@ -30,26 +30,26 @@ Postgres()
 }
 \arguments{
 \item{drv}{\link[DBI:DBIDriver-class]{DBI::DBIDriver}.
-Use \code{\link[=Postgres]{Postgres()}} to connect to a PostgreSQL(-ish) database or \code{\link[=Redshift]{Redshift()}} to connect to an AWS Redshift cluster.
-Use an existing \link[DBI:DBIConnection-class]{DBI::DBIConnection} object to clone an existing connection.}
+ Use \code{\link[=Postgres]{Postgres()}} to connect to a PostgreSQL(-ish) database or \code{\link[=Redshift]{Redshift()}} to connect to an AWS Redshift cluster.
+ Use an existing \link[DBI:DBIConnection-class]{DBI::DBIConnection} object to clone an existing connection.}
 
 \item{dbname}{Database name.
-If \code{NULL}, defaults to the user name.
-Note that this argument can only contain the database name,
+ If \code{NULL}, defaults to the user name.
+ Note that this argument can only contain the database name,
 it will not be parsed as a connection string
 (internally, \code{expand_dbname} is set to \code{false} in the call to \href{https://www.postgresql.org/docs/current/libpq-connect.html}{\code{PQconnectdbParams()}}).}
 
 \item{host, port}{Host and port.
-If \code{NULL}, will be retrieved from \code{PGHOST} and \code{PGPORT} env vars.}
+ If \code{NULL}, will be retrieved from \code{PGHOST} and \code{PGPORT} env vars.}
 
 \item{user, password}{User name and password.
-If \code{NULL}, will be retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the appropriate line in \verb{~/.pgpass}.
-See \url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for more details.}
+ If \code{NULL}, will be retrieved from \code{PGUSER} and \code{PGPASSWORD} envvars, or from the appropriate line in \verb{~/.pgpass}.
+ See \url{https://www.postgresql.org/docs/current/libpq-pgpass.html} for more details.}
 
 \item{service}{Name of service to connect as.
-If \code{NULL}, will be ignored.
-Otherwise, connection parameters will be loaded from the pg_service.conf file and used.
-See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html} for details on this file and syntax.}
+ If \code{NULL}, will be ignored.
+ Otherwise, connection parameters will be loaded from the pg_service.conf file and used.
+ See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html} for details on this file and syntax.}
 
 \item{...}{Other name-value pairs that describe additional connection options
 as described at \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
@@ -58,23 +58,23 @@ as described at \url{https://www.postgresql.org/docs/current/libpq-connect.html#
 default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit integers.}
 
 \item{check_interrupts}{Should user interrupts be checked during the query execution (before first row of data is available)?
-Setting to \code{TRUE} allows interruption of queries running too long.}
+ Setting to \code{TRUE} allows interruption of queries running too long.}
 
 \item{timezone}{Sets the timezone for the connection.
-The default is \code{"UTC"}.
-If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
+ The default is \code{"UTC"}.
+ If \code{NULL} then no timezone is set, which defaults to the server's time zone.}
 
 \item{timezone_out}{The time zone returned to R, defaults to \code{timezone}.
-If you want to display datetime values in the local timezone,
+ If you want to display datetime values in the local timezone,
 set to \code{\link[=Sys.timezone]{Sys.timezone()}} or \code{""}.
-This setting does not change the time values returned, only their display.}
+ This setting does not change the time values returned, only their display.}
 
 \item{conn}{Connection to disconnect.}
 }
 \description{
 \code{DBI::dbConnect()} establishes a connection to a database.
-Set \code{drv = Postgres()} to connect to a PostgreSQL(-ish) database.
-Use \code{drv = Redshift()} instead to connect to an AWS Redshift cluster.
+ Set \code{drv = Postgres()} to connect to a PostgreSQL(-ish) database.
+ Use \code{drv = Redshift()} instead to connect to an AWS Redshift cluster.
 
 Manually disconnecting a connection is not necessary with \pkg{RPostgres},
 but still recommended;
