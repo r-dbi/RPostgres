@@ -226,16 +226,15 @@ void PqResultImpl::prepare() {
   // Prepare query
   PGresult* prep = PQprepare(pConn_, "", sql_.c_str(), 0, NULL);
   if (PQresultStatus(prep) != PGRES_COMMAND_OK) {
-    PQclear(prep);
-    conn_stop("Failed to prepare query");
+    // result_stop() takes ownership of `prep` (extracts fields, then PQclears).
+    result_stop(prep, "Failed to prepare query");
   }
   PQclear(prep);
 
   // Retrieve query specification
   PGresult* spec = PQdescribePrepared(pConn_, "");
   if (PQresultStatus(spec) != PGRES_COMMAND_OK) {
-    PQclear(spec);
-    conn_stop("Failed to retrieve query result metadata");
+    result_stop(spec, "Failed to retrieve query result metadata");
   }
 
   pSpec_ = spec;
@@ -490,9 +489,10 @@ bool PqResultImpl::step_run() {
   ExecStatusType status = PQresultStatus(pRes_);
 
   if (status == PGRES_FATAL_ERROR) {
-    PQclear(pRes_);
+    PGresult* res = pRes_;
     pRes_ = NULL;
-    conn_stop("Failed to fetch row");
+    // result_stop() takes ownership of `res` (extracts fields, then PQclears).
+    result_stop(res, "Failed to fetch row");
     return false;
   }
 
@@ -538,6 +538,10 @@ cpp11::list PqResultImpl::peek_first_row() {
 
 void PqResultImpl::conn_stop(const char* msg) const {
   DbConnection::conn_stop(pConn_, msg);
+}
+
+void PqResultImpl::result_stop(PGresult* res, const char* msg) const {
+  DbConnection::result_stop(res, msg, pConn_);
 }
 
 void PqResultImpl::bind() {
