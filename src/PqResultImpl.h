@@ -34,7 +34,7 @@ class PqResultImpl : boost::noncopyable, public PqResultSource {
     int nparams_;
 
     _cache();
-    void set(PGresult* spec);
+    void set(PGresult* spec, bool enforce_result);
 
     static std::vector<std::string> get_column_names(PGresult* spec);
     static DATA_TYPE get_column_type_from_oid(const Oid type);
