@@ -1,5 +1,20 @@
 # Changelog
 
+## RPostgres 1.4.10.9018 (2026-09-15)
+
+### Documentation
+
+- Break lines at meaning boundaries
+  ([\#606](https://github.com/r-dbi/RPostgres/issues/606)).
+
+- Point the coverage badge at the branch that exists
+  ([\#599](https://github.com/r-dbi/RPostgres/issues/599),
+  [\#605](https://github.com/r-dbi/RPostgres/issues/605)).
+
+- Use [`pak::pak()`](https://pak.r-lib.org/reference/pak.html) for the
+  development install
+  ([\#602](https://github.com/r-dbi/RPostgres/issues/602)).
+
 ## RPostgres 1.4.10.9017 (2026-09-13)
 
 ### Chore
