@@ -2,20 +2,21 @@
 
 <!-- badges: start -->
 [![rcc](https://github.com/r-dbi/RPostgres/workflows/rcc/badge.svg)](https://github.com/r-dbi/RPostgres/actions)
-[![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/RPostgres?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/RPostgres/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/RPostgres/tree/main)
 [![CRAN status](https://www.r-pkg.org/badges/version/RPostgres)](https://CRAN.R-project.org/package=RPostgres)
 <!-- badges: end -->
 
-RPostgres is an DBI-compliant interface to the postgres database. It's a ground-up rewrite using C++ and [cpp11](https://github.com/r-lib/cpp11). Compared to RPostgreSQL, it:
+RPostgres is an DBI-compliant interface to the postgres database.
+It's a ground-up rewrite using C++ and [cpp11](https://github.com/r-lib/cpp11).
+Compared to RPostgreSQL, it:
 
 * Has full support for parameterised queries via `dbSendQuery()`, and `dbBind()`.
 
-* Automatically cleans up open connections and result sets, ensuring that you
-  don't need to worry about leaking connections or memory.
+* Automatically cleans up open connections and result sets, ensuring that you don't need to worry about leaking connections or memory.
 
-* Is a little faster, saving ~5 ms per query. (For reference, it takes around 5ms
-  to retrieve a 1000 x 25 result set from a local database, so this is 
-  decent speed up for smaller queries.)
+* Is a little faster, saving ~5 ms per query.
+  (For reference, it takes around 5ms to retrieve a 1000 x 25 result set from a local database,
+  so this is decent speed up for smaller queries.)
 
 * A simplified build process that relies on system libpq.
 
@@ -25,8 +26,8 @@ RPostgres is an DBI-compliant interface to the postgres database. It's a ground-
 install.packages("RPostgres")
 
 # Or the development version from GitHub:
-# install.packages("remotes")
-remotes::install_github("r-dbi/RPostgres")
+# install.packages("pak")
+pak::pak("r-dbi/RPostgres")
 ```
 
 Discussions associated with DBI and related database packages take place on [R-SIG-DB](https://stat.ethz.ch/mailman/listinfo/r-sig-db). 
@@ -78,10 +79,14 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'DATABASE_NAME',
 
 ## Design notes
 
-The original DBI design imagined that each package could instantiate X drivers, with each driver having Y connections and each connection having Z results. This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set. In the RPostgres package there's only one class on the C side: a connection, which optionally contains a result set. On the R side, the driver class is just a dummy class with no contents (used only for dispatch), and both the connection and result objects point to the same external pointer.
+The original DBI design imagined that each package could instantiate X drivers,
+with each driver having Y connections and each connection having Z results.
+This turns out to be too general: a driver has no real state, for PostgreSQL each connection can only have one result set.
+In the RPostgres package there's only one class on the C side: a connection, which optionally contains a result set.
+On the R side, the driver class is just a dummy class with no contents (used only for dispatch),
+and both the connection and result objects point to the same external pointer.
 
 ---
 
-Please note that the 'RPostgres' project is released with a
-[Contributor Code of Conduct](https://rpostgres.r-dbi.org/CODE_OF_CONDUCT.html).
+Please note that the 'RPostgres' project is released with a [Contributor Code of Conduct](https://rpostgres.r-dbi.org/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

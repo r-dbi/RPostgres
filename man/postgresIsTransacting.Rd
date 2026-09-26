@@ -7,14 +7,12 @@
 postgresIsTransacting(conn)
 }
 \arguments{
-\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by
-\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
+\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 }
 \value{
 A boolean, indicating if a transaction is ongoing.
 }
 \description{
-Detect whether the transaction is active for the given connection. A
-transaction might be started with \code{\link[DBI:dbBegin]{dbBegin()}} or wrapped within
-\code{\link[DBI:dbWithTransaction]{DBI::dbWithTransaction()}}.
+Detect whether the transaction is active for the given connection.
+A transaction might be started with \code{\link[DBI:dbBegin]{dbBegin()}} or wrapped within \code{\link[DBI:dbWithTransaction]{DBI::dbWithTransaction()}}.
 }

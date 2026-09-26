@@ -3,13 +3,11 @@ NULL
 
 #' Quote postgres strings, identifiers, and literals
 #'
-#' If an object of class [Id] is used for `dbQuoteIdentifier()`, it needs
-#' at most one `table` component and at most one `schema` component.
+#' If an object of class [Id] is used for `dbQuoteIdentifier()`, it needs at most one `table` component and at most one `schema` component.
 #'
 #' @param conn A [PqConnection-class] created by `dbConnect()`
 #' @param x A character vector to be quoted.
-#' @param ... Other arguments needed for compatibility with generic (currently
-#'   ignored).
+#' @param ... Other arguments needed for compatibility with generic (currently ignored).
 #' @examplesIf postgresHasDefault()
 #' library(DBI)
 #' con <- dbConnect(RPostgres::Postgres())

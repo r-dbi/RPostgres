@@ -1,7 +1,6 @@
 #' @rdname postgres-tables
 #' @param temporary If `TRUE`, only temporary tables are considered.
-#' @param fail_if_missing If `FALSE`, `dbRemoveTable()` succeeds if the
-#'   table doesn't exist.
+#' @param fail_if_missing If `FALSE`, `dbRemoveTable()` succeeds if the table doesn't exist.
 #' @usage NULL
 dbRemoveTable_PqConnection_character <- function(
   conn,

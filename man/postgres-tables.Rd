@@ -68,23 +68,20 @@
 \S4method{sqlData}{PqConnection}(con, value, row.names = FALSE, ...)
 }
 \arguments{
-\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by
-\code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
+\item{conn}{a \link[=PqConnection-class]{PqConnection} object, produced by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
-\item{name}{a character string specifying a table name. Names will be
-automatically quoted so you can use any sequence of characters, not
-just any valid bare table name.
+\item{name}{a character string specifying a table name.
+Names will be automatically quoted so you can use any sequence of characters, not just any valid bare table name.
 Alternatively, pass a name quoted with \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}},
 an \code{\link[=Id]{Id()}} object, or a string escaped with \code{\link[DBI:SQL]{SQL()}}.}
 
 \item{value}{A data.frame to write to the database.}
 
-\item{copy}{If \code{TRUE}, serializes the data frame to a single string
-and uses \verb{COPY name FROM stdin}. This is fast, but not supported by
-all postgres servers (e.g. Amazon's Redshift). If \code{FALSE}, generates
-a single SQL string. This is slower, but always supported.
-The default maps to \code{TRUE} on connections established via \code{\link[=Postgres]{Postgres()}}
-and to \code{FALSE} on connections established via \code{\link[=Redshift]{Redshift()}}.}
+\item{copy}{If \code{TRUE}, serializes the data frame to a single string and uses \verb{COPY name FROM stdin}.
+This is fast, but not supported by all postgres servers (e.g. Amazon's Redshift).
+If \code{FALSE}, generates a single SQL string.
+This is slower, but always supported.
+The default maps to \code{TRUE} on connections established via \code{\link[=Postgres]{Postgres()}} and to \code{FALSE} on connections established via \code{\link[=Redshift]{Redshift()}}.}
 
 \item{...}{Ignored.}
 
@@ -103,36 +100,30 @@ For backward compatibility, \code{NULL} is equivalent to \code{FALSE}.}
 This argument will be processed with \code{\link[DBI:dbUnquoteIdentifier]{dbUnquoteIdentifier()}}.
 If given the method will return all objects accessible through this prefix.}
 
-\item{check.names}{If \code{TRUE}, the default, column names will be
-converted to valid R identifiers.}
+\item{check.names}{If \code{TRUE}, the default, column names will be converted to valid R identifiers.}
 
 \item{temporary}{If \code{TRUE}, only temporary tables are considered.}
 
-\item{fail_if_missing}{If \code{FALSE}, \code{dbRemoveTable()} succeeds if the
-table doesn't exist.}
+\item{fail_if_missing}{If \code{FALSE}, \code{dbRemoveTable()} succeeds if the table doesn't exist.}
 
-\item{overwrite}{a logical specifying whether to overwrite an existing table
-or not. Its default is \code{FALSE}.}
+\item{overwrite}{a logical specifying whether to overwrite an existing table or not.
+Its default is \code{FALSE}.}
 
-\item{append}{a logical specifying whether to append to an existing table
-in the DBMS. Its default is \code{FALSE}.}
+\item{append}{a logical specifying whether to append to an existing table in the DBMS.
+Its default is \code{FALSE}.}
 
-\item{field.types}{character vector of named SQL field types where
-the names are the names of new table's columns.
+\item{field.types}{character vector of named SQL field types where the names are the names of new table's columns.
 If missing, types are inferred with \code{\link[DBI:dbDataType]{DBI::dbDataType()}}).
 The types can only be specified with \code{append = FALSE}.}
 
 \item{con}{A database connection.}
 }
 \description{
-\code{\link[DBI:dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres}
-uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
+\code{\link[DBI:dbAppendTable]{dbAppendTable()}} is overridden because \pkg{RPostgres} uses placeholders of the form \verb{$1}, \verb{$2} etc. instead of \verb{?}.
 
-\code{\link[DBI:dbWriteTable]{dbWriteTable()}} executes several SQL statements that
-create/overwrite a table and fill it with values.
-\pkg{RPostgres} does not use parameterised queries to insert rows because
-benchmarks revealed that this was considerably slower than using a single
-SQL string.
+\code{\link[DBI:dbWriteTable]{dbWriteTable()}} executes several SQL statements that create/overwrite a table and fill it with values.
+\pkg{RPostgres} does not use parameterised queries to insert rows
+because benchmarks revealed that this was considerably slower than using a single SQL string.
 }
 \section{Schemas, catalogs, tablespaces}{
 

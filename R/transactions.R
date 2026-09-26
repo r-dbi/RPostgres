@@ -1,10 +1,9 @@
 #' Transaction management.
 #'
-#' `dbBegin()` starts a transaction. `dbCommit()` and `dbRollback()`
-#' end the transaction by either committing or rolling back the changes.
+#' `dbBegin()` starts a transaction.
+#' `dbCommit()` and `dbRollback()` end the transaction by either committing or rolling back the changes.
 #'
-#' @param conn a [PqConnection-class] object, produced by
-#'   [DBI::dbConnect()]
+#' @param conn a [PqConnection-class] object, produced by [DBI::dbConnect()]
 #' @param ... Unused, for extensibility.
 #' @return A boolean, indicating success or failure.
 #' @examplesIf postgresHasDefault()

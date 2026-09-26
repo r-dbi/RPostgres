@@ -42,12 +42,10 @@
 
 \item{x}{A character vector to be quoted.}
 
-\item{...}{Other arguments needed for compatibility with generic (currently
-ignored).}
+\item{...}{Other arguments needed for compatibility with generic (currently ignored).}
 }
 \description{
-If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs
-at most one \code{table} component and at most one \code{schema} component.
+If an object of class \link{Id} is used for \code{dbQuoteIdentifier()}, it needs at most one \code{table} component and at most one \code{schema} component.
 }
 \examples{
 \dontshow{if (postgresHasDefault()) withAutoprint(\{ # examplesIf}
