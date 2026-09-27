@@ -19,6 +19,7 @@ permissions:
 jobs:
   matrix:
     runs-on: ubuntu-26.04
+    timeout-minutes: 30 # longest run seen: 2 min
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
@@ -40,6 +41,7 @@ jobs:
 
   check-matrix:
     runs-on: ubuntu-26.04
+    timeout-minutes: 15 # longest run seen: 1 min
     needs: matrix
 
     name: Check deps
@@ -54,8 +56,12 @@ jobs:
 
   R-CMD-check-base:
     runs-on: ubuntu-26.04
+    timeout-minutes: 120 # longest run seen: 46 min
 
     name: base
+
+    outputs:
+      binary: ${{ steps.binary.outputs.artifact-name }}
 
     permissions:
       # Both required by the update-snapshots action, which opens a pull
@@ -78,7 +84,7 @@ jobs:
         with:
           cache-version: rcc-dev-base-1
           needs: build, check
-          extra-packages: "any::rcmdcheck any::remotes ."
+          extra-packages: "any::rcmdcheck any::remotes"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Session info
@@ -88,6 +94,12 @@ jobs:
         uses: ./.github/workflows/custom/after-install
         if: hashFiles('.github/workflows/custom/after-install/action.yml') != ''
 
+      - name: Build, install and upload the binary package
+        id: binary
+        uses: cynkra/cynkratemplate/.github/actions/build-binary@main
+        with:
+          name: ubuntu-26.04-rrelease-base
+
       - name: Update the testthat snapshots
         uses: cynkra/cynkratemplate/.github/actions/update-snapshots@main
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
@@ -95,7 +107,7 @@ jobs:
       - name: Run R CMD check
         uses: cynkra/cynkratemplate/.github/actions/check@main
         with:
-          results: ${{ matrix.package }}
+          results: base
 
   R-CMD-check-dev:
     needs:
@@ -103,6 +115,7 @@ jobs:
       - R-CMD-check-base
 
     runs-on: ubuntu-26.04
+    timeout-minutes: 120 # longest run seen: 57 min
 
     name: 'rcc-dev: ${{ matrix.package }}'
 
@@ -127,8 +140,14 @@ jobs:
         with:
           cache-version: rcc-dev-${{ matrix.package }}-1
           needs: build, check
-          extra-packages: "any::rcmdcheck r-lib/remotes@f-618-universe ."
+          extra-packages: "any::rcmdcheck r-lib/remotes@f-618-universe"
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Same runner and R version as the base job, so its binary fits.
+      - name: Install the package from the base job's binary
+        uses: cynkra/cynkratemplate/.github/actions/install-binary@main
+        with:
+          name: ${{ needs.R-CMD-check-base.outputs.binary }}
 
       - name: Install dev version of ${{ matrix.package }}
         env:
