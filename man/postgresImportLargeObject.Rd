@@ -12,14 +12,14 @@ postgresImportLargeObject(conn, filepath = NULL, oid = 0)
 \item{filepath}{a path to the large object to import}
 
 \item{oid}{the oid to write to.
-Defaults to 0 which assigns an unused oid}
+ Defaults to 0 which assigns an unused oid}
 }
 \value{
 the identifier of the large object, an integer
 }
 \description{
 Returns an object identifier (Oid) for the imported large object.
-This function must be called within a transaction.
+ This function must be called within a transaction.
 }
 \examples{
 \dontrun{
