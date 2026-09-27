@@ -1,5 +1,38 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9019 (2026-09-27)
+
+## Bug fixes
+
+### ci
+
+- Restore the custom `before-install` and `after-install` actions (#616).
+
+## Continuous integration
+
+- Run coverage checks after pkgdown push.
+
+## Testing
+
+- Drop the unused astyle helper (#614).
+
+## Uncategorized
+
+- Feat(ci): Render `README.md` and `index.md` in CI (cynkra/cynkratemplate#118).
+
+- Feat(ci): Run R-hub checks on every `cran-*` push, through `rhub-setup` and `rhub-check` actions (cynkra/cynkratemplate#145).
+
+- Feat(ci): Report coverage on pull requests from this repository (cynkra/cynkratemplate#146).
+
+- Ci: Bound every job with `timeout-minutes` (cynkra/cynkratemplate#144).
+
+- Fix(revdep2): Let a slice with no packages check nothing instead of failing (cynkra/cynkratemplate#150).
+
+- Feat: Build a binary package in every check job and share it as an artifact (cynkra/cynkratemplate#141).
+
+- Fix(ci): Collect the fleet's workflow fixes after the move to central actions (cynkra/cynkratemplate#139).
+
+
 # RPostgres 1.4.10.9018 (2026-09-15)
 
 ## Documentation
