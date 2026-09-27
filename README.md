@@ -37,8 +37,8 @@ RPostgres aims to:
 - map PostgreSQL types to the R types that fit them best:
   64-bit integers via `bit64`, `bytea` via `blob`, and date-time columns with an explicit time zone
 - reach the PostgreSQL features that DBI has no generic for,
-  such as `LISTEN`/`NOTIFY` through `postgresWaitForNotify()` and large objects through `postgresImportLargeObject()`
-- serve AWS Redshift clusters through `Redshift()`, with the behaviour of individual methods adjusted where that cluster differs
+  such as `LISTEN`/`NOTIFY` through [`postgresWaitForNotify()`](https://rpostgres.r-dbi.org/reference/postgresWaitForNotify.html) and large objects through [`postgresImportLargeObject()`](https://rpostgres.r-dbi.org/reference/postgresImportLargeObject.html)
+- serve AWS Redshift clusters through [`Redshift()`](https://rpostgres.r-dbi.org/reference/Redshift.html), with the behaviour of individual methods adjusted where that cluster differs
 
 It is explicitly not trying to:
 
