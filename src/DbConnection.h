@@ -60,6 +60,11 @@ public:
   void conn_stop(const char* msg);
   static void conn_stop(PGconn* conn, const char* msg);
 
+  // Raises a classed RPostgres_error condition carrying the SQLSTATE and other
+  // libpq diagnostic fields. Takes ownership of `res`: it is PQcleared here
+  // after the fields have been extracted. `res` may be NULL (no result).
+  static void result_stop(PGresult* res, const char* msg, PGconn* conn);
+
   void cleanup_query();
   static void finish_query(PGconn* pConn);
   cpp11::list wait_for_notify(int timeout_secs);
