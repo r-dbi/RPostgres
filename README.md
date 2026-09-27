@@ -25,7 +25,7 @@ Compared to RPostgreSQL, it:
 # Install the latest RPostgres release from CRAN:
 install.packages("RPostgres")
 
-# Or the the development version from GitHub:
+# Or the development version from GitHub:
 # install.packages("pak")
 pak::pak("r-dbi/RPostgres")
 ```
