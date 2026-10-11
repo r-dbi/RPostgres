@@ -39,6 +39,7 @@ reference:
   desc: Functions specific to Postgres
   contents:
   - '`RPostgres-package`'
+  - '`RPostgres-conditions`'
   - postgresHasDefault
   - postgresWaitForNotify
   - postgresImportLargeObject

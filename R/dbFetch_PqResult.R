@@ -17,7 +17,7 @@ dbFetch_PqResult <- function(res, n = -1, ..., row.names = FALSE) {
   if (trunc(n) != n) {
     stopc("n must be a whole number")
   }
-  ret <- sqlColumnToRownames(result_fetch(res@ptr, n = n), row.names)
+  ret <- sqlColumnToRownames(rethrow(result_fetch(res@ptr, n = n)), row.names)
   ret <- convert_bigint(ret, res@bigint)
   ret <- finalize_types(ret, res@conn)
   ret <- fix_timezone(ret, res@conn)

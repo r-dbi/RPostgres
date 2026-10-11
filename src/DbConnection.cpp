@@ -177,8 +177,8 @@ void DbConnection::copy_data(std::string sql, cpp11::list df) {
 
   PGresult* pComplete = PQgetResult(pConn_);
   if (PQresultStatus(pComplete) != PGRES_COMMAND_OK) {
-    PQclear(pComplete);
-    conn_stop("COPY returned error");
+    // result_stop() takes ownership of `pComplete` (extracts fields, clears).
+    result_stop(pComplete, "COPY returned error", pConn_);
   }
   PQclear(pComplete);
 
@@ -288,7 +288,50 @@ void DbConnection::conn_stop(const char* msg) {
 }
 
 void DbConnection::conn_stop(PGconn* conn, const char* msg) {
-  cpp11::stop(std::string(msg) + " : " + PQerrorMessage(conn));
+  // No result available: raise a classed condition without SQLSTATE/fields.
+  result_stop(NULL, msg, conn);
+}
+
+void DbConnection::result_stop(PGresult* res, const char* msg, PGconn* conn) {
+  // Backward-compatible message: prefer the result-specific text when
+  // available.
+  const char* res_msg = res ? PQresultErrorMessage(res) : NULL;
+  std::string full = std::string(msg) + " : " +
+                     (res_msg && *res_msg ? res_msg : PQerrorMessage(conn));
+
+  // Collect libpq diagnostic fields. Absent fields are stored as NULL so the
+  // R side sees a stable set of names.
+  cpp11::writable::list fields;
+  cpp11::writable::strings names;
+  auto add_field = [&](const char* name, int code) {
+    const char* v = res ? PQresultErrorField(res, code) : NULL;
+    fields.push_back(v ? cpp11::as_sexp(std::string(v)) : R_NilValue);
+    names.push_back(name);
+  };
+  add_field("sqlstate", PG_DIAG_SQLSTATE);
+  add_field("hint", PG_DIAG_MESSAGE_HINT);
+  add_field("detail", PG_DIAG_MESSAGE_DETAIL);
+  add_field("context", PG_DIAG_CONTEXT);
+  add_field("table", PG_DIAG_TABLE_NAME);
+  add_field("column", PG_DIAG_COLUMN_NAME);
+  add_field("datatype", PG_DIAG_DATATYPE_NAME);
+  add_field("constraint", PG_DIAG_CONSTRAINT_NAME);
+  add_field("schema", PG_DIAG_SCHEMA_NAME);
+  fields.names() = names;
+
+  // We own `res`: clear it now that all fields have been copied out.
+  if (res) {
+    PQclear(res);
+  }
+
+  static cpp11::function signal_pq_error =
+    cpp11::package("RPostgres")["signal_pq_error"];
+  // Pass arguments unconverted so cpp11 materializes the SEXPs inside the
+  // protected call construction (avoids a GC window on the message string).
+  signal_pq_error(full, fields);
+
+  // signal_pq_error() always calls stop(); this is an unreachable fallback.
+  cpp11::stop(full);  // # nocov
 }
 
 void DbConnection::cleanup_query() {

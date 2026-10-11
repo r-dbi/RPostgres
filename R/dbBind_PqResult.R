@@ -13,7 +13,7 @@ dbBind_PqResult <- function(res, params, ...) {
   params <- difftime_to_hms(params)
   params <- fix_numeric(params)
   params <- prepare_for_binding(params)
-  result_bind(res@ptr, params)
+  rethrow(result_bind(res@ptr, params))
   invisible(res)
 }
 
