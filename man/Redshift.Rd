@@ -49,7 +49,10 @@ Otherwise, connection parameters will be loaded from the pg_service.conf file an
 See \url{https://www.postgresql.org/docs/current/libpq-pgservice.html} for details on this file and syntax.}
 
 \item{...}{Other name-value pairs that describe additional connection options
-as described at \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}}
+as described at \url{https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS}.
+For example, set \code{options = "-c search_path=myschema"} to make
+\code{\link[DBI:dbListTables]{dbListTables()}} and unqualified reads and writes use \code{myschema}
+by default for that connection.}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
 default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit integers.}
