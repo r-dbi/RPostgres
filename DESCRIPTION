@@ -37,20 +37,21 @@ Suggests:
     testthat (>= 3.0.0)
 LinkingTo: 
     cpp11
-Config/Needs/website: 
-    r-dbi/dbitemplate
 VignetteBuilder: 
     knitr
-Config/Needs/build: decor
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
-Config/testthat/edition: 3
+Config/comment/gha/filter: No PostgreSQL server exists for ARM64 Windows,
+    and the DBItest suite needs a live one -- it connects in
+    tests/testthat/helper-DBItest.R and has no path that skips when the
+    server is absent. ankane/setup-postgres gives up on that runner in
+    about a second.  Drop this filter once PostgreSQL publishes an ARM64
+    Windows server.
 Config/gha/filter: os != "windows-11-arm"
-Config/comment/gha/filter: No PostgreSQL server exists for ARM64 Windows, and
-    the DBItest suite needs a live one -- it connects in
-    tests/testthat/helper-DBItest.R and has no path that skips when the server
-    is absent. ankane/setup-postgres gives up on that runner in about a second.
-    Drop this filter once PostgreSQL publishes an ARM64 Windows server.
+Config/Needs/build: decor
+Config/Needs/website: r-dbi/dbitemplate
+Config/roxygen2/version: 8.1.1.9000
+Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
@@ -111,4 +112,3 @@ Collate:
     'tables.R'
     'transactions.R'
     'utils.R'
-Config/roxygen2/version: 8.1.1.9000
