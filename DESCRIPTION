@@ -38,7 +38,8 @@ Suggests:
 LinkingTo: 
     cpp11
 VignetteBuilder: 
-    knitr
+    knitr,
+    rmarkdown
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: false
 Config/comment/gha/filter: No PostgreSQL server exists for ARM64 Windows,
