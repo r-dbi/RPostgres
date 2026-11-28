@@ -1,0 +1,34 @@
+# Uploads the checked tarball to win-builder and macbuilder with the reusable workflow of krlmlr/r-release-actions,
+# and reports both on the checklist pull request (the release process: the header of cran-submission.yaml).
+# It builds nothing: it takes the tarball from a green run of R-CMD-check.yaml on the same commit.
+# Every upload is started by hand, because each one sends an email:
+# `gh workflow run builders.yaml --repo r-dbi/RPostgres --ref <branch> [-f queues="R-devel R-release"]`.
+# Only on r-dbi/RPostgres: in a fork, the job is skipped.
+on:
+  workflow_dispatch:
+    inputs:
+      queues:
+        description: "Space-separated win-builder queues: R-devel, R-release, R-oldrelease"
+        type: string
+        default: "R-devel"
+      dry-run:
+        description: "Dry run: check and report everything, but upload nothing and write no comment"
+        type: boolean
+        default: false
+
+name: builders
+
+permissions: {}
+
+jobs:
+  builders:
+    if: github.repository == 'r-dbi/RPostgres'
+    uses: krlmlr/r-release-actions/.github/workflows/builders.yaml@main
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    with:
+      sha: ${{ github.sha }}
+      dry-run: ${{ inputs.dry-run }}
+      queues: ${{ inputs.queues }}

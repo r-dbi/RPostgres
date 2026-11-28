@@ -1,0 +1,24 @@
+# Checks that a commit is ready for a CRAN release with the reusable workflow of krlmlr/r-release-actions:
+# it fails on what CRAN requires, reports on what CRAN expects,
+# and keeps one comment on the checklist pull request (the release process: the header of cran-submission.yaml).
+# Dispatch it by hand on the release branch after the date commit and the run of R-CMD-check.yaml on it,
+# and again after every change to it:
+# `gh workflow run release-gate.yaml --repo r-dbi/RPostgres --ref <branch>`.
+# Only on r-dbi/RPostgres: in a fork, the job is skipped.
+on:
+  workflow_dispatch:
+
+name: release-gate
+
+permissions: {}
+
+jobs:
+  gate:
+    if: github.repository == 'r-dbi/RPostgres'
+    uses: krlmlr/r-release-actions/.github/workflows/release-gate.yaml@main
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    with:
+      sha: ${{ github.sha }}
