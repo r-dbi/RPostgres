@@ -1,0 +1,29 @@
+# Finishes a release once CRAN has accepted it, with the reusable workflow of krlmlr/r-release-actions:
+# once Posit's package manager serves the version, it tags `vX.Y.Z`, publishes the draft release,
+# commits the development bump and merges the release pull request (the release process: the header of cran-submission.yaml).
+# A run without a draft release does nothing.
+# Nightly, and by hand with `gh workflow run release-status.yaml --repo r-dbi/RPostgres [-f dry-run=true]`.
+# Only on r-dbi/RPostgres: in a fork, the job is skipped.
+on:
+  schedule:
+    - cron: "43 5 * * *"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Dry run: check and report everything, but tag, publish, commit, merge, close and comment nothing"
+        type: boolean
+        default: false
+
+name: release-status
+
+permissions: {}
+
+jobs:
+  release-status:
+    if: github.repository == 'r-dbi/RPostgres'
+    uses: krlmlr/r-release-actions/.github/workflows/release-status.yaml@main
+    permissions:
+      contents: write
+      pull-requests: write
+    with:
+      dry-run: ${{ inputs.dry-run == true }}

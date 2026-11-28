@@ -1,0 +1,76 @@
+# Submits the package to CRAN with the reusable workflow of krlmlr/r-release-actions,
+# whose README describes what each job does and what it expects from the package.
+# It builds nothing: it uploads the tarball that a green run of R-CMD-check.yaml on the same commit built, checked and uploaded.
+# Dispatch it by hand on the release branch, or on `main` for a fix made there:
+# `gh workflow run cran-submission.yaml --repo r-dbi/RPostgres --ref <branch> [-f dry-run=true]`.
+# Only on r-dbi/RPostgres: in a fork, the job is skipped.
+#
+# The release process:
+#
+# 1. Review: before the cut, go through the open issues and pull requests,
+#    the CI history on `main` (scheduled runs and R-devel included),
+#    CRAN's check results with their additional issues,
+#    https://cran.r-project.org/web/checks/check_results_RPostgres.html,
+#    the r-universe build, https://r-dbi.r-universe.dev/RPostgres, the last reverse-dependency results,
+#    and the CRAN Repository Policy, https://cran.r-project.org/web/packages/policies.html.
+#    CRAN asks for about a week between two releases of a package.
+# 2. Cut: create the release branch `vX.Y-<name>` from the chosen commit of `main`,
+#    where `<name>` is one lowercase word that names the release,
+#    so that R-CMD-check.yaml checks pull requests against it.
+#    Remove fledge's marker line from the top of NEWS.md, and never run `fledge::bump_version()` afterwards.
+#    Set `Version: X.Y.Z` in DESCRIPTION by hand.
+#    Fold the development sections into one section headed `# RPostgres X.Y.Z`; one bullet per change,
+#    grouped as the tidyverse style guide does (https://style.tidyverse.org/news.html), breaking changes first.
+#    Open the release pull request into `main`: it is the checklist pull request,
+#    and the first line of its body is `<!-- release-checklist: RPostgres X.Y.Z -->`.
+#    Record the review's findings there.
+# 3. Date: before each round of checks, one commit sets the date in the NEWS.md heading,
+#    `# RPostgres X.Y.Z (YYYY-MM-DD)`, and in `Date:` in DESCRIPTION.
+# 4. Check: dispatch R-CMD-check.yaml on the release branch with `cran-submission` on,
+#    which builds the source tarball, recompresses it with pigz -11, checks it and uploads it:
+#    `gh workflow run R-CMD-check.yaml --repo r-dbi/RPostgres --ref <branch> -f cran-submission=true`.
+#    Only a tarball from such a run is recompressed, so dispatch it again after every change to the branch.
+#    Dispatch it after the push, not before: a push run and a dispatch run of the same commit share a concurrency group,
+#    so the later one cancels the earlier one; R-CMD-check.yaml starts push runs on `main`, for a fix made there.
+#    Then dispatch release-gate.yaml, builders.yaml, rhub.yaml and revdep.yaml.
+#    The release workflows post their results to the checklist pull request;
+#    win-builder mails its verdict to the maintainer.
+#    Every error, warning and note is a blocker unless the checklist pull request explains it.
+# 5. Dry run: dispatch this workflow with `dry-run` on the final commit.
+# 6. Submit: dispatch this workflow without `dry-run`,
+#    only once R-CMD-check, the release gate and the reverse-dependency run on that commit are finished and green;
+#    the maintainer follows the confirmation link CRAN mails.
+#    A submission writes a draft release, and no tag.
+# 7. Finish: release-status.yaml tags `vX.Y.Z` and publishes the draft once Posit's package manager serves the version,
+#    then commits the development bump to the release branch and merges the release pull request into `main`.
+#
+# Acceptance is asynchronous and can take days.
+# A rejection is fixed on the release branch, dated, checked and submitted again with `resubmit`.
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Dry run: check and report everything, but write no release and send nothing to CRAN"
+        type: boolean
+        default: false
+      resubmit:
+        description: "Submit a version that an earlier attempt submitted already: after a rejection, or when CRAN never received it"
+        type: boolean
+        default: false
+
+name: CRAN submission
+
+permissions: {}
+
+jobs:
+  submit:
+    if: github.repository == 'r-dbi/RPostgres'
+    uses: krlmlr/r-release-actions/.github/workflows/cran-submission.yaml@main
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    with:
+      sha: ${{ github.sha }}
+      dry-run: ${{ inputs.dry-run }}
+      resubmit: ${{ inputs.resubmit }}
