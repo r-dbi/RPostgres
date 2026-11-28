@@ -51,6 +51,11 @@
 #   collect   folds every shard artifact into the revdepcheck-style report,
 #             the manifest, the baseline for later runs, and the timings the
 #             next plan calibrates from.
+#   commit    commits the report to the checked branch, unless dispatched
+#             with `commit: false`.
+#   release-comment
+#             points the release pull request of the checked branch, if it
+#             has one, at the run.
 #
 # The scripts live in `.github/actions/revdepx/` of cynkra/cynkratemplate
 # (once shared with the retired concurrent-pair sibling, revdep3, whose PR
@@ -80,7 +85,13 @@
 #
 # Dispatch-only, deliberately: nothing here runs on push. Check results never
 # turn the run red -- the summary and the report artifact are the
-# deliverable; only infrastructure failures fail jobs.
+# deliverable; only infrastructure failures fail jobs. The report is also
+# committed to the checked branch, unless the run is dispatched with
+# `commit: false`: the release process turns that off, because on a release
+# branch a commit would move the head the checks were run for. Either way,
+# where the branch has an open release pull request, the one whose body
+# starts with `<!-- release-checklist: <package> <version> -->`, one comment
+# there points at the run.
 
 on:
   workflow_dispatch:
@@ -99,7 +110,7 @@ on:
         options:
           - strong
           - most
-        default: strong
+        default: most
       depth:
         description: "Levels of reverse dependencies: 1 = direct, 2 = also revdeps of revdeps, ..., 'all' = the full transitive closure"
         type: string
@@ -144,12 +155,16 @@ on:
         description: "Plan only: report the shards and reuse decisions, start no checks"
         type: boolean
         default: false
+      commit:
+        description: "Commit the report to the dispatched branch; the release process turns this off"
+        type: boolean
+        default: true
 
 name: revdep4
 
 # GitHub does not show a run the inputs it was dispatched with, so the ones
 # that decide how much work the run is go into the run's own title.
-run-name: "revdep4 ${{ inputs.packages && format('({0})', inputs.packages) || format('({0}, depth {1})', inputs.which || 'strong', inputs.depth || '1') }}${{ inputs['retry-run'] && format(', retry of {0}', inputs['retry-run']) || '' }}${{ inputs['dry-run'] && ', dry run' || '' }}"
+run-name: "revdep4 ${{ inputs.packages && format('({0})', inputs.packages) || format('({0}, depth {1})', inputs.which || 'most', inputs.depth || '1') }}${{ inputs['retry-run'] && format(', retry of {0}', inputs['retry-run']) || '' }}${{ inputs['dry-run'] && ', dry run' || '' }}"
 
 # Read-only by default; every job opts back into what it actually needs.
 permissions:
@@ -158,8 +173,8 @@ permissions:
 # One revdepx run per checked ref at a time -- the group is named revdepx,
 # not after this file, a relic of the retired sibling workflow that shared
 # it. Two runs interleaving on one ref would race the committed report, the
-# baseline lineage and the universe image's `latest` tag. A queued run waits
-# rather than killing shards mid-check.
+# release pull request's comment, the baseline lineage and the universe image's `latest` tag. A
+# queued run waits rather than killing shards mid-check.
 #
 # `github.ref_name`, not `github.ref`: the input holds a bare name ("main")
 # while `github.ref` is fully qualified ("refs/heads/main"), and a group
@@ -174,7 +189,7 @@ concurrency:
 env:
   REVDEPX_ENGINE: queue
   REVDEPX_PACKAGES: ${{ inputs.packages || '' }}
-  REVDEPX_WHICH: ${{ inputs.which || 'strong' }}
+  REVDEPX_WHICH: ${{ inputs.which || 'most' }}
   REVDEPX_DEPTH: ${{ inputs.depth || '1' }}
   REVDEPX_RETRY_RUN: ${{ inputs.retry-run || '' }}
   REVDEPX_PART: ${{ inputs.part || '' }}
@@ -395,6 +410,25 @@ jobs:
           key: revdepx-pak-build-${{ hashFiles('DESCRIPTION') }}
           restore-keys: |
             revdepx-pak-build-
+
+      # The compiler cache, which is what keeps this job from recompiling the
+      # whole vendored engine every run. Everything in it was produced by the
+      # base image's toolchain, so the key carries that image's ref, whose tag
+      # is the R version and the hash of base-image.sh: a change to either is
+      # a different compiler, and ccache would miss on every object
+      # regardless. The ref stands in for hashFiles() because base-image.sh
+      # is served with the kit's actions and is not in this workspace. The run
+      # id makes the key unique, because actions/cache never overwrites a key
+      # that already exists and the cache would otherwise be saved once and
+      # never again; restore-keys then takes the newest cache the same
+      # toolchain left behind.
+      - name: Cache the compiler cache
+        uses: actions/cache@v5
+        with:
+          path: ${{ runner.temp }}/ccache
+          key: revdepx-ccache-${{ needs.base.outputs.image }}-${{ github.run_id }}
+          restore-keys: |
+            revdepx-ccache-${{ needs.base.outputs.image }}-
 
       # Inside the base container, because the binary must load under the
       # container's R (the pinned oldrel), and a binary built by the runner's
@@ -865,9 +899,18 @@ jobs:
 
     name: "Collect results and report"
 
+    outputs:
+      # How many packages this run compared; zero means it learnt nothing,
+      # and `commit` and `release-comment` then leave the committed report and
+      # the release pull request's comment as they are.
+      compared: ${{ steps.collect.outputs.compared }}
+      # The commit the plan checked, from the report's run.json: the commit
+      # job commits on top of it, not on whatever the branch is now.
+      sha: ${{ steps.checked.outputs.sha }}
+
     permissions:
-      # To commit the report back to the checked branch.
-      contents: write
+      # To check out the ref under test.
+      contents: read
       # To download the retried run's report artifact, which lives on that
       # run, and to read shard job durations for the timings.
       actions: read
@@ -945,6 +988,19 @@ jobs:
           Rscript "${REVDEPX_DIR}/collect.R"
         shell: bash
 
+      # Without it the commit job is skipped; the report is still uploaded.
+      - name: Record the checked commit
+        id: checked
+        if: steps.collect.outcome == 'success'
+        continue-on-error: true
+        run: |
+          sha=$(jq -r '.sha // empty' revdep/run.json || true)
+          if [ -z "${sha}" ]; then
+            echo "::notice::revdep/run.json names no checked commit; the report is not committed."
+          fi
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
       - name: Upload the report
         uses: actions/upload-artifact@v7
         if: always()
@@ -953,26 +1009,6 @@ jobs:
           path: revdep
           retention-days: 90
           overwrite: true
-
-      # The report is also the repository's own record: `revdep/README.md`
-      # and friends have been committed here since revdepcheck wrote them,
-      # and `packages: broken` reads them back. Only the generated files and
-      # the manifest are staged.
-      #
-      # `!cancelled()` rather than `always()`: a cancelled run has no shard
-      # results, so its report is every package `missing`. `compared > 0`
-      # covers the rest of that family: a run in which *no* package produced
-      # a comparison learnt nothing, and must not overwrite the good record.
-      - name: Commit the report to the checked ref
-        if: >-
-          !cancelled()
-          && vars.REVDEPX_COMMIT_REPORT != 'false'
-          && steps.collect.outputs.compared != '0'
-        continue-on-error: true
-        uses: cynkra/cynkratemplate/.github/actions/revdep-commit-report@main
-        with:
-          ref: ${{ inputs.ref }}
-          workflow: revdep4
 
       - name: Upload the new baseline
         uses: actions/upload-artifact@v7
@@ -996,3 +1032,129 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
           overwrite: true
+
+  # The report is also the repository's own record: `revdep/README.md` and
+  # friends have been committed here since revdepcheck wrote them, and
+  # `packages: broken` reads them back. A job of its own, so that only this
+  # one can write to the repository, and only when it commits: dispatched
+  # with `commit: false`, as the release process does, it does not run, and
+  # the report stays in the run.
+  #
+  # The checkout's per-package sections are replaced by the report's, so a
+  # package the run found fixed loses its section, as it did when the
+  # collector committed in place; the action stages only the generated files.
+  # `!cancelled()` and `compared > 0`, as for the comment: a run that learnt
+  # nothing must not overwrite the good record. The action does nothing where
+  # the ref is not a branch of this repository.
+  commit:
+    needs:
+      - collect
+
+    if: ${{ !cancelled() && inputs.commit && vars.REVDEPX_COMMIT_REPORT != 'false' && needs.collect.result == 'success' && needs.collect.outputs.compared != '0' && needs.collect.outputs.sha != '' }}
+
+    runs-on: ubuntu-26.04
+
+    timeout-minutes: 10
+
+    name: "Commit the report to the checked ref"
+
+    permissions:
+      contents: write
+
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+      parent: ${{ steps.commit.outputs.parent }}
+
+    steps:
+      # The commit the plan checked, so the report lands on top of the tree it
+      # describes; the action rebases onto the branch's tip before pushing,
+      # and a conflict with newer `revdep/` changes leaves it unpushed with a
+      # warning.
+      - name: Check out the checked commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.collect.outputs.sha }}
+
+      - name: Download the report
+        uses: actions/download-artifact@v8
+        with:
+          name: revdepx-report
+          path: ${{ runner.temp }}/report
+
+      # Only the files the action stages, not the raw check output beside
+      # them. The two directories are emptied and recreated rather than
+      # removed, because an artifact drops empty directories: a run that
+      # cleared every section must still stage their removal.
+      - name: Copy the report files into revdep/
+        env:
+          REPORT: ${{ runner.temp }}/report
+        run: |
+          set -eu
+          rm -rf revdep/problems revdep/failures
+          mkdir -p revdep/problems revdep/failures
+          for f in README.md problems.md failures.md cran.md manifest.json problems failures; do
+            if [ -e "${REPORT}/${f}" ]; then cp -R "${REPORT}/${f}" revdep/; fi
+          done
+        shell: bash
+
+      # A protected branch, a read-only token or a race with another push
+      # leaves the report in the artifact; it does not fail the run.
+      - name: Commit the report to the checked ref
+        id: commit
+        continue-on-error: true
+        uses: cynkra/cynkratemplate/.github/actions/revdep-commit-report@main
+        with:
+          ref: ${{ inputs.ref || github.ref_name }}
+          workflow: revdep4
+
+  # Whether or not the report is committed: where the checked branch has an
+  # open release pull request, one comment there links to the run and says
+  # what it found. A job of its own so that only this one can write to pull
+  # requests, and without a checkout, because the report comes as this run's
+  # artifact.
+  release-comment:
+    # After `commit`, so the comment can tell the report commit from a
+    # pull request head that moved for another reason.
+    needs:
+      - collect
+      - commit
+
+    # Only after a collect that finished, so the artifact is whole, and that
+    # compared something: a run in which every shard died would otherwise
+    # replace a good comment with a list of packages it never checked.
+    # `!cancelled()` replaces the implicit `success()`, which would also
+    # require every earlier job, so one red shard would skip the comment.
+    if: ${{ !cancelled() && needs.collect.result == 'success' && needs.collect.outputs.compared != '0' }}
+
+    runs-on: ubuntu-26.04
+
+    timeout-minutes: 10
+
+    name: "Point the release pull request at the run"
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Download the report
+        id: report
+        uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          name: revdepx-report
+          path: ${{ runner.temp }}/report
+
+      - name: Point the release pull request at the run
+        if: steps.report.outcome == 'success'
+        uses: cynkra/cynkratemplate/.github/actions/revdep-release-comment@main
+        with:
+          report: ${{ runner.temp }}/report
+          artifact: revdepx-report
+          workflow: revdep4
+          ref: ${{ inputs.ref || github.ref_name }}
+          report-commit: ${{ needs.commit.outputs.sha }}
+          report-parent: ${{ needs.commit.outputs.parent }}
+          which: ${{ env.REVDEPX_WHICH }}
+          depth: ${{ env.REVDEPX_DEPTH }}
+          part: ${{ env.REVDEPX_PART }}
+          packages: ${{ env.REVDEPX_PACKAGES }}
