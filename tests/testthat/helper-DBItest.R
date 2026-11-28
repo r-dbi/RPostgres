@@ -18,7 +18,7 @@ if (rlang::is_installed("DBItest")) {
       # Redshift:
       # omit_blob_tests = TRUE,
 
-      dbitest_version = "1.8.3.6",
+      dbitest_version = "1.9.0",
 
       # immediate = TRUE:
       placeholder_pattern = "$1",
@@ -39,7 +39,7 @@ if (rlang::is_installed("DBItest")) {
 
       if (getRversion() < "3.6") "compliance",
 
-      # Newly enabled by dbitest_version 1.8.3.6:
+      # Newly enabled by dbitest_version 1.9.0:
       # dbFetch(n = NA) errors instead of returning a chunk of rows
       "fetch_na_rows",
       # The Arrow generics from DBI are not reexported
