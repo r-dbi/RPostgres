@@ -204,7 +204,9 @@ jobs:
           # ask for it by name rather than hope it arrives as somebody's
           # dependency. cynkratemplate supplies the output format those READMEs
           # declare, so it belongs here rather than in thirty DESCRIPTIONs.
-          extra-packages: any::rcmdcheck r-lib/roxygen2 any::decor r-lib/pkgdown r-lib/covr any::xml2 any::rmarkdown cynkra/cynkratemplate deps::.
+          # curl, xml2 and jsonlite are also what the versions-matrix action
+          # reads the R releases with, so ask for them by name too.
+          extra-packages: any::rcmdcheck r-lib/roxygen2 any::decor r-lib/pkgdown r-lib/covr any::xml2 any::curl any::jsonlite any::rmarkdown cynkra/cynkratemplate deps::.
 
       - name: Run the repository-specific after-install steps
         uses: ./.github/workflows/custom/after-install

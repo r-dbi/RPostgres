@@ -150,7 +150,7 @@ jobs:
         with:
           cache-version: rcc-dev-${{ matrix.package }}-1
           needs: build, check
-          extra-packages: "any::rcmdcheck r-lib/remotes@f-618-universe"
+          extra-packages: "any::rcmdcheck any::jsonlite"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # Same runner and R version as the base job, so its binary fits.
@@ -160,13 +160,152 @@ jobs:
           name: ${{ needs.R-CMD-check-base.outputs.binary }}
 
       - name: Install dev version of ${{ matrix.package }}
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # r-universe builds Linux binaries for ubuntu:latest, which now tracks
           # 26.04 "resolute" (it no longer publishes "noble"). This matches the
           # ubuntu-26.04 runner above.
-          remotes::install_runiverse("${{ matrix.package }}", linux_distro = "resolute")
+          distro <- "resolute"
+          package <- "${{ matrix.package }}"
+
+          search_results <- function(package) {
+            url <- paste0("https://r-universe.dev/api/search?q=package:", package)
+            jsonlite::fromJSON(url, simplifyVector = FALSE)$results
+          }
+
+          # The canonical universe of a package: among the search results for exactly
+          # this package, the one r-universe indexes as canonical (`_indexed`),
+          # else the first one that is not the CRAN mirror.
+          universe_for <- function(package, results = search_results(package)) {
+            matches <- Filter(function(x) identical(x$Package, package), results)
+            universes <- unique(vapply(matches, function(x) x$`_user`, character(1)))
+            if (length(universes) == 0) {
+              stop("Package '", package, "' not found on r-universe", call. = FALSE)
+            }
+            universe <- universes[[1]]
+            if (length(universes) > 1) {
+              indexed <- vapply(
+                universes,
+                function(u) {
+                  url <- paste0("https://", u, ".r-universe.dev/api/packages/", package)
+                  info <- tryCatch(jsonlite::fromJSON(url), error = function(e) NULL)
+                  isTRUE(info$`_indexed`)
+                },
+                logical(1)
+              )
+              if (any(indexed)) {
+                universe <- universes[indexed][[1]]
+              } else if (any(universes != "cran")) {
+                universe <- universes[universes != "cran"][[1]]
+              }
+            }
+            message(
+              "Universe for ", package, ": ", universe,
+              " (candidates: ", paste(universes, collapse = ", "), ")"
+            )
+            universe
+          }
+
+          # Packages already installed by install_from_universe(), to stop cycles
+          # through Remotes.
+          visited <- new.env()
+
+          # Install the development version of a package from a universe,
+          # as a binary for this runner where one is listed, else from source.
+          # Only the universe-wide repositories serve packages,
+          # a per-package URL such as https://<universe>.r-universe.dev/<package>/
+          # answers with 403.
+          install_from_universe <- function(package, universe) {
+            if (exists(package, envir = visited, inherits = FALSE)) {
+              return(invisible())
+            }
+            assign(package, TRUE, envir = visited)
+            r_version <- sub("^([0-9]+[.][0-9]+).*$", "\\1", getRversion())
+            base <- paste0("https://", universe, ".r-universe.dev")
+            candidates <- c(
+              binary = paste0(
+                base, "/bin/linux/", distro, "-", R.version$arch, "/", r_version
+              ),
+              source = base
+            )
+
+            repo <- NULL
+            for (candidate in candidates) {
+              available <- utils::available.packages(repos = candidate)
+              if (package %in% rownames(available)) {
+                repo <- candidate
+                break
+              }
+            }
+            if (is.null(repo)) {
+              stop(
+                "Package '", package, "' not found in the r-universe repositories ",
+                paste(candidates, collapse = " and "),
+                call. = FALSE
+              )
+            }
+            version <- available[package, "Version"]
+            message("Installing ", package, " ", version, " from ", repo)
+
+            destdir <- tempfile("universe")
+            dir.create(destdir)
+            on.exit(unlink(destdir, recursive = TRUE), add = TRUE)
+            file <- utils::download.packages(
+              package,
+              destdir = destdir,
+              available = available,
+              repos = repo
+            )[, 2]
+            if (length(file) != 1 || !file.exists(file)) {
+              stop("Failed to download ", package, " from ", repo, call. = FALSE)
+            }
+
+            # The repository index carries no Remotes field, the DESCRIPTION does.
+            utils::untar(file, file.path(package, "DESCRIPTION"), exdir = destdir)
+            desc <- read.dcf(file.path(destdir, package, "DESCRIPTION"))
+            if ("Remotes" %in% colnames(desc)) {
+              remotes <- trimws(strsplit(desc[, "Remotes"], ",")[[1]])
+              remotes <- remotes[remotes != ""]
+              pattern <- "^(?:github::)?([^/:]+)/([^/@#]+)$"
+              for (remote in remotes) {
+                if (grepl(pattern, remote, perl = TRUE)) {
+                  install_from_universe(
+                    sub(pattern, "\\2", remote, perl = TRUE),
+                    sub(pattern, "\\1", remote, perl = TRUE)
+                  )
+                } else {
+                  message("Not installing remote ", remote, ", only org/pkg is supported")
+                }
+              }
+            }
+
+            # Missing dependencies come from the universe or the usual repositories,
+            # the package itself from the file downloaded from the universe.
+            deps <- tools::package_dependencies(
+              package,
+              db = available,
+              which = c("Depends", "Imports", "LinkingTo")
+            )[[1]]
+            missing <- setdiff(deps, c("R", rownames(utils::installed.packages())))
+            if (length(missing) > 0) {
+              utils::install.packages(missing, repos = c(universe = repo, getOption("repos")))
+            }
+            utils::install.packages(file, repos = NULL)
+
+            installed <- utils::packageDescription(package, fields = "Version")
+            message(package, ": installed ", installed, ", universe ", version)
+            if (is.na(installed)) {
+              stop("Package ", package, " is not installed", call. = FALSE)
+            }
+            if (package_version(installed) != package_version(version)) {
+              stop(
+                "Installed ", package, " ", installed,
+                " differs from the universe's ", version,
+                call. = FALSE
+              )
+            }
+          }
+
+          install_from_universe(package, universe_for(package))
         shell: Rscript {0}
 
       - name: Session info
