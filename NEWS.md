@@ -1,5 +1,20 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# RPostgres 1.4.10.9021 (2026-11-28)
+
+## Chore
+
+- Declare every vignette builder in DESCRIPTION (#622).
+
+- Tidy DESCRIPTION with usethis::use_tidy_description() (#621).
+
+## Continuous integration
+
+- Sync the workflows with cynkra/cynkratemplate (#620).
+
+- Sync the workflows with cynkra/cynkratemplate (#619).
+
+
 # RPostgres 1.4.10.9020 (2026-10-11)
 
 ## Chore
