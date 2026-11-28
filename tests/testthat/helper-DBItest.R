@@ -18,7 +18,7 @@ if (rlang::is_installed("DBItest")) {
       # Redshift:
       # omit_blob_tests = TRUE,
 
-      dbitest_version = "1.7.2",
+      dbitest_version = "1.8.3.6",
 
       # immediate = TRUE:
       placeholder_pattern = "$1",
@@ -38,6 +38,15 @@ if (rlang::is_installed("DBItest")) {
       if (.Platform$r_arch == "i386") "roundtrip_timestamp_extended",
 
       if (getRversion() < "3.6") "compliance",
+
+      # Newly enabled by dbitest_version 1.8.3.6:
+      # dbFetch(n = NA) errors instead of returning a chunk of rows
+      "fetch_na_rows",
+      # The Arrow generics from DBI are not reexported
+      "reexport",
+      # nanoarrow warns about lossy conversion of extended timestamps
+      "arrow_write_table_arrow_roundtrip_timestamp_extended",
+      "arrow_append_table_arrow_roundtrip_timestamp_extended",
 
       NULL
     )
